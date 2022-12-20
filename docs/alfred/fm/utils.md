@@ -5,11 +5,20 @@
 [Fm](./index.md#fm) /
 Utils
 
-> Auto-generated documentation for [alfred.fm.utils](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/utils.py) module.
+> Auto-generated documentation for [alfred.fm.utils](../../../alfred/fm/utils.py) module.
+
+- [Utils](#utils)
+  - [DynamicBatcher](#dynamicbatcher)
+    - [DynamicBatcher().batch](#dynamicbatcher()batch)
+    - [DynamicBatcher().merge_rank_response](#dynamicbatcher()merge_rank_response)
+    - [DynamicBatcher().reorder](#dynamicbatcher()reorder)
+  - [clear_cuda_cache](#clear_cuda_cache)
+  - [normalize_logits](#normalize_logits)
+  - [reorder_array](#reorder_array)
 
 ## DynamicBatcher
 
-[Show source in utils.py:59](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/utils.py#L59)
+[Show source in utils.py:59](../../../alfred/fm/utils.py#L59)
 
 #### Signature
 
@@ -23,7 +32,7 @@ class DynamicBatcher:
 
 ### DynamicBatcher().batch
 
-[Show source in utils.py:156](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/utils.py#L156)
+[Show source in utils.py:156](../../../alfred/fm/utils.py#L156)
 
 Batch a list of instances into a list of batches
 
@@ -36,7 +45,7 @@ def batch(self):
 
 ### DynamicBatcher().merge_rank_response
 
-[Show source in utils.py:96](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/utils.py#L96)
+[Show source in utils.py:96](../../../alfred/fm/utils.py#L96)
 
 Assumption: Candidate Order is the same across all ranked queries
 
@@ -64,7 +73,7 @@ def merge_rank_response(
 
 ### DynamicBatcher().reorder
 
-[Show source in utils.py:127](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/utils.py#L127)
+[Show source in utils.py:127](../../../alfred/fm/utils.py#L127)
 
 #### Signature
 
@@ -82,7 +91,7 @@ def reorder(
 
 ## clear_cuda_cache
 
-[Show source in utils.py:15](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/utils.py#L15)
+[Show source in utils.py:15](../../../alfred/fm/utils.py#L15)
 
 Clear cuda cache via garbage collection
 
@@ -97,7 +106,7 @@ def clear_cuda_cache():
 
 ## normalize_logits
 
-[Show source in utils.py:23](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/utils.py#L23)
+[Show source in utils.py:23](../../../alfred/fm/utils.py#L23)
 
 Normalize raw logit scores from a foundation model.
 
@@ -125,7 +134,7 @@ def normalize_logits(logits: torch.Tensor) -> torch.Tensor:
 
 ## reorder_array
 
-[Show source in utils.py:38](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/utils.py#L38)
+[Show source in utils.py:38](../../../alfred/fm/utils.py#L38)
 
 Reorder an array according to a given order.
 
@@ -152,6 +161,5 @@ def reorder_array(
 ) -> Union[np.ndarray, torch.Tensor, list]:
     ...
 ```
-
 
 

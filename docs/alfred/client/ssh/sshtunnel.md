@@ -6,11 +6,17 @@
 [Ssh](./index.md#ssh) /
 SSHTunnel
 
-> Auto-generated documentation for [alfred.client.ssh.sshtunnel](https://github.com/BatsResearch/alfred/blob/main/alfred/client/ssh/sshtunnel.py) module.
+> Auto-generated documentation for [alfred.client.ssh.sshtunnel](../../../../alfred/client/ssh/sshtunnel.py) module.
+
+- [SSHTunnel](#sshtunnel)
+  - [SSHTunnel](#sshtunnel-1)
+    - [SSHTunnel.adaptive_handler](#sshtunneladaptive_handler)
+    - [SSHTunnel().start](#sshtunnel()start)
+    - [SSHTunnel().stop](#sshtunnel()stop)
 
 ## SSHTunnel
 
-[Show source in sshtunnel.py:12](https://github.com/BatsResearch/alfred/blob/main/alfred/client/ssh/sshtunnel.py#L12)
+[Show source in sshtunnel.py:12](../../../../alfred/client/ssh/sshtunnel.py#L12)
 
 SSH Tunnel implemented with paramiko and supports interactive authentication
 This tunnel would be very useful if you have a alfred.fm model on remote server that you want to access
@@ -37,7 +43,7 @@ class SSHTunnel:
 
 ### SSHTunnel.adaptive_handler
 
-[Show source in sshtunnel.py:21](https://github.com/BatsResearch/alfred/blob/main/alfred/client/ssh/sshtunnel.py#L21)
+[Show source in sshtunnel.py:21](../../../../alfred/client/ssh/sshtunnel.py#L21)
 
 Authentication handler for paramiko's interactive authentication
 
@@ -51,7 +57,7 @@ def adaptive_handler(title, instructions, prompt_list):
 
 ### SSHTunnel().start
 
-[Show source in sshtunnel.py:74](https://github.com/BatsResearch/alfred/blob/main/alfred/client/ssh/sshtunnel.py#L74)
+[Show source in sshtunnel.py:74](../../../../alfred/client/ssh/sshtunnel.py#L74)
 
 Start the tunnel
 
@@ -64,7 +70,7 @@ def start(self):
 
 ### SSHTunnel().stop
 
-[Show source in sshtunnel.py:117](https://github.com/BatsResearch/alfred/blob/main/alfred/client/ssh/sshtunnel.py#L117)
+[Show source in sshtunnel.py:117](../../../../alfred/client/ssh/sshtunnel.py#L117)
 
 Stop the tunnel
 
@@ -74,6 +80,5 @@ Stop the tunnel
 def stop(self):
     ...
 ```
-
 
 

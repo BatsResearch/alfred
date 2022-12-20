@@ -5,11 +5,26 @@
 [Template](./index.md#template) /
 Template
 
-> Auto-generated documentation for [alfred.template.template](https://github.com/BatsResearch/alfred/blob/main/alfred/template/template.py) module.
+> Auto-generated documentation for [alfred.template.template](../../../alfred/template/template.py) module.
+
+- [Template](#template)
+  - [Template](#template-1)
+    - [Template().__call__](#template()__call__)
+    - [Template().apply](#template()apply)
+    - [Template().deserialize](#template()deserialize)
+    - [Template().get_answer_choices_list](#template()get_answer_choices_list)
+    - [Template().id](#template()id)
+    - [Template().metadata](#template()metadata)
+    - [Template().name](#template()name)
+    - [Template().reference](#template()reference)
+    - [Template().serialize](#template()serialize)
+    - [Template().template](#template()template)
+    - [Template().type](#template()type)
+    - [Template().vote](#template()vote)
 
 ## Template
 
-[Show source in template.py:7](https://github.com/BatsResearch/alfred/blob/main/alfred/template/template.py#L7)
+[Show source in template.py:7](../../../alfred/template/template.py#L7)
 
 Generic interface for prompt template
 
@@ -34,7 +49,7 @@ class Template(abc.ABC):
 
 ### Template().__call__
 
-[Show source in template.py:100](https://github.com/BatsResearch/alfred/blob/main/alfred/template/template.py#L100)
+[Show source in template.py:100](../../../alfred/template/template.py#L100)
 
 returns the template applied to the example, this allows a functional style
 
@@ -47,7 +62,7 @@ def __call__(self, example):
 
 ### Template().apply
 
-[Show source in template.py:85](https://github.com/BatsResearch/alfred/blob/main/alfred/template/template.py#L85)
+[Show source in template.py:85](../../../alfred/template/template.py#L85)
 
 returns the template applied to the example
 
@@ -61,7 +76,7 @@ def apply(self, example):
 
 ### Template().deserialize
 
-[Show source in template.py:95](https://github.com/BatsResearch/alfred/blob/main/alfred/template/template.py#L95)
+[Show source in template.py:95](../../../alfred/template/template.py#L95)
 
 returns the deserialized version of the template
 
@@ -75,7 +90,7 @@ def deserialize(self, json_str):
 
 ### Template().get_answer_choices_list
 
-[Show source in template.py:80](https://github.com/BatsResearch/alfred/blob/main/alfred/template/template.py#L80)
+[Show source in template.py:80](../../../alfred/template/template.py#L80)
 
 returns the answer choices list of the template
 
@@ -89,7 +104,7 @@ def get_answer_choices_list(self, example):
 
 ### Template().id
 
-[Show source in template.py:36](https://github.com/BatsResearch/alfred/blob/main/alfred/template/template.py#L36)
+[Show source in template.py:36](../../../alfred/template/template.py#L36)
 
 returns the id of the template
 
@@ -104,7 +119,7 @@ def id(self):
 
 ### Template().metadata
 
-[Show source in template.py:54](https://github.com/BatsResearch/alfred/blob/main/alfred/template/template.py#L54)
+[Show source in template.py:54](../../../alfred/template/template.py#L54)
 
 returns the metadata of the template
 
@@ -119,7 +134,7 @@ def metadata(self):
 
 ### Template().name
 
-[Show source in template.py:42](https://github.com/BatsResearch/alfred/blob/main/alfred/template/template.py#L42)
+[Show source in template.py:42](../../../alfred/template/template.py#L42)
 
 returns the name of the template
 
@@ -134,7 +149,7 @@ def name(self):
 
 ### Template().reference
 
-[Show source in template.py:48](https://github.com/BatsResearch/alfred/blob/main/alfred/template/template.py#L48)
+[Show source in template.py:48](../../../alfred/template/template.py#L48)
 
 returns the reference of the template
 
@@ -149,7 +164,7 @@ def reference(self):
 
 ### Template().serialize
 
-[Show source in template.py:90](https://github.com/BatsResearch/alfred/blob/main/alfred/template/template.py#L90)
+[Show source in template.py:90](../../../alfred/template/template.py#L90)
 
 returns the serialized version of the template
 
@@ -163,7 +178,7 @@ def serialize(self):
 
 ### Template().template
 
-[Show source in template.py:24](https://github.com/BatsResearch/alfred/blob/main/alfred/template/template.py#L24)
+[Show source in template.py:24](../../../alfred/template/template.py#L24)
 
 returns the template string
 
@@ -178,7 +193,7 @@ def template(self):
 
 ### Template().type
 
-[Show source in template.py:30](https://github.com/BatsResearch/alfred/blob/main/alfred/template/template.py#L30)
+[Show source in template.py:30](../../../alfred/template/template.py#L30)
 
 returns the type of the template
 
@@ -193,7 +208,7 @@ def type(self):
 
 ### Template().vote
 
-[Show source in template.py:60](https://github.com/BatsResearch/alfred/blob/main/alfred/template/template.py#L60)
+[Show source in template.py:60](../../../alfred/template/template.py#L60)
 
 returns the vote of the template based on the responses with
 the label maps and matching function
@@ -220,6 +235,5 @@ def vote(
 ):
     ...
 ```
-
 
 

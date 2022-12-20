@@ -5,11 +5,16 @@
 [Data](./index.md#data) /
 Wrench
 
-> Auto-generated documentation for [alfred.data.wrench](https://github.com/BatsResearch/alfred/blob/main/alfred/data/wrench.py) module.
+> Auto-generated documentation for [alfred.data.wrench](../../../alfred/data/wrench.py) module.
+
+- [Wrench](#wrench)
+  - [WrenchBenchmarkDataset](#wrenchbenchmarkdataset)
+    - [WrenchBenchmarkDataset().__getattr__](#wrenchbenchmarkdataset()__getattr__)
+    - [WrenchBenchmarkDataset().__repr__](#wrenchbenchmarkdataset()__repr__)
 
 ## WrenchBenchmarkDataset
 
-[Show source in wrench.py:28](https://github.com/BatsResearch/alfred/blob/main/alfred/data/wrench.py#L28)
+[Show source in wrench.py:28](../../../alfred/data/wrench.py#L28)
 
 Dataset wrapper for Wrench Dataset.
 This wrapper class inherits from IterableArrowDataset
@@ -37,7 +42,7 @@ class WrenchBenchmarkDataset(IterableArrowDataset):
 
 ### WrenchBenchmarkDataset().__getattr__
 
-[Show source in wrench.py:132](https://github.com/BatsResearch/alfred/blob/main/alfred/data/wrench.py#L132)
+[Show source in wrench.py:132](../../../alfred/data/wrench.py#L132)
 
 returns the data instance with the given uid
 
@@ -50,7 +55,7 @@ def __getattr__(self, uid):
 
 ### WrenchBenchmarkDataset().__repr__
 
-[Show source in wrench.py:136](https://github.com/BatsResearch/alfred/blob/main/alfred/data/wrench.py#L136)
+[Show source in wrench.py:136](../../../alfred/data/wrench.py#L136)
 
 returns the string representation of the dataset
 
@@ -60,6 +65,5 @@ returns the string representation of the dataset
 def __repr__(self):
     ...
 ```
-
 
 

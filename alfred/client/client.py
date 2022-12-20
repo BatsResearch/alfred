@@ -3,6 +3,7 @@ from typing import Any, List, Optional, Union, Dict
 
 from grpc import FutureTimeoutError
 
+from alfred.client.cache import Cache, DummyCache, SQLiteCache
 from alfred.client.ssh.sshtunnel import SSHTunnel
 from alfred.fm.dummy import DummyModel
 from alfred.fm.huggingface import HuggingFaceModel
@@ -29,6 +30,7 @@ class Client:
                  local_path: Optional[str] = None,
                  ssh_tunnel: bool = False,
                  ssh_node: Optional[str] = None,
+                 cache: Optional[Cache] = "SQLite",
                  **kwargs: Any,
                  ):
         '''
@@ -47,6 +49,8 @@ class Client:
         :type ssh_tunnel: bool
         :param ssh_node: (optional) The final SSH node to establish the SSH tunnel. (e.g. gpu node on a cluster with login node as jump)
         :type ssh_node: str
+        :param cache: (optional) The cache to use. (e.g. "SQLite", "Dummy")
+        :type cache: Cache Object
         :param kwargs: Additional keyword arguments
         :type kwargs: Any
         '''
@@ -64,6 +68,13 @@ class Client:
                     "Model type is not specified. Please specify model type or end point")
                 raise ValueError(
                     "Model type is not specified. Please specify model/model_type or end_point")
+
+        if cache:
+            if cache == "SQLite":
+                self.cache = SQLiteCache()
+            elif cache == "Dummy":
+                self.cache = DummyCache()
+            self.run = self.cache.cached_query(self.run)
 
         self.grpcClient = None
         if end_point:

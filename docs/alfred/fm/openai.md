@@ -5,11 +5,14 @@
 [Fm](./index.md#fm) /
 Openai
 
-> Auto-generated documentation for [alfred.fm.openai](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/openai.py) module.
+> Auto-generated documentation for [alfred.fm.openai](../../../alfred/fm/openai.py) module.
+
+- [Openai](#openai)
+  - [OpenAIModel](#openaimodel)
 
 ## OpenAIModel
 
-[Show source in openai.py:26](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/openai.py#L26)
+[Show source in openai.py:26](../../../alfred/fm/openai.py#L26)
 
 A wrapper for the OpenAI API.
 
@@ -24,6 +27,5 @@ class OpenAIModel(APIAccessFoundationModel):
     ):
         ...
 ```
-
 
 

@@ -7,5 +7,6 @@
 [Protos](./index.md#protos) /
 Query Pb2
 
-> Auto-generated documentation for [alfred.fm.remote.protos.query_pb2](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/remote/protos/query_pb2.py) module.
+> Auto-generated documentation for [alfred.fm.remote.protos.query_pb2](../../../../../alfred/fm/remote/protos/query_pb2.py) module.
 
+- [Query Pb2](#query-pb2)

@@ -5,11 +5,19 @@
 [Client](./index.md#client) /
 Client
 
-> Auto-generated documentation for [alfred.client.client](https://github.com/BatsResearch/alfred/blob/main/alfred/client/client.py) module.
+> Auto-generated documentation for [alfred.client.client](../../../alfred/client/client.py) module.
+
+- [Client](#client)
+  - [Client](#client-1)
+    - [Client().__call__](#client()__call__)
+    - [Client().generate](#client()generate)
+    - [Client().remote_run](#client()remote_run)
+    - [Client().run](#client()run)
+    - [Client().score](#client()score)
 
 ## Client
 
-[Show source in client.py:17](https://github.com/BatsResearch/alfred/blob/main/alfred/client/client.py#L17)
+[Show source in client.py:18](../../../alfred/client/client.py#L18)
 
 Client is the primary user interface that wraps around foundation models.
 A client interface for accessing various models, such as those implemented by OpenAI, Hugging Face, etc.
@@ -28,6 +36,7 @@ class Client:
         local_path: Optional[str] = None,
         ssh_tunnel: bool = False,
         ssh_node: Optional[str] = None,
+        cache: Optional[Cache] = "SQLite",
         **kwargs: Any
     ):
         ...
@@ -35,7 +44,7 @@ class Client:
 
 ### Client().__call__
 
-[Show source in client.py:219](https://github.com/BatsResearch/alfred/blob/main/alfred/client/client.py#L219)
+[Show source in client.py:230](../../../alfred/client/client.py#L230)
 
 __call__() function to run the model on the queries.
 Equivalent to run() function.
@@ -63,7 +72,7 @@ def __call__(
 
 ### Client().generate
 
-[Show source in client.py:180](https://github.com/BatsResearch/alfred/blob/main/alfred/client/client.py#L180)
+[Show source in client.py:191](../../../alfred/client/client.py#L191)
 
 Wrapper function to generate the response(s) from the model. (For completion)
 
@@ -92,7 +101,7 @@ def generate(
 
 ### Client().remote_run
 
-[Show source in client.py:159](https://github.com/BatsResearch/alfred/blob/main/alfred/client/client.py#L159)
+[Show source in client.py:170](../../../alfred/client/client.py#L170)
 
 Wrapper function for running the model on the queries thru a gRPC Server.
 
@@ -119,7 +128,7 @@ def remote_run(
 
 ### Client().run
 
-[Show source in client.py:140](https://github.com/BatsResearch/alfred/blob/main/alfred/client/client.py#L140)
+[Show source in client.py:151](../../../alfred/client/client.py#L151)
 
 Run the model on the queries.
 
@@ -146,7 +155,7 @@ def run(
 
 ### Client().score
 
-[Show source in client.py:196](https://github.com/BatsResearch/alfred/blob/main/alfred/client/client.py#L196)
+[Show source in client.py:207](../../../alfred/client/client.py#L207)
 
 Wrapper function to score the response(s) from the model. (For ranking)
 
@@ -177,6 +186,5 @@ def score(
 ) -> Union[Response, List[Response]]:
     ...
 ```
-
 
 

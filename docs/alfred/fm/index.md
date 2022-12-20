@@ -4,7 +4,10 @@
 [Alfred](../index.md#alfred) /
 Fm
 
-> Auto-generated documentation for [alfred.fm](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/__init__.py) module.
+> Auto-generated documentation for [alfred.fm](../../../alfred/fm/__init__.py) module.
+
+- [Fm](#fm)
+  - [Modules](#modules)
 
 ## Modules
 

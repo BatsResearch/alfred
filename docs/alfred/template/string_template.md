@@ -5,11 +5,27 @@
 [Template](./index.md#template) /
 StringTemplate
 
-> Auto-generated documentation for [alfred.template.string_template](https://github.com/BatsResearch/alfred/blob/main/alfred/template/string_template.py) module.
+> Auto-generated documentation for [alfred.template.string_template](../../../alfred/template/string_template.py) module.
+
+- [StringTemplate](#stringtemplate)
+  - [StringTemplate](#stringtemplate-1)
+    - [StringTemplate().__call__](#stringtemplate()__call__)
+    - [StringTemplate().apply](#stringtemplate()apply)
+    - [StringTemplate().apply_to_dataset](#stringtemplate()apply_to_dataset)
+    - [StringTemplate().deserialize](#stringtemplate()deserialize)
+    - [StringTemplate().get_answer_choices_list](#stringtemplate()get_answer_choices_list)
+    - [StringTemplate().id](#stringtemplate()id)
+    - [StringTemplate().metadata](#stringtemplate()metadata)
+    - [StringTemplate().name](#stringtemplate()name)
+    - [StringTemplate().reference](#stringtemplate()reference)
+    - [StringTemplate().serialize](#stringtemplate()serialize)
+    - [StringTemplate().template](#stringtemplate()template)
+    - [StringTemplate().type](#stringtemplate()type)
+    - [StringTemplate().vote](#stringtemplate()vote)
 
 ## StringTemplate
 
-[Show source in string_template.py:16](https://github.com/BatsResearch/alfred/blob/main/alfred/template/string_template.py#L16)
+[Show source in string_template.py:16](../../../alfred/template/string_template.py#L16)
 
 Prompt Template Class for Common Static Templates
 
@@ -70,7 +86,7 @@ class StringTemplate(Template):
 
 ### StringTemplate().__call__
 
-[Show source in string_template.py:327](https://github.com/BatsResearch/alfred/blob/main/alfred/template/string_template.py#L327)
+[Show source in string_template.py:327](../../../alfred/template/string_template.py#L327)
 
 A wrapper function to apply the template to a single example
 
@@ -95,7 +111,7 @@ def __call__(self, example: Dict, **kawrgs: Any) -> Query:
 
 ### StringTemplate().apply
 
-[Show source in string_template.py:112](https://github.com/BatsResearch/alfred/blob/main/alfred/template/string_template.py#L112)
+[Show source in string_template.py:112](../../../alfred/template/string_template.py#L112)
 
 Apply template to an example and returns a query object
 
@@ -120,7 +136,7 @@ def apply(self, example: Dict, **kawrgs) -> Query:
 
 ### StringTemplate().apply_to_dataset
 
-[Show source in string_template.py:174](https://github.com/BatsResearch/alfred/blob/main/alfred/template/string_template.py#L174)
+[Show source in string_template.py:174](../../../alfred/template/string_template.py#L174)
 
 A wrapper function to apply the template to a dataset iteratively
 
@@ -145,7 +161,7 @@ def apply_to_dataset(self, dataset: Iterable[Dict], **kwargs: Any) -> Iterable[Q
 
 ### StringTemplate().deserialize
 
-[Show source in string_template.py:308](https://github.com/BatsResearch/alfred/blob/main/alfred/template/string_template.py#L308)
+[Show source in string_template.py:308](../../../alfred/template/string_template.py#L308)
 
 returns a template object from a json string of dictionary
 
@@ -171,7 +187,7 @@ def deserialize(self, json_str: str) -> Template:
 
 ### StringTemplate().get_answer_choices_list
 
-[Show source in string_template.py:256](https://github.com/BatsResearch/alfred/blob/main/alfred/template/string_template.py#L256)
+[Show source in string_template.py:256](../../../alfred/template/string_template.py#L256)
 
 Get answer choices list
 
@@ -189,7 +205,7 @@ def get_answer_choices_list(self) -> List[str]:
 
 ### StringTemplate().id
 
-[Show source in string_template.py:273](https://github.com/BatsResearch/alfred/blob/main/alfred/template/string_template.py#L273)
+[Show source in string_template.py:273](../../../alfred/template/string_template.py#L273)
 
 returns the template id
 
@@ -202,7 +218,7 @@ def id(self):
 
 ### StringTemplate().metadata
 
-[Show source in string_template.py:285](https://github.com/BatsResearch/alfred/blob/main/alfred/template/string_template.py#L285)
+[Show source in string_template.py:285](../../../alfred/template/string_template.py#L285)
 
 returns the template metadata
 
@@ -215,7 +231,7 @@ def metadata(self):
 
 ### StringTemplate().name
 
-[Show source in string_template.py:277](https://github.com/BatsResearch/alfred/blob/main/alfred/template/string_template.py#L277)
+[Show source in string_template.py:277](../../../alfred/template/string_template.py#L277)
 
 returns the template name
 
@@ -228,7 +244,7 @@ def name(self):
 
 ### StringTemplate().reference
 
-[Show source in string_template.py:281](https://github.com/BatsResearch/alfred/blob/main/alfred/template/string_template.py#L281)
+[Show source in string_template.py:281](../../../alfred/template/string_template.py#L281)
 
 returns the template reference
 
@@ -241,7 +257,7 @@ def reference(self):
 
 ### StringTemplate().serialize
 
-[Show source in string_template.py:289](https://github.com/BatsResearch/alfred/blob/main/alfred/template/string_template.py#L289)
+[Show source in string_template.py:289](../../../alfred/template/string_template.py#L289)
 
 returns the template as a json string of dictionary
 
@@ -259,7 +275,7 @@ def serialize(self):
 
 ### StringTemplate().template
 
-[Show source in string_template.py:265](https://github.com/BatsResearch/alfred/blob/main/alfred/template/string_template.py#L265)
+[Show source in string_template.py:265](../../../alfred/template/string_template.py#L265)
 
 returns the template
 
@@ -272,7 +288,7 @@ def template(self):
 
 ### StringTemplate().type
 
-[Show source in string_template.py:269](https://github.com/BatsResearch/alfred/blob/main/alfred/template/string_template.py#L269)
+[Show source in string_template.py:269](../../../alfred/template/string_template.py#L269)
 
 returns the template type
 
@@ -285,7 +301,7 @@ def type(self):
 
 ### StringTemplate().vote
 
-[Show source in string_template.py:190](https://github.com/BatsResearch/alfred/blob/main/alfred/template/string_template.py#L190)
+[Show source in string_template.py:190](../../../alfred/template/string_template.py#L190)
 
 Vote for the responses based on the matching function and the label maps
 
@@ -324,6 +340,5 @@ def vote(
 ) -> np.ndarray:
     ...
 ```
-
 
 

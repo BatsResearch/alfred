@@ -3,7 +3,10 @@
 [alfred Index](../README.md#alfred-index) /
 Alfred
 
-> Auto-generated documentation for [alfred](https://github.com/BatsResearch/alfred/blob/main/alfred/__init__.py) module.
+> Auto-generated documentation for [alfred](../../alfred/__init__.py) module.
+
+- [Alfred](#alfred)
+  - [Modules](#modules)
 
 ## Modules
 

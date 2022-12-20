@@ -4,7 +4,10 @@
 [Alfred](../index.md#alfred) /
 Template
 
-> Auto-generated documentation for [alfred.template](https://github.com/BatsResearch/alfred/blob/main/alfred/template/__init__.py) module.
+> Auto-generated documentation for [alfred.template](../../../alfred/template/__init__.py) module.
+
+- [Template](#template)
+  - [Modules](#modules)
 
 ## Modules
 

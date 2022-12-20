@@ -5,11 +5,14 @@
 [Fm](./index.md#fm) /
 Dummy
 
-> Auto-generated documentation for [alfred.fm.dummy](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/dummy.py) module.
+> Auto-generated documentation for [alfred.fm.dummy](../../../alfred/fm/dummy.py) module.
+
+- [Dummy](#dummy)
+  - [DummyModel](#dummymodel)
 
 ## DummyModel
 
-[Show source in dummy.py:11](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/dummy.py#L11)
+[Show source in dummy.py:11](../../../alfred/fm/dummy.py#L11)
 
 A dummy model that returns the input as the output.
 
@@ -23,6 +26,5 @@ class DummyModel(LocalAccessFoundationModel):
     def __init__(self, model: Optional[str] = None):
         ...
 ```
-
 
 

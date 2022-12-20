@@ -6,7 +6,10 @@
 [Remote](../index.md#remote) /
 Protos
 
-> Auto-generated documentation for [alfred.fm.remote.protos](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/remote/protos/__init__.py) module.
+> Auto-generated documentation for [alfred.fm.remote.protos](../../../../../alfred/fm/remote/protos/__init__.py) module.
+
+- [Protos](#protos)
+  - [Modules](#modules)
 
 ## Modules
 

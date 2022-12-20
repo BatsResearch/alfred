@@ -5,11 +5,14 @@
 [Fm](./index.md#fm) /
 Huggingface
 
-> Auto-generated documentation for [alfred.fm.huggingface](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/huggingface.py) module.
+> Auto-generated documentation for [alfred.fm.huggingface](../../../alfred/fm/huggingface.py) module.
+
+- [Huggingface](#huggingface)
+  - [HuggingFaceModel](#huggingfacemodel)
 
 ## HuggingFaceModel
 
-[Show source in huggingface.py:40](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/huggingface.py#L40)
+[Show source in huggingface.py:40](../../../alfred/fm/huggingface.py#L40)
 
 The HuggingFaceModel class is a wrapper for HuggingFace models,
 including both Seq2Seq (Encoder-Decoder, e.g. T5, T0) and Causal
@@ -38,6 +41,5 @@ class HuggingFaceModel(LocalAccessFoundationModel):
     ):
         ...
 ```
-
 
 

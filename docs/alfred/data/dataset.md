@@ -5,11 +5,24 @@
 [Data](./index.md#data) /
 Dataset
 
-> Auto-generated documentation for [alfred.data.dataset](https://github.com/BatsResearch/alfred/blob/main/alfred/data/dataset.py) module.
+> Auto-generated documentation for [alfred.data.dataset](../../../alfred/data/dataset.py) module.
+
+- [Dataset](#dataset)
+  - [Dataset](#dataset-1)
+    - [Dataset().__getitem__](#dataset()__getitem__)
+    - [Dataset().__iter__](#dataset()__iter__)
+    - [Dataset().__len__](#dataset()__len__)
+    - [Dataset().__version__](#dataset()__version__)
+    - [Dataset().data](#dataset()data)
+    - [Dataset().info](#dataset()info)
+    - [Dataset.load_from_disk](#datasetload_from_disk)
+    - [Dataset.save_to_disk](#datasetsave_to_disk)
+    - [Dataset().split](#dataset()split)
+    - [Dataset().version](#dataset()version)
 
 ## Dataset
 
-[Show source in dataset.py:4](https://github.com/BatsResearch/alfred/blob/main/alfred/data/dataset.py#L4)
+[Show source in dataset.py:4](../../../alfred/data/dataset.py#L4)
 
 This is a generic interface for dataset classes that mirrors key interfaces from huggingface datasets. It provides methods for accessing and iterating over the data, as well as for saving and loading the dataset to and from disk.
 
@@ -42,7 +55,7 @@ class Dataset(abc.ABC):
 
 ### Dataset().__getitem__
 
-[Show source in dataset.py:52](https://github.com/BatsResearch/alfred/blob/main/alfred/data/dataset.py#L52)
+[Show source in dataset.py:52](../../../alfred/data/dataset.py#L52)
 
 returns the row with the given unique identifier
 
@@ -56,7 +69,7 @@ def __getitem__(self, uid, **kawrgs):
 
 ### Dataset().__iter__
 
-[Show source in dataset.py:57](https://github.com/BatsResearch/alfred/blob/main/alfred/data/dataset.py#L57)
+[Show source in dataset.py:57](../../../alfred/data/dataset.py#L57)
 
 iterates over the rows of the dataset
 
@@ -70,7 +83,7 @@ def __iter__(self):
 
 ### Dataset().__len__
 
-[Show source in dataset.py:47](https://github.com/BatsResearch/alfred/blob/main/alfred/data/dataset.py#L47)
+[Show source in dataset.py:47](../../../alfred/data/dataset.py#L47)
 
 returns the number of rows in the dataset
 
@@ -84,7 +97,7 @@ def __len__(self) -> int:
 
 ### Dataset().__version__
 
-[Show source in dataset.py:62](https://github.com/BatsResearch/alfred/blob/main/alfred/data/dataset.py#L62)
+[Show source in dataset.py:62](../../../alfred/data/dataset.py#L62)
 
 returns the version of the dataset
 
@@ -98,7 +111,7 @@ def __version__(self) -> str:
 
 ### Dataset().data
 
-[Show source in dataset.py:29](https://github.com/BatsResearch/alfred/blob/main/alfred/data/dataset.py#L29)
+[Show source in dataset.py:29](../../../alfred/data/dataset.py#L29)
 
 returns the underlying data
 
@@ -113,7 +126,7 @@ def data(self):
 
 ### Dataset().info
 
-[Show source in dataset.py:35](https://github.com/BatsResearch/alfred/blob/main/alfred/data/dataset.py#L35)
+[Show source in dataset.py:35](../../../alfred/data/dataset.py#L35)
 
 returns the metadata about the dataset
 
@@ -128,7 +141,7 @@ def info(self):
 
 ### Dataset.load_from_disk
 
-[Show source in dataset.py:77](https://github.com/BatsResearch/alfred/blob/main/alfred/data/dataset.py#L77)
+[Show source in dataset.py:77](../../../alfred/data/dataset.py#L77)
 
 loads the dataset from disk from the specified path
 
@@ -142,7 +155,7 @@ def load_from_disk(self, path: str):
 
 ### Dataset.save_to_disk
 
-[Show source in dataset.py:72](https://github.com/BatsResearch/alfred/blob/main/alfred/data/dataset.py#L72)
+[Show source in dataset.py:72](../../../alfred/data/dataset.py#L72)
 
 saves the dataset to disk at the specified path
 
@@ -156,7 +169,7 @@ def save_to_disk(self, path: str):
 
 ### Dataset().split
 
-[Show source in dataset.py:41](https://github.com/BatsResearch/alfred/blob/main/alfred/data/dataset.py#L41)
+[Show source in dataset.py:41](../../../alfred/data/dataset.py#L41)
 
 returns the information about how the dataset has been split
 
@@ -171,7 +184,7 @@ def split(self):
 
 ### Dataset().version
 
-[Show source in dataset.py:67](https://github.com/BatsResearch/alfred/blob/main/alfred/data/dataset.py#L67)
+[Show source in dataset.py:67](../../../alfred/data/dataset.py#L67)
 
 returns the version of the dataset
 
@@ -182,6 +195,5 @@ returns the version of the dataset
 def version(self) -> str:
     ...
 ```
-
 
 

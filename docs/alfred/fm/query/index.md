@@ -5,7 +5,10 @@
 [Fm](../index.md#fm) /
 Query
 
-> Auto-generated documentation for [alfred.fm.query](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/query/__init__.py) module.
+> Auto-generated documentation for [alfred.fm.query](../../../../alfred/fm/query/__init__.py) module.
+
+- [Query](#query)
+  - [Modules](#modules)
 
 ## Modules
 
