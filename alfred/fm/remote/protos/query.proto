@@ -1,0 +1,46 @@
+// StreamUnary RPCs that contains streaming strings
+// https://ably.com/blog/grpc-stream-performance
+syntax = "proto3";
+
+package unary;
+
+service QueryService{
+  // stream messages
+  rpc Inference(InferenceRequest) returns (InferenceResponse) {}
+  rpc DataReady(DataReadySignal) returns (stream InferenceResponse) {}
+  rpc DataHeader(DataHeaderRequest) returns (DataHeaderResponse) {}
+}
+
+message DataHeaderRequest {
+  string data_meta = 1;
+  uint64 data_size = 2;
+}
+
+message DataHeaderResponse {
+  string data_meta = 1;
+  uint64 data_size = 2;
+}
+
+message DataReadySignal {
+  uint64 data_size = 1;
+  optional string kwargs = 2;
+}
+
+message InferenceRequest {
+  string message = 1;
+  string candidate = 2; // ~formated as answer choices: (i.e. ans1|||ans2|||ans3)
+  optional string kwargs = 3;
+}
+
+message InferenceResponse {
+  string message = 1;
+  bool ranked = 2;
+  bool success = 3;
+  optional string logit = 4;
+}
+/**
+
+TODO: [] Nested Tensor Responses [] Scoring Candidates (logits return)
+
+Current design only need to expand InferenceResponse a little bit
+**/
