@@ -2,7 +2,7 @@
 
 _Now with Cache!_
 
-Internal Alpha Run, Build Status:  ![test status](https://github.com/BatsResearch/alfred/actions/workflows/tests.yml/badge.svg?branch=cache)
+Internal Alpha Run, Build Status:  ![test status](https://github.com/BatsResearch/alfred/actions/workflows/tests.yml/badge.svg?branch=main)
 
 # Overview
 
