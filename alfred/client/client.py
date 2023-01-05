@@ -173,8 +173,6 @@ class Client:
         if isinstance(queries, str) or isinstance(queries, Query):
             return self.grpcClient.run(queries, **kwargs)
         if isinstance(queries, list):
-            if isinstance(queries[0], Query):
-                queries = [query.load()[0] for query in queries]
             return self.grpcClient.run_dataset(queries, **kwargs)
 
     def generate(self,
