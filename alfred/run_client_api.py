@@ -8,7 +8,7 @@ from pydantic import BaseModel
 
 from alfred.client import Client
 from alfred.client.ssh.sshtunnel import SSHTunnel
-from alfred.fm.query import RankedQuery
+from alfred.fm.query import RankedQuery, CompletionQuery
 from alfred.template import StringTemplate
 
 alfred_app = FastAPI()
@@ -222,7 +222,7 @@ async def alfred_server_completion(request: Request):
     prompt = request['prompt']
     if client:
         res = client(prompt).prediction
-        return {'prediction': res}
+        return {'prediction': res, 'scores': ''}
     else:
         return {'prediction': 'Error: No alfred client connected!'}
 
