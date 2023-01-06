@@ -222,7 +222,7 @@ async def alfred_server_completion(request: Request):
     prompt = request['prompt']
     if client:
         res = client(prompt).prediction
-        return {'prediction': res}
+        return {'prediction': res, 'scores': ''}
     else:
         return {'prediction': 'Error: No alfred client connected!'}
 
@@ -233,12 +233,8 @@ async def alfred_server_completion(request: Request):
     prompt = request['prompt']
     candidates = request['candidates']
     if client:
-        if len(candidates) > 0:
-            res = client(RankedQuery(prompt, candidates=candidates.split('|||')))
-            return {'prediction': res.prediction, 'scores': res.scores}
-        else:
-            res = client(CompletionQuery(prompt))
-            return {'prediction': res.prediction, 'scores': ''}
+        res = client(RankedQuery(prompt, candidates=candidates.split('|||')))
+        return {'prediction': res.prediction, 'scores': res.scores}
     else:
         return {'prediction': 'Error: No alfred client connected!'}
 
