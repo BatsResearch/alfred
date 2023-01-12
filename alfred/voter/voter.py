@@ -101,9 +101,9 @@ class Voter:
                     labels = np.array(list(response.scores.keys()))
                     if type(self._calibration) == tuple:
                         weights, biases = self._calibration
-                        calibrated_scores = scores * weights + biases
+                        calibrated_scores = scores @ weights + biases
                     elif type(self._calibration) in [list, np.ndarray]:
-                        calibrated_scores = scores * self._calibration
+                        calibrated_scores = scores @ self._calibration
                     response = labels[np.argmax(calibrated_scores)]
                 else:
                     response = response.prediction
