@@ -67,7 +67,7 @@ class DynamicBatcher:
             self,
             queries: Union[List[Query], List[str]],
             max_batch_size: int = 2048,
-        ):
+    ):
         """
 
 
@@ -128,7 +128,7 @@ class DynamicBatcher:
                 inst: List,
                 offset: Optional[int] = None,
                 candidate_token_len: Optional[Union[int,
-                                                    List[int]]] = None) -> List:
+                List[int]]] = None) -> List:
 
         if len(inst) != len(self.len_sorted_idx):
             if offset:

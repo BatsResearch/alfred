@@ -1,13 +1,12 @@
 import json
 import logging
-from typing import Dict, Any, Optional, Iterable, Callable, Union, List
+import re
+from typing import Dict, Any, Optional, Iterable, List
 
 import numpy as np
 import torch
-from tqdm.auto import tqdm
 
 from alfred.fm.query import Query, CompletionQuery, RankedQuery
-from alfred.fm.response import Response, RankedResponse, CompletionResponse
 from alfred.template.template import Template
 
 logger = logging.getLogger(__name__)
@@ -55,14 +54,12 @@ class StringTemplate(Template):
                  reference: Optional[str] = None,
                  metadata: Optional[Dict[str, Any]] = None,
                  answer_choices: Optional[str] = None,
-                 label_maps: Optional[Dict] = None,
-                 matching_fn: Optional[Callable] = lambda x, y: x == y,
                  ):
         """
 
         Static Prompt Template Constructor:
 
-        :param template: template TODO: Use jinja as soon as possible!!
+        :param template: template expressed in jinja strings
         :type template: str
         :param id: (optional) id of the template
         :type id: str
@@ -77,15 +74,6 @@ class StringTemplate(Template):
                                    e.g. "cat ||| dog"
                                If None is given, then the template is open-ended completion.
         :type answer_choices: str
-        :param label_maps: (optional) There are 2 scenario each corresponding to ranked scoring scheme and completion scheme.
-                            1. Ranked Scoring Scheme:
-                                A dictionary of *labels* that maps to numerical vote/labels.
-                                To use when the given answer_choices is out of order.
-                                e.g. {"dog": 1, "cat": 2}
-                            2. Completion Scheme:
-                                A dictionary that maps *completions* to numerical values for votes.
-                                e.g. {"cat": 1, "kitten": 1, "dog": 2, "puppy": 2}
-        :type label_maps: Dict
         """
         self._template = template
 
@@ -97,6 +85,8 @@ class StringTemplate(Template):
         self._answer_choices = answer_choices
         self._answer_candidates = None
 
+        self._keywords = re.findall(r"\[([^\]]*)\]", template)
+
         if answer_choices:
             if isinstance(answer_choices, str):
                 self._answer_candidates = [
@@ -105,9 +95,6 @@ class StringTemplate(Template):
                 logger.warning(
                     f"Unsupported answer choices format: {type(answer_choices)}")
                 self._answer_choices = None
-
-        self._label_maps = label_maps
-        self._matching_fn = matching_fn
 
     def apply(self,
               example: Dict,
@@ -187,72 +174,6 @@ class StringTemplate(Template):
         """
         return [self.apply(example, **kwargs) for example in dataset]
 
-    def vote(self,
-             responses: Union[Iterable[str],
-                              str,
-                              Iterable[Response],
-                              Response],
-             matching_function: Callable = lambda x, y: x == y,
-             label_maps: Optional[Dict] = None,
-             **kwargs: Any) -> np.ndarray:
-        """
-        Vote for the responses based on the matching function and the label maps
-
-        *NOTE*: if label maps contains numerical labels then the vote will be the exact specified value
-        if not the vote will be the index + 1 of the matched answer choice
-
-        *Abstention vote is 0*
-
-        *NOTE* on partial labels:
-
-        :param responses: list of response objects
-        :type responses: Union[Iterable[str], str, Iterable[Response], Response]
-        :param matching_function: (optional) function to match responses against answer choices, defaulting to exact match
-                                    e.g. lambda x, y: x == y
-        :type matching_function: Callable
-        :param label_maps: (optional) label maps that maps responses content to labels
-                           label_maps specified here will overide the label_maps initialized in the template
-        :type label_maps: Dict
-        :return: numpy ndarray of votes in np.int8
-        :rtype: np.ndarray
-        """
-        label_maps = self._label_maps if label_maps is None else label_maps
-
-        if isinstance(responses, str) or isinstance(responses, Response):
-            responses = [responses]
-
-        if label_maps is None:
-            logger.warning(
-                "No answer label map found, voting will not be done")
-            raise ValueError(
-                "No answer label map found, voting will not be done")
-
-        no_tqdm = kwargs.get('no_tqdm', True)
-
-        if 'zero_abstention' in kwargs:
-            zero_abstention = kwargs['zero_abstention']
-
-        votes = np.zeros(len(responses))
-        for idx, response in enumerate(tqdm(responses, disable=no_tqdm)):
-            if type(response) in [CompletionResponse, RankedResponse]:
-                response = response.prediction
-            elif isinstance(response, str):
-                pass
-            else:
-                logger.error(f"Unsupported response type: {type(response)}")
-                raise ValueError(
-                    f"Unsupported response type: {type(response)}")
-
-            if isinstance(label_maps, dict):
-                for k_idx, key in enumerate(label_maps.keys()):
-                    if matching_function(response, key):
-                        votes[idx] = label_maps[key] if isinstance(
-                            label_maps[key], int) else k_idx + 1
-            else:
-                if matching_function(response, label_maps):
-                    votes[idx] = 1
-        return votes
-
     def get_answer_choices_list(self) -> List[str]:
         """
         Get answer choices list
@@ -269,6 +190,10 @@ class StringTemplate(Template):
     def type(self):
         """returns the template type"""
         return self._type
+
+    def keywords(self):
+        """returns the keywords"""
+        return self._keywords
 
     def id(self):
         """returns the template id"""
@@ -294,16 +219,16 @@ class StringTemplate(Template):
         :rtype: str
         """
         return json.dumps(
-                            {
-                                "id": self._id,
-                                "name": self._name,
-                                "reference": self._reference,
-                                "template": self._template,
-                                "metadata": self._metadata,
-                                "answer_choices": self._answer_choices,
-                                "label_maps": self._label_maps
-                            }
-                        )
+            {
+                "id": self._id,
+                "name": self._name,
+                "reference": self._reference,
+                "template": self._template,
+                "metadata": self._metadata,
+                "answer_choices": self._answer_choices,
+                "label_maps": self._label_maps
+            }
+        )
 
     def deserialize(self, json_str: str) -> Template:
         """

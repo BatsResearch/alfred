@@ -197,7 +197,6 @@ async def set_alfred_server_endpoint_cfg(
         server_connected = True
         print("Server connected")
 
-
     ALFRED_META_CONFIG['model'] = data.model
     ALFRED_META_CONFIG['model_type'] = data.model_type
     ALFRED_META_CONFIG['end_point'] = data.end_point

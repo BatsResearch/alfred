@@ -35,6 +35,12 @@ class Template(abc.ABC):
 
     @property
     @abc.abstractmethod
+    def keywords(self):
+        """returns the keywords of the template"""
+        pass
+
+    @property
+    @abc.abstractmethod
     def id(self):
         """returns the id of the template"""
         pass

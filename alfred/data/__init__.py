@@ -1,6 +1,8 @@
+from pandas import read_csv, read_json, read_sql_table, DataFrame
+
 from .arrow import IterableArrowDataset, BufferedArrowDataset
 from .dataset import Dataset
-from pandas import read_csv, read_json, read_sql_table, DataFrame
+
 
 def from_csv(csv_file: str) -> IterableArrowDataset:
     """
@@ -50,8 +52,8 @@ def from_sql_table(sql_table_name, sql_connection_string) -> IterableArrowDatase
     :rtype: IterableArrowDataset
     """
     return IterableArrowDataset(
-                read_sql_table(
-                    sql_table_name,
-                    sql_connection_string,
-                )
-            )
+        read_sql_table(
+            sql_table_name,
+            sql_connection_string,
+        )
+    )
