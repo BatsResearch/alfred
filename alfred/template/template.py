@@ -64,26 +64,6 @@ class Template(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def vote(self,
-             responses: Union[Response, str],
-             matching_function: Callable,
-             label_maps: Optional[Dict] = None,
-             ):
-        """
-        returns the vote of the template based on the responses with
-        the label maps and matching function
-
-        :param responses: the responses to be voted on
-        :type responses: Union[Response, str]
-        :param matching_function: the matching function to be used
-        :type matching_function: Callable
-        :param label_maps: (optional) the label maps to be used, this will overide the
-                            default label maps of the template if it is initialized with one
-        :type label_maps: Dict
-        """
-        pass
-
-    @abc.abstractmethod
     def get_answer_choices_list(self, example):
         """returns the answer choices list of the template"""
         pass

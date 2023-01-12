@@ -58,6 +58,7 @@ class Voter:
         *NOTE*: if label maps contains numerical labels then the vote will be the exact specified value
         if not the vote will be the index + 1 of the matched answer choice
 
+
         *Abstention vote is 0*
 
         *NOTE* on partial labels:
@@ -68,17 +69,18 @@ class Voter:
                                     e.g. lambda x, y: x == y
         :type matching_function: Callable
         :param label_map: (optional) label maps that maps responses content to labels
-                           label_maps specified here will overide the label_maps initialized in the template
+                           label_map specified here will overide the label_map initialized in the template
         :type label_map: Dict
         :return: numpy ndarray of votes in np.int8
         :rtype: np.ndarray
         """
-        label_maps = self._label_map if label_map is None else label_map
+        label_map = self._label_map if label_map is None else label_map
+        matching_function = self._matching_fn if matching_function is None else matching_function
 
         if isinstance(responses, str) or isinstance(responses, Response):
             responses = [responses]
 
-        if label_maps is None:
+        if label_map is None:
             logger.warning(
                 "No answer label map found, voting will not be done")
             raise ValueError(
@@ -112,13 +114,13 @@ class Voter:
                 raise ValueError(
                     f"Unsupported response type: {type(response)}")
 
-            if isinstance(label_maps, dict):
-                for k_idx, key in enumerate(label_maps.keys()):
+            if isinstance(label_map, dict):
+                for k_idx, key in enumerate(label_map.keys()):
                     if matching_function(response, key):
-                        votes[idx] = label_maps[key] if isinstance(
-                            label_maps[key], int) else k_idx + 1
+                        votes[idx] = label_map[key] if isinstance(
+                            label_map[key], int) else k_idx + 1
             else:
-                if matching_function(response, label_maps):
+                if matching_function(response, label_map):
                     votes[idx] = 1
         return votes
 

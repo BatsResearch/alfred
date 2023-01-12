@@ -183,30 +183,37 @@ class StringTemplate(Template):
         """
         return self._answer_candidates
 
+    @property
     def template(self):
         """returns the template"""
         return self._template
 
+    @property
     def type(self):
         """returns the template type"""
         return self._type
 
+    @property
     def keywords(self):
         """returns the keywords"""
         return self._keywords
 
+    @property
     def id(self):
         """returns the template id"""
         return self._id
 
+    @property
     def name(self):
         """returns the template name"""
         return self._name
 
+    @property
     def reference(self):
         """returns the template reference"""
         return self._reference
 
+    @property
     def metadata(self):
         """returns the template metadata"""
         return self._metadata
@@ -226,7 +233,6 @@ class StringTemplate(Template):
                 "template": self._template,
                 "metadata": self._metadata,
                 "answer_choices": self._answer_choices,
-                "label_maps": self._label_maps
             }
         )
 
@@ -246,7 +252,7 @@ class StringTemplate(Template):
             json_str['template'],
             json_str['metadata'],
             json_str['answer_choices'],
-            json_str['label_maps'])
+            )
         return self
 
     def __call__(self,
