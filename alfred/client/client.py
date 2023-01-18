@@ -1,6 +1,7 @@
 import logging
 from typing import Any, List, Optional, Union, Dict
 
+import numpy as np
 from grpc import FutureTimeoutError
 
 from alfred.client.ssh.sshtunnel import SSHTunnel
@@ -10,8 +11,12 @@ from alfred.fm.openai import OpenAIModel
 from alfred.fm.query import CompletionQuery, Query, RankedQuery
 from alfred.fm.remote.grpc import gRPCClient
 from alfred.fm.response import Response
+from alfred.template import StringTemplate, Template
+from alfred.voter.voter import Voter
 
 logger = logging.getLogger(__name__)
+
+NULL_INPUT_TOKENS = ["N/A", "ε", "[MASK]", "NULL", "<|endoftext|>"]
 
 
 class Client:
@@ -230,3 +235,74 @@ class Client:
         :rtype: Union[Response, List[Response]]
         """
         return self.run(queries, **kwargs)
+
+    def calibrate(self,
+                  template: Union[str, Template],
+                  voter: Optional[Voter] = None,
+                  null_tokens: Optional[Union[List[str], str]] = None,
+                  candidates: Optional[Union[List[str], str]] = None,
+                  strategy: int = 1,
+                  ):
+        """
+        calibrate are used to calibrate foundation models contextually given the template.
+        A voter class may be passed to calibrate the model with a specific voter.
+        If a voter is set, the calibrated weights will be stored in the voter
+        calibrate() function will return the calibration weights and biases otherwise.
+
+        There are two strategies for calibration:
+        1.  W = diag(p)^-1, b = 0
+        2.  W = eye, b = -p
+
+        For reference, please refer to:
+            Zhao, Z., Wallace, E., Feng, S., Klein, D., & Singh, S. (2021, July).
+            Calibrate before use: Improving few-shot performance of language models.
+            In International Conference on Machine Learning (pp. 12697-12706). PMLR.
+
+        :param template: The template to calibrate the model with.
+        :type template: Union[str, Template]
+        :param voter: The voter to calibrate the model with.
+        :type voter: Optional[Voter]
+        :param null_tokens: The null tokens to calibrate the model with.
+        :type null_tokens: Optional[Union[List[str], str]]
+        :param candidates: The candidates to calibrate the model with.
+        :type candidates: Optional[Union[List[str], str]]
+        :param strategy: The strategy to calibrate the model with. default to 1
+        :type strategy: int
+        """
+        if null_tokens is None:
+            null_tokens = NULL_INPUT_TOKENS
+        if isinstance(null_tokens, str):
+            null_tokens = [null_tokens]
+
+        candidates = candidates or template._answer_candidates
+        if candidates is None:
+            logger.error("No candidates provided for calibration.")
+            raise ValueError("No answer candidates provided for calibration.")
+
+        template = StringTemplate(template) if isinstance(template, str) else template
+
+        # identify the keywords in template_str
+        keywords = template.keywords
+        weights = np.empty([len(null_tokens), len(candidates), len(candidates)])
+        biases = np.empty([len(null_tokens), len(candidates)])
+        scores = np.empty((len(null_tokens), len(candidates)))
+        for null_token_id, null_token in enumerate(null_tokens):
+            null_instance = dict(((k, null_token) for k in keywords))
+            query = template.apply(null_instance)
+            query._candidates = candidates
+            p = np.array(list(self.score(query).scores.values()))
+            scores[null_token_id, :] = p
+            if strategy == 1:
+                weights[null_token_id, :, :] = np.linalg.inv(np.diag(p))
+                biases[null_token_id, :] = np.zeros(len(candidates))
+            elif strategy == 2:
+                weights[null_token_id, :, :] = np.eye(len(candidates))
+                biases[null_token_id, :] = -p
+
+        ensembled_weights = weights.mean(axis=0)
+        ensembled_biases = biases.mean(axis=0)
+
+        if voter is None:
+            return ensembled_weights, ensembled_biases
+
+        voter.set_calibration(ensembled_weights, ensembled_biases)

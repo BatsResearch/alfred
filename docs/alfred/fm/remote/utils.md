@@ -1,16 +1,19 @@
 # Utils
 
-[alfred Index](../../../README.md#alfred-index) /
+[Alfred Index](../../../README.md#alfred-index) /
 [Alfred](../../index.md#alfred) /
 [Fm](../index.md#fm) /
 [Remote](./index.md#remote) /
 Utils
 
-> Auto-generated documentation for [alfred.fm.remote.utils](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/remote/utils.py) module.
+> Auto-generated documentation for [alfred.fm.remote.utils](../../../../alfred/fm/remote/utils.py) module.
+
+- [Utils](#utils)
+  - [get_ip](#get_ip)
 
 ## get_ip
 
-[Show source in utils.py:4](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/remote/utils.py#L4)
+[Show source in utils.py:4](../../../../alfred/fm/remote/utils.py#L4)
 
 Returns the Public IP address of the current machine.
 
@@ -30,6 +33,5 @@ Type: *str*
 def get_ip(ipv4=True):
     ...
 ```
-
 
 

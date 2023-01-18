@@ -1,16 +1,23 @@
 # Response
 
-[alfred Index](../../../README.md#alfred-index) /
+[Alfred Index](../../../README.md#alfred-index) /
 [Alfred](../../index.md#alfred) /
 [Fm](../index.md#fm) /
 [Response](./index.md#response) /
 Response
 
-> Auto-generated documentation for [alfred.fm.response.response](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/response/response.py) module.
+> Auto-generated documentation for [alfred.fm.response.response](../../../../alfred/fm/response/response.py) module.
+
+- [Response](#response)
+  - [Response](#response-1)
+    - [Response().__repr__](#response()__repr__)
+    - [Response().__str__](#response()__str__)
+    - [Response().prediction](#response()prediction)
+    - [Response().serialize](#response()serialize)
 
 ## Response
 
-[Show source in response.py:6](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/response/response.py#L6)
+[Show source in response.py:6](../../../../alfred/fm/response/response.py#L6)
 
 A class that represents a response from a alfred.fm model.
 Inherit from OrderedDict.
@@ -25,7 +32,7 @@ class Response(OrderedDict):
 
 ### Response().__repr__
 
-[Show source in response.py:43](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/response/response.py#L43)
+[Show source in response.py:44](../../../../alfred/fm/response/response.py#L44)
 
 Get a string representation of the response object.
 
@@ -43,7 +50,7 @@ def __repr__(self):
 
 ### Response().__str__
 
-[Show source in response.py:30](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/response/response.py#L30)
+[Show source in response.py:31](../../../../alfred/fm/response/response.py#L31)
 
 Get a string representation of the response.
 
@@ -61,7 +68,7 @@ def __str__(self):
 
 ### Response().prediction
 
-[Show source in response.py:12](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/response/response.py#L12)
+[Show source in response.py:13](../../../../alfred/fm/response/response.py#L13)
 
 Get the prediction made by the model.
 
@@ -79,7 +86,7 @@ def prediction(self):
 
 ### Response().serialize
 
-[Show source in response.py:21](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/response/response.py#L21)
+[Show source in response.py:22](../../../../alfred/fm/response/response.py#L22)
 
 Serialize the response to a JSON string.
 
@@ -94,6 +101,5 @@ Type: *str*
 def serialize(self) -> str:
     ...
 ```
-
 
 

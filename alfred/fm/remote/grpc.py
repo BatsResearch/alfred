@@ -7,6 +7,7 @@ from concurrent import futures
 from typing import Optional, Union, Iterable, Tuple
 
 import grpc
+
 from alfred.fm.query import Query, RankedQuery, CompletionQuery
 from alfred.fm.remote.protos import query_pb2
 from alfred.fm.remote.protos import query_pb2_grpc
@@ -76,9 +77,9 @@ class gRPCClient:
 
     def run_dataset(self,
                     dataset: Union[Iterable[Query],
-                                   Iterable[str],
-                                   Iterable[Tuple[str,
-                                                  str]]],
+                    Iterable[str],
+                    Iterable[Tuple[str,
+                    str]]],
                     **kwargs,
                     ):
         try:

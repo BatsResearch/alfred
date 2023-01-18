@@ -13,6 +13,7 @@ logger = logging.getLogger(__name__)
 
 LMT_SIZE_FACTOR = 86381
 
+
 def clear_cuda_cache():
     """
     Clear cuda cache via garbage collection
@@ -59,19 +60,22 @@ def reorder_array(arr: Union[np.ndarray, torch.Tensor, list],
 
 class DynamicBatcher:
     """
-
-
-
+    Dynamic Batching Utility
+    Maximize GPU Utilization by batching queries of similar sizes
     """
 
     def __init__(
             self,
             queries: Union[List[Query], List[str]],
             max_batch_size: int = 2048,
-        ):
+    ):
         """
+        Initialize a DynamicBatcher
 
-
+        :param queries: A list of queries to be batched
+        :type queries: Union[List[Query], List[str]]
+        :param max_batch_size: The maximum batch size
+        :type max_batch_size: int
         """
         self.queries = queries
         self.max_batch_size = max_batch_size
@@ -100,13 +104,17 @@ class DynamicBatcher:
                             candidate_token_len: Union[List[int], int] = 1,
                             ) -> RankedResponse:
         """
-
+        Merge a list of responses with raw logit into a single RankedResponse
         Assumption: Candidate Order is the same across all ranked queries
 
         :param responses: A list of responses to be merged
+        :type responses: List[OrderedDict]
         :param softmax: Whether to apply softmax to the logits
+        :type softmax: bool
         :param candidate_token_len: The length of the candidate in terms of tokens
+        :type candidate_token_len: Union[List[int], int]
         :return: A merged response
+        :rtype: RankedResponse
         """
         if isinstance(candidate_token_len, int):
             candidate_token_len = [candidate_token_len] * len(self.candidates)
@@ -129,7 +137,19 @@ class DynamicBatcher:
                 inst: List,
                 offset: Optional[int] = None,
                 candidate_token_len: Optional[Union[int,
-                                                    List[int]]] = None) -> List:
+                List[int]]] = None) -> List:
+        """
+        Reordering the responses according to the original order of the queries
+
+        :param inst: The list of responses to be reordered
+        :type inst: List
+        :param offset: The offset of the responses
+        :type offset: Optional[int]
+        :param candidate_token_len: The length of the candidate in terms of tokens
+        :type candidate_token_len: Optional[Union[int, List[int]]]
+        :return: The reordered responses
+        :rtype: List of responses
+        """
 
         if len(inst) != len(self.len_sorted_idx):
             if offset:
@@ -154,12 +174,15 @@ class DynamicBatcher:
         clear_cuda_cache()
         return list(reordered_inst)
 
-    def batch(self):
+    def batch(self) -> List:
         '''
-        Batch a list of instances into a list of batches
+        Batch a list of instances into a list of batches.
+        If the instances are of different sizes, they will be sorted by size
+        and batched accordingly
+
+        :return: A list of batches
+        :rtype: List[List[Instance]]
         '''
-        # sort instances by length and record the index map to the original
-        # inst list
         insts = []
         candidates = []
         for query in self.queries:

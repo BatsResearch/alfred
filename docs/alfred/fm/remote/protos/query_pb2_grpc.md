@@ -1,17 +1,29 @@
 # Query Pb2 Grpc
 
-[alfred Index](../../../../README.md#alfred-index) /
+[Alfred Index](../../../../README.md#alfred-index) /
 [Alfred](../../../index.md#alfred) /
 [Fm](../../index.md#fm) /
 [Remote](../index.md#remote) /
 [Protos](./index.md#protos) /
 Query Pb2 Grpc
 
-> Auto-generated documentation for [alfred.fm.remote.protos.query_pb2_grpc](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/remote/protos/query_pb2_grpc.py) module.
+> Auto-generated documentation for [alfred.fm.remote.protos.query_pb2_grpc](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py) module.
+
+- [Query Pb2 Grpc](#query-pb2-grpc)
+  - [QueryService](#queryservice)
+    - [QueryService.DataHeader](#queryservicedataheader)
+    - [QueryService.DataReady](#queryservicedataready)
+    - [QueryService.Inference](#queryserviceinference)
+  - [QueryServiceServicer](#queryserviceservicer)
+    - [QueryServiceServicer().DataHeader](#queryserviceservicer()dataheader)
+    - [QueryServiceServicer().DataReady](#queryserviceservicer()dataready)
+    - [QueryServiceServicer().Inference](#queryserviceservicer()inference)
+  - [QueryServiceStub](#queryservicestub)
+  - [add_QueryServiceServicer_to_server](#add_queryserviceservicer_to_server)
 
 ## QueryService
 
-[Show source in query_pb2_grpc.py:88](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/remote/protos/query_pb2_grpc.py#L88)
+[Show source in query_pb2_grpc.py:88](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L88)
 
 Missing associated documentation comment in .proto file.
 
@@ -24,7 +36,7 @@ class QueryService(object):
 
 ### QueryService.DataHeader
 
-[Show source in query_pb2_grpc.py:143](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/remote/protos/query_pb2_grpc.py#L143)
+[Show source in query_pb2_grpc.py:143](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L143)
 
 #### Signature
 
@@ -47,7 +59,7 @@ def DataHeader(
 
 ### QueryService.DataReady
 
-[Show source in query_pb2_grpc.py:117](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/remote/protos/query_pb2_grpc.py#L117)
+[Show source in query_pb2_grpc.py:117](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L117)
 
 #### Signature
 
@@ -70,7 +82,7 @@ def DataReady(
 
 ### QueryService.Inference
 
-[Show source in query_pb2_grpc.py:91](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/remote/protos/query_pb2_grpc.py#L91)
+[Show source in query_pb2_grpc.py:91](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L91)
 
 #### Signature
 
@@ -95,7 +107,7 @@ def Inference(
 
 ## QueryServiceServicer
 
-[Show source in query_pb2_grpc.py:40](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/remote/protos/query_pb2_grpc.py#L40)
+[Show source in query_pb2_grpc.py:40](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L40)
 
 Missing associated documentation comment in .proto file.
 
@@ -108,7 +120,7 @@ class QueryServiceServicer(object):
 
 ### QueryServiceServicer().DataHeader
 
-[Show source in query_pb2_grpc.py:56](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/remote/protos/query_pb2_grpc.py#L56)
+[Show source in query_pb2_grpc.py:56](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L56)
 
 Missing associated documentation comment in .proto file.
 
@@ -121,7 +133,7 @@ def DataHeader(self, request, context):
 
 ### QueryServiceServicer().DataReady
 
-[Show source in query_pb2_grpc.py:50](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/remote/protos/query_pb2_grpc.py#L50)
+[Show source in query_pb2_grpc.py:50](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L50)
 
 Missing associated documentation comment in .proto file.
 
@@ -134,7 +146,7 @@ def DataReady(self, request, context):
 
 ### QueryServiceServicer().Inference
 
-[Show source in query_pb2_grpc.py:43](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/remote/protos/query_pb2_grpc.py#L43)
+[Show source in query_pb2_grpc.py:43](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L43)
 
 stream messages
 
@@ -149,7 +161,7 @@ def Inference(self, request, context):
 
 ## QueryServiceStub
 
-[Show source in query_pb2_grpc.py:14](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/remote/protos/query_pb2_grpc.py#L14)
+[Show source in query_pb2_grpc.py:14](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L14)
 
 Missing associated documentation comment in .proto file.
 
@@ -165,7 +177,7 @@ class QueryServiceStub(object):
 
 ## add_QueryServiceServicer_to_server
 
-[Show source in query_pb2_grpc.py:63](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/remote/protos/query_pb2_grpc.py#L63)
+[Show source in query_pb2_grpc.py:63](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L63)
 
 #### Signature
 
@@ -173,6 +185,5 @@ class QueryServiceStub(object):
 def add_QueryServiceServicer_to_server(servicer, server):
     ...
 ```
-
 
 

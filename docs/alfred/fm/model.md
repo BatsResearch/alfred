@@ -1,15 +1,25 @@
 # Model
 
-[alfred Index](../../README.md#alfred-index) /
+[Alfred Index](../../README.md#alfred-index) /
 [Alfred](../index.md#alfred) /
 [Fm](./index.md#fm) /
 Model
 
-> Auto-generated documentation for [alfred.fm.model](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/model.py) module.
+> Auto-generated documentation for [alfred.fm.model](../../../alfred/fm/model.py) module.
+
+- [Model](#model)
+  - [APIAccessFoundationModel](#apiaccessfoundationmodel)
+  - [FoundationModel](#foundationmodel)
+    - [FoundationModel().__call__](#foundationmodel()__call__)
+    - [FoundationModel().forward](#foundationmodel()forward)
+    - [FoundationModel().generate](#foundationmodel()generate)
+    - [FoundationModel().run](#foundationmodel()run)
+    - [FoundationModel().score](#foundationmodel()score)
+  - [LocalAccessFoundationModel](#localaccessfoundationmodel)
 
 ## APIAccessFoundationModel
 
-[Show source in model.py:250](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/model.py#L250)
+[Show source in model.py:250](../../../alfred/fm/model.py#L250)
 
 #### Signature
 
@@ -27,7 +37,7 @@ class APIAccessFoundationModel(FoundationModel):
 
 ## FoundationModel
 
-[Show source in model.py:18](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/model.py#L18)
+[Show source in model.py:18](../../../alfred/fm/model.py#L18)
 
 Generic interface for foundation model class
 
@@ -40,7 +50,7 @@ class FoundationModel(abc.ABC):
 
 ### FoundationModel().__call__
 
-[Show source in model.py:230](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/model.py#L230)
+[Show source in model.py:230](../../../alfred/fm/model.py#L230)
 
 This function returns the output of the run function when the
  model is called as a function. It can be used as model(queries),
@@ -71,7 +81,7 @@ def __call__(
 
 ### FoundationModel().forward
 
-[Show source in model.py:59](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/model.py#L59)
+[Show source in model.py:59](../../../alfred/fm/model.py#L59)
 
 This function is the main entry point for running queries through the foundation model.
 It accepts raw query content and automatically converts it into query objects.
@@ -114,7 +124,7 @@ def forward(
 
 ### FoundationModel().generate
 
-[Show source in model.py:141](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/model.py#L141)
+[Show source in model.py:141](../../../alfred/fm/model.py#L141)
 
 This function is a wrapper around the forward function for running
 CompletionQuery objects through the foundation model. It returns a list
@@ -151,7 +161,7 @@ def generate(
 
 ### FoundationModel().run
 
-[Show source in model.py:195](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/model.py#L195)
+[Show source in model.py:195](../../../alfred/fm/model.py#L195)
 
 This function is the main entry point for users to run queries through the foundation model.
 It accepts raw query content and automatically converts it into query objects.
@@ -183,7 +193,7 @@ def run(
 
 ### FoundationModel().score
 
-[Show source in model.py:165](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/model.py#L165)
+[Show source in model.py:165](../../../alfred/fm/model.py#L165)
 
 This function is a wrapper around the forward function
 for running RankedQuery objects through the foundation model.
@@ -222,7 +232,7 @@ def score(
 
 ## LocalAccessFoundationModel
 
-[Show source in model.py:267](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/model.py#L267)
+[Show source in model.py:267](../../../alfred/fm/model.py#L267)
 
 #### Signature
 
@@ -235,6 +245,5 @@ class LocalAccessFoundationModel(FoundationModel):
 #### See also
 
 - [FoundationModel](#foundationmodel)
-
 
 

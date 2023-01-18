@@ -1,14 +1,21 @@
 # Data
 
-[alfred Index](../../README.md#alfred-index) /
+[Alfred Index](../../README.md#alfred-index) /
 [Alfred](../index.md#alfred) /
 Data
 
-> Auto-generated documentation for [alfred.data](https://github.com/BatsResearch/alfred/blob/main/alfred/data/__init__.py) module.
+> Auto-generated documentation for [alfred.data](../../../alfred/data/__init__.py) module.
+
+- [Data](#data)
+  - [from_csv](#from_csv)
+  - [from_json](#from_json)
+  - [from_pandas](#from_pandas)
+  - [from_sql_table](#from_sql_table)
+  - [Modules](#modules)
 
 ## from_csv
 
-[Show source in __init__.py:5](https://github.com/BatsResearch/alfred/blob/main/alfred/data/__init__.py#L5)
+[Show source in __init__.py:7](../../../alfred/data/__init__.py#L7)
 
 Load a csv file as a dataset
 
@@ -33,7 +40,7 @@ def from_csv(csv_file: str) -> IterableArrowDataset:
 
 ## from_json
 
-[Show source in __init__.py:29](https://github.com/BatsResearch/alfred/blob/main/alfred/data/__init__.py#L29)
+[Show source in __init__.py:31](../../../alfred/data/__init__.py#L31)
 
 Load a json file as a dataset
 
@@ -58,7 +65,7 @@ def from_json(json_file: str) -> IterableArrowDataset:
 
 ## from_pandas
 
-[Show source in __init__.py:17](https://github.com/BatsResearch/alfred/blob/main/alfred/data/__init__.py#L17)
+[Show source in __init__.py:19](../../../alfred/data/__init__.py#L19)
 
 Load a pandas dataframe as a dataset
 
@@ -83,7 +90,7 @@ def from_pandas(df: DataFrame) -> IterableArrowDataset:
 
 ## from_sql_table
 
-[Show source in __init__.py:41](https://github.com/BatsResearch/alfred/blob/main/alfred/data/__init__.py#L41)
+[Show source in __init__.py:43](../../../alfred/data/__init__.py#L43)
 
 Load a sql table as a dataset
 

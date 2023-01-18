@@ -1,16 +1,29 @@
 # RankedQuery
 
-[alfred Index](../../../README.md#alfred-index) /
+[Alfred Index](../../../README.md#alfred-index) /
 [Alfred](../../index.md#alfred) /
 [Fm](../index.md#fm) /
 [Query](./index.md#query) /
 RankedQuery
 
-> Auto-generated documentation for [alfred.fm.query.ranked_query](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/query/ranked_query.py) module.
+> Auto-generated documentation for [alfred.fm.query.ranked_query](../../../../alfred/fm/query/ranked_query.py) module.
+
+- [RankedQuery](#rankedquery)
+  - [RankedQuery](#rankedquery-1)
+    - [RankedQuery().__add__](#rankedquery()__add__)
+    - [RankedQuery().__eq__](#rankedquery()__eq__)
+    - [RankedQuery().__hash__](#rankedquery()__hash__)
+    - [RankedQuery().__len__](#rankedquery()__len__)
+    - [RankedQuery().__repr__](#rankedquery()__repr__)
+    - [RankedQuery().__str__](#rankedquery()__str__)
+    - [RankedQuery().candidates](#rankedquery()candidates)
+    - [RankedQuery().get_answer_choices_str](#rankedquery()get_answer_choices_str)
+    - [RankedQuery().load](#rankedquery()load)
+    - [RankedQuery().prompt](#rankedquery()prompt)
 
 ## RankedQuery
 
-[Show source in ranked_query.py:14](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/query/ranked_query.py#L14)
+[Show source in ranked_query.py:14](../../../../alfred/fm/query/ranked_query.py#L14)
 
 Ranked Query Class encompasses query terms that operate in
 scoring scheme with FM interfaces
@@ -44,7 +57,7 @@ class RankedQuery(Query):
 
 ### RankedQuery().__add__
 
-[Show source in ranked_query.py:109](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/query/ranked_query.py#L109)
+[Show source in ranked_query.py:109](../../../../alfred/fm/query/ranked_query.py#L109)
 
 concatenates the two queries
 
@@ -57,7 +70,7 @@ def __add__(self, other):
 
 ### RankedQuery().__eq__
 
-[Show source in ranked_query.py:95](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/query/ranked_query.py#L95)
+[Show source in ranked_query.py:95](../../../../alfred/fm/query/ranked_query.py#L95)
 
 returns whether the two queries are equal
 
@@ -70,7 +83,7 @@ def __eq__(self, other):
 
 ### RankedQuery().__hash__
 
-[Show source in ranked_query.py:101](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/query/ranked_query.py#L101)
+[Show source in ranked_query.py:101](../../../../alfred/fm/query/ranked_query.py#L101)
 
 returns the hash of the query
 
@@ -83,7 +96,7 @@ def __hash__(self):
 
 ### RankedQuery().__len__
 
-[Show source in ranked_query.py:105](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/query/ranked_query.py#L105)
+[Show source in ranked_query.py:105](../../../../alfred/fm/query/ranked_query.py#L105)
 
 returns the length of the query
 
@@ -96,7 +109,7 @@ def __len__(self):
 
 ### RankedQuery().__repr__
 
-[Show source in ranked_query.py:87](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/query/ranked_query.py#L87)
+[Show source in ranked_query.py:87](../../../../alfred/fm/query/ranked_query.py#L87)
 
 returns the string representation of the query
 
@@ -109,7 +122,7 @@ def __repr__(self):
 
 ### RankedQuery().__str__
 
-[Show source in ranked_query.py:91](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/query/ranked_query.py#L91)
+[Show source in ranked_query.py:91](../../../../alfred/fm/query/ranked_query.py#L91)
 
 returns the string representation of the query
 
@@ -122,7 +135,7 @@ def __str__(self):
 
 ### RankedQuery().candidates
 
-[Show source in ranked_query.py:54](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/query/ranked_query.py#L54)
+[Show source in ranked_query.py:54](../../../../alfred/fm/query/ranked_query.py#L54)
 
 returns the raw candidates content
 
@@ -136,7 +149,7 @@ def candidates(self):
 
 ### RankedQuery().get_answer_choices_str
 
-[Show source in ranked_query.py:64](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/query/ranked_query.py#L64)
+[Show source in ranked_query.py:64](../../../../alfred/fm/query/ranked_query.py#L64)
 
 get the raw candidates as jinja strings (deliminated by '|||')
 
@@ -149,7 +162,7 @@ def get_answer_choices_str(self):
 
 ### RankedQuery().load
 
-[Show source in ranked_query.py:68](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/query/ranked_query.py#L68)
+[Show source in ranked_query.py:68](../../../../alfred/fm/query/ranked_query.py#L68)
 
 Load prompt and candidates
 
@@ -172,7 +185,7 @@ def load(self, composition_fn: Callable = None) -> List:
 
 ### RankedQuery().prompt
 
-[Show source in ranked_query.py:59](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/query/ranked_query.py#L59)
+[Show source in ranked_query.py:59](../../../../alfred/fm/query/ranked_query.py#L59)
 
 returns the raw prompt content
 
@@ -183,6 +196,5 @@ returns the raw prompt content
 def prompt(self):
     ...
 ```
-
 
 

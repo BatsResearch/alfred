@@ -1,15 +1,24 @@
 # Client
 
-[alfred Index](../../README.md#alfred-index) /
+[Alfred Index](../../README.md#alfred-index) /
 [Alfred](../index.md#alfred) /
 [Client](./index.md#client) /
 Client
 
-> Auto-generated documentation for [alfred.client.client](https://github.com/BatsResearch/alfred/blob/main/alfred/client/client.py) module.
+> Auto-generated documentation for [alfred.client.client](../../../alfred/client/client.py) module.
+
+- [Client](#client)
+  - [Client](#client-1)
+    - [Client().__call__](#client()__call__)
+    - [Client().calibrate](#client()calibrate)
+    - [Client().generate](#client()generate)
+    - [Client().remote_run](#client()remote_run)
+    - [Client().run](#client()run)
+    - [Client().score](#client()score)
 
 ## Client
 
-[Show source in client.py:17](https://github.com/BatsResearch/alfred/blob/main/alfred/client/client.py#L17)
+[Show source in client.py:22](../../../alfred/client/client.py#L22)
 
 Client is the primary user interface that wraps around foundation models.
 A client interface for accessing various models, such as those implemented by OpenAI, Hugging Face, etc.
@@ -35,7 +44,7 @@ class Client:
 
 ### Client().__call__
 
-[Show source in client.py:219](https://github.com/BatsResearch/alfred/blob/main/alfred/client/client.py#L219)
+[Show source in client.py:222](../../../alfred/client/client.py#L222)
 
 __call__() function to run the model on the queries.
 Equivalent to run() function.
@@ -61,9 +70,54 @@ def __call__(
     ...
 ```
 
+### Client().calibrate
+
+[Show source in client.py:239](../../../alfred/client/client.py#L239)
+
+calibrate are used to calibrate foundation models contextually given the template.
+A voter class may be passed to calibrate the model with a specific voter.
+If a voter is set, the calibrated weights will be stored in the voter
+calibrate() function will return the calibration weights and biases otherwise.
+
+There are two strategies for calibration:
+1.  W = diag(p)^-1, b = 0
+2.  W = eye, b = -p
+
+For reference, please refer to:
+    Zhao, Z., Wallace, E., Feng, S., Klein, D., & Singh, S. (2021, July).
+    Calibrate before use: Improving few-shot performance of language models.
+    In International Conference on Machine Learning (pp. 12697-12706). PMLR.
+
+#### Arguments
+
+- `template` - The template to calibrate the model with.
+:type template: Union[str, Template]
+- `voter` - The voter to calibrate the model with.
+:type voter: Optional[Voter]
+- `null_tokens` - The null tokens to calibrate the model with.
+:type null_tokens: Optional[Union[List[str], str]]
+- `candidates` - The candidates to calibrate the model with.
+:type candidates: Optional[Union[List[str], str]]
+- `strategy` - The strategy to calibrate the model with. default to 1
+:type strategy: int
+
+#### Signature
+
+```python
+def calibrate(
+    self,
+    template: Union[str, Template],
+    voter: Optional[Voter] = None,
+    null_tokens: Optional[Union[List[str], str]] = None,
+    candidates: Optional[Union[List[str], str]] = None,
+    strategy: int = 1,
+):
+    ...
+```
+
 ### Client().generate
 
-[Show source in client.py:180](https://github.com/BatsResearch/alfred/blob/main/alfred/client/client.py#L180)
+[Show source in client.py:183](../../../alfred/client/client.py#L183)
 
 Wrapper function to generate the response(s) from the model. (For completion)
 
@@ -92,7 +146,7 @@ def generate(
 
 ### Client().remote_run
 
-[Show source in client.py:159](https://github.com/BatsResearch/alfred/blob/main/alfred/client/client.py#L159)
+[Show source in client.py:164](../../../alfred/client/client.py#L164)
 
 Wrapper function for running the model on the queries thru a gRPC Server.
 
@@ -119,7 +173,7 @@ def remote_run(
 
 ### Client().run
 
-[Show source in client.py:140](https://github.com/BatsResearch/alfred/blob/main/alfred/client/client.py#L140)
+[Show source in client.py:145](../../../alfred/client/client.py#L145)
 
 Run the model on the queries.
 
@@ -146,7 +200,7 @@ def run(
 
 ### Client().score
 
-[Show source in client.py:196](https://github.com/BatsResearch/alfred/blob/main/alfred/client/client.py#L196)
+[Show source in client.py:199](../../../alfred/client/client.py#L199)
 
 Wrapper function to score the response(s) from the model. (For ranking)
 
@@ -177,6 +231,5 @@ def score(
 ) -> Union[Response, List[Response]]:
     ...
 ```
-
 
 

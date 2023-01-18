@@ -1,15 +1,20 @@
 # Response
 
-[alfred Index](../../../README.md#alfred-index) /
+[Alfred Index](../../../README.md#alfred-index) /
 [Alfred](../../index.md#alfred) /
 [Fm](../index.md#fm) /
 Response
 
-> Auto-generated documentation for [alfred.fm.response](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/response/__init__.py) module.
+> Auto-generated documentation for [alfred.fm.response](../../../../alfred/fm/response/__init__.py) module.
+
+- [Response](#response)
+  - [deserialize](#deserialize)
+  - [from_dict](#from_dict)
+  - [Modules](#modules)
 
 ## deserialize
 
-[Show source in __init__.py:22](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/response/__init__.py#L22)
+[Show source in __init__.py:22](../../../../alfred/fm/response/__init__.py#L22)
 
 Deserializes a JSON string into a Response object.
 
@@ -34,7 +39,7 @@ def deserialize(json_str: str) -> Response:
 
 ## from_dict
 
-[Show source in __init__.py:9](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/response/__init__.py#L9)
+[Show source in __init__.py:9](../../../../alfred/fm/response/__init__.py#L9)
 
 Converts a JSON dictionary to a Response object.
 

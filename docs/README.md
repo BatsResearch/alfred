@@ -1,8 +1,6 @@
-# alfred Index
+# Alfred Documentation
 
-> Auto-generated documentation index.
-
-A full list of [alfred](https://github.com/BatsResearch/alfred) project modules.
+A full list of `Alfred` project modules.
 
 - [Alfred](alfred/index.md#alfred)
     - [Client](alfred/client/index.md#client)
@@ -34,8 +32,14 @@ A full list of [alfred](https://github.com/BatsResearch/alfred) project modules.
             - [RankedResponse](alfred/fm/response/ranked_response.md#rankedresponse)
             - [Response](alfred/fm/response/response.md#response)
         - [Utils](alfred/fm/utils.md#utils)
+    - [Labeling](alfred/labeling/index.md#labeling)
+        - [LabelModel](alfred/labeling/labelmodel.md#labelmodel)
+        - [MajorityVote](alfred/labeling/majority_vote.md#majorityvote)
+    - [Registry](alfred/registry.md#registry)
     - [Run Client Api](alfred/run_client_api.md#run-client-api)
     - [Run Server](alfred/run_server.md#run-server)
     - [Template](alfred/template/index.md#template)
         - [StringTemplate](alfred/template/string_template.md#stringtemplate)
         - [Template](alfred/template/template.md#template)
+    - [Voter](alfred/voter/index.md#voter)
+        - [Voter](alfred/voter/voter.md#voter)

@@ -1,11 +1,14 @@
 # Remote
 
-[alfred Index](../../../README.md#alfred-index) /
+[Alfred Index](../../../README.md#alfred-index) /
 [Alfred](../../index.md#alfred) /
 [Fm](../index.md#fm) /
 Remote
 
-> Auto-generated documentation for [alfred.fm.remote](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/remote/__init__.py) module.
+> Auto-generated documentation for [alfred.fm.remote](../../../../alfred/fm/remote/__init__.py) module.
+
+- [Remote](#remote)
+  - [Modules](#modules)
 
 ## Modules
 

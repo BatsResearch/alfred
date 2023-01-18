@@ -1,16 +1,22 @@
 # CompletionResponse
 
-[alfred Index](../../../README.md#alfred-index) /
+[Alfred Index](../../../README.md#alfred-index) /
 [Alfred](../../index.md#alfred) /
 [Fm](../index.md#fm) /
 [Response](./index.md#response) /
 CompletionResponse
 
-> Auto-generated documentation for [alfred.fm.response.completion_response](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/response/completion_response.py) module.
+> Auto-generated documentation for [alfred.fm.response.completion_response](../../../../alfred/fm/response/completion_response.py) module.
+
+- [CompletionResponse](#completionresponse)
+  - [CompletionResponse](#completionresponse-1)
+    - [CompletionResponse().__eq__](#completionresponse()__eq__)
+    - [CompletionResponse().prediction](#completionresponse()prediction)
+    - [CompletionResponse().score](#completionresponse()score)
 
 ## CompletionResponse
 
-[Show source in completion_response.py:9](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/response/completion_response.py#L9)
+[Show source in completion_response.py:9](../../../../alfred/fm/response/completion_response.py#L9)
 
 A response class for language model completions.
 
@@ -33,7 +39,7 @@ class CompletionResponse(Response):
 
 ### CompletionResponse().__eq__
 
-[Show source in completion_response.py:58](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/response/completion_response.py#L58)
+[Show source in completion_response.py:58](../../../../alfred/fm/response/completion_response.py#L58)
 
 Determines if two CompletionResponse objects are equal.
 
@@ -60,7 +66,7 @@ def __eq__(self, other):
 
 ### CompletionResponse().prediction
 
-[Show source in completion_response.py:38](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/response/completion_response.py#L38)
+[Show source in completion_response.py:38](../../../../alfred/fm/response/completion_response.py#L38)
 
 Returns the predicted completion string.
 
@@ -79,7 +85,7 @@ def prediction(self) -> str:
 
 ### CompletionResponse().score
 
-[Show source in completion_response.py:48](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/response/completion_response.py#L48)
+[Show source in completion_response.py:48](../../../../alfred/fm/response/completion_response.py#L48)
 
 Returns the score of the completion prediction.
 
@@ -95,6 +101,5 @@ Type: *float*
 def score(self) -> Dict:
     ...
 ```
-
 
 

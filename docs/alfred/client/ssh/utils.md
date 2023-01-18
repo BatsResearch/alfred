@@ -1,16 +1,24 @@
 # Utils
 
-[alfred Index](../../../README.md#alfred-index) /
+[Alfred Index](../../../README.md#alfred-index) /
 [Alfred](../../index.md#alfred) /
 [Client](../index.md#client) /
 [Ssh](./index.md#ssh) /
 Utils
 
-> Auto-generated documentation for [alfred.client.ssh.utils](https://github.com/BatsResearch/alfred/blob/main/alfred/client/ssh/utils.py) module.
+> Auto-generated documentation for [alfred.client.ssh.utils](../../../../alfred/client/ssh/utils.py) module.
+
+- [Utils](#utils)
+  - [ForwardServer](#forwardserver)
+  - [Handler](#handler)
+    - [Handler().handle](#handler()handle)
+  - [forward_tunnel](#forward_tunnel)
+  - [get_host_port](#get_host_port)
+  - [port_finder](#port_finder)
 
 ## ForwardServer
 
-[Show source in utils.py:15](https://github.com/BatsResearch/alfred/blob/main/alfred/client/ssh/utils.py#L15)
+[Show source in utils.py:15](../../../../alfred/client/ssh/utils.py#L15)
 
 A simple TCP forwarding server inherited from SocketServer.ThreadingTCPServer
 
@@ -25,7 +33,7 @@ class ForwardServer(SocketServer.ThreadingTCPServer):
 
 ## Handler
 
-[Show source in utils.py:23](https://github.com/BatsResearch/alfred/blob/main/alfred/client/ssh/utils.py#L23)
+[Show source in utils.py:23](../../../../alfred/client/ssh/utils.py#L23)
 
 #### Signature
 
@@ -36,7 +44,7 @@ class Handler(SocketServer.BaseRequestHandler):
 
 ### Handler().handle
 
-[Show source in utils.py:24](https://github.com/BatsResearch/alfred/blob/main/alfred/client/ssh/utils.py#L24)
+[Show source in utils.py:24](../../../../alfred/client/ssh/utils.py#L24)
 
 #### Signature
 
@@ -49,7 +57,7 @@ def handle(self):
 
 ## forward_tunnel
 
-[Show source in utils.py:53](https://github.com/BatsResearch/alfred/blob/main/alfred/client/ssh/utils.py#L53)
+[Show source in utils.py:53](../../../../alfred/client/ssh/utils.py#L53)
 
 #### Signature
 
@@ -62,7 +70,7 @@ def forward_tunnel(local_port, remote_host, remote_port, transport):
 
 ## get_host_port
 
-[Show source in utils.py:64](https://github.com/BatsResearch/alfred/blob/main/alfred/client/ssh/utils.py#L64)
+[Show source in utils.py:64](../../../../alfred/client/ssh/utils.py#L64)
 
 parse 'hostname:22' into a host and port, with the port optional
 
@@ -77,7 +85,7 @@ def get_host_port(spec, default_port):
 
 ## port_finder
 
-[Show source in utils.py:71](https://github.com/BatsResearch/alfred/blob/main/alfred/client/ssh/utils.py#L71)
+[Show source in utils.py:71](../../../../alfred/client/ssh/utils.py#L71)
 
 Finds the next available port if given port is not available
 
@@ -87,6 +95,5 @@ Finds the next available port if given port is not available
 def port_finder(port: Union[str, int], host: str = "") -> int:
     ...
 ```
-
 
 

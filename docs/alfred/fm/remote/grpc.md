@@ -1,16 +1,28 @@
 # Grpc
 
-[alfred Index](../../../README.md#alfred-index) /
+[Alfred Index](../../../README.md#alfred-index) /
 [Alfred](../../index.md#alfred) /
 [Fm](../index.md#fm) /
 [Remote](./index.md#remote) /
 Grpc
 
-> Auto-generated documentation for [alfred.fm.remote.grpc](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/remote/grpc.py) module.
+> Auto-generated documentation for [alfred.fm.remote.grpc](../../../../alfred/fm/remote/grpc.py) module.
+
+- [Grpc](#grpc)
+  - [gRPCClient](#grpcclient)
+    - [gRPCClient().run](#grpcclient()run)
+    - [gRPCClient().run_dataset](#grpcclient()run_dataset)
+  - [gRPCServer](#grpcserver)
+    - [gRPCServer().DataHeader](#grpcserver()dataheader)
+    - [gRPCServer().DataReady](#grpcserver()dataready)
+    - [gRPCServer().Inference](#grpcserver()inference)
+    - [gRPCServer().close](#grpcserver()close)
+    - [gRPCServer.port_finder](#grpcserverport_finder)
+    - [gRPCServer().restart](#grpcserver()restart)
 
 ## gRPCClient
 
-[Show source in grpc.py:19](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/remote/grpc.py#L19)
+[Show source in grpc.py:20](../../../../alfred/fm/remote/grpc.py#L20)
 
 #### Signature
 
@@ -27,7 +39,7 @@ class gRPCClient:
 
 ### gRPCClient().run
 
-[Show source in grpc.py:53](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/remote/grpc.py#L53)
+[Show source in grpc.py:54](../../../../alfred/fm/remote/grpc.py#L54)
 
 #### Signature
 
@@ -38,7 +50,7 @@ def run(self, msg: Union[str, Query, Tuple[str, str]], **kwargs):
 
 ### gRPCClient().run_dataset
 
-[Show source in grpc.py:77](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/remote/grpc.py#L77)
+[Show source in grpc.py:78](../../../../alfred/fm/remote/grpc.py#L78)
 
 #### Signature
 
@@ -55,7 +67,7 @@ def run_dataset(
 
 ## gRPCServer
 
-[Show source in grpc.py:119](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/remote/grpc.py#L119)
+[Show source in grpc.py:120](../../../../alfred/fm/remote/grpc.py#L120)
 
 Manages connections with gRPCClient
 
@@ -74,7 +86,7 @@ class gRPCServer(query_pb2_grpc.QueryServiceServicer):
 
 ### gRPCServer().DataHeader
 
-[Show source in grpc.py:240](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/remote/grpc.py#L240)
+[Show source in grpc.py:241](../../../../alfred/fm/remote/grpc.py#L241)
 
 #### Signature
 
@@ -85,7 +97,7 @@ def DataHeader(self, request, context):
 
 ### gRPCServer().DataReady
 
-[Show source in grpc.py:208](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/remote/grpc.py#L208)
+[Show source in grpc.py:209](../../../../alfred/fm/remote/grpc.py#L209)
 
 #### Signature
 
@@ -96,7 +108,7 @@ def DataReady(self, request, context):
 
 ### gRPCServer().Inference
 
-[Show source in grpc.py:169](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/remote/grpc.py#L169)
+[Show source in grpc.py:170](../../../../alfred/fm/remote/grpc.py#L170)
 
 #### Signature
 
@@ -107,7 +119,7 @@ def Inference(self, request, context):
 
 ### gRPCServer().close
 
-[Show source in grpc.py:246](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/remote/grpc.py#L246)
+[Show source in grpc.py:247](../../../../alfred/fm/remote/grpc.py#L247)
 
 #### Signature
 
@@ -118,7 +130,7 @@ def close(self):
 
 ### gRPCServer.port_finder
 
-[Show source in grpc.py:124](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/remote/grpc.py#L124)
+[Show source in grpc.py:125](../../../../alfred/fm/remote/grpc.py#L125)
 
 Finds the next available port if given port is not available
 
@@ -132,7 +144,7 @@ def port_finder(port: int) -> int:
 
 ### gRPCServer().restart
 
-[Show source in grpc.py:249](https://github.com/BatsResearch/alfred/blob/main/alfred/fm/remote/grpc.py#L249)
+[Show source in grpc.py:250](../../../../alfred/fm/remote/grpc.py#L250)
 
 #### Signature
 
@@ -140,6 +152,5 @@ def port_finder(port: int) -> int:
 def restart(self):
     ...
 ```
-
 
 

@@ -1,15 +1,51 @@
 # Arrow
 
-[alfred Index](../../README.md#alfred-index) /
+[Alfred Index](../../README.md#alfred-index) /
 [Alfred](../index.md#alfred) /
 [Data](./index.md#data) /
 Arrow
 
-> Auto-generated documentation for [alfred.data.arrow](https://github.com/BatsResearch/alfred/blob/main/alfred/data/arrow.py) module.
+> Auto-generated documentation for [alfred.data.arrow](../../../alfred/data/arrow.py) module.
+
+- [Arrow](#arrow)
+  - [BufferedArrowDataset](#bufferedarrowdataset)
+    - [BufferedArrowDataset().__getitem__](#bufferedarrowdataset()__getitem__)
+    - [BufferedArrowDataset().__iter__](#bufferedarrowdataset()__iter__)
+    - [BufferedArrowDataset().__len__](#bufferedarrowdataset()__len__)
+    - [BufferedArrowDataset().__repr__](#bufferedarrowdataset()__repr__)
+    - [BufferedArrowDataset().__version__](#bufferedarrowdataset()__version__)
+    - [BufferedArrowDataset().data](#bufferedarrowdataset()data)
+    - [BufferedArrowDataset().info](#bufferedarrowdataset()info)
+    - [BufferedArrowDataset().load_from_disk](#bufferedarrowdataset()load_from_disk)
+    - [BufferedArrowDataset().num_cols](#bufferedarrowdataset()num_cols)
+    - [BufferedArrowDataset().num_rows](#bufferedarrowdataset()num_rows)
+    - [BufferedArrowDataset().save_to_disk](#bufferedarrowdataset()save_to_disk)
+    - [BufferedArrowDataset().shape](#bufferedarrowdataset()shape)
+    - [BufferedArrowDataset().split](#bufferedarrowdataset()split)
+    - [BufferedArrowDataset().version](#bufferedarrowdataset()version)
+  - [IterableArrowDataset](#iterablearrowdataset)
+    - [IterableArrowDataset().__getitem__](#iterablearrowdataset()__getitem__)
+    - [IterableArrowDataset().__iter__](#iterablearrowdataset()__iter__)
+    - [IterableArrowDataset().__len__](#iterablearrowdataset()__len__)
+    - [IterableArrowDataset().__repr__](#iterablearrowdataset()__repr__)
+    - [IterableArrowDataset().__version__](#iterablearrowdataset()__version__)
+    - [IterableArrowDataset().columns](#iterablearrowdataset()columns)
+    - [IterableArrowDataset().data](#iterablearrowdataset()data)
+    - [IterableArrowDataset().info](#iterablearrowdataset()info)
+    - [IterableArrowDataset().itercolumns](#iterablearrowdataset()itercolumns)
+    - [IterableArrowDataset().load_from_disk](#iterablearrowdataset()load_from_disk)
+    - [IterableArrowDataset().num_cols](#iterablearrowdataset()num_cols)
+    - [IterableArrowDataset().num_rows](#iterablearrowdataset()num_rows)
+    - [IterableArrowDataset.pyarrow_typer](#iterablearrowdatasetpyarrow_typer)
+    - [IterableArrowDataset().save_to_disk](#iterablearrowdataset()save_to_disk)
+    - [IterableArrowDataset().schema](#iterablearrowdataset()schema)
+    - [IterableArrowDataset().shape](#iterablearrowdataset()shape)
+    - [IterableArrowDataset().split](#iterablearrowdataset()split)
+    - [IterableArrowDataset().version](#iterablearrowdataset()version)
 
 ## BufferedArrowDataset
 
-[Show source in arrow.py:202](https://github.com/BatsResearch/alfred/blob/main/alfred/data/arrow.py#L202)
+[Show source in arrow.py:202](../../../alfred/data/arrow.py#L202)
 
 This class represents a dataset stored in a pyarrow buffer.
 It provides methods for accessing and iterating over the data,
@@ -50,7 +86,7 @@ class BufferedArrowDataset(Dataset):
 
 ### BufferedArrowDataset().__getitem__
 
-[Show source in arrow.py:289](https://github.com/BatsResearch/alfred/blob/main/alfred/data/arrow.py#L289)
+[Show source in arrow.py:289](../../../alfred/data/arrow.py#L289)
 
 Retuns the row with the given unique identifier.
 
@@ -75,7 +111,7 @@ def __getitem__(self, uid: int, **kawrgs: Any) -> Dict[str, Any]:
 
 ### BufferedArrowDataset().__iter__
 
-[Show source in arrow.py:302](https://github.com/BatsResearch/alfred/blob/main/alfred/data/arrow.py#L302)
+[Show source in arrow.py:302](../../../alfred/data/arrow.py#L302)
 
 Iterator over the rows of the dataset, yielding a dictionary for each row.
 
@@ -93,7 +129,7 @@ def __iter__(self) -> Iterable:
 
 ### BufferedArrowDataset().__len__
 
-[Show source in arrow.py:285](https://github.com/BatsResearch/alfred/blob/main/alfred/data/arrow.py#L285)
+[Show source in arrow.py:285](../../../alfred/data/arrow.py#L285)
 
 returns the number of rows in the dataset
 
@@ -106,7 +142,7 @@ def __len__(self) -> int:
 
 ### BufferedArrowDataset().__repr__
 
-[Show source in arrow.py:313](https://github.com/BatsResearch/alfred/blob/main/alfred/data/arrow.py#L313)
+[Show source in arrow.py:313](../../../alfred/data/arrow.py#L313)
 
 returns a string representation of the dataset
 
@@ -119,7 +155,7 @@ def __repr__(self):
 
 ### BufferedArrowDataset().__version__
 
-[Show source in arrow.py:281](https://github.com/BatsResearch/alfred/blob/main/alfred/data/arrow.py#L281)
+[Show source in arrow.py:281](../../../alfred/data/arrow.py#L281)
 
 returns the version of the dataset
 
@@ -132,7 +168,7 @@ def __version__(self) -> str:
 
 ### BufferedArrowDataset().data
 
-[Show source in arrow.py:265](https://github.com/BatsResearch/alfred/blob/main/alfred/data/arrow.py#L265)
+[Show source in arrow.py:265](../../../alfred/data/arrow.py#L265)
 
 returns the underlying pyarrow Table
 
@@ -145,7 +181,7 @@ def data(self):
 
 ### BufferedArrowDataset().info
 
-[Show source in arrow.py:269](https://github.com/BatsResearch/alfred/blob/main/alfred/data/arrow.py#L269)
+[Show source in arrow.py:269](../../../alfred/data/arrow.py#L269)
 
 returns the metadata about the dataset
 
@@ -158,7 +194,7 @@ def info(self):
 
 ### BufferedArrowDataset().load_from_disk
 
-[Show source in arrow.py:321](https://github.com/BatsResearch/alfred/blob/main/alfred/data/arrow.py#L321)
+[Show source in arrow.py:321](../../../alfred/data/arrow.py#L321)
 
 loads the dataset from disk from the specified path
 
@@ -171,7 +207,7 @@ def load_from_disk(self, path: str):
 
 ### BufferedArrowDataset().num_cols
 
-[Show source in arrow.py:260](https://github.com/BatsResearch/alfred/blob/main/alfred/data/arrow.py#L260)
+[Show source in arrow.py:260](../../../alfred/data/arrow.py#L260)
 
 returns the number of columns in the dataset
 
@@ -185,7 +221,7 @@ def num_cols(self) -> int:
 
 ### BufferedArrowDataset().num_rows
 
-[Show source in arrow.py:255](https://github.com/BatsResearch/alfred/blob/main/alfred/data/arrow.py#L255)
+[Show source in arrow.py:255](../../../alfred/data/arrow.py#L255)
 
 returns the number of rows in the dataset
 
@@ -199,7 +235,7 @@ def num_rows(self) -> int:
 
 ### BufferedArrowDataset().save_to_disk
 
-[Show source in arrow.py:317](https://github.com/BatsResearch/alfred/blob/main/alfred/data/arrow.py#L317)
+[Show source in arrow.py:317](../../../alfred/data/arrow.py#L317)
 
 saves the dataset to disk at the specified path
 
@@ -212,7 +248,7 @@ def save_to_disk(self, path: str):
 
 ### BufferedArrowDataset().shape
 
-[Show source in arrow.py:250](https://github.com/BatsResearch/alfred/blob/main/alfred/data/arrow.py#L250)
+[Show source in arrow.py:250](../../../alfred/data/arrow.py#L250)
 
 returns the shape of the dataset (number of rows and columns)
 
@@ -226,7 +262,7 @@ def shape(self) -> Tuple[int, int]:
 
 ### BufferedArrowDataset().split
 
-[Show source in arrow.py:273](https://github.com/BatsResearch/alfred/blob/main/alfred/data/arrow.py#L273)
+[Show source in arrow.py:273](../../../alfred/data/arrow.py#L273)
 
 returns the information about how the dataset has been split
 
@@ -239,7 +275,7 @@ def split(self):
 
 ### BufferedArrowDataset().version
 
-[Show source in arrow.py:277](https://github.com/BatsResearch/alfred/blob/main/alfred/data/arrow.py#L277)
+[Show source in arrow.py:277](../../../alfred/data/arrow.py#L277)
 
 returns the version of the dataset
 
@@ -254,7 +290,7 @@ def version(self) -> str:
 
 ## IterableArrowDataset
 
-[Show source in arrow.py:11](https://github.com/BatsResearch/alfred/blob/main/alfred/data/arrow.py#L11)
+[Show source in arrow.py:11](../../../alfred/data/arrow.py#L11)
 
 This class represents a dataset stored in a pyarrow Table or pandas DataFrame. It provides methods for accessing and iterating over the data, as well as for saving and loading the dataset to and from disk.
 
@@ -293,7 +329,7 @@ class IterableArrowDataset(Dataset):
 
 ### IterableArrowDataset().__getitem__
 
-[Show source in arrow.py:143](https://github.com/BatsResearch/alfred/blob/main/alfred/data/arrow.py#L143)
+[Show source in arrow.py:143](../../../alfred/data/arrow.py#L143)
 
 Return the row with the given unique identifier.
 
@@ -318,7 +354,7 @@ def __getitem__(self, uid: int, **kawrgs: Any) -> Dict[str, Any]:
 
 ### IterableArrowDataset().__iter__
 
-[Show source in arrow.py:178](https://github.com/BatsResearch/alfred/blob/main/alfred/data/arrow.py#L178)
+[Show source in arrow.py:178](../../../alfred/data/arrow.py#L178)
 
 Iterator over the rows of the dataset, yielding a dictionary for each row.
 
@@ -336,7 +372,7 @@ def __iter__(self) -> Iterable[Dict]:
 
 ### IterableArrowDataset().__len__
 
-[Show source in arrow.py:139](https://github.com/BatsResearch/alfred/blob/main/alfred/data/arrow.py#L139)
+[Show source in arrow.py:139](../../../alfred/data/arrow.py#L139)
 
 returns the number of rows in the dataset
 
@@ -349,7 +385,7 @@ def __len__(self) -> int:
 
 ### IterableArrowDataset().__repr__
 
-[Show source in arrow.py:189](https://github.com/BatsResearch/alfred/blob/main/alfred/data/arrow.py#L189)
+[Show source in arrow.py:189](../../../alfred/data/arrow.py#L189)
 
 returns a string representation of the dataset
 
@@ -362,7 +398,7 @@ def __repr__(self):
 
 ### IterableArrowDataset().__version__
 
-[Show source in arrow.py:135](https://github.com/BatsResearch/alfred/blob/main/alfred/data/arrow.py#L135)
+[Show source in arrow.py:135](../../../alfred/data/arrow.py#L135)
 
 returns the version of the dataset
 
@@ -375,7 +411,7 @@ def __version__(self) -> str:
 
 ### IterableArrowDataset().columns
 
-[Show source in arrow.py:104](https://github.com/BatsResearch/alfred/blob/main/alfred/data/arrow.py#L104)
+[Show source in arrow.py:104](../../../alfred/data/arrow.py#L104)
 
 Columns of the dataset.
 
@@ -394,7 +430,7 @@ def columns(self) -> List[pyarrow.ChunkedArray]:
 
 ### IterableArrowDataset().data
 
-[Show source in arrow.py:114](https://github.com/BatsResearch/alfred/blob/main/alfred/data/arrow.py#L114)
+[Show source in arrow.py:114](../../../alfred/data/arrow.py#L114)
 
 Return the underlying pyarrow Table or pandas DataFrame.
 
@@ -412,7 +448,7 @@ def data(self) -> Union[pyarrow.Table, pandas.DataFrame]:
 
 ### IterableArrowDataset().info
 
-[Show source in arrow.py:123](https://github.com/BatsResearch/alfred/blob/main/alfred/data/arrow.py#L123)
+[Show source in arrow.py:123](../../../alfred/data/arrow.py#L123)
 
 returns the metadata about the dataset
 
@@ -425,7 +461,7 @@ def info(self) -> DatasetInfo:
 
 ### IterableArrowDataset().itercolumns
 
-[Show source in arrow.py:167](https://github.com/BatsResearch/alfred/blob/main/alfred/data/arrow.py#L167)
+[Show source in arrow.py:167](../../../alfred/data/arrow.py#L167)
 
 Iterator over all columns in their numerical order.
 
@@ -445,7 +481,7 @@ def itercolumns(self, *args: Any, **kwargs: Any) -> Iterable:
 
 ### IterableArrowDataset().load_from_disk
 
-[Show source in arrow.py:197](https://github.com/BatsResearch/alfred/blob/main/alfred/data/arrow.py#L197)
+[Show source in arrow.py:197](../../../alfred/data/arrow.py#L197)
 
 loads the dataset from disk from the specified path
 
@@ -458,7 +494,7 @@ def load_from_disk(self, path: str):
 
 ### IterableArrowDataset().num_cols
 
-[Show source in arrow.py:89](https://github.com/BatsResearch/alfred/blob/main/alfred/data/arrow.py#L89)
+[Show source in arrow.py:89](../../../alfred/data/arrow.py#L89)
 
 returns the number of columns in the dataset
 
@@ -472,7 +508,7 @@ def num_cols(self) -> int:
 
 ### IterableArrowDataset().num_rows
 
-[Show source in arrow.py:84](https://github.com/BatsResearch/alfred/blob/main/alfred/data/arrow.py#L84)
+[Show source in arrow.py:84](../../../alfred/data/arrow.py#L84)
 
 returns the number of rows in the dataset
 
@@ -486,7 +522,7 @@ def num_rows(self) -> int:
 
 ### IterableArrowDataset.pyarrow_typer
 
-[Show source in arrow.py:58](https://github.com/BatsResearch/alfred/blob/main/alfred/data/arrow.py#L58)
+[Show source in arrow.py:58](../../../alfred/data/arrow.py#L58)
 
 Recognize the type of the data and find the according pyarrow type.
 
@@ -510,7 +546,7 @@ def pyarrow_typer(data: Any) -> pyarrow.DataType:
 
 ### IterableArrowDataset().save_to_disk
 
-[Show source in arrow.py:193](https://github.com/BatsResearch/alfred/blob/main/alfred/data/arrow.py#L193)
+[Show source in arrow.py:193](../../../alfred/data/arrow.py#L193)
 
 saves the dataset to disk at the specified path
 
@@ -523,7 +559,7 @@ def save_to_disk(self, path: str):
 
 ### IterableArrowDataset().schema
 
-[Show source in arrow.py:94](https://github.com/BatsResearch/alfred/blob/main/alfred/data/arrow.py#L94)
+[Show source in arrow.py:94](../../../alfred/data/arrow.py#L94)
 
 Schema of the table and its columns.
 
@@ -542,7 +578,7 @@ def schema(self) -> pyarrow.Schema:
 
 ### IterableArrowDataset().shape
 
-[Show source in arrow.py:79](https://github.com/BatsResearch/alfred/blob/main/alfred/data/arrow.py#L79)
+[Show source in arrow.py:79](../../../alfred/data/arrow.py#L79)
 
 returns the shape of the dataset (number of rows and columns)
 
@@ -556,7 +592,7 @@ def shape(self) -> Tuple[int, int]:
 
 ### IterableArrowDataset().split
 
-[Show source in arrow.py:127](https://github.com/BatsResearch/alfred/blob/main/alfred/data/arrow.py#L127)
+[Show source in arrow.py:127](../../../alfred/data/arrow.py#L127)
 
 returns the information about how the dataset has been split
 
@@ -569,7 +605,7 @@ def split(self) -> NamedSplit:
 
 ### IterableArrowDataset().version
 
-[Show source in arrow.py:131](https://github.com/BatsResearch/alfred/blob/main/alfred/data/arrow.py#L131)
+[Show source in arrow.py:131](../../../alfred/data/arrow.py#L131)
 
 returns the version of the dataset
 
@@ -579,6 +615,5 @@ returns the version of the dataset
 def version(self) -> str:
     ...
 ```
-
 
 

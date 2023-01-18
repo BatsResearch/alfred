@@ -38,6 +38,5 @@ class TestQuery(unittest.TestCase):
         self.assertTrue(RankedQuery("prompt", candidates=["2", "1"]).load() == [("prompt", "2"), ("prompt", "1")])
 
 
-
 if __name__ == '__main__':
     unittest.main()

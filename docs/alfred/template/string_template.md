@@ -1,15 +1,32 @@
 # StringTemplate
 
-[alfred Index](../../README.md#alfred-index) /
+[Alfred Index](../../README.md#alfred-index) /
 [Alfred](../index.md#alfred) /
 [Template](./index.md#template) /
 StringTemplate
 
-> Auto-generated documentation for [alfred.template.string_template](https://github.com/BatsResearch/alfred/blob/main/alfred/template/string_template.py) module.
+> Auto-generated documentation for [alfred.template.string_template](../../../alfred/template/string_template.py) module.
+
+- [StringTemplate](#stringtemplate)
+  - [StringTemplate](#stringtemplate-1)
+    - [StringTemplate().__call__](#stringtemplate()__call__)
+    - [StringTemplate().apply](#stringtemplate()apply)
+    - [StringTemplate().apply_to_dataset](#stringtemplate()apply_to_dataset)
+    - [StringTemplate().deserialize](#stringtemplate()deserialize)
+    - [StringTemplate().from_promptsource](#stringtemplate()from_promptsource)
+    - [StringTemplate().get_answer_choices_list](#stringtemplate()get_answer_choices_list)
+    - [StringTemplate().id](#stringtemplate()id)
+    - [StringTemplate().keywords](#stringtemplate()keywords)
+    - [StringTemplate().metadata](#stringtemplate()metadata)
+    - [StringTemplate().name](#stringtemplate()name)
+    - [StringTemplate().reference](#stringtemplate()reference)
+    - [StringTemplate().serialize](#stringtemplate()serialize)
+    - [StringTemplate().template](#stringtemplate()template)
+    - [StringTemplate().type](#stringtemplate()type)
 
 ## StringTemplate
 
-[Show source in string_template.py:16](https://github.com/BatsResearch/alfred/blob/main/alfred/template/string_template.py#L16)
+[Show source in string_template.py:16](../../../alfred/template/string_template.py#L16)
 
 Prompt Template Class for Common Static Templates
 
@@ -24,7 +41,7 @@ Users will need to specify the label maps for the partial label group numbers.
     e.g.
     Rule: Predict "stripe" attributes for labels [zebra, tigers].
     Label Numerical: {"zebra": 1, "tiger": 2, "horse": 3}
-    Prompt: "Does the [animal] have stripes?"
+    Prompt: "Does the [[animal]] have stripes?"
 
     answer_choices: "yes|||no"
     labels_map: {"yes": 2, "no": 1}
@@ -57,9 +74,8 @@ class StringTemplate(Template):
         name: Optional[str] = None,
         reference: Optional[str] = None,
         metadata: Optional[Dict[str, Any]] = None,
-        answer_choices: Optional[str] = None,
-        label_maps: Optional[Dict] = None,
-        matching_fn: Optional[Callable] = lambda x, y,: x == y,
+        answer_choices: Optional[Union[str, List[str]]] = None,
+        register: bool = False,
     ):
         ...
 ```
@@ -70,7 +86,7 @@ class StringTemplate(Template):
 
 ### StringTemplate().__call__
 
-[Show source in string_template.py:327](https://github.com/BatsResearch/alfred/blob/main/alfred/template/string_template.py#L327)
+[Show source in string_template.py:286](../../../alfred/template/string_template.py#L286)
 
 A wrapper function to apply the template to a single example
 
@@ -95,7 +111,7 @@ def __call__(self, example: Dict, **kawrgs: Any) -> Query:
 
 ### StringTemplate().apply
 
-[Show source in string_template.py:112](https://github.com/BatsResearch/alfred/blob/main/alfred/template/string_template.py#L112)
+[Show source in string_template.py:127](../../../alfred/template/string_template.py#L127)
 
 Apply template to an example and returns a query object
 
@@ -120,7 +136,7 @@ def apply(self, example: Dict, **kawrgs) -> Query:
 
 ### StringTemplate().apply_to_dataset
 
-[Show source in string_template.py:174](https://github.com/BatsResearch/alfred/blob/main/alfred/template/string_template.py#L174)
+[Show source in string_template.py:189](../../../alfred/template/string_template.py#L189)
 
 A wrapper function to apply the template to a dataset iteratively
 
@@ -145,7 +161,7 @@ def apply_to_dataset(self, dataset: Iterable[Dict], **kwargs: Any) -> Iterable[Q
 
 ### StringTemplate().deserialize
 
-[Show source in string_template.py:308](https://github.com/BatsResearch/alfred/blob/main/alfred/template/string_template.py#L308)
+[Show source in string_template.py:267](../../../alfred/template/string_template.py#L267)
 
 returns a template object from a json string of dictionary
 
@@ -169,9 +185,27 @@ def deserialize(self, json_str: str) -> Template:
 
 - [Template](./template.md#template)
 
+### StringTemplate().from_promptsource
+
+[Show source in string_template.py:113](../../../alfred/template/string_template.py#L113)
+
+Update the template from a promptsource template
+
+#### Arguments
+
+- `promptsource_template` - a promptsource template
+:type promptsource_template: Dict
+
+#### Signature
+
+```python
+def from_promptsource(self, promptsource_template):
+    ...
+```
+
 ### StringTemplate().get_answer_choices_list
 
-[Show source in string_template.py:256](https://github.com/BatsResearch/alfred/blob/main/alfred/template/string_template.py#L256)
+[Show source in string_template.py:205](../../../alfred/template/string_template.py#L205)
 
 Get answer choices list
 
@@ -189,59 +223,77 @@ def get_answer_choices_list(self) -> List[str]:
 
 ### StringTemplate().id
 
-[Show source in string_template.py:273](https://github.com/BatsResearch/alfred/blob/main/alfred/template/string_template.py#L273)
+[Show source in string_template.py:229](../../../alfred/template/string_template.py#L229)
 
 returns the template id
 
 #### Signature
 
 ```python
+@property
 def id(self):
+    ...
+```
+
+### StringTemplate().keywords
+
+[Show source in string_template.py:224](../../../alfred/template/string_template.py#L224)
+
+returns the keywords
+
+#### Signature
+
+```python
+@property
+def keywords(self):
     ...
 ```
 
 ### StringTemplate().metadata
 
-[Show source in string_template.py:285](https://github.com/BatsResearch/alfred/blob/main/alfred/template/string_template.py#L285)
+[Show source in string_template.py:244](../../../alfred/template/string_template.py#L244)
 
 returns the template metadata
 
 #### Signature
 
 ```python
+@property
 def metadata(self):
     ...
 ```
 
 ### StringTemplate().name
 
-[Show source in string_template.py:277](https://github.com/BatsResearch/alfred/blob/main/alfred/template/string_template.py#L277)
+[Show source in string_template.py:234](../../../alfred/template/string_template.py#L234)
 
 returns the template name
 
 #### Signature
 
 ```python
+@property
 def name(self):
     ...
 ```
 
 ### StringTemplate().reference
 
-[Show source in string_template.py:281](https://github.com/BatsResearch/alfred/blob/main/alfred/template/string_template.py#L281)
+[Show source in string_template.py:239](../../../alfred/template/string_template.py#L239)
 
 returns the template reference
 
 #### Signature
 
 ```python
+@property
 def reference(self):
     ...
 ```
 
 ### StringTemplate().serialize
 
-[Show source in string_template.py:289](https://github.com/BatsResearch/alfred/blob/main/alfred/template/string_template.py#L289)
+[Show source in string_template.py:249](../../../alfred/template/string_template.py#L249)
 
 returns the template as a json string of dictionary
 
@@ -259,71 +311,30 @@ def serialize(self):
 
 ### StringTemplate().template
 
-[Show source in string_template.py:265](https://github.com/BatsResearch/alfred/blob/main/alfred/template/string_template.py#L265)
+[Show source in string_template.py:214](../../../alfred/template/string_template.py#L214)
 
 returns the template
 
 #### Signature
 
 ```python
+@property
 def template(self):
     ...
 ```
 
 ### StringTemplate().type
 
-[Show source in string_template.py:269](https://github.com/BatsResearch/alfred/blob/main/alfred/template/string_template.py#L269)
+[Show source in string_template.py:219](../../../alfred/template/string_template.py#L219)
 
 returns the template type
 
 #### Signature
 
 ```python
+@property
 def type(self):
     ...
 ```
-
-### StringTemplate().vote
-
-[Show source in string_template.py:190](https://github.com/BatsResearch/alfred/blob/main/alfred/template/string_template.py#L190)
-
-Vote for the responses based on the matching function and the label maps
-
-*NOTE*: if label maps contains numerical labels then the vote will be the exact specified value
-if not the vote will be the index + 1 of the matched answer choice
-
-*Abstention vote is 0*
-
-*NOTE* on partial labels:
-
-#### Arguments
-
-- `responses` - list of response objects
-:type responses: Union[Iterable[str], str, Iterable[Response], Response]
-- `matching_function` - (optional) function to match responses against answer choices, defaulting to exact match
-                            e.g. lambda x, y: x == y
-:type matching_function: Callable
-- `label_maps` - (optional) label maps that maps responses content to labels
-                   label_maps specified here will overide the label_maps initialized in the template
-:type label_maps: Dict
-
-#### Returns
-
-numpy ndarray of votes in np.int8
-Type: *np.ndarray*
-
-#### Signature
-
-```python
-def vote(
-    self,
-    responses: Union[Iterable[str], str, Iterable[Response], Response],
-    matching_function: Callable = lambda x, y,: x == y,
-    label_maps: Optional[Dict] = None,
-    **kwargs: Any
-) -> np.ndarray:
-    ...
-```
-
 
 

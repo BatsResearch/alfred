@@ -1,14 +1,38 @@
 # Run Client Api
 
-[alfred Index](../README.md#alfred-index) /
+[Alfred Index](../README.md#alfred-index) /
 [Alfred](./index.md#alfred) /
 Run Client Api
 
-> Auto-generated documentation for [alfred.run_client_api](https://github.com/BatsResearch/alfred/blob/main/alfred/run_client_api.py) module.
+> Auto-generated documentation for [alfred.run_client_api](../../alfred/run_client_api.py) module.
+
+- [Run Client Api](#run-client-api)
+  - [ALFRED_CONFIG](#alfred_config)
+  - [alfred_server_completion](#alfred_server_completion)
+  - [get_alfred_server_end_point](#get_alfred_server_end_point)
+  - [get_alfred_server_final_host](#get_alfred_server_final_host)
+  - [get_alfred_server_model](#get_alfred_server_model)
+  - [get_alfred_server_model_type](#get_alfred_server_model_type)
+  - [get_alfred_server_port](#get_alfred_server_port)
+  - [get_alfred_server_username](#get_alfred_server_username)
+  - [get_alfred_server_webhook_port](#get_alfred_server_webhook_port)
+  - [main](#main)
+  - [root](#root)
+  - [set_alfred_server_connected](#set_alfred_server_connected)
+  - [set_alfred_server_connected](#set_alfred_server_connected-1)
+  - [set_alfred_server_end_point](#set_alfred_server_end_point)
+  - [set_alfred_server_endpoint_cfg](#set_alfred_server_endpoint_cfg)
+  - [set_alfred_server_final_host](#set_alfred_server_final_host)
+  - [set_alfred_server_model](#set_alfred_server_model)
+  - [set_alfred_server_model_type](#set_alfred_server_model_type)
+  - [set_alfred_server_port](#set_alfred_server_port)
+  - [set_alfred_server_username](#set_alfred_server_username)
+  - [set_alfred_server_webhook_port](#set_alfred_server_webhook_port)
+  - [status](#status)
 
 ## ALFRED_CONFIG
 
-[Show source in run_client_api.py:27](https://github.com/BatsResearch/alfred/blob/main/alfred/run_client_api.py#L27)
+[Show source in run_client_api.py:27](../../alfred/run_client_api.py#L27)
 
 #### Signature
 
@@ -21,7 +45,7 @@ class ALFRED_CONFIG(BaseModel):
 
 ## alfred_server_completion
 
-[Show source in run_client_api.py:215](https://github.com/BatsResearch/alfred/blob/main/alfred/run_client_api.py#L215)
+[Show source in run_client_api.py:214](../../alfred/run_client_api.py#L214)
 
 #### Signature
 
@@ -35,7 +59,7 @@ async def alfred_server_completion(request: Request):
 
 ## get_alfred_server_end_point
 
-[Show source in run_client_api.py:62](https://github.com/BatsResearch/alfred/blob/main/alfred/run_client_api.py#L62)
+[Show source in run_client_api.py:62](../../alfred/run_client_api.py#L62)
 
 #### Signature
 
@@ -49,7 +73,7 @@ async def get_alfred_server_end_point():
 
 ## get_alfred_server_final_host
 
-[Show source in run_client_api.py:72](https://github.com/BatsResearch/alfred/blob/main/alfred/run_client_api.py#L72)
+[Show source in run_client_api.py:72](../../alfred/run_client_api.py#L72)
 
 #### Signature
 
@@ -63,7 +87,7 @@ async def get_alfred_server_final_host():
 
 ## get_alfred_server_model
 
-[Show source in run_client_api.py:52](https://github.com/BatsResearch/alfred/blob/main/alfred/run_client_api.py#L52)
+[Show source in run_client_api.py:52](../../alfred/run_client_api.py#L52)
 
 #### Signature
 
@@ -77,7 +101,7 @@ async def get_alfred_server_model():
 
 ## get_alfred_server_model_type
 
-[Show source in run_client_api.py:57](https://github.com/BatsResearch/alfred/blob/main/alfred/run_client_api.py#L57)
+[Show source in run_client_api.py:57](../../alfred/run_client_api.py#L57)
 
 #### Signature
 
@@ -91,7 +115,7 @@ async def get_alfred_server_model_type():
 
 ## get_alfred_server_port
 
-[Show source in run_client_api.py:47](https://github.com/BatsResearch/alfred/blob/main/alfred/run_client_api.py#L47)
+[Show source in run_client_api.py:47](../../alfred/run_client_api.py#L47)
 
 #### Signature
 
@@ -105,7 +129,7 @@ async def get_alfred_server_port():
 
 ## get_alfred_server_username
 
-[Show source in run_client_api.py:67](https://github.com/BatsResearch/alfred/blob/main/alfred/run_client_api.py#L67)
+[Show source in run_client_api.py:67](../../alfred/run_client_api.py#L67)
 
 #### Signature
 
@@ -119,7 +143,7 @@ async def get_alfred_server_username():
 
 ## get_alfred_server_webhook_port
 
-[Show source in run_client_api.py:77](https://github.com/BatsResearch/alfred/blob/main/alfred/run_client_api.py#L77)
+[Show source in run_client_api.py:77](../../alfred/run_client_api.py#L77)
 
 #### Signature
 
@@ -133,7 +157,7 @@ async def get_alfred_server_webhook_port():
 
 ## main
 
-[Show source in run_client_api.py:240](https://github.com/BatsResearch/alfred/blob/main/alfred/run_client_api.py#L240)
+[Show source in run_client_api.py:238](../../alfred/run_client_api.py#L238)
 
 #### Signature
 
@@ -146,7 +170,7 @@ def main(args):
 
 ## root
 
-[Show source in run_client_api.py:36](https://github.com/BatsResearch/alfred/blob/main/alfred/run_client_api.py#L36)
+[Show source in run_client_api.py:36](../../alfred/run_client_api.py#L36)
 
 #### Signature
 
@@ -160,7 +184,7 @@ async def root():
 
 ## set_alfred_server_connected
 
-[Show source in run_client_api.py:82](https://github.com/BatsResearch/alfred/blob/main/alfred/run_client_api.py#L82)
+[Show source in run_client_api.py:82](../../alfred/run_client_api.py#L82)
 
 #### Signature
 
@@ -174,7 +198,7 @@ async def set_alfred_server_connected():
 
 ## set_alfred_server_connected
 
-[Show source in run_client_api.py:227](https://github.com/BatsResearch/alfred/blob/main/alfred/run_client_api.py#L227)
+[Show source in run_client_api.py:226](../../alfred/run_client_api.py#L226)
 
 #### Signature
 
@@ -188,7 +212,7 @@ async def set_alfred_server_connected():
 
 ## set_alfred_server_end_point
 
-[Show source in run_client_api.py:110](https://github.com/BatsResearch/alfred/blob/main/alfred/run_client_api.py#L110)
+[Show source in run_client_api.py:110](../../alfred/run_client_api.py#L110)
 
 #### Signature
 
@@ -202,7 +226,7 @@ async def set_alfred_server_end_point(request: Request):
 
 ## set_alfred_server_endpoint_cfg
 
-[Show source in run_client_api.py:143](https://github.com/BatsResearch/alfred/blob/main/alfred/run_client_api.py#L143)
+[Show source in run_client_api.py:143](../../alfred/run_client_api.py#L143)
 
 #### Signature
 
@@ -220,7 +244,7 @@ async def set_alfred_server_endpoint_cfg(data: ALFRED_CONFIG):
 
 ## set_alfred_server_final_host
 
-[Show source in run_client_api.py:124](https://github.com/BatsResearch/alfred/blob/main/alfred/run_client_api.py#L124)
+[Show source in run_client_api.py:124](../../alfred/run_client_api.py#L124)
 
 #### Signature
 
@@ -234,7 +258,7 @@ async def set_alfred_server_final_host(request: Request):
 
 ## set_alfred_server_model
 
-[Show source in run_client_api.py:96](https://github.com/BatsResearch/alfred/blob/main/alfred/run_client_api.py#L96)
+[Show source in run_client_api.py:96](../../alfred/run_client_api.py#L96)
 
 #### Signature
 
@@ -248,7 +272,7 @@ async def set_alfred_server_model(request: Request):
 
 ## set_alfred_server_model_type
 
-[Show source in run_client_api.py:103](https://github.com/BatsResearch/alfred/blob/main/alfred/run_client_api.py#L103)
+[Show source in run_client_api.py:103](../../alfred/run_client_api.py#L103)
 
 #### Signature
 
@@ -262,7 +286,7 @@ async def set_alfred_server_model_type(request: Request):
 
 ## set_alfred_server_port
 
-[Show source in run_client_api.py:89](https://github.com/BatsResearch/alfred/blob/main/alfred/run_client_api.py#L89)
+[Show source in run_client_api.py:89](../../alfred/run_client_api.py#L89)
 
 #### Signature
 
@@ -276,7 +300,7 @@ async def set_alfred_server_port(request: Request):
 
 ## set_alfred_server_username
 
-[Show source in run_client_api.py:117](https://github.com/BatsResearch/alfred/blob/main/alfred/run_client_api.py#L117)
+[Show source in run_client_api.py:117](../../alfred/run_client_api.py#L117)
 
 #### Signature
 
@@ -290,7 +314,7 @@ async def set_alfred_server_username(request: Request):
 
 ## set_alfred_server_webhook_port
 
-[Show source in run_client_api.py:131](https://github.com/BatsResearch/alfred/blob/main/alfred/run_client_api.py#L131)
+[Show source in run_client_api.py:131](../../alfred/run_client_api.py#L131)
 
 #### Signature
 
@@ -304,7 +328,7 @@ async def set_alfred_server_webhook_port(request: Request):
 
 ## status
 
-[Show source in run_client_api.py:41](https://github.com/BatsResearch/alfred/blob/main/alfred/run_client_api.py#L41)
+[Show source in run_client_api.py:41](../../alfred/run_client_api.py#L41)
 
 #### Signature
 
@@ -313,6 +337,5 @@ async def set_alfred_server_webhook_port(request: Request):
 async def status():
     ...
 ```
-
 
 

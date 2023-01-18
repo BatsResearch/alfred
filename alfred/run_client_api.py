@@ -197,7 +197,6 @@ async def set_alfred_server_endpoint_cfg(
         server_connected = True
         print("Server connected")
 
-
     ALFRED_META_CONFIG['model'] = data.model
     ALFRED_META_CONFIG['model_type'] = data.model_type
     ALFRED_META_CONFIG['end_point'] = data.end_point
@@ -232,7 +231,6 @@ async def set_alfred_server_connected():
 
     df = pd.DataFrame(np.arange(9).reshape(3, 3), list('ABC'), list('XYZ'))
     html_table_blue_light = build_table(df, 'blue_light')
-    print(html_table_blue_light)
     return {'html': html_table_blue_light}
 
 

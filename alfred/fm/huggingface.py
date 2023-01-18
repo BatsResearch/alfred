@@ -51,6 +51,7 @@ class HuggingFaceModel(LocalAccessFoundationModel):
     The interface includes implementations of the _score_batch method
     for ranking candidates and the _generate_batch method for generating prompts.
     """
+
     def __init__(self,
                  model_string: str,
                  dtype: str = "auto",
@@ -299,7 +300,7 @@ class HuggingFaceModel(LocalAccessFoundationModel):
                     skip_special_tokens=True))
         else:
             texts = [self.tokenizer.batch_decode(output, skip_special_tokens=True)[
-                0] for output in outputs]
+                         0] for output in outputs]
         del inputs, outputs
 
         return [CompletionResponse(prediction=text) for text in texts]

@@ -1,14 +1,18 @@
 # Run Server
 
-[alfred Index](../README.md#alfred-index) /
+[Alfred Index](../README.md#alfred-index) /
 [Alfred](./index.md#alfred) /
 Run Server
 
-> Auto-generated documentation for [alfred.run_server](https://github.com/BatsResearch/alfred/blob/main/alfred/run_server.py) module.
+> Auto-generated documentation for [alfred.run_server](../../alfred/run_server.py) module.
+
+- [Run Server](#run-server)
+  - [ModelServer](#modelserver)
+  - [start_server](#start_server)
 
 ## ModelServer
 
-[Show source in run_server.py:19](https://github.com/BatsResearch/alfred/blob/main/alfred/run_server.py#L19)
+[Show source in run_server.py:19](../../alfred/run_server.py#L19)
 
 ModelServer is the server-side interface that wraps a certain alfred.fm class.
 ModelServer is used to launch the specified alfred.fm model as a gRPC Server and find the proper port.
@@ -25,7 +29,7 @@ class ModelServer:
 
 ## start_server
 
-[Show source in run_server.py:67](https://github.com/BatsResearch/alfred/blob/main/alfred/run_server.py#L67)
+[Show source in run_server.py:67](../../alfred/run_server.py#L67)
 
 Wrapper function to start gRPC Server.
 
@@ -40,6 +44,5 @@ Wrapper function to start gRPC Server.
 def start_server(args: argparse.Namespace):
     ...
 ```
-
 
 

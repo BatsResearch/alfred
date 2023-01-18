@@ -1,6 +1,5 @@
 import unittest
 
-
 from alfred.fm.query import RankedQuery, CompletionQuery
 from alfred.template import StringTemplate
 
@@ -12,7 +11,7 @@ class TestDatasetTemplate(unittest.TestCase):
                    {'text': 'This is another test.'},
                    {'text': 'This is a third test.'}]
 
-        template = StringTemplate("This is a [text]")
+        template = StringTemplate("This is a [[text]]")
 
         queries = template.apply_to_dataset(dataset)
         queries_ = [template.apply(d) for d in dataset]
@@ -26,7 +25,7 @@ class TestDatasetTemplate(unittest.TestCase):
         self.assertEqual(queries[1].prompt, "This is a This is another test.")
 
         template = StringTemplate(
-            "This is a [text]",
+            "This is a [[text]]",
             answer_choices="Yes ||| No",
         )
 
