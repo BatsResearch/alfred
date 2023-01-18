@@ -4,7 +4,10 @@ from typing import Dict, Callable, Union, List, Any, Iterable, Optional, Tuple
 import numpy as np
 from tqdm.auto import tqdm
 
-from alfred.fm.response import Response, CompletionResponse, RankedResponse
+import alfred.registry as registry
+from alfred.fm.response.completion_response import CompletionResponse
+from alfred.fm.response.ranked_response import RankedResponse
+from alfred.fm.response.response import Response
 
 logger = logging.getLogger(__name__)
 
@@ -22,6 +25,7 @@ class Voter:
                  label_map: Dict,
                  matching_fn: Callable = lambda x, y: x == y,
                  calibration: Optional[Union[List, np.ndarray, Tuple]] = None,
+                 register: bool = False,
                  ):
         """
         Initialize a voter
@@ -41,11 +45,16 @@ class Voter:
         :type matching_fn: Callable
         :param calibration: (optional) calibration weights to apply to the voter
         :type calibration: Optional[Union[List, np.ndarray]]
+        :param register: (optional) whether to register the voter to the voter registry
+        :type register: bool
         """
 
         self._label_map = label_map
         self._matching_fn = matching_fn
         self._calibration = calibration
+
+        if register:
+            registry.register(self)
 
     def vote(self,
              responses: Union[Iterable[str], str, Iterable[Response], Response],
@@ -87,11 +96,9 @@ class Voter:
                 "No answer label map found, voting will not be done")
 
         no_tqdm = kwargs.get('no_tqdm', True)
+        abstention = kwargs.get('abstention', 0)
 
-        if 'zero_abstention' in kwargs:
-            zero_abstention = kwargs['zero_abstention']
-
-        votes = np.zeros(len(responses))
+        votes = np.ones(len(responses)) * abstention
         for idx, response in enumerate(tqdm(responses, disable=no_tqdm)):
             if type(response) == CompletionResponse:
                 response = response.prediction
@@ -101,9 +108,9 @@ class Voter:
                     labels = np.array(list(response.scores.keys()))
                     if type(self._calibration) == tuple:
                         weights, biases = self._calibration
-                        calibrated_scores = scores @ weights + biases
+                        calibrated_scores = scores * weights + biases
                     elif type(self._calibration) in [list, np.ndarray]:
-                        calibrated_scores = scores @ self._calibration
+                        calibrated_scores = scores * self._calibration
                     response = labels[np.argmax(calibrated_scores)]
                 else:
                     response = response.prediction
@@ -138,3 +145,9 @@ class Voter:
         :type biases: Union[List[float], np.ndarray]
         """
         self._calibration = (weights, biases)
+
+    def clear_calibration(self):
+        """
+        Clear calibration weights and biases
+        """
+        self._calibration = None

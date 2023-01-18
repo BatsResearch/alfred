@@ -1,0 +1,953 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>alfred.client.client API documentation</title>
+<meta name="description" content="" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>alfred.client.client</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">import logging
+from typing import Any, List, Optional, Union, Dict
+
+import numpy as np
+from grpc import FutureTimeoutError
+
+from alfred.client.ssh.sshtunnel import SSHTunnel
+from alfred.fm.dummy import DummyModel
+from alfred.fm.huggingface import HuggingFaceModel
+from alfred.fm.openai import OpenAIModel
+from alfred.fm.query import CompletionQuery, Query, RankedQuery
+from alfred.fm.remote.grpc import gRPCClient
+from alfred.fm.response import Response
+from alfred.template import StringTemplate, Template
+from alfred.voter.voter import Voter
+
+logger = logging.getLogger(__name__)
+
+NULL_INPUT_TOKENS = [&#34;N/A&#34;, &#34;ε&#34;, &#34;[MASK]&#34;, &#34;NULL&#34;, &#34;&lt;|endoftext|&gt;&#34;]
+
+
+class Client:
+    &#34;&#34;&#34;
+    Client is the primary user interface that wraps around foundation models.
+    A client interface for accessing various models, such as those implemented by OpenAI, Hugging Face, etc.
+    The client can be used to specify the model and how to access it,
+    and can establish an SSH tunnel to a remote end point for secure access to a remote model.
+    &#34;&#34;&#34;
+
+    def __init__(self,
+                 model: Optional[str] = None,
+                 model_type: Optional[str] = None,
+                 end_point: Optional[str] = None,
+                 local_path: Optional[str] = None,
+                 ssh_tunnel: bool = False,
+                 ssh_node: Optional[str] = None,
+                 **kwargs: Any,
+                 ):
+        &#39;&#39;&#39;
+        Initialize a Client class.
+
+        TODO: implement ngrok/cloudflare/localhost.run tunneling
+
+        :param model: (optional) The name of the model. (e.g. bigscience/T0pp or text-davinci-003)
+        :type model: str
+        :param model_type: (optional) The type of the model. (e.g. &#34;openai&#34;, &#34;huggingface&#34;, &#34;dummy&#34;)
+        :type model_type: str
+        :param end_point: (optional) The end point of the model with username and port. (e.g. &#34;user@localhost:50051&#34;)
+        :type end_point: str
+        :param local_path: (optional) The local path of the model. (e.g. &#34;/home/user/.cache/model&#34;)
+        :param ssh_tunnel: Whether to establish an SSH tunnel to the end point.
+        :type ssh_tunnel: bool
+        :param ssh_node: (optional) The final SSH node to establish the SSH tunnel. (e.g. gpu node on a cluster with login node as jump)
+        :type ssh_node: str
+        :param kwargs: Additional keyword arguments
+        :type kwargs: Any
+        &#39;&#39;&#39;
+
+        self.model = model
+        self.model_type = model_type
+
+        if self.model_type:
+            self.model_type = model_type.lower()
+            assert self.model_type in [&#34;huggingface&#34;, &#34;openai&#34;, &#34;onnx&#34;, &#34;tensorrt&#34;,
+                                       &#34;torch&#34;, &#34;dummy&#34;], f&#34;Invalid model type: {self.model_type}&#34;
+        else:
+            if end_point is None:
+                logger.error(
+                    &#34;Model type is not specified. Please specify model type or end point&#34;)
+                raise ValueError(
+                    &#34;Model type is not specified. Please specify model/model_type or end_point&#34;)
+
+        self.grpcClient = None
+        if end_point:
+            end_point_pieces = end_point.split(&#34;:&#34;)
+            self.end_point_ip, self.end_point_port = &#34;&#34;.join(
+                end_point_pieces[:-1]), end_point_pieces[-1]
+
+            if ssh_tunnel:
+                try:
+                    user_name, host_name = self.end_point_ip.split(&#34;@&#34;)
+                except ValueError:
+                    logger.warning(
+                        &#34;Invalid end point format, please use user_name@host_name:port, prompting for username and &#34;
+                        &#34;password&#34;)
+                    user_name = input(&#34;Username: &#34;)
+                    host_name = self.end_point_ip
+
+                logger.info(
+                    f&#34;Trying to connect to {user_name}@{host_name}:{self.end_point_port} via {ssh_node}&#34;)
+
+                tunnel = SSHTunnel(
+                    remote_host=host_name,
+                    remote_port=self.end_point_port,
+                    remote_node_address=ssh_node,
+                    username=user_name,
+                )
+
+                tunnel.start()
+
+                logger.info(
+                    f&#34;SSH tunnel bound to {self.end_point_ip}:{self.end_point_port} established at localhost:{tunnel.local_port}&#34;)
+
+                self.end_point_ip = &#34;127.0.0.1&#34;
+                self.end_point_port = tunnel.local_port
+
+            logger.info(
+                f&#34;Connecting to remote end point: {end_point}, looking for model: {model}&#34;)
+            # TODO Check remote model registry
+
+            try:
+                logger.info(
+                    f&#34;Connecting to remote end point: {self.end_point_ip}:{self.end_point_port}, looking for model: {model}&#34;)
+                self.grpcClient = gRPCClient(
+                    self.end_point_ip, self.end_point_port)
+                logger.info(f&#34;Connected to remote end point: {end_point}&#34;)
+            except FutureTimeoutError:
+                logger.error(
+                    f&#34;Cannot connect to remote end point: {end_point}&#34;)
+                raise ConnectionError(
+                    f&#34;Cannot connect to remote end point: {end_point}&#34;)
+        else:
+            if self.model_type == &#34;huggingface&#34;:
+                self.model = HuggingFaceModel(
+                    self.model, local_path=local_path, **kwargs)
+            elif self.model_type == &#34;openai&#34;:
+                self.model = OpenAIModel(self.model, **kwargs)
+            elif self.model_type == &#34;dummy&#34;:
+                self.model = DummyModel(self.model)
+            elif self.model_type == &#34;onnx&#34;:
+                # self.model = ONNXModel(self.model, **kwargs)
+                raise NotImplementedError
+            elif self.model_type == &#34;tensorrt&#34;:
+                # self.model = TensorRTModel(self.model, **kwargs)
+                raise NotImplementedError
+            elif self.model_type == &#34;torch&#34;:
+                # self.model = TorchModel(self.model, **kwargs)
+                raise NotImplementedError
+            else:
+                logger.error(f&#34;Invalid model type: {self.model_type}&#34;)
+                raise ValueError(f&#34;Invalid model type: {self.model_type}&#34;)
+            logger.info(
+                f&#34;Connected to local {self.model_type} model: {self.model}&#34;)
+
+    def run(self,
+            queries: Union[Query, str, List[Query], List[str]],
+            **kwargs: Any,
+            ) -&gt; Union[Response, List[Response]]:
+        &#34;&#34;&#34;
+        Run the model on the queries.
+
+        :param queries: The queries to run the model on.
+        :type queries: Union[Query, str, List[Query], List[str]]
+        :param kwargs: Additional keyword arguments (e.g. repetition_penalty, temperature, etc.)
+        :type kwargs: Any
+        :return: The response(s) from the model.
+        :rtype: Union[Response, List[Response]]
+        &#34;&#34;&#34;
+        if self.grpcClient:
+            return self.remote_run(queries, **kwargs)
+        else:
+            return self.model.run(queries, **kwargs)
+
+    def remote_run(self,
+                   queries: Union[Query, str, List[Query], List[str]],
+                   **kwargs: Any,
+                   ) -&gt; Union[Response, List[Response]]:
+        &#34;&#34;&#34;
+        Wrapper function for running the model on the queries thru a gRPC Server.
+
+        :param queries: The queries to run the model on.
+        :type queries: Union[Query, str, List[Query], List[str]]
+        :param kwargs: Additional keyword arguments (e.g. repetition_penalty, temperature, etc.)
+        :type kwargs: Any
+        :return: The response(s) from the model.
+        :rtype: Union[Response, List[Response]]
+        &#34;&#34;&#34;
+        if isinstance(queries, str) or isinstance(queries, Query):
+            return self.grpcClient.run(queries, **kwargs)
+        if isinstance(queries, list):
+            return self.grpcClient.run_dataset(queries, **kwargs)
+
+    def generate(self,
+                 query: Union[CompletionQuery, str, List[CompletionQuery], List[str]],
+                 **kwargs: Any,
+                 ) -&gt; Union[Response, List[Response]]:
+        &#34;&#34;&#34;
+        Wrapper function to generate the response(s) from the model. (For completion)
+
+        :param query: The query to generate the response(s) from.
+        :type query: Union[CompletionQuery, str, List[Union[CompletionQuery, str]]]
+        :param kwargs: Additional keyword arguments (e.g. repetition_penalty, temperature, etc.)
+        :type kwargs: Any
+        :return: The response(s) from the model.
+        :rtype: Union[Response, List[Response]]
+        &#34;&#34;&#34;
+        return self(query, **kwargs)
+
+    def score(self,
+              query: Union[RankedQuery, Dict, List[RankedQuery], List[str]],
+              **kwargs: Any,
+              ) -&gt; Union[Response, List[Response]]:
+        &#34;&#34;&#34;
+        Wrapper function to score the response(s) from the model. (For ranking)
+
+        TODO: Implement Query in the below format:
+        Query can be in form of a list of ranked query or a dictionary in form of:
+        {
+            &#34;prompt&#34;: &#34;query string&#34;,
+            &#34;candidates&#34;: [&#34;candidate 1&#34;, &#34;candidate 2&#34;, ...]
+        }
+
+        :param query: A single query object or a list of query objects
+        :type query: Union[RankedQuery, Dict, List[RankedQuery], List[str]]
+        :param kwargs: Additional keyword arguments
+        :type kwargs: Any
+        :return: A single response or a list of responses
+        :rtype: Union[Response, List[Response]]
+        &#34;&#34;&#34;
+        return self(query, **kwargs)
+
+    def __call__(self,
+                 queries: Union[Query, str, List[Query], List[str]],
+                 **kwargs: Any
+                 ) -&gt; Union[Response, List[Response]]:
+        &#34;&#34;&#34;
+        __call__() function to run the model on the queries.
+        Equivalent to run() function.
+
+        :param queries: The queries to run the model on.
+        :type queries: Union[Query, str, List[Query], List[str]]
+        :param kwargs: Additional keyword arguments (e.g. repetition_penalty, temperature, etc.)
+        :type kwargs: Any
+        :return: The response(s) from the model.
+        :rtype: Union[Response, List[Response]]
+        &#34;&#34;&#34;
+        return self.run(queries, **kwargs)
+
+    def calibrate(self,
+                  template: Union[str, Template],
+                  voter: Optional[Voter] = None,
+                  null_tokens: Optional[Union[List[str], str]] = None,
+                  candidates: Optional[Union[List[str], str]] = None,
+                  strategy: int = 1,
+                  ):
+        &#34;&#34;&#34;
+        calibrate are used to calibrate foundation models contextually given the template.
+        A voter class may be passed to calibrate the model with a specific voter.
+        If a voter is set, the calibrated weights will be stored in the voter
+        calibrate() function will return the calibration weights and biases otherwise.
+
+        There are two strategies for calibration:
+        1.  W = diag(p)^-1, b = 0
+        2.  W = eye, b = -p
+
+        For reference, please refer to:
+            Zhao, Z., Wallace, E., Feng, S., Klein, D., &amp; Singh, S. (2021, July).
+            Calibrate before use: Improving few-shot performance of language models.
+            In International Conference on Machine Learning (pp. 12697-12706). PMLR.
+
+        :param template: The template to calibrate the model with.
+        :type template: Union[str, Template]
+        :param voter: The voter to calibrate the model with.
+        :type voter: Optional[Voter]
+        :param null_tokens: The null tokens to calibrate the model with.
+        :type null_tokens: Optional[Union[List[str], str]]
+        :param candidates: The candidates to calibrate the model with.
+        :type candidates: Optional[Union[List[str], str]]
+        :param strategy: The strategy to calibrate the model with. default to 1
+        :type strategy: int
+        &#34;&#34;&#34;
+        if null_tokens is None:
+            null_tokens = NULL_INPUT_TOKENS
+        if isinstance(null_tokens, str):
+            null_tokens = [null_tokens]
+
+        candidates = candidates or template._answer_candidates
+        if candidates is None:
+            logger.error(&#34;No candidates provided for calibration.&#34;)
+            raise ValueError(&#34;No answer candidates provided for calibration.&#34;)
+
+        template = StringTemplate(template) if isinstance(template, str) else template
+
+        # identify the keywords in template_str
+        keywords = template.keywords
+        weights = np.empty([len(null_tokens), len(candidates), len(candidates)])
+        biases = np.empty([len(null_tokens), len(candidates)])
+        scores = np.empty((len(null_tokens), len(candidates)))
+        for null_token_id, null_token in enumerate(null_tokens):
+            null_instance = dict(((k, null_token) for k in keywords))
+            query = template.apply(null_instance)
+            query._candidates = candidates
+            p = np.array(list(self.score(query).scores.values()))
+            scores[null_token_id, :] = p
+            if strategy == 1:
+                weights[null_token_id, :, :] = np.linalg.inv(np.diag(p))
+                biases[null_token_id, :] = np.zeros(len(candidates))
+            elif strategy == 2:
+                weights[null_token_id, :, :] = np.eye(len(candidates))
+                biases[null_token_id, :] = -p
+
+        ensembled_weights = weights.mean(axis=0)
+        ensembled_biases = biases.mean(axis=0)
+
+        if voter is None:
+            return ensembled_weights, ensembled_biases
+
+        voter.set_calibration(ensembled_weights, ensembled_biases)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="alfred.client.client.Client"><code class="flex name class">
+<span>class <span class="ident">Client</span></span>
+<span>(</span><span>model: Optional[str] = None, model_type: Optional[str] = None, end_point: Optional[str] = None, local_path: Optional[str] = None, ssh_tunnel: bool = False, ssh_node: Optional[str] = None, **kwargs: Any)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Client is the primary user interface that wraps around foundation models.
+A client interface for accessing various models, such as those implemented by OpenAI, Hugging Face, etc.
+The client can be used to specify the model and how to access it,
+and can establish an SSH tunnel to a remote end point for secure access to a remote model.</p>
+<p>Initialize a Client class.</p>
+<p>TODO: implement ngrok/cloudflare/localhost.run tunneling</p>
+<p>:param model: (optional) The name of the model. (e.g. bigscience/T0pp or text-davinci-003)
+:type model: str
+:param model_type: (optional) The type of the model. (e.g. "openai", "huggingface", "dummy")
+:type model_type: str
+:param end_point: (optional) The end point of the model with username and port. (e.g. "user@localhost:50051")
+:type end_point: str
+:param local_path: (optional) The local path of the model. (e.g. "/home/user/.cache/model")
+:param ssh_tunnel: Whether to establish an SSH tunnel to the end point.
+:type ssh_tunnel: bool
+:param ssh_node: (optional) The final SSH node to establish the SSH tunnel. (e.g. gpu node on a cluster with login node as jump)
+:type ssh_node: str
+:param kwargs: Additional keyword arguments
+:type kwargs: Any</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Client:
+    &#34;&#34;&#34;
+    Client is the primary user interface that wraps around foundation models.
+    A client interface for accessing various models, such as those implemented by OpenAI, Hugging Face, etc.
+    The client can be used to specify the model and how to access it,
+    and can establish an SSH tunnel to a remote end point for secure access to a remote model.
+    &#34;&#34;&#34;
+
+    def __init__(self,
+                 model: Optional[str] = None,
+                 model_type: Optional[str] = None,
+                 end_point: Optional[str] = None,
+                 local_path: Optional[str] = None,
+                 ssh_tunnel: bool = False,
+                 ssh_node: Optional[str] = None,
+                 **kwargs: Any,
+                 ):
+        &#39;&#39;&#39;
+        Initialize a Client class.
+
+        TODO: implement ngrok/cloudflare/localhost.run tunneling
+
+        :param model: (optional) The name of the model. (e.g. bigscience/T0pp or text-davinci-003)
+        :type model: str
+        :param model_type: (optional) The type of the model. (e.g. &#34;openai&#34;, &#34;huggingface&#34;, &#34;dummy&#34;)
+        :type model_type: str
+        :param end_point: (optional) The end point of the model with username and port. (e.g. &#34;user@localhost:50051&#34;)
+        :type end_point: str
+        :param local_path: (optional) The local path of the model. (e.g. &#34;/home/user/.cache/model&#34;)
+        :param ssh_tunnel: Whether to establish an SSH tunnel to the end point.
+        :type ssh_tunnel: bool
+        :param ssh_node: (optional) The final SSH node to establish the SSH tunnel. (e.g. gpu node on a cluster with login node as jump)
+        :type ssh_node: str
+        :param kwargs: Additional keyword arguments
+        :type kwargs: Any
+        &#39;&#39;&#39;
+
+        self.model = model
+        self.model_type = model_type
+
+        if self.model_type:
+            self.model_type = model_type.lower()
+            assert self.model_type in [&#34;huggingface&#34;, &#34;openai&#34;, &#34;onnx&#34;, &#34;tensorrt&#34;,
+                                       &#34;torch&#34;, &#34;dummy&#34;], f&#34;Invalid model type: {self.model_type}&#34;
+        else:
+            if end_point is None:
+                logger.error(
+                    &#34;Model type is not specified. Please specify model type or end point&#34;)
+                raise ValueError(
+                    &#34;Model type is not specified. Please specify model/model_type or end_point&#34;)
+
+        self.grpcClient = None
+        if end_point:
+            end_point_pieces = end_point.split(&#34;:&#34;)
+            self.end_point_ip, self.end_point_port = &#34;&#34;.join(
+                end_point_pieces[:-1]), end_point_pieces[-1]
+
+            if ssh_tunnel:
+                try:
+                    user_name, host_name = self.end_point_ip.split(&#34;@&#34;)
+                except ValueError:
+                    logger.warning(
+                        &#34;Invalid end point format, please use user_name@host_name:port, prompting for username and &#34;
+                        &#34;password&#34;)
+                    user_name = input(&#34;Username: &#34;)
+                    host_name = self.end_point_ip
+
+                logger.info(
+                    f&#34;Trying to connect to {user_name}@{host_name}:{self.end_point_port} via {ssh_node}&#34;)
+
+                tunnel = SSHTunnel(
+                    remote_host=host_name,
+                    remote_port=self.end_point_port,
+                    remote_node_address=ssh_node,
+                    username=user_name,
+                )
+
+                tunnel.start()
+
+                logger.info(
+                    f&#34;SSH tunnel bound to {self.end_point_ip}:{self.end_point_port} established at localhost:{tunnel.local_port}&#34;)
+
+                self.end_point_ip = &#34;127.0.0.1&#34;
+                self.end_point_port = tunnel.local_port
+
+            logger.info(
+                f&#34;Connecting to remote end point: {end_point}, looking for model: {model}&#34;)
+            # TODO Check remote model registry
+
+            try:
+                logger.info(
+                    f&#34;Connecting to remote end point: {self.end_point_ip}:{self.end_point_port}, looking for model: {model}&#34;)
+                self.grpcClient = gRPCClient(
+                    self.end_point_ip, self.end_point_port)
+                logger.info(f&#34;Connected to remote end point: {end_point}&#34;)
+            except FutureTimeoutError:
+                logger.error(
+                    f&#34;Cannot connect to remote end point: {end_point}&#34;)
+                raise ConnectionError(
+                    f&#34;Cannot connect to remote end point: {end_point}&#34;)
+        else:
+            if self.model_type == &#34;huggingface&#34;:
+                self.model = HuggingFaceModel(
+                    self.model, local_path=local_path, **kwargs)
+            elif self.model_type == &#34;openai&#34;:
+                self.model = OpenAIModel(self.model, **kwargs)
+            elif self.model_type == &#34;dummy&#34;:
+                self.model = DummyModel(self.model)
+            elif self.model_type == &#34;onnx&#34;:
+                # self.model = ONNXModel(self.model, **kwargs)
+                raise NotImplementedError
+            elif self.model_type == &#34;tensorrt&#34;:
+                # self.model = TensorRTModel(self.model, **kwargs)
+                raise NotImplementedError
+            elif self.model_type == &#34;torch&#34;:
+                # self.model = TorchModel(self.model, **kwargs)
+                raise NotImplementedError
+            else:
+                logger.error(f&#34;Invalid model type: {self.model_type}&#34;)
+                raise ValueError(f&#34;Invalid model type: {self.model_type}&#34;)
+            logger.info(
+                f&#34;Connected to local {self.model_type} model: {self.model}&#34;)
+
+    def run(self,
+            queries: Union[Query, str, List[Query], List[str]],
+            **kwargs: Any,
+            ) -&gt; Union[Response, List[Response]]:
+        &#34;&#34;&#34;
+        Run the model on the queries.
+
+        :param queries: The queries to run the model on.
+        :type queries: Union[Query, str, List[Query], List[str]]
+        :param kwargs: Additional keyword arguments (e.g. repetition_penalty, temperature, etc.)
+        :type kwargs: Any
+        :return: The response(s) from the model.
+        :rtype: Union[Response, List[Response]]
+        &#34;&#34;&#34;
+        if self.grpcClient:
+            return self.remote_run(queries, **kwargs)
+        else:
+            return self.model.run(queries, **kwargs)
+
+    def remote_run(self,
+                   queries: Union[Query, str, List[Query], List[str]],
+                   **kwargs: Any,
+                   ) -&gt; Union[Response, List[Response]]:
+        &#34;&#34;&#34;
+        Wrapper function for running the model on the queries thru a gRPC Server.
+
+        :param queries: The queries to run the model on.
+        :type queries: Union[Query, str, List[Query], List[str]]
+        :param kwargs: Additional keyword arguments (e.g. repetition_penalty, temperature, etc.)
+        :type kwargs: Any
+        :return: The response(s) from the model.
+        :rtype: Union[Response, List[Response]]
+        &#34;&#34;&#34;
+        if isinstance(queries, str) or isinstance(queries, Query):
+            return self.grpcClient.run(queries, **kwargs)
+        if isinstance(queries, list):
+            return self.grpcClient.run_dataset(queries, **kwargs)
+
+    def generate(self,
+                 query: Union[CompletionQuery, str, List[CompletionQuery], List[str]],
+                 **kwargs: Any,
+                 ) -&gt; Union[Response, List[Response]]:
+        &#34;&#34;&#34;
+        Wrapper function to generate the response(s) from the model. (For completion)
+
+        :param query: The query to generate the response(s) from.
+        :type query: Union[CompletionQuery, str, List[Union[CompletionQuery, str]]]
+        :param kwargs: Additional keyword arguments (e.g. repetition_penalty, temperature, etc.)
+        :type kwargs: Any
+        :return: The response(s) from the model.
+        :rtype: Union[Response, List[Response]]
+        &#34;&#34;&#34;
+        return self(query, **kwargs)
+
+    def score(self,
+              query: Union[RankedQuery, Dict, List[RankedQuery], List[str]],
+              **kwargs: Any,
+              ) -&gt; Union[Response, List[Response]]:
+        &#34;&#34;&#34;
+        Wrapper function to score the response(s) from the model. (For ranking)
+
+        TODO: Implement Query in the below format:
+        Query can be in form of a list of ranked query or a dictionary in form of:
+        {
+            &#34;prompt&#34;: &#34;query string&#34;,
+            &#34;candidates&#34;: [&#34;candidate 1&#34;, &#34;candidate 2&#34;, ...]
+        }
+
+        :param query: A single query object or a list of query objects
+        :type query: Union[RankedQuery, Dict, List[RankedQuery], List[str]]
+        :param kwargs: Additional keyword arguments
+        :type kwargs: Any
+        :return: A single response or a list of responses
+        :rtype: Union[Response, List[Response]]
+        &#34;&#34;&#34;
+        return self(query, **kwargs)
+
+    def __call__(self,
+                 queries: Union[Query, str, List[Query], List[str]],
+                 **kwargs: Any
+                 ) -&gt; Union[Response, List[Response]]:
+        &#34;&#34;&#34;
+        __call__() function to run the model on the queries.
+        Equivalent to run() function.
+
+        :param queries: The queries to run the model on.
+        :type queries: Union[Query, str, List[Query], List[str]]
+        :param kwargs: Additional keyword arguments (e.g. repetition_penalty, temperature, etc.)
+        :type kwargs: Any
+        :return: The response(s) from the model.
+        :rtype: Union[Response, List[Response]]
+        &#34;&#34;&#34;
+        return self.run(queries, **kwargs)
+
+    def calibrate(self,
+                  template: Union[str, Template],
+                  voter: Optional[Voter] = None,
+                  null_tokens: Optional[Union[List[str], str]] = None,
+                  candidates: Optional[Union[List[str], str]] = None,
+                  strategy: int = 1,
+                  ):
+        &#34;&#34;&#34;
+        calibrate are used to calibrate foundation models contextually given the template.
+        A voter class may be passed to calibrate the model with a specific voter.
+        If a voter is set, the calibrated weights will be stored in the voter
+        calibrate() function will return the calibration weights and biases otherwise.
+
+        There are two strategies for calibration:
+        1.  W = diag(p)^-1, b = 0
+        2.  W = eye, b = -p
+
+        For reference, please refer to:
+            Zhao, Z., Wallace, E., Feng, S., Klein, D., &amp; Singh, S. (2021, July).
+            Calibrate before use: Improving few-shot performance of language models.
+            In International Conference on Machine Learning (pp. 12697-12706). PMLR.
+
+        :param template: The template to calibrate the model with.
+        :type template: Union[str, Template]
+        :param voter: The voter to calibrate the model with.
+        :type voter: Optional[Voter]
+        :param null_tokens: The null tokens to calibrate the model with.
+        :type null_tokens: Optional[Union[List[str], str]]
+        :param candidates: The candidates to calibrate the model with.
+        :type candidates: Optional[Union[List[str], str]]
+        :param strategy: The strategy to calibrate the model with. default to 1
+        :type strategy: int
+        &#34;&#34;&#34;
+        if null_tokens is None:
+            null_tokens = NULL_INPUT_TOKENS
+        if isinstance(null_tokens, str):
+            null_tokens = [null_tokens]
+
+        candidates = candidates or template._answer_candidates
+        if candidates is None:
+            logger.error(&#34;No candidates provided for calibration.&#34;)
+            raise ValueError(&#34;No answer candidates provided for calibration.&#34;)
+
+        template = StringTemplate(template) if isinstance(template, str) else template
+
+        # identify the keywords in template_str
+        keywords = template.keywords
+        weights = np.empty([len(null_tokens), len(candidates), len(candidates)])
+        biases = np.empty([len(null_tokens), len(candidates)])
+        scores = np.empty((len(null_tokens), len(candidates)))
+        for null_token_id, null_token in enumerate(null_tokens):
+            null_instance = dict(((k, null_token) for k in keywords))
+            query = template.apply(null_instance)
+            query._candidates = candidates
+            p = np.array(list(self.score(query).scores.values()))
+            scores[null_token_id, :] = p
+            if strategy == 1:
+                weights[null_token_id, :, :] = np.linalg.inv(np.diag(p))
+                biases[null_token_id, :] = np.zeros(len(candidates))
+            elif strategy == 2:
+                weights[null_token_id, :, :] = np.eye(len(candidates))
+                biases[null_token_id, :] = -p
+
+        ensembled_weights = weights.mean(axis=0)
+        ensembled_biases = biases.mean(axis=0)
+
+        if voter is None:
+            return ensembled_weights, ensembled_biases
+
+        voter.set_calibration(ensembled_weights, ensembled_biases)</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="alfred.client.client.Client.calibrate"><code class="name flex">
+<span>def <span class="ident">calibrate</span></span>(<span>self, template: Union[str, <a title="alfred.template.template.Template" href="../template/template.html#alfred.template.template.Template">Template</a>], voter: Optional[<a title="alfred.voter.voter.Voter" href="../voter/voter.html#alfred.voter.voter.Voter">Voter</a>] = None, null_tokens: Union[str, List[str], None] = None, candidates: Union[str, List[str], None] = None, strategy: int = 1)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>calibrate are used to calibrate foundation models contextually given the template.
+A voter class may be passed to calibrate the model with a specific voter.
+If a voter is set, the calibrated weights will be stored in the voter
+calibrate() function will return the calibration weights and biases otherwise.</p>
+<p>There are two strategies for calibration:
+1.
+W = diag(p)^-1, b = 0
+2.
+W = eye, b = -p</p>
+<p>For reference, please refer to:
+Zhao, Z., Wallace, E., Feng, S., Klein, D., &amp; Singh, S. (2021, July).
+Calibrate before use: Improving few-shot performance of language models.
+In International Conference on Machine Learning (pp. 12697-12706). PMLR.</p>
+<p>:param template: The template to calibrate the model with.
+:type template: Union[str, Template]
+:param voter: The voter to calibrate the model with.
+:type voter: Optional[Voter]
+:param null_tokens: The null tokens to calibrate the model with.
+:type null_tokens: Optional[Union[List[str], str]]
+:param candidates: The candidates to calibrate the model with.
+:type candidates: Optional[Union[List[str], str]]
+:param strategy: The strategy to calibrate the model with. default to 1
+:type strategy: int</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def calibrate(self,
+              template: Union[str, Template],
+              voter: Optional[Voter] = None,
+              null_tokens: Optional[Union[List[str], str]] = None,
+              candidates: Optional[Union[List[str], str]] = None,
+              strategy: int = 1,
+              ):
+    &#34;&#34;&#34;
+    calibrate are used to calibrate foundation models contextually given the template.
+    A voter class may be passed to calibrate the model with a specific voter.
+    If a voter is set, the calibrated weights will be stored in the voter
+    calibrate() function will return the calibration weights and biases otherwise.
+
+    There are two strategies for calibration:
+    1.  W = diag(p)^-1, b = 0
+    2.  W = eye, b = -p
+
+    For reference, please refer to:
+        Zhao, Z., Wallace, E., Feng, S., Klein, D., &amp; Singh, S. (2021, July).
+        Calibrate before use: Improving few-shot performance of language models.
+        In International Conference on Machine Learning (pp. 12697-12706). PMLR.
+
+    :param template: The template to calibrate the model with.
+    :type template: Union[str, Template]
+    :param voter: The voter to calibrate the model with.
+    :type voter: Optional[Voter]
+    :param null_tokens: The null tokens to calibrate the model with.
+    :type null_tokens: Optional[Union[List[str], str]]
+    :param candidates: The candidates to calibrate the model with.
+    :type candidates: Optional[Union[List[str], str]]
+    :param strategy: The strategy to calibrate the model with. default to 1
+    :type strategy: int
+    &#34;&#34;&#34;
+    if null_tokens is None:
+        null_tokens = NULL_INPUT_TOKENS
+    if isinstance(null_tokens, str):
+        null_tokens = [null_tokens]
+
+    candidates = candidates or template._answer_candidates
+    if candidates is None:
+        logger.error(&#34;No candidates provided for calibration.&#34;)
+        raise ValueError(&#34;No answer candidates provided for calibration.&#34;)
+
+    template = StringTemplate(template) if isinstance(template, str) else template
+
+    # identify the keywords in template_str
+    keywords = template.keywords
+    weights = np.empty([len(null_tokens), len(candidates), len(candidates)])
+    biases = np.empty([len(null_tokens), len(candidates)])
+    scores = np.empty((len(null_tokens), len(candidates)))
+    for null_token_id, null_token in enumerate(null_tokens):
+        null_instance = dict(((k, null_token) for k in keywords))
+        query = template.apply(null_instance)
+        query._candidates = candidates
+        p = np.array(list(self.score(query).scores.values()))
+        scores[null_token_id, :] = p
+        if strategy == 1:
+            weights[null_token_id, :, :] = np.linalg.inv(np.diag(p))
+            biases[null_token_id, :] = np.zeros(len(candidates))
+        elif strategy == 2:
+            weights[null_token_id, :, :] = np.eye(len(candidates))
+            biases[null_token_id, :] = -p
+
+    ensembled_weights = weights.mean(axis=0)
+    ensembled_biases = biases.mean(axis=0)
+
+    if voter is None:
+        return ensembled_weights, ensembled_biases
+
+    voter.set_calibration(ensembled_weights, ensembled_biases)</code></pre>
+</details>
+</dd>
+<dt id="alfred.client.client.Client.generate"><code class="name flex">
+<span>def <span class="ident">generate</span></span>(<span>self, query: Union[<a title="alfred.fm.query.completion_query.CompletionQuery" href="../fm/query/completion_query.html#alfred.fm.query.completion_query.CompletionQuery">CompletionQuery</a>, str, List[<a title="alfred.fm.query.completion_query.CompletionQuery" href="../fm/query/completion_query.html#alfred.fm.query.completion_query.CompletionQuery">CompletionQuery</a>], List[str]], **kwargs: Any) ‑> Union[<a title="alfred.fm.response.response.Response" href="../fm/response/response.html#alfred.fm.response.response.Response">Response</a>, List[<a title="alfred.fm.response.response.Response" href="../fm/response/response.html#alfred.fm.response.response.Response">Response</a>]]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Wrapper function to generate the response(s) from the model. (For completion)</p>
+<p>:param query: The query to generate the response(s) from.
+:type query: Union[CompletionQuery, str, List[Union[CompletionQuery, str]]]
+:param kwargs: Additional keyword arguments (e.g. repetition_penalty, temperature, etc.)
+:type kwargs: Any
+:return: The response(s) from the model.
+:rtype: Union[Response, List[Response]]</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def generate(self,
+             query: Union[CompletionQuery, str, List[CompletionQuery], List[str]],
+             **kwargs: Any,
+             ) -&gt; Union[Response, List[Response]]:
+    &#34;&#34;&#34;
+    Wrapper function to generate the response(s) from the model. (For completion)
+
+    :param query: The query to generate the response(s) from.
+    :type query: Union[CompletionQuery, str, List[Union[CompletionQuery, str]]]
+    :param kwargs: Additional keyword arguments (e.g. repetition_penalty, temperature, etc.)
+    :type kwargs: Any
+    :return: The response(s) from the model.
+    :rtype: Union[Response, List[Response]]
+    &#34;&#34;&#34;
+    return self(query, **kwargs)</code></pre>
+</details>
+</dd>
+<dt id="alfred.client.client.Client.remote_run"><code class="name flex">
+<span>def <span class="ident">remote_run</span></span>(<span>self, queries: Union[<a title="alfred.fm.query.query.Query" href="../fm/query/query.html#alfred.fm.query.query.Query">Query</a>, str, List[<a title="alfred.fm.query.query.Query" href="../fm/query/query.html#alfred.fm.query.query.Query">Query</a>], List[str]], **kwargs: Any) ‑> Union[<a title="alfred.fm.response.response.Response" href="../fm/response/response.html#alfred.fm.response.response.Response">Response</a>, List[<a title="alfred.fm.response.response.Response" href="../fm/response/response.html#alfred.fm.response.response.Response">Response</a>]]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Wrapper function for running the model on the queries thru a gRPC Server.</p>
+<p>:param queries: The queries to run the model on.
+:type queries: Union[Query, str, List[Query], List[str]]
+:param kwargs: Additional keyword arguments (e.g. repetition_penalty, temperature, etc.)
+:type kwargs: Any
+:return: The response(s) from the model.
+:rtype: Union[Response, List[Response]]</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def remote_run(self,
+               queries: Union[Query, str, List[Query], List[str]],
+               **kwargs: Any,
+               ) -&gt; Union[Response, List[Response]]:
+    &#34;&#34;&#34;
+    Wrapper function for running the model on the queries thru a gRPC Server.
+
+    :param queries: The queries to run the model on.
+    :type queries: Union[Query, str, List[Query], List[str]]
+    :param kwargs: Additional keyword arguments (e.g. repetition_penalty, temperature, etc.)
+    :type kwargs: Any
+    :return: The response(s) from the model.
+    :rtype: Union[Response, List[Response]]
+    &#34;&#34;&#34;
+    if isinstance(queries, str) or isinstance(queries, Query):
+        return self.grpcClient.run(queries, **kwargs)
+    if isinstance(queries, list):
+        return self.grpcClient.run_dataset(queries, **kwargs)</code></pre>
+</details>
+</dd>
+<dt id="alfred.client.client.Client.run"><code class="name flex">
+<span>def <span class="ident">run</span></span>(<span>self, queries: Union[<a title="alfred.fm.query.query.Query" href="../fm/query/query.html#alfred.fm.query.query.Query">Query</a>, str, List[<a title="alfred.fm.query.query.Query" href="../fm/query/query.html#alfred.fm.query.query.Query">Query</a>], List[str]], **kwargs: Any) ‑> Union[<a title="alfred.fm.response.response.Response" href="../fm/response/response.html#alfred.fm.response.response.Response">Response</a>, List[<a title="alfred.fm.response.response.Response" href="../fm/response/response.html#alfred.fm.response.response.Response">Response</a>]]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Run the model on the queries.</p>
+<p>:param queries: The queries to run the model on.
+:type queries: Union[Query, str, List[Query], List[str]]
+:param kwargs: Additional keyword arguments (e.g. repetition_penalty, temperature, etc.)
+:type kwargs: Any
+:return: The response(s) from the model.
+:rtype: Union[Response, List[Response]]</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def run(self,
+        queries: Union[Query, str, List[Query], List[str]],
+        **kwargs: Any,
+        ) -&gt; Union[Response, List[Response]]:
+    &#34;&#34;&#34;
+    Run the model on the queries.
+
+    :param queries: The queries to run the model on.
+    :type queries: Union[Query, str, List[Query], List[str]]
+    :param kwargs: Additional keyword arguments (e.g. repetition_penalty, temperature, etc.)
+    :type kwargs: Any
+    :return: The response(s) from the model.
+    :rtype: Union[Response, List[Response]]
+    &#34;&#34;&#34;
+    if self.grpcClient:
+        return self.remote_run(queries, **kwargs)
+    else:
+        return self.model.run(queries, **kwargs)</code></pre>
+</details>
+</dd>
+<dt id="alfred.client.client.Client.score"><code class="name flex">
+<span>def <span class="ident">score</span></span>(<span>self, query: Union[<a title="alfred.fm.query.ranked_query.RankedQuery" href="../fm/query/ranked_query.html#alfred.fm.query.ranked_query.RankedQuery">RankedQuery</a>, Dict[~KT, ~VT], List[<a title="alfred.fm.query.ranked_query.RankedQuery" href="../fm/query/ranked_query.html#alfred.fm.query.ranked_query.RankedQuery">RankedQuery</a>], List[str]], **kwargs: Any) ‑> Union[<a title="alfred.fm.response.response.Response" href="../fm/response/response.html#alfred.fm.response.response.Response">Response</a>, List[<a title="alfred.fm.response.response.Response" href="../fm/response/response.html#alfred.fm.response.response.Response">Response</a>]]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Wrapper function to score the response(s) from the model. (For ranking)</p>
+<p>TODO: Implement Query in the below format:
+Query can be in form of a list of ranked query or a dictionary in form of:
+{
+"prompt": "query string",
+"candidates": ["candidate 1", "candidate 2", &hellip;]
+}</p>
+<p>:param query: A single query object or a list of query objects
+:type query: Union[RankedQuery, Dict, List[RankedQuery], List[str]]
+:param kwargs: Additional keyword arguments
+:type kwargs: Any
+:return: A single response or a list of responses
+:rtype: Union[Response, List[Response]]</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def score(self,
+          query: Union[RankedQuery, Dict, List[RankedQuery], List[str]],
+          **kwargs: Any,
+          ) -&gt; Union[Response, List[Response]]:
+    &#34;&#34;&#34;
+    Wrapper function to score the response(s) from the model. (For ranking)
+
+    TODO: Implement Query in the below format:
+    Query can be in form of a list of ranked query or a dictionary in form of:
+    {
+        &#34;prompt&#34;: &#34;query string&#34;,
+        &#34;candidates&#34;: [&#34;candidate 1&#34;, &#34;candidate 2&#34;, ...]
+    }
+
+    :param query: A single query object or a list of query objects
+    :type query: Union[RankedQuery, Dict, List[RankedQuery], List[str]]
+    :param kwargs: Additional keyword arguments
+    :type kwargs: Any
+    :return: A single response or a list of responses
+    :rtype: Union[Response, List[Response]]
+    &#34;&#34;&#34;
+    return self(query, **kwargs)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="alfred.client" href="index.html">alfred.client</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="alfred.client.client.Client" href="#alfred.client.client.Client">Client</a></code></h4>
+<ul class="">
+<li><code><a title="alfred.client.client.Client.calibrate" href="#alfred.client.client.Client.calibrate">calibrate</a></code></li>
+<li><code><a title="alfred.client.client.Client.generate" href="#alfred.client.client.Client.generate">generate</a></code></li>
+<li><code><a title="alfred.client.client.Client.remote_run" href="#alfred.client.client.Client.remote_run">remote_run</a></code></li>
+<li><code><a title="alfred.client.client.Client.run" href="#alfred.client.client.Client.run">run</a></code></li>
+<li><code><a title="alfred.client.client.Client.score" href="#alfred.client.client.Client.score">score</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>alfred.fm.remote.protos.query_pb2 API documentation</title>
+<meta name="description" content="Generated protocol buffer code." />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>alfred.fm.remote.protos.query_pb2</code></h1>
+</header>
+<section id="section-intro">
+<p>Generated protocol buffer code.</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python"># -*- coding: utf-8 -*-
+# Generated by the protocol buffer compiler.  DO NOT EDIT!
+# source: query.proto
+&#34;&#34;&#34;Generated protocol buffer code.&#34;&#34;&#34;
+
+from google.protobuf import descriptor as _descriptor
+from google.protobuf import descriptor_pool as _descriptor_pool
+from google.protobuf import symbol_database as _symbol_database
+from google.protobuf.internal import builder as _builder
+
+# @@protoc_insertion_point(imports)
+
+_sym_db = _symbol_database.Default()
+
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(
+    b&#39;\n\x0bquery.proto\x12\x05unary\&#34;9\n\x11\x44\x61taHeaderRequest\x12\x11\n\tdata_meta\x18\x01 \x01(\t\x12\x11\n\tdata_size\x18\x02 \x01(\x04\&#34;:\n\x12\x44\x61taHeaderResponse\x12\x11\n\tdata_meta\x18\x01 \x01(\t\x12\x11\n\tdata_size\x18\x02 \x01(\x04\&#34;D\n\x0f\x44\x61taReadySignal\x12\x11\n\tdata_size\x18\x01 \x01(\x04\x12\x13\n\x06kwargs\x18\x02 \x01(\tH\x00\x88\x01\x01\x42\t\n\x07_kwargs\&#34;V\n\x10InferenceRequest\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x11\n\tcandidate\x18\x02 \x01(\t\x12\x13\n\x06kwargs\x18\x03 \x01(\tH\x00\x88\x01\x01\x42\t\n\x07_kwargs\&#34;c\n\x11InferenceResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x0e\n\x06ranked\x18\x02 \x01(\x08\x12\x0f\n\x07success\x18\x03 \x01(\x08\x12\x12\n\x05logit\x18\x04 \x01(\tH\x00\x88\x01\x01\x42\x08\n\x06_logit2\xd8\x01\n\x0cQueryService\x12@\n\tInference\x12\x17.unary.InferenceRequest\x1a\x18.unary.InferenceResponse\&#34;\x00\x12\x41\n\tDataReady\x12\x16.unary.DataReadySignal\x1a\x18.unary.InferenceResponse\&#34;\x00\x30\x01\x12\x43\n\nDataHeader\x12\x18.unary.DataHeaderRequest\x1a\x19.unary.DataHeaderResponse\&#34;\x00\x62\x06proto3&#39;)
+
+_builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, globals())
+_builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, &#39;query_pb2&#39;, globals())
+if not _descriptor._USE_C_DESCRIPTORS:
+    DESCRIPTOR._options = None
+    _DATAHEADERREQUEST._serialized_start = 22
+    _DATAHEADERREQUEST._serialized_end = 79
+    _DATAHEADERRESPONSE._serialized_start = 81
+    _DATAHEADERRESPONSE._serialized_end = 139
+    _DATAREADYSIGNAL._serialized_start = 141
+    _DATAREADYSIGNAL._serialized_end = 209
+    _INFERENCEREQUEST._serialized_start = 211
+    _INFERENCEREQUEST._serialized_end = 297
+    _INFERENCERESPONSE._serialized_start = 299
+    _INFERENCERESPONSE._serialized_end = 398
+    _QUERYSERVICE._serialized_start = 401
+    _QUERYSERVICE._serialized_end = 617
+# @@protoc_insertion_point(module_scope)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="alfred.fm.remote.protos.query_pb2.DataHeaderRequest"><code class="flex name class">
+<span>class <span class="ident">DataHeaderRequest</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>A ProtocolMessage</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>google.protobuf.pyext._message.CMessage</li>
+<li>google.protobuf.message.Message</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="alfred.fm.remote.protos.query_pb2.DataHeaderRequest.DESCRIPTOR"><code class="name">var <span class="ident">DESCRIPTOR</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="alfred.fm.remote.protos.query_pb2.DataHeaderRequest.data_meta"><code class="name">var <span class="ident">data_meta</span></code></dt>
+<dd>
+<div class="desc"><p>Field unary.DataHeaderRequest.data_meta</p></div>
+</dd>
+<dt id="alfred.fm.remote.protos.query_pb2.DataHeaderRequest.data_size"><code class="name">var <span class="ident">data_size</span></code></dt>
+<dd>
+<div class="desc"><p>Field unary.DataHeaderRequest.data_size</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="alfred.fm.remote.protos.query_pb2.DataHeaderResponse"><code class="flex name class">
+<span>class <span class="ident">DataHeaderResponse</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>A ProtocolMessage</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>google.protobuf.pyext._message.CMessage</li>
+<li>google.protobuf.message.Message</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="alfred.fm.remote.protos.query_pb2.DataHeaderResponse.DESCRIPTOR"><code class="name">var <span class="ident">DESCRIPTOR</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="alfred.fm.remote.protos.query_pb2.DataHeaderResponse.data_meta"><code class="name">var <span class="ident">data_meta</span></code></dt>
+<dd>
+<div class="desc"><p>Field unary.DataHeaderResponse.data_meta</p></div>
+</dd>
+<dt id="alfred.fm.remote.protos.query_pb2.DataHeaderResponse.data_size"><code class="name">var <span class="ident">data_size</span></code></dt>
+<dd>
+<div class="desc"><p>Field unary.DataHeaderResponse.data_size</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="alfred.fm.remote.protos.query_pb2.DataReadySignal"><code class="flex name class">
+<span>class <span class="ident">DataReadySignal</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>A ProtocolMessage</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>google.protobuf.pyext._message.CMessage</li>
+<li>google.protobuf.message.Message</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="alfred.fm.remote.protos.query_pb2.DataReadySignal.DESCRIPTOR"><code class="name">var <span class="ident">DESCRIPTOR</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="alfred.fm.remote.protos.query_pb2.DataReadySignal.data_size"><code class="name">var <span class="ident">data_size</span></code></dt>
+<dd>
+<div class="desc"><p>Field unary.DataReadySignal.data_size</p></div>
+</dd>
+<dt id="alfred.fm.remote.protos.query_pb2.DataReadySignal.kwargs"><code class="name">var <span class="ident">kwargs</span></code></dt>
+<dd>
+<div class="desc"><p>Field unary.DataReadySignal.kwargs</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="alfred.fm.remote.protos.query_pb2.InferenceRequest"><code class="flex name class">
+<span>class <span class="ident">InferenceRequest</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>A ProtocolMessage</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>google.protobuf.pyext._message.CMessage</li>
+<li>google.protobuf.message.Message</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="alfred.fm.remote.protos.query_pb2.InferenceRequest.DESCRIPTOR"><code class="name">var <span class="ident">DESCRIPTOR</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="alfred.fm.remote.protos.query_pb2.InferenceRequest.candidate"><code class="name">var <span class="ident">candidate</span></code></dt>
+<dd>
+<div class="desc"><p>Field unary.InferenceRequest.candidate</p></div>
+</dd>
+<dt id="alfred.fm.remote.protos.query_pb2.InferenceRequest.kwargs"><code class="name">var <span class="ident">kwargs</span></code></dt>
+<dd>
+<div class="desc"><p>Field unary.InferenceRequest.kwargs</p></div>
+</dd>
+<dt id="alfred.fm.remote.protos.query_pb2.InferenceRequest.message"><code class="name">var <span class="ident">message</span></code></dt>
+<dd>
+<div class="desc"><p>Field unary.InferenceRequest.message</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="alfred.fm.remote.protos.query_pb2.InferenceResponse"><code class="flex name class">
+<span>class <span class="ident">InferenceResponse</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>A ProtocolMessage</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>google.protobuf.pyext._message.CMessage</li>
+<li>google.protobuf.message.Message</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="alfred.fm.remote.protos.query_pb2.InferenceResponse.DESCRIPTOR"><code class="name">var <span class="ident">DESCRIPTOR</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="alfred.fm.remote.protos.query_pb2.InferenceResponse.logit"><code class="name">var <span class="ident">logit</span></code></dt>
+<dd>
+<div class="desc"><p>Field unary.InferenceResponse.logit</p></div>
+</dd>
+<dt id="alfred.fm.remote.protos.query_pb2.InferenceResponse.message"><code class="name">var <span class="ident">message</span></code></dt>
+<dd>
+<div class="desc"><p>Field unary.InferenceResponse.message</p></div>
+</dd>
+<dt id="alfred.fm.remote.protos.query_pb2.InferenceResponse.ranked"><code class="name">var <span class="ident">ranked</span></code></dt>
+<dd>
+<div class="desc"><p>Field unary.InferenceResponse.ranked</p></div>
+</dd>
+<dt id="alfred.fm.remote.protos.query_pb2.InferenceResponse.success"><code class="name">var <span class="ident">success</span></code></dt>
+<dd>
+<div class="desc"><p>Field unary.InferenceResponse.success</p></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="alfred.fm.remote.protos" href="index.html">alfred.fm.remote.protos</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="alfred.fm.remote.protos.query_pb2.DataHeaderRequest" href="#alfred.fm.remote.protos.query_pb2.DataHeaderRequest">DataHeaderRequest</a></code></h4>
+<ul class="">
+<li><code><a title="alfred.fm.remote.protos.query_pb2.DataHeaderRequest.DESCRIPTOR" href="#alfred.fm.remote.protos.query_pb2.DataHeaderRequest.DESCRIPTOR">DESCRIPTOR</a></code></li>
+<li><code><a title="alfred.fm.remote.protos.query_pb2.DataHeaderRequest.data_meta" href="#alfred.fm.remote.protos.query_pb2.DataHeaderRequest.data_meta">data_meta</a></code></li>
+<li><code><a title="alfred.fm.remote.protos.query_pb2.DataHeaderRequest.data_size" href="#alfred.fm.remote.protos.query_pb2.DataHeaderRequest.data_size">data_size</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="alfred.fm.remote.protos.query_pb2.DataHeaderResponse" href="#alfred.fm.remote.protos.query_pb2.DataHeaderResponse">DataHeaderResponse</a></code></h4>
+<ul class="">
+<li><code><a title="alfred.fm.remote.protos.query_pb2.DataHeaderResponse.DESCRIPTOR" href="#alfred.fm.remote.protos.query_pb2.DataHeaderResponse.DESCRIPTOR">DESCRIPTOR</a></code></li>
+<li><code><a title="alfred.fm.remote.protos.query_pb2.DataHeaderResponse.data_meta" href="#alfred.fm.remote.protos.query_pb2.DataHeaderResponse.data_meta">data_meta</a></code></li>
+<li><code><a title="alfred.fm.remote.protos.query_pb2.DataHeaderResponse.data_size" href="#alfred.fm.remote.protos.query_pb2.DataHeaderResponse.data_size">data_size</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="alfred.fm.remote.protos.query_pb2.DataReadySignal" href="#alfred.fm.remote.protos.query_pb2.DataReadySignal">DataReadySignal</a></code></h4>
+<ul class="">
+<li><code><a title="alfred.fm.remote.protos.query_pb2.DataReadySignal.DESCRIPTOR" href="#alfred.fm.remote.protos.query_pb2.DataReadySignal.DESCRIPTOR">DESCRIPTOR</a></code></li>
+<li><code><a title="alfred.fm.remote.protos.query_pb2.DataReadySignal.data_size" href="#alfred.fm.remote.protos.query_pb2.DataReadySignal.data_size">data_size</a></code></li>
+<li><code><a title="alfred.fm.remote.protos.query_pb2.DataReadySignal.kwargs" href="#alfred.fm.remote.protos.query_pb2.DataReadySignal.kwargs">kwargs</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="alfred.fm.remote.protos.query_pb2.InferenceRequest" href="#alfred.fm.remote.protos.query_pb2.InferenceRequest">InferenceRequest</a></code></h4>
+<ul class="">
+<li><code><a title="alfred.fm.remote.protos.query_pb2.InferenceRequest.DESCRIPTOR" href="#alfred.fm.remote.protos.query_pb2.InferenceRequest.DESCRIPTOR">DESCRIPTOR</a></code></li>
+<li><code><a title="alfred.fm.remote.protos.query_pb2.InferenceRequest.candidate" href="#alfred.fm.remote.protos.query_pb2.InferenceRequest.candidate">candidate</a></code></li>
+<li><code><a title="alfred.fm.remote.protos.query_pb2.InferenceRequest.kwargs" href="#alfred.fm.remote.protos.query_pb2.InferenceRequest.kwargs">kwargs</a></code></li>
+<li><code><a title="alfred.fm.remote.protos.query_pb2.InferenceRequest.message" href="#alfred.fm.remote.protos.query_pb2.InferenceRequest.message">message</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="alfred.fm.remote.protos.query_pb2.InferenceResponse" href="#alfred.fm.remote.protos.query_pb2.InferenceResponse">InferenceResponse</a></code></h4>
+<ul class="">
+<li><code><a title="alfred.fm.remote.protos.query_pb2.InferenceResponse.DESCRIPTOR" href="#alfred.fm.remote.protos.query_pb2.InferenceResponse.DESCRIPTOR">DESCRIPTOR</a></code></li>
+<li><code><a title="alfred.fm.remote.protos.query_pb2.InferenceResponse.logit" href="#alfred.fm.remote.protos.query_pb2.InferenceResponse.logit">logit</a></code></li>
+<li><code><a title="alfred.fm.remote.protos.query_pb2.InferenceResponse.message" href="#alfred.fm.remote.protos.query_pb2.InferenceResponse.message">message</a></code></li>
+<li><code><a title="alfred.fm.remote.protos.query_pb2.InferenceResponse.ranked" href="#alfred.fm.remote.protos.query_pb2.InferenceResponse.ranked">ranked</a></code></li>
+<li><code><a title="alfred.fm.remote.protos.query_pb2.InferenceResponse.success" href="#alfred.fm.remote.protos.query_pb2.InferenceResponse.success">success</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>

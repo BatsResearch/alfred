@@ -1,14 +1,11 @@
 import abc
-from typing import Callable, Union, Dict, Optional
-
-from alfred.fm.response import Response
 
 
 class Template(abc.ABC):
     """
     Generic interface for prompt template
 
-    The class mirros main functionality of promptsource's template
+    The class mirrors main functionality of promptsource's template
     Please see https://github.com/bigscience-workshop/promptsource for more details
 
     @misc{bach2022promptsource,

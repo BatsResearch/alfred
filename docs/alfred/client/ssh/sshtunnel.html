@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>alfred.client.ssh.sshtunnel API documentation</title>
+<meta name="description" content="" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>alfred.client.ssh.sshtunnel</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">import getpass
+import logging
+from typing import Optional, Union, Callable
+
+import paramiko
+
+from alfred.client.ssh.utils import port_finder, forward_tunnel
+
+logger = logging.getLogger(__name__)
+
+
+class SSHTunnel:
+    &#34;&#34;&#34;
+    SSH Tunnel implemented with paramiko and supports interactive authentication
+    This tunnel would be very useful if you have a alfred.fm model on remote server that you want to access
+    It also supports tunneling via a jump host:
+    e.g. model on a gpu node of a cluster can use login node as jump
+         This will be equivalent to SSH -L commands
+    &#34;&#34;&#34;
+
+    @staticmethod
+    def adaptive_handler(title, instructions, prompt_list):
+        &#34;&#34;&#34;Authentication handler for paramiko&#39;s interactive authentication&#34;&#34;&#34;
+        print(title)
+        print(instructions)
+        user_input = []
+        for (prompt, echo) in prompt_list:
+            if echo:
+                res = input(prompt)
+            else:
+                res = getpass.getpass(prompt)
+            user_input.append(res)
+        return user_input
+
+    def __init__(self,
+                 remote_host: str,
+                 remote_port: Union[int, str],
+                 local_port: Union[int, str] = 10705,
+                 username: Optional[str] = None,
+                 remote_node_address: Optional[str] = None,
+                 remote_bind_port: Optional[Union[int, str]] = 443,
+                 handler: Callable = None,
+                 ):
+        &#34;&#34;&#34;
+        Initialize the SSH Tunnel
+
+        :param remote_host: The remote host to connect to
+        :type remote_host: str
+        :param remote_port: The remote port to connect to
+        :type remote_port: Union[int, str]
+        :param local_port: The local port to bind to, defaults to 10705
+        :type local_port: Union[int, str], optional
+        :param username: (optional) The username to connect with, defaults to None
+        :type username: str
+        :param remote_node_address: (optional) The remote node address to connect to, defaults to None
+        :type remote_node_address: str
+        :param remote_bind_port: (optional) The remote bind port to connect to, defaults to 443
+        :type remote_bind_port: Optional[Union[int, str]], optional
+        :param handler: The handler for interactive authentication, defaults to adaptive handler
+        :type handler: Callable, optional
+        &#34;&#34;&#34;
+
+        self.local_port = port_finder(local_port)
+        logger.info(f&#34;Local port: {self.local_port}&#34;)
+
+        self.remote_port = remote_port
+        self.remote_host = remote_host
+
+        self.username = username or input(&#34;Username: &#34;)
+        self.remote_node_address = remote_node_address
+        self.remote_bind_port = remote_bind_port
+        self.handler = handler or self.adaptive_handler
+
+    def start(self):
+        &#34;&#34;&#34;Start the tunnel&#34;&#34;&#34;
+
+        self.client = paramiko.SSHClient()
+        self.client.load_system_host_keys()
+        self.client.set_missing_host_key_policy(paramiko.WarningPolicy())
+
+        try:
+            self.client.connect(self.remote_host, username=self.username)
+        except paramiko.ssh_exception.SSHException:
+            pass
+
+        try:
+            self.client.get_transport().auth_interactive(
+                username=self.username, handler=self.handler)
+        except paramiko.ssh_exception.AuthenticationException:
+            logger.error(&#34;Wrong Password, Please restart the Tunnel&#34;)
+            raise paramiko.ssh_exception.AuthenticationException
+        logger.log(logging.INFO, f&#34;Connected to {self.remote_host} @ port 22&#34;)
+
+        port = self.client.get_transport().sock.getsockname()[1]
+        logger.debug(f&#34;Underlying port: {port}&#34;)
+
+        if not self.remote_node_address:
+            self.remote_bind_port = port_finder(
+                self.remote_bind_port, self.remote_host)
+            self.remote_node_address = &#34;127.0.0.1&#34;
+        else:
+            self.remote_bind_port = self.remote_port
+
+        logger.info(f&#34;Remote bind port: {self.remote_bind_port}&#34;)
+
+        forward_tunnel(
+            int(self.local_port),
+            self.remote_node_address,
+            int(self.remote_port),
+            self.client.get_transport()
+        )
+        logger.info(f&#34;Forward SSH Tunnel started on port {self.local_port}&#34;)
+
+        logger.info(
+            f&#34;Forwarding {self.remote_host}-&gt;{self.remote_node_address}:{self.remote_bind_port} to localhost:{self.local_port}&#34;)
+
+    def stop(self):
+        &#34;&#34;&#34;Stop the tunnel&#34;&#34;&#34;
+        self.client = None</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="alfred.client.ssh.sshtunnel.SSHTunnel"><code class="flex name class">
+<span>class <span class="ident">SSHTunnel</span></span>
+<span>(</span><span>remote_host: str, remote_port: Union[int, str], local_port: Union[int, str] = 10705, username: Optional[str] = None, remote_node_address: Optional[str] = None, remote_bind_port: Union[int, str, None] = 443, handler: Callable = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>SSH Tunnel implemented with paramiko and supports interactive authentication
+This tunnel would be very useful if you have a alfred.fm model on remote server that you want to access
+It also supports tunneling via a jump host:
+e.g. model on a gpu node of a cluster can use login node as jump
+This will be equivalent to SSH -L commands</p>
+<p>Initialize the SSH Tunnel</p>
+<p>:param remote_host: The remote host to connect to
+:type remote_host: str
+:param remote_port: The remote port to connect to
+:type remote_port: Union[int, str]
+:param local_port: The local port to bind to, defaults to 10705
+:type local_port: Union[int, str], optional
+:param username: (optional) The username to connect with, defaults to None
+:type username: str
+:param remote_node_address: (optional) The remote node address to connect to, defaults to None
+:type remote_node_address: str
+:param remote_bind_port: (optional) The remote bind port to connect to, defaults to 443
+:type remote_bind_port: Optional[Union[int, str]], optional
+:param handler: The handler for interactive authentication, defaults to adaptive handler
+:type handler: Callable, optional</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class SSHTunnel:
+    &#34;&#34;&#34;
+    SSH Tunnel implemented with paramiko and supports interactive authentication
+    This tunnel would be very useful if you have a alfred.fm model on remote server that you want to access
+    It also supports tunneling via a jump host:
+    e.g. model on a gpu node of a cluster can use login node as jump
+         This will be equivalent to SSH -L commands
+    &#34;&#34;&#34;
+
+    @staticmethod
+    def adaptive_handler(title, instructions, prompt_list):
+        &#34;&#34;&#34;Authentication handler for paramiko&#39;s interactive authentication&#34;&#34;&#34;
+        print(title)
+        print(instructions)
+        user_input = []
+        for (prompt, echo) in prompt_list:
+            if echo:
+                res = input(prompt)
+            else:
+                res = getpass.getpass(prompt)
+            user_input.append(res)
+        return user_input
+
+    def __init__(self,
+                 remote_host: str,
+                 remote_port: Union[int, str],
+                 local_port: Union[int, str] = 10705,
+                 username: Optional[str] = None,
+                 remote_node_address: Optional[str] = None,
+                 remote_bind_port: Optional[Union[int, str]] = 443,
+                 handler: Callable = None,
+                 ):
+        &#34;&#34;&#34;
+        Initialize the SSH Tunnel
+
+        :param remote_host: The remote host to connect to
+        :type remote_host: str
+        :param remote_port: The remote port to connect to
+        :type remote_port: Union[int, str]
+        :param local_port: The local port to bind to, defaults to 10705
+        :type local_port: Union[int, str], optional
+        :param username: (optional) The username to connect with, defaults to None
+        :type username: str
+        :param remote_node_address: (optional) The remote node address to connect to, defaults to None
+        :type remote_node_address: str
+        :param remote_bind_port: (optional) The remote bind port to connect to, defaults to 443
+        :type remote_bind_port: Optional[Union[int, str]], optional
+        :param handler: The handler for interactive authentication, defaults to adaptive handler
+        :type handler: Callable, optional
+        &#34;&#34;&#34;
+
+        self.local_port = port_finder(local_port)
+        logger.info(f&#34;Local port: {self.local_port}&#34;)
+
+        self.remote_port = remote_port
+        self.remote_host = remote_host
+
+        self.username = username or input(&#34;Username: &#34;)
+        self.remote_node_address = remote_node_address
+        self.remote_bind_port = remote_bind_port
+        self.handler = handler or self.adaptive_handler
+
+    def start(self):
+        &#34;&#34;&#34;Start the tunnel&#34;&#34;&#34;
+
+        self.client = paramiko.SSHClient()
+        self.client.load_system_host_keys()
+        self.client.set_missing_host_key_policy(paramiko.WarningPolicy())
+
+        try:
+            self.client.connect(self.remote_host, username=self.username)
+        except paramiko.ssh_exception.SSHException:
+            pass
+
+        try:
+            self.client.get_transport().auth_interactive(
+                username=self.username, handler=self.handler)
+        except paramiko.ssh_exception.AuthenticationException:
+            logger.error(&#34;Wrong Password, Please restart the Tunnel&#34;)
+            raise paramiko.ssh_exception.AuthenticationException
+        logger.log(logging.INFO, f&#34;Connected to {self.remote_host} @ port 22&#34;)
+
+        port = self.client.get_transport().sock.getsockname()[1]
+        logger.debug(f&#34;Underlying port: {port}&#34;)
+
+        if not self.remote_node_address:
+            self.remote_bind_port = port_finder(
+                self.remote_bind_port, self.remote_host)
+            self.remote_node_address = &#34;127.0.0.1&#34;
+        else:
+            self.remote_bind_port = self.remote_port
+
+        logger.info(f&#34;Remote bind port: {self.remote_bind_port}&#34;)
+
+        forward_tunnel(
+            int(self.local_port),
+            self.remote_node_address,
+            int(self.remote_port),
+            self.client.get_transport()
+        )
+        logger.info(f&#34;Forward SSH Tunnel started on port {self.local_port}&#34;)
+
+        logger.info(
+            f&#34;Forwarding {self.remote_host}-&gt;{self.remote_node_address}:{self.remote_bind_port} to localhost:{self.local_port}&#34;)
+
+    def stop(self):
+        &#34;&#34;&#34;Stop the tunnel&#34;&#34;&#34;
+        self.client = None</code></pre>
+</details>
+<h3>Static methods</h3>
+<dl>
+<dt id="alfred.client.ssh.sshtunnel.SSHTunnel.adaptive_handler"><code class="name flex">
+<span>def <span class="ident">adaptive_handler</span></span>(<span>title, instructions, prompt_list)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Authentication handler for paramiko's interactive authentication</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@staticmethod
+def adaptive_handler(title, instructions, prompt_list):
+    &#34;&#34;&#34;Authentication handler for paramiko&#39;s interactive authentication&#34;&#34;&#34;
+    print(title)
+    print(instructions)
+    user_input = []
+    for (prompt, echo) in prompt_list:
+        if echo:
+            res = input(prompt)
+        else:
+            res = getpass.getpass(prompt)
+        user_input.append(res)
+    return user_input</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="alfred.client.ssh.sshtunnel.SSHTunnel.start"><code class="name flex">
+<span>def <span class="ident">start</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Start the tunnel</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def start(self):
+    &#34;&#34;&#34;Start the tunnel&#34;&#34;&#34;
+
+    self.client = paramiko.SSHClient()
+    self.client.load_system_host_keys()
+    self.client.set_missing_host_key_policy(paramiko.WarningPolicy())
+
+    try:
+        self.client.connect(self.remote_host, username=self.username)
+    except paramiko.ssh_exception.SSHException:
+        pass
+
+    try:
+        self.client.get_transport().auth_interactive(
+            username=self.username, handler=self.handler)
+    except paramiko.ssh_exception.AuthenticationException:
+        logger.error(&#34;Wrong Password, Please restart the Tunnel&#34;)
+        raise paramiko.ssh_exception.AuthenticationException
+    logger.log(logging.INFO, f&#34;Connected to {self.remote_host} @ port 22&#34;)
+
+    port = self.client.get_transport().sock.getsockname()[1]
+    logger.debug(f&#34;Underlying port: {port}&#34;)
+
+    if not self.remote_node_address:
+        self.remote_bind_port = port_finder(
+            self.remote_bind_port, self.remote_host)
+        self.remote_node_address = &#34;127.0.0.1&#34;
+    else:
+        self.remote_bind_port = self.remote_port
+
+    logger.info(f&#34;Remote bind port: {self.remote_bind_port}&#34;)
+
+    forward_tunnel(
+        int(self.local_port),
+        self.remote_node_address,
+        int(self.remote_port),
+        self.client.get_transport()
+    )
+    logger.info(f&#34;Forward SSH Tunnel started on port {self.local_port}&#34;)
+
+    logger.info(
+        f&#34;Forwarding {self.remote_host}-&gt;{self.remote_node_address}:{self.remote_bind_port} to localhost:{self.local_port}&#34;)</code></pre>
+</details>
+</dd>
+<dt id="alfred.client.ssh.sshtunnel.SSHTunnel.stop"><code class="name flex">
+<span>def <span class="ident">stop</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Stop the tunnel</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def stop(self):
+    &#34;&#34;&#34;Stop the tunnel&#34;&#34;&#34;
+    self.client = None</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="alfred.client.ssh" href="index.html">alfred.client.ssh</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="alfred.client.ssh.sshtunnel.SSHTunnel" href="#alfred.client.ssh.sshtunnel.SSHTunnel">SSHTunnel</a></code></h4>
+<ul class="">
+<li><code><a title="alfred.client.ssh.sshtunnel.SSHTunnel.adaptive_handler" href="#alfred.client.ssh.sshtunnel.SSHTunnel.adaptive_handler">adaptive_handler</a></code></li>
+<li><code><a title="alfred.client.ssh.sshtunnel.SSHTunnel.start" href="#alfred.client.ssh.sshtunnel.SSHTunnel.start">start</a></code></li>
+<li><code><a title="alfred.client.ssh.sshtunnel.SSHTunnel.stop" href="#alfred.client.ssh.sshtunnel.SSHTunnel.stop">stop</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>

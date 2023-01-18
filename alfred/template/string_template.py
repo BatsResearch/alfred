@@ -1,11 +1,12 @@
 import json
 import logging
 import re
-from typing import Dict, Any, Optional, Iterable, List
+from typing import Dict, Any, Optional, Iterable, List, Union
 
 import numpy as np
 import torch
 
+import alfred.registry as registry
 from alfred.fm.query import Query, CompletionQuery, RankedQuery
 from alfred.template.template import Template
 
@@ -25,7 +26,7 @@ class StringTemplate(Template):
             e.g.
             Rule: Predict "stripe" attributes for labels [zebra, tigers].
             Label Numerical: {"zebra": 1, "tiger": 2, "horse": 3}
-            Prompt: "Does the [animal] have stripes?"
+            Prompt: "Does the [[animal]] have stripes?"
 
             answer_choices: "yes|||no"
             labels_map: {"yes": 2, "no": 1}
@@ -53,13 +54,15 @@ class StringTemplate(Template):
                  name: Optional[str] = None,
                  reference: Optional[str] = None,
                  metadata: Optional[Dict[str, Any]] = None,
-                 answer_choices: Optional[str] = None,
+                 answer_choices: Optional[Union[str, List[str]]] = None,
+                 register: bool = False,
                  ):
         """
 
         Static Prompt Template Constructor:
 
-        :param template: template expressed in jinja strings
+        :param template: template strings with keywords enclosed in *double square brackets*
+                            (e.g. "Does the [[animal]] have stripes?")
         :type template: str
         :param id: (optional) id of the template
         :type id: str
@@ -69,11 +72,17 @@ class StringTemplate(Template):
         :type reference: str
         :param metadata: (optional) metadata of the template
         :type metadata: Dict[str, Any]
-        :param answer_choices:  (optional) a ||| delimited string of choices that enumerates
+        :param answer_choices:  (optional) can be one of the following formats:
+                                -  a ||| delimited string of choices that enumerates
                                    the possible completions. (PromptSource Convention)
                                    e.g. "cat ||| dog"
+                                   This is for compatibility with promptsource templates
+                                - a list of strings that enumerates the possible completions
+                                    e.g. ["cat", "dog"]
                                If None is given, then the template is open-ended completion.
         :type answer_choices: str
+        :param register: (optional) whether to register the template to the registry
+        :type register: bool
         """
         self._template = template
 
@@ -85,16 +94,35 @@ class StringTemplate(Template):
         self._answer_choices = answer_choices
         self._answer_candidates = None
 
-        self._keywords = re.findall(r"\[([^\]]*)\]", template)
+        self._keywords = re.findall(r"\[\[(.*?)\]\]", template)
 
         if answer_choices:
             if isinstance(answer_choices, str):
                 self._answer_candidates = [
                     _x.strip() for _x in answer_choices.split("|||")]
+            elif isinstance(answer_choices, list):
+                self._answer_candidates = answer_choices
             else:
                 logger.warning(
                     f"Unsupported answer choices format: {type(answer_choices)}")
                 self._answer_choices = None
+
+        if register:
+            registry.register(self)
+
+    def from_promptsource(self, promptsource_template):
+        """
+        Update the template from a promptsource template
+
+        :param promptsource_template: a promptsource template
+        :type promptsource_template: Dict
+        """
+        self._template = promptsource_template['template']
+        self._id = promptsource_template['id']
+        self._name = promptsource_template['name']
+        self._reference = promptsource_template['reference']
+        self._metadata = promptsource_template['metadata']
+        self._answer_choices = promptsource_template['answer_choices']
 
     def apply(self,
               example: Dict,
@@ -124,7 +152,7 @@ class StringTemplate(Template):
                         k = key
                 else:
                     k = key
-                prompt = prompt.replace(f"[{str(k)}]", value)
+                prompt = prompt.replace(f"[[{str(k)}]]", value)
             elif type(value) in [list, np.ndarray, torch.Tensor]:
                 if isinstance(key, int):
                     if key_translator:
@@ -252,7 +280,7 @@ class StringTemplate(Template):
             json_str['template'],
             json_str['metadata'],
             json_str['answer_choices'],
-            )
+        )
         return self
 
     def __call__(self,
