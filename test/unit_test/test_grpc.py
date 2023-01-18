@@ -1,4 +1,3 @@
-
 import threading
 import unittest
 
@@ -18,7 +17,6 @@ class TestGRPCServer(unittest.TestCase):
             server(client, port, None)
             print("Server started")
 
-
         self.port = 10711
         #
         cli = Client(model_type="dummy")
@@ -26,9 +24,8 @@ class TestGRPCServer(unittest.TestCase):
         #
         # # Start the gRPC server in a separate thread
         self.server = gRPCServer
-        self.server_thread = threading.Thread(target=server_starter, args=(self.server, cli, self.port, ), daemon=True)
+        self.server_thread = threading.Thread(target=server_starter, args=(self.server, cli, self.port,), daemon=True)
         self.server_thread.start()
-
 
         self.channel = grpc.insecure_channel(f"localhost:{self.port}")
         self.stub = query_pb2_grpc.QueryServiceStub(self.channel)

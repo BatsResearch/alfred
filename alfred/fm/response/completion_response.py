@@ -71,10 +71,10 @@ class CompletionResponse(Response):
         if isinstance(other, CompletionResponse):
             consistent_flag = self.prediction == other.prediction
             consistent_flag &= (
-                self.score == other.score) or (
-                self.score is None and other.score is None)
+                                       self.score == other.score) or (
+                                       self.score is None and other.score is None)
             consistent_flag &= (self['embedding'] == other['embedding']) or (
-                self['embedding'] is None and other['embedding'] is None)
+                    self['embedding'] is None and other['embedding'] is None)
             return consistent_flag
         else:
             return False

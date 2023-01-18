@@ -11,6 +11,7 @@ class RankedResponse(Response):
     A subclass of `Response` that represents a language model response for scoring/ranking.
 
     """
+
     def __init__(self,
                  prediction: str,
                  scores: Dict,
@@ -81,13 +82,13 @@ class RankedResponse(Response):
         if isinstance(other, RankedResponse):
             consistent_flag = self.prediction == other.prediction
             consistent_flag &= (
-                self.scores == other.scores) or (
-                self.scores is None and other.scores is None)
+                                       self.scores == other.scores) or (
+                                       self.scores is None and other.scores is None)
             consistent_flag &= (
-                self.logits == other.logits) or (
-                self.logits is None and other.logits is None)
+                                       self.logits == other.logits) or (
+                                       self.logits is None and other.logits is None)
             consistent_flag &= (self['embedding'] == other['embedding']) or (
-                self['embedding'] is None and other['embedding'] is None)
+                    self['embedding'] is None and other['embedding'] is None)
             return consistent_flag
         else:
             return False

@@ -113,7 +113,6 @@ from alfred.template import StringTemplate
 ```python
 example_template = StringTemplate(
     template = """Context: [text]\n\nIs the above messege about weather?""",
-    label_maps = {'yes': 2},
     answer_choices = None, # -> None if for completion, add "|||" delimilated strings for candidates scoring
 )
 
@@ -158,8 +157,11 @@ from alfred.template import StringTemplate
 
 mention_template = StringTemplate(
     template = """Context: [text]\n\nIs there any mention of "spouse" between the entities [entity1] and [entity2]?""",
-    label_maps = {'yes': 2},
     answer_choices = None, # -> None if for completion, add "|||" delimilated strings for candidates scoring
+)
+
+mention_voter = Voter(
+    label_map = {'yes': 2},
 )
 
 prompts = [mention_template.apply(instance) for instance in spouse_test]
@@ -172,5 +174,5 @@ responses = t0pp(prompts)
 
 ### 5. Finally we can get the votes from the responses based on the `label_maps` defined in the template
 ```python
-votes = mention_template.vote(responses)
+votes = mention_voter.vote(responses)
 ```

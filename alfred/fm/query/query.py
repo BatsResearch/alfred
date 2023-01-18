@@ -15,7 +15,11 @@ class Query(abc.ABC):
         Compose two strings or lists or tensors or numpy arrays
 
         :param a: operand a
+        :type a: Union[str, List, Tuple, np.ndarray, torch.Tensor]
         :param b: operand b
+        :type b: Union[str, List, Tuple, np.ndarray, torch.Tensor]
+        :param strategy: composition strategy, defaults to None
+        :type strategy: str, optional
         :return: composition of a and b
         """
         assert isinstance(

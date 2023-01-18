@@ -64,4 +64,4 @@ class DummyModel(LocalAccessFoundationModel):
         :rtype: List[dict]
         """
 
-        return [{'logits': -1.} for _ in range(len(batch_instance))]
+        return [{'logits': 1.} for _ in range(len(batch_instance))]

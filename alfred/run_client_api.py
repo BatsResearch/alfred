@@ -263,7 +263,6 @@ async def set_alfred_server_connected():
 
     df = pd.DataFrame(np.arange(9).reshape(3, 3), list('ABC'), list('XYZ'))
     html_table_blue_light = build_table(df, 'blue_light')
-    print(html_table_blue_light)
     return {'html': html_table_blue_light}
 
 

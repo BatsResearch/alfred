@@ -1,14 +1,11 @@
 import abc
-from typing import Callable, Union, Dict, Optional
-
-from alfred.fm.response import Response
 
 
 class Template(abc.ABC):
     """
     Generic interface for prompt template
 
-    The class mirros main functionality of promptsource's template
+    The class mirrors main functionality of promptsource's template
     Please see https://github.com/bigscience-workshop/promptsource for more details
 
     @misc{bach2022promptsource,
@@ -35,6 +32,12 @@ class Template(abc.ABC):
 
     @property
     @abc.abstractmethod
+    def keywords(self):
+        """returns the keywords of the template"""
+        pass
+
+    @property
+    @abc.abstractmethod
     def id(self):
         """returns the id of the template"""
         pass
@@ -55,26 +58,6 @@ class Template(abc.ABC):
     @abc.abstractmethod
     def metadata(self):
         """returns the metadata of the template"""
-        pass
-
-    @abc.abstractmethod
-    def vote(self,
-             responses: Union[Response, str],
-             matching_function: Callable,
-             label_maps: Optional[Dict] = None,
-             ):
-        """
-        returns the vote of the template based on the responses with
-        the label maps and matching function
-
-        :param responses: the responses to be voted on
-        :type responses: Union[Response, str]
-        :param matching_function: the matching function to be used
-        :type matching_function: Callable
-        :param label_maps: (optional) the label maps to be used, this will overide the
-                            default label maps of the template if it is initialized with one
-        :type label_maps: Dict
-        """
         pass
 
     @abc.abstractmethod
