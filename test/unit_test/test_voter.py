@@ -49,7 +49,7 @@ class TestVoter(unittest.TestCase):
         self.assertEqual(len(votes), 1)
         self.assertEqual(votes[0], 1)
 
-        template_voter.set_calibration([1, 100],[0,0])
+        template_voter.set_calibration([[1, 0],[0,100]],[0,0])
         votes = template_voter.vote(response)
         self.assertEqual(len(votes), 1)
         self.assertEqual(votes[0], 2)
