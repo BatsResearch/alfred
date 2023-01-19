@@ -12,8 +12,6 @@ class Registry:
         self._is_interactive = not hasattr(main_str, '__file__')
 
     def register(self, cls: Union[Voter, Template]):
-        if self._is_interactive:
-            self.clean_registry()
         if isinstance(cls, Voter):
             self._voter_registry.append(cls)
         elif isinstance(cls, Template):
@@ -22,22 +20,12 @@ class Registry:
             raise TypeError("Only Voter or Template can be registered")
 
     def unregister(self, cls: Union[Voter, Template]):
-        if self._is_interactive:
-            self.clean_registry()
         if isinstance(cls, Voter):
             self._voter_registry.remove(cls)
         elif isinstance(cls, Template):
             self._template_registry.remove(cls)
         else:
             raise TypeError("Only Voter or Template can be unregistered")
-
-    def clean_registry(self):
-        for cls in self._voter_registry:
-            if cls.__name__ not in globals():
-                self.unregister(cls)
-        for cls in self._template_registry:
-            if cls.__name__ not in globals():
-                self.unregister(cls)
 
     @property
     def voters(self):
@@ -47,9 +35,7 @@ class Registry:
     def templates(self):
         return self._template_registry
 
-
 _global_registry = Registry()
-
 
 def register(cls: Union[Voter, Template]):
     _global_registry.register(cls)
