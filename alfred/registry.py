@@ -13,17 +13,21 @@ class Registry:
 
     def register(self, cls: Union[Voter, Template]):
         if isinstance(cls, Voter):
-            self._voter_registry.append(cls)
+            if cls not in self._voter_registry:
+                self._voter_registry.append(cls)
         elif isinstance(cls, Template):
-            self._template_registry.append(cls)
+            if cls not in self._template_registry:
+                self._template_registry.append(cls)
         else:
             raise TypeError("Only Voter or Template can be registered")
 
     def unregister(self, cls: Union[Voter, Template]):
         if isinstance(cls, Voter):
-            self._voter_registry.remove(cls)
+            if cls in self._voter_registry:
+                self._voter_registry.remove(cls)
         elif isinstance(cls, Template):
-            self._template_registry.remove(cls)
+            if cls in self._template_registry:
+                self._template_registry.remove(cls)
         else:
             raise TypeError("Only Voter or Template can be unregistered")
 
