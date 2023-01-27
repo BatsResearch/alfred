@@ -1,1 +1,1 @@
-from typing import List
+from .voter import Voter
