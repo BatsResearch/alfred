@@ -6,7 +6,6 @@ from typing import Dict, Any, Optional, Iterable, List, Union
 import numpy as np
 import torch
 
-import alfred.registry as registry
 from alfred.fm.query import Query, CompletionQuery, RankedQuery
 from alfred.template.template import Template
 
@@ -55,7 +54,6 @@ class StringTemplate(Template):
                  reference: Optional[str] = None,
                  metadata: Optional[Dict[str, Any]] = None,
                  answer_choices: Optional[Union[str, List[str]]] = None,
-                 register: bool = False,
                  ):
         """
 
@@ -81,8 +79,6 @@ class StringTemplate(Template):
                                     e.g. ["cat", "dog"]
                                If None is given, then the template is open-ended completion.
         :type answer_choices: str
-        :param register: (optional) whether to register the template to the registry
-        :type register: bool
         """
         self._template = template
 
@@ -106,9 +102,6 @@ class StringTemplate(Template):
                 logger.warning(
                     f"Unsupported answer choices format: {type(answer_choices)}")
                 self._answer_choices = None
-
-        if register:
-            registry.register(self)
 
     def from_promptsource(self, promptsource_template):
         """

@@ -4,7 +4,6 @@ from typing import Dict, Callable, Union, List, Any, Iterable, Optional, Tuple
 import numpy as np
 from tqdm.auto import tqdm
 
-import alfred.registry as registry
 from alfred.fm.response.completion_response import CompletionResponse
 from alfred.fm.response.ranked_response import RankedResponse
 from alfred.fm.response.response import Response
@@ -25,7 +24,6 @@ class Voter:
                  label_map: Dict,
                  matching_fn: Callable = lambda x, y: x == y,
                  calibration: Optional[Union[List, np.ndarray, Tuple]] = None,
-                 register: bool = False,
                  ):
         """
         Initialize a voter
@@ -45,16 +43,11 @@ class Voter:
         :type matching_fn: Callable
         :param calibration: (optional) calibration weights to apply to the voter
         :type calibration: Optional[Union[List, np.ndarray]]
-        :param register: (optional) whether to register the voter to the voter registry
-        :type register: bool
         """
 
         self._label_map = label_map
         self._matching_fn = matching_fn
         self._calibration = calibration
-
-        if register:
-            registry.register(self)
 
     def vote(self,
              responses: Union[Iterable[str], str, Iterable[Response], Response],
