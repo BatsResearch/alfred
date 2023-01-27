@@ -128,12 +128,36 @@ class HuggingFaceModel(LocalAccessFoundationModel):
 
         self.tokenizer.pad_token = self.tokenizer.eos_token
 
+    def _get_encoder_hidden_state(self, inputs, reduction="mean"):
+
+        if self.model.config.is_encoder_decoder:
+            output = self.model.encoder(
+                input_ids=inputs["input_ids"],
+                attention_mask=inputs["attention_mask"],
+            )
+            output = output.last_hidden_state
+        else:
+            output = self.model(
+                input_ids=inputs["input_ids"],
+                attention_mask=inputs["attention_mask"],
+            )
+            output = output.hidden_states
+
+        if reduction == "mean":
+            embedding = (output * inputs["attention_mask"].unsqueeze(-1)).sum(dim=-2) / inputs["attention_mask"].sum(dim=-1)
+        elif reduction == "sum":
+            embedding = (output * inputs["attention_mask"].unsqueeze(-1)).sum(dim=-2)
+        else:
+            embedding = output
+
+        return embedding.detach().cpu()
+
     def _score_batch(self,
                      batch: Union[List[str], List[Tuple[str, str]]],
                      padding: bool = True,
                      candidate: Optional[List[str]] = None,
                      encoder_hidden_state: bool = False,
-                     decoder_hidden_state: bool = False,
+                     **kwargs: Any,
                      ) -> List[Dict[str, Any]]:
         """
         Score a batch of prompts and candidates using the model.
@@ -153,8 +177,6 @@ class HuggingFaceModel(LocalAccessFoundationModel):
         :type candidate: List[str]
         :param encoder_hidden_state: Whether to return the encoder hidden state.
         :type encoder_hidden_state: bool
-        :param decoder_hidden_state: Whether to return the decoder hidden state.
-        :type decoder_hidden_state: bool
         :return: A list of dictionaries containing the raw logit scores and the encoder/decoder hidden states.
         :rtype: List[Dict[str, Any]]
         """
@@ -224,13 +246,17 @@ class HuggingFaceModel(LocalAccessFoundationModel):
             masked_log_probs, -1, candidate_token_ids.to(logits.get_device()).unsqueeze(-1))
         seq_log_prob = seq_token_log_probs.squeeze(dim=-1).sum(dim=-1)
 
+        if encoder_hidden_state:
+            reduction = kwargs.get("reduction", "mean")
+            encoder_hidden_state = self._get_encoder_hidden_state(inputs, reduction=reduction)
+            return [{'logit': logit, 'hidden_state': encoder_hidden_state} for logit in torch.flatten(seq_log_prob)]
+
         return [{'logit': logit} for logit in torch.flatten(seq_log_prob)]
 
     def _generate_batch(self,
                         batch: List[str],
                         padding: bool = True,
                         encoder_hidden_state: bool = False,
-                        decoder_hidden_state: bool = False,
                         allow_grad: bool = False,
                         **kwargs: Any,
                         ) -> List[CompletionResponse]:
@@ -242,16 +268,12 @@ class HuggingFaceModel(LocalAccessFoundationModel):
         The generated completions are then returned in a list of `CompletionResponse` objects.
         Currently, only greedy decoding is supported for open completion.
 
-        TODO: Add Hidden State Return Support
-
         :param batch: A list of raw text prompts.
         :type batch: List[str]
         :param padding: Whether to pad the batch.
         :type padding: bool
         :param encoder_hidden_state: Whether to return the encoder hidden state.
         :type encoder_hidden_state: bool
-        :param decoder_hidden_state: Whether to return the decoder hidden state.
-        :type decoder_hidden_state: bool
         :param allow_grad: Whether to allow gradient calculations during generation.
         :type allow_grad: bool
         :param kwargs: Additional keyword arguments to pass to the model's `generate` method.
@@ -261,7 +283,7 @@ class HuggingFaceModel(LocalAccessFoundationModel):
         """
         logger.log(
             logging.INFO,
-            f"Inferring {len(batch)} instances with padding {padding}")
+            f"Inferring {len(batch)} instances")
 
         if padding:
             inputs = self.tokenizer(batch, return_tensors="pt", padding=True)
@@ -285,7 +307,7 @@ class HuggingFaceModel(LocalAccessFoundationModel):
                     temperature=temprature,
                     repetition_penalty=repetition_penalty,
                     return_dict_in_generate=True,
-                    output_hidden_states=encoder_hidden_state or decoder_hidden_state)
+                )
             else:
                 outputs = [
                     self.model.generate(
@@ -301,6 +323,23 @@ class HuggingFaceModel(LocalAccessFoundationModel):
         else:
             texts = [self.tokenizer.batch_decode(output, skip_special_tokens=True)[
                          0] for output in outputs]
+
+        if encoder_hidden_state:
+            reduction = kwargs.get("reduction", "mean")
+
+            encoder_hidden_state = self._get_encoder_hidden_state(inputs, reduction=reduction)
+            return [CompletionResponse(prediction=text, embedding=encoder_hidden_state) for text in texts]
+
         del inputs, outputs
 
         return [CompletionResponse(prediction=text) for text in texts]
+
+    def _encode_batch(self,
+                      batch_instance,
+                      **kwargs) -> List[torch.Tensor]:
+        reduction = kwargs.get('reduction', 'mean')
+
+        inputs = self.tokenizer(batch_instance, return_tensors="pt", padding=True)
+        encoder_hidden_state = self._get_encoder_hidden_state(inputs, reduction=reduction)
+
+        return list(encoder_hidden_state)

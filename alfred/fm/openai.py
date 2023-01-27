@@ -2,6 +2,8 @@ import logging
 import os
 from typing import Optional, List, Dict, Any
 
+import torch
+
 from .model import APIAccessFoundationModel
 from .response import CompletionResponse
 
@@ -62,6 +64,27 @@ class OpenAIModel(APIAccessFoundationModel):
             max_tokens=max_tokens,
         )
         return response
+
+    @staticmethod
+    def _openai_embedding_query(query_string: str,
+                                model: str = "text-davinci-002",
+                                **kwargs: Any,
+                                ) -> torch.Tensor:
+        """
+        Run a single query to get the embedding through the foundation model
+
+        :param query_string: The prompt to be used for the query
+        :type query_string: str
+        :param model: The model to be used (choose from https://beta.openai.com/docs/api-reference/completions/create)
+        :type model: str
+        :return: The embeddings
+        :rtype: str
+        """
+        openai_api_key = kwargs.get("openai_api_key", None)
+        if openai_api_key is not None:
+            openai.api_key = openai_api_key
+        return torch.tensor(
+            openai.Embedding.create(input=[query_string.replace("\n", " ")], model=model)['data'][0]['embedding'])
 
     def __init__(self,
                  model_string: str = "text-davinci-002",
@@ -131,4 +154,26 @@ class OpenAIModel(APIAccessFoundationModel):
                         query,
                         model=self.model_string,
                         **kwargs)))
+        return output
+
+    def _encode_batch(self,
+                      batch_instance: [List[str]],
+                      **kwargs,
+                      ) -> List[torch.Tensor]:
+        """
+        Generate embeddings for a batch of prompts using the OpenAI API.
+
+        This function generates embeddings for a batch of prompts using the OpenAI API.
+        The generated embeddings are returned in a list of `torch.Tensor` objects.
+
+        :param batch_instance: A list of prompts
+        :type batch_instance: List[str]
+        :param kwargs: Additional keyword arguments to pass to the OpenAI API.
+        :type kwargs: Any
+        :return: A list of `torch.Tensor` objects containing the generated embeddings.
+        :rtype: List[torch.Tensor]
+        """
+        output = []
+        for query in batch_instance:
+            output.append(self._openai_embedding_query(query, model=self.model_string, **kwargs))
         return output

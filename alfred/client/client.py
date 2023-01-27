@@ -2,6 +2,7 @@ import logging
 from typing import Any, List, Optional, Union, Dict
 
 import numpy as np
+import torch
 from grpc import FutureTimeoutError
 
 from alfred.client.ssh.sshtunnel import SSHTunnel
@@ -306,3 +307,22 @@ class Client:
             return ensembled_weights, ensembled_biases
 
         voter.set_calibration(ensembled_weights, ensembled_biases)
+
+    def embed(self,
+              queries: Union[str, List[str]],
+              reduction: str = 'mean',
+              ) -> Union[torch.Tensor, List[torch.Tensor]]:
+        """
+        embed() function to embed the queries.
+
+        :param queries: The queries to embed.
+        :type queries: Union[Query, str, List[Query], List[str]]
+        :param reduction: The reduction method to use on word embeddings. default to 'mean'
+                          choose from ['mean', 'sum', 'none']
+        :type reduction: str
+        """
+
+        if isinstance(queries, str) or isinstance(queries, Query):
+            queries = [queries]
+
+

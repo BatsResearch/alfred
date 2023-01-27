@@ -39,7 +39,9 @@ class Registry:
     def templates(self):
         return self._template_registry
 
+
 _global_registry = Registry()
+
 
 def register(cls: Union[Voter, Template]):
     _global_registry.register(cls)

@@ -56,17 +56,31 @@ class FoundationModel(abc.ABC):
         raise NotImplementedError(
             f"_score_batch() is not implemented for {self.__class__.__name__}")
 
+    @abc.abstractmethod
+    def _encode_batch(self,
+                      batch_instance: Union[List[str]],
+                      **kwargs: Any,
+                      ) -> List[torch.Tensor]:
+        """
+        For encoding queries into embeddings.
+
+        :param batch_instance: A batch of query objects or raw query content (e.g. string or embedding arrays)
+        :type batch_instance: Union[List[RankedQuery], List[str]]
+        :return: A list of responses
+        :rtype List[Response]
+        """
+        raise NotImplementedError(
+            f"_encode_batch() is not implemented for {self.__class__.__name__}")
+
     def forward(self,
                 queries: Union[List[Query],
                 List[str],
                 List[Tuple[str, str]]],
                 batch_policy: str = 'dynamic',
                 batch_size: int = 1024,
-                score: bool = False,
+                mode: str = 'generate',
                 **kwargs,
-                ) -> Union[List[CompletionResponse],
-    List[RankedResponse],
-    List[OrderedDict]]:
+                ) -> Union[List[CompletionResponse], List[RankedResponse], List[OrderedDict], List[torch.Tensor]]:
         """
         This function is the main entry point for running queries through the foundation model.
         It accepts raw query content and automatically converts it into query objects.
@@ -81,14 +95,13 @@ class FoundationModel(abc.ABC):
         :type batch_policy: str
         :param batch_size: The batch size to use for static batching or maximum batch size for dynamic batching
         :type batch_size: int
-        :param score: Whether to run the queries through the _score_batch() method
-        :type score: bool
+        :param mode: LLM inference mode, choose from ['generate', 'score', 'encode']
+        :type mode: str
         :param kwargs: Additional arguments to pass to the foundation model
         :type kwargs: Any
         :return: A list of responses
-        :rtype: Union[List[CompletionResponse], List[RankedResponse], List[OrderedDict]]
+        :rtype: Union[List[CompletionResponse], List[RankedResponse], List[OrderedDict], List[torch.Tensor]]
         """
-
         with_grad = kwargs.get('with_grad', False)
         no_tqdm = kwargs.get('no_tqdm', False)
 
@@ -106,7 +119,13 @@ class FoundationModel(abc.ABC):
         else:
             raise ValueError(f"batch_policy {batch_policy} not supported")
 
-        inferece_fn = self._score_batch if score else self._generate_batch
+        if mode == 'generate':
+            inferece_fn = self._generate_batch
+        elif mode == 'score':
+            inferece_fn = self._score_batch
+        elif mode == 'encode':
+            inferece_fn = self._encode_batch
+
         logger.log(logging.INFO, f"Inferring {len(batched_queries)} batches")
 
         with nullcontext() if with_grad else torch.no_grad():
@@ -115,7 +134,7 @@ class FoundationModel(abc.ABC):
                     tqdm(batched_queries, disable=no_tqdm)):
                 responses += inferece_fn(batch, **kwargs)
 
-        if score:
+        if mode == 'score':
             # Assuming candidates are the same for all queries for one
             # run/batch
             try:
@@ -189,7 +208,34 @@ class FoundationModel(abc.ABC):
             queries,
             batch_policy,
             batch_size,
-            score=True,
+            mode="score",
+            **kwargs)
+
+    def encode(self,
+               queries: Union[List[Query], List[str]],
+               batch_policy: str = 'dynamic',
+               batch_size: int = 1024,
+               reduction: str = 'mean',
+               **kwargs: Any,
+               ) -> List[torch.Tensor]:
+        """
+        This function is a wrapper around the forward function
+
+        :param queries:  A list of Query or raw query content (as string)
+        :type queries: Union[List[Query], List[str]]
+        :param batch_policy: The batching policy to use. Can be either 'dynamic' or 'static'
+        :type batch_policy: str
+        :param batch_size: The batch size to use for static batching or maximum batch size for dynamic batching
+        :type batch_size: int
+        :return: A list of encoded queries
+        :rtype: List[torch.Tensor]
+        """
+        return self.forward(
+            queries,
+            batch_policy,
+            batch_size,
+            mode="encode",
+            reduction=reduction,
             **kwargs)
 
     def run(self,
@@ -211,14 +257,14 @@ class FoundationModel(abc.ABC):
         """
         if isinstance(queries, list):
             if type(queries[0]) in [tuple, RankedQuery]:
-                score = True
+                mode = 'score'
             elif type(queries[0]) in [str, CompletionQuery]:
-                score = False
+                mode = 'generate'
             else:
                 raise ValueError(f"Unsupported query type {type(queries[0])}")
-            return self.forward(queries, score=score, **kwargs)
+            return self.forward(queries, mode=mode, **kwargs)
         elif isinstance(queries, RankedQuery) or isinstance(queries, tuple):
-            return self.forward([queries], score=True, **kwargs)[0]
+            return self.forward([queries], mode="score", **kwargs)[0]
         elif isinstance(queries, CompletionQuery) or isinstance(queries, str):
             return self._generate_batch(queries.load() if isinstance(
                 queries, CompletionQuery) else [queries], **kwargs)[0]
@@ -243,7 +289,6 @@ class FoundationModel(abc.ABC):
         :return: A single response or a list of responses
         :rtype: Union[str, Response, List[Response]]
         """
-
         return self.run(queries)
 
 

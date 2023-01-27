@@ -37,6 +37,7 @@ message InferenceResponse {
   bool ranked = 2;
   bool success = 3;
   optional string logit = 4;
+  optional bytes embedding = 5;
 }
 /**
 
