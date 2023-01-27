@@ -15,7 +15,7 @@ Voter
 
 ## Voter
 
-[Show source in voter.py:15](../../../alfred/voter/voter.py#L15)
+[Show source in voter.py:14](../../../alfred/voter/voter.py#L14)
 
 Voter is an actionable objective that translate raw fm responses
 to votes. It can also handle calibrations automatically for given template.
@@ -29,14 +29,13 @@ class Voter:
         label_map: Dict,
         matching_fn: Callable = lambda x, y,: x == y,
         calibration: Optional[Union[List, np.ndarray, Tuple]] = None,
-        register: bool = False,
     ):
         ...
 ```
 
 ### Voter().clear_calibration
 
-[Show source in voter.py:149](../../../alfred/voter/voter.py#L149)
+[Show source in voter.py:142](../../../alfred/voter/voter.py#L142)
 
 Clear calibration weights and biases
 
@@ -49,7 +48,7 @@ def clear_calibration(self):
 
 ### Voter().set_calibration
 
-[Show source in voter.py:134](../../../alfred/voter/voter.py#L134)
+[Show source in voter.py:127](../../../alfred/voter/voter.py#L127)
 
 Set calibration weights and biases
 
@@ -73,7 +72,7 @@ def set_calibration(
 
 ### Voter().vote
 
-[Show source in voter.py:59](../../../alfred/voter/voter.py#L59)
+[Show source in voter.py:52](../../../alfred/voter/voter.py#L52)
 
 Vote for the responses based on the matching function and the label maps
 

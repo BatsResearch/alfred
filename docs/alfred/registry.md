@@ -8,7 +8,6 @@ Registry
 
 - [Registry](#registry)
   - [Registry](#registry-1)
-    - [Registry().clean_registry](#registry()clean_registry)
     - [Registry().register](#registry()register)
     - [Registry().templates](#registry()templates)
     - [Registry().unregister](#registry()unregister)
@@ -30,17 +29,6 @@ class Registry:
         ...
 ```
 
-### Registry().clean_registry
-
-[Show source in registry.py:34](../../alfred/registry.py#L34)
-
-#### Signature
-
-```python
-def clean_registry(self):
-    ...
-```
-
 ### Registry().register
 
 [Show source in registry.py:14](../../alfred/registry.py#L14)
@@ -59,7 +47,7 @@ def register(self, cls: Union[Voter, Template]):
 
 ### Registry().templates
 
-[Show source in registry.py:46](../../alfred/registry.py#L46)
+[Show source in registry.py:38](../../alfred/registry.py#L38)
 
 #### Signature
 
@@ -87,7 +75,7 @@ def unregister(self, cls: Union[Voter, Template]):
 
 ### Registry().voters
 
-[Show source in registry.py:42](../../alfred/registry.py#L42)
+[Show source in registry.py:34](../../alfred/registry.py#L34)
 
 #### Signature
 
@@ -101,7 +89,7 @@ def voters(self):
 
 ## register
 
-[Show source in registry.py:54](../../alfred/registry.py#L54)
+[Show source in registry.py:44](../../alfred/registry.py#L44)
 
 #### Signature
 
@@ -119,7 +107,7 @@ def register(cls: Union[Voter, Template]):
 
 ## templates
 
-[Show source in registry.py:66](../../alfred/registry.py#L66)
+[Show source in registry.py:56](../../alfred/registry.py#L56)
 
 #### Signature
 
@@ -132,7 +120,7 @@ def templates() -> List[Template]:
 
 ## unregister
 
-[Show source in registry.py:58](../../alfred/registry.py#L58)
+[Show source in registry.py:48](../../alfred/registry.py#L48)
 
 #### Signature
 
@@ -150,7 +138,7 @@ def unregister(cls: Union[Voter, Template]):
 
 ## voters
 
-[Show source in registry.py:62](../../alfred/registry.py#L62)
+[Show source in registry.py:52](../../alfred/registry.py#L52)
 
 #### Signature
 

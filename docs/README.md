@@ -1,4 +1,6 @@
-# Alfred Documentation
+# Alfred Index
+
+> Auto-generated documentation index.
 
 A full list of `Alfred` project modules.
 
