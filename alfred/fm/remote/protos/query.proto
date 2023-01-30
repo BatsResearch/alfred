@@ -7,7 +7,7 @@ package unary;
 service QueryService{
   // stream messages
   rpc Inference(InferenceRequest) returns (InferenceResponse) {}
-  rpc Encode(InferenceRequest) returns (stream InferenceResponse) {}
+  rpc Encode(EncodeRequest) returns (stream EncodeResponse) {}
   rpc DataReady(DataReadySignal) returns (stream InferenceResponse) {}
   rpc DataHeader(DataHeaderRequest) returns (DataHeaderResponse) {}
 }
