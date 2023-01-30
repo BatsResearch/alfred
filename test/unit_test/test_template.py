@@ -5,7 +5,6 @@ from alfred.template import StringTemplate
 
 
 class TestTemplate(unittest.TestCase):
-
     def test_string_template_constructor(self):
         # Test with minimal arguments
         template = StringTemplate("This is a template.")
@@ -32,9 +31,10 @@ class TestTemplate(unittest.TestCase):
         self.assertEqual(query.candidates, ["Yes", "No"])
 
         # Test with ranked template
-        template = StringTemplate("This is a [[data]].",
-                                  answer_choices="Yes ||| No",
-                                  )
+        template = StringTemplate(
+            "This is a [[data]].",
+            answer_choices="Yes ||| No",
+        )
         query = template.apply({"data": "Test data"})
         self.assertIsInstance(query, RankedQuery)
         self.assertEqual(query.prompt, "This is a Test data.")

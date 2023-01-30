@@ -17,7 +17,6 @@ class SSHTunnel:
     e.g. model on a gpu node of a cluster can use login node as jump
          This will be equivalent to SSH -L commands
     """
-
     @staticmethod
     def adaptive_handler(title, instructions, prompt_list):
         """Authentication handler for paramiko's interactive authentication"""
@@ -32,15 +31,16 @@ class SSHTunnel:
             user_input.append(res)
         return user_input
 
-    def __init__(self,
-                 remote_host: str,
-                 remote_port: Union[int, str],
-                 local_port: Union[int, str] = 10705,
-                 username: Optional[str] = None,
-                 remote_node_address: Optional[str] = None,
-                 remote_bind_port: Optional[Union[int, str]] = 443,
-                 handler: Callable = None,
-                 ):
+    def __init__(
+        self,
+        remote_host: str,
+        remote_port: Union[int, str],
+        local_port: Union[int, str] = 10705,
+        username: Optional[str] = None,
+        remote_node_address: Optional[str] = None,
+        remote_bind_port: Optional[Union[int, str]] = 443,
+        handler: Callable = None,
+    ):
         """
         Initialize the SSH Tunnel
 
@@ -95,24 +95,21 @@ class SSHTunnel:
         logger.debug(f"Underlying port: {port}")
 
         if not self.remote_node_address:
-            self.remote_bind_port = port_finder(
-                self.remote_bind_port, self.remote_host)
+            self.remote_bind_port = port_finder(self.remote_bind_port,
+                                                self.remote_host)
             self.remote_node_address = "127.0.0.1"
         else:
             self.remote_bind_port = self.remote_port
 
         logger.info(f"Remote bind port: {self.remote_bind_port}")
 
-        forward_tunnel(
-            int(self.local_port),
-            self.remote_node_address,
-            int(self.remote_port),
-            self.client.get_transport()
-        )
+        forward_tunnel(int(self.local_port), self.remote_node_address,
+                       int(self.remote_port), self.client.get_transport())
         logger.info(f"Forward SSH Tunnel started on port {self.local_port}")
 
         logger.info(
-            f"Forwarding {self.remote_host}->{self.remote_node_address}:{self.remote_bind_port} to localhost:{self.local_port}")
+            f"Forwarding {self.remote_host}->{self.remote_node_address}:{self.remote_bind_port} to localhost:{self.local_port}"
+        )
 
     def stop(self):
         """Stop the tunnel"""

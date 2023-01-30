@@ -7,6 +7,7 @@ package unary;
 service QueryService{
   // stream messages
   rpc Inference(InferenceRequest) returns (InferenceResponse) {}
+  rpc Encode(InferenceRequest) returns (stream InferenceResponse) {}
   rpc DataReady(DataReadySignal) returns (stream InferenceResponse) {}
   rpc DataHeader(DataHeaderRequest) returns (DataHeaderResponse) {}
 }
@@ -30,6 +31,18 @@ message InferenceRequest {
   string message = 1;
   string candidate = 2; // ~formated as answer choices: (i.e. ans1|||ans2|||ans3)
   optional string kwargs = 3;
+}
+
+message EncodeRequest {
+  string message = 1;
+  bool immediate = 2;
+  string reduction = 3;
+  optional string kwargs = 4;
+}
+
+message EncodeResponse {
+  bytes embedding = 1;
+  bool success = 2;
 }
 
 message InferenceResponse {

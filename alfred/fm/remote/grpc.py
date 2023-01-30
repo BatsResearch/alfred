@@ -4,32 +4,33 @@ import logging
 import socket
 import sys
 from concurrent import futures
-from typing import Optional, Union, Iterable, Tuple
+from typing import Optional, Union, Iterable, Tuple, Any
 
 import grpc
+import torch
 
 from alfred.fm.query import Query, RankedQuery, CompletionQuery
 from alfred.fm.remote.protos import query_pb2
 from alfred.fm.remote.protos import query_pb2_grpc
-from alfred.fm.remote.utils import get_ip
+from alfred.fm.remote.utils import get_ip, tensor_to_bytes, bytes_to_tensor
 from alfred.fm.response import RankedResponse, CompletionResponse
 
 logger = logging.getLogger(__name__)
 
 
 class gRPCClient:
-
-    def __init__(self,
-                 host: str,
-                 port: int,
-                 credentials: Optional[Union[grpc.ChannelCredentials, str]] = None,
-                 ):
+    def __init__(
+        self,
+        host: str,
+        port: int,
+        credentials: Optional[Union[grpc.ChannelCredentials, str]] = None,
+    ):
         self.host = host
         self.port = port
 
         if credentials:
-            self.channel = grpc.secure_channel(
-                f"{self.host}:{self.port}", credentials)
+            self.channel = grpc.secure_channel(f"{self.host}:{self.port}",
+                                               credentials)
         else:
             self.channel = grpc.insecure_channel(f"{self.host}:{self.port}")
 
@@ -51,37 +52,70 @@ class gRPCClient:
             msg, candidate = msg[0], msg[1]
         return msg, candidate
 
-    def run(self,
-            msg: Union[str, Query, Tuple[str, str]],
-            **kwargs,
-            ):
-
+    def run(
+        self,
+        msg: Union[str, Query, Tuple[str, str]],
+        **kwargs: Any,
+    ):
         kwargs = json.dumps(kwargs)
         msg, candidate = self._interpret_msg(msg)
         response = self.stub.Inference(
-            query_pb2.InferenceRequest(
-                message=msg,
-                candidate=candidate,
-                kwargs=kwargs))
+            query_pb2.InferenceRequest(message=msg,
+                                       candidate=candidate,
+                                       kwargs=kwargs))
         if candidate:
             resp = self.stub.DataReady(
-                query_pb2.DataReadySignal(
-                    data_size=1, kwargs=kwargs))
+                query_pb2.DataReadySignal(data_size=1, kwargs=kwargs))
             for response in resp:
-                # Only supposed to run once
+                if response.embedding is not None:
+                    if len(response.embedding) > 0:
+                        embedding = bytes_to_tensor(response.embedding)
+                else:
+                    embedding = None
                 response = RankedResponse(
-                    **{"prediction": response.message, "scores": ast.literal_eval(response.logit)})
+                    **{
+                        "prediction": response.message,
+                        "scores": ast.literal_eval(response.logit),
+                        "embeddings": embedding
+                    })
         else:
             response = CompletionResponse(response.message)
         return response
 
-    def run_dataset(self,
-                    dataset: Union[Iterable[Query],
-                    Iterable[str],
-                    Iterable[Tuple[str,
-                    str]]],
-                    **kwargs,
-                    ):
+    def encode(
+        self,
+        queries: Union[Iterable[str]],
+        reduction: str = "mean",
+        **kwargs: Any,
+    ):
+        kwargs = json.dumps(kwargs)
+        hold_queries, last_query = queries[:-1], queries[-1]
+        for query in hold_queries:
+            self.stub.Encode(
+                query_pb2.EncodeRequest(message=query,
+                                        immediate=False,
+                                        reduction=reduction,
+                                        kwargs=kwargs))
+        response = self.stub.Encode(
+            query_pb2.EncodeRequest(message=last_query,
+                                    immediate=True,
+                                    reduction=reduction,
+                                    kwargs=kwargs))
+
+        output = []
+        for resp in response:
+            if resp.success:
+                output.append(bytes_to_tensor(resp.tensor))
+            else:
+                output.append(None)
+        return output
+
+    def run_dataset(
+        self,
+        dataset: Union[Iterable[Query], Iterable[str], Iterable[Tuple[str,
+                                                                      str]]],
+        **kwargs,
+    ):
         try:
             data_size = len(dataset)
         except TypeError:
@@ -96,22 +130,26 @@ class gRPCClient:
         for msg in dataset:
             msg, candidate = self._interpret_msg(msg)
             self.stub.Inference(
-                query_pb2.InferenceRequest(
-                    message=msg, candidate=candidate))
+                query_pb2.InferenceRequest(message=msg, candidate=candidate))
 
         responses = []
         for response in self.stub.DataReady(
-                query_pb2.DataReadySignal(
-                    data_size=data_size,
-                    kwargs=kwargs)):
+                query_pb2.DataReadySignal(data_size=data_size, kwargs=kwargs)):
+            if response.embedding is not None:
+                if len(response.embedding) > 0:
+                    embedding = bytes_to_tensor(response.embedding)
+            else:
+                embedding = None
             if candidate:
                 response = {
                     "prediction": response.message,
-                    "scores": ast.literal_eval(
-                        response.logit)}
+                    "scores": ast.literal_eval(response.logit),
+                    "embeddings": embedding,
+                }
                 response = RankedResponse(**response)
             else:
-                response = CompletionResponse(response.message)
+                response = CompletionResponse(response.message,
+                                              embedding=embedding)
             responses.append(response)
 
         return responses
@@ -121,7 +159,6 @@ class gRPCServer(query_pb2_grpc.QueryServiceServicer):
     """
     Manages connections with gRPCClient
     """
-
     @staticmethod
     def port_finder(port: int) -> int:
         """
@@ -138,11 +175,12 @@ class gRPCServer(query_pb2_grpc.QueryServiceServicer):
                 logger.warning(
                     f"Port {port + 1} is not available, trying {port}")
 
-    def __init__(self,
-                 model,
-                 port: int = 10719,
-                 credentials: Optional[grpc.ServerCredentials] = None,
-                 ):
+    def __init__(
+        self,
+        model,
+        port: int = 10719,
+        credentials: Optional[grpc.ServerCredentials] = None,
+    ):
         self.model = model
         self.port = self.port_finder(port)
 
@@ -156,14 +194,17 @@ class gRPCServer(query_pb2_grpc.QueryServiceServicer):
 
         self.group_infer_flag = False
         self.group_ranked_flag = False
+
         self.dataset = []
         self.candidates = []
+        self.encode_dataset = []
 
         my_ip = get_ip()
         hostname = socket.gethostname()
         # Will not work if the port is not visible to the outside world
         logger.info(
-            f"gRPC server starting at {hostname}:{self.port} or {my_ip}:{self.port}")
+            f"gRPC server starting at {hostname}:{self.port} or {my_ip}:{self.port}"
+        )
         self.server.start()
         self.server.wait_for_termination()
 
@@ -179,9 +220,8 @@ class gRPCServer(query_pb2_grpc.QueryServiceServicer):
             kwargs = {}
 
         if candidate:
-            instance = RankedQuery(
-                prompt=instance,
-                candidates=candidate.split("|||"))
+            instance = RankedQuery(prompt=instance,
+                                   candidates=candidate.split("|||"))
             self.group_ranked_flag = True
             self.group_infer_flag = True
         else:
@@ -193,18 +233,58 @@ class gRPCServer(query_pb2_grpc.QueryServiceServicer):
         else:
             try:
                 logger.info(
-                    f"Received inference request: {instance} with kwargs: {kwargs}")
+                    f"Received inference request: {instance} with kwargs: {kwargs}"
+                )
                 response = self.model.run(instance, **kwargs)
-                response = response.prediction
-                logger.info(f"Sending inference response: {response}")
-                # TODO: Take advantage of serialization of Responses
+                prediction = response.prediction
+                if candidate:
+                    embedding = response.embeddings  # => Dictionary (old), Tensor (new)
+                else:
+                    embedding = response.embedding
+                if isinstance(embedding, torch.Tensor):
+                    embedding = tensor_to_bytes(embedding)
+                else:
+                    embedding = None
+                logger.info(f"Sending inference response: {prediction}")
                 return query_pb2.InferenceResponse(
-                    message=response, ranked=False, success=True)
+                    message=prediction,
+                    ranked=False,
+                    success=True,
+                    embedding=embedding,
+                )
             except Exception as e:
                 message = f"Error: {e}"
                 logger.error(message)
-                return query_pb2.InferenceResponse(
-                    message=message, ranked=False, success=False)
+                return query_pb2.InferenceResponse(message=message,
+                                                   ranked=False,
+                                                   success=False)
+
+    def Encode(self, request, context):
+        string = request.message
+        reduction = request.reduction
+
+        kwargs = request.kwargs
+        if kwargs:
+            kwargs = json.loads(kwargs)
+        else:
+            kwargs = {}
+
+        self.encode_dataset.append(string)
+
+        if request.immediate:
+            try:
+                embeddings = self.model.encode(self.encode_dataset,
+                                               reduction=reduction,
+                                               **kwargs)
+            except Exception as e:
+                logger.error(f"Error: {e}")
+                yield query_pb2.EncodeResponse(embedding=bytes(
+                    f"Error: {e}", 'utf-8'),
+                                               success=False)
+            for embedding in embeddings:
+                yield query_pb2.EncodeResponse(
+                    embedding=tensor_to_bytes(embedding), success=True)
+            self.encode_dataset = []
 
     def DataReady(self, request, context):
         dataset_size = request.data_size
@@ -218,21 +298,43 @@ class gRPCServer(query_pb2_grpc.QueryServiceServicer):
         logger.info(f"Received {dataset_size} queries")
         if len(self.dataset) != dataset_size:
             logger.warning(
-                f"Dataset size mismatch, expected {dataset_size} but got {len(self.dataset)}")
+                f"Dataset size mismatch, expected {dataset_size} but got {len(self.dataset)}"
+            )
 
         logger.info(f"Running {dataset_size} queries")
         # edge case for 1 rankequery
         for response in self.model.run(self.dataset, **kwargs):
-            # TODO: Take advantage of serialization of Responses
+
             if isinstance(response, RankedResponse):
-                yield query_pb2.InferenceResponse(message=response.prediction,
-                                                  logit=str(
-                                                      response.scores) if response.scores else None,
-                                                  ranked=response.scores is not None, success=True)
-            elif isinstance(response, CompletionResponse):
-                yield query_pb2.InferenceResponse(message=response.prediction, ranked=False, success=True)
+                embedding = response.embeddings  # => Dictionary (old), Tensor (new)
             else:
-                yield query_pb2.InferenceResponse(message=response, ranked=False, success=True)
+                embedding = response.embedding
+            if isinstance(embedding, torch.Tensor):
+                embedding = tensor_to_bytes(embedding)
+            else:
+                embedding = None
+
+            if isinstance(response, RankedResponse):
+                yield query_pb2.InferenceResponse(
+                    message=response.prediction,
+                    ranked=response.scores is not None,
+                    success=True,
+                    logit=str(response.scores) if response.scores else None,
+                    embedding=embedding,
+                )
+            elif isinstance(response, CompletionResponse):
+                yield query_pb2.InferenceResponse(
+                    message=response.prediction,
+                    ranked=False,
+                    success=True,
+                    embedding=embedding,
+                )
+            else:
+                yield query_pb2.InferenceResponse(
+                    message=response,
+                    ranked=False,
+                    success=True,
+                )
         logger.info(f"Finished running {dataset_size} queries")
         self.group_infer_flag, self.group_ranked_flag = False, False
         self.dataset = []

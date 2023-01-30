@@ -1,4 +1,6 @@
 import urllib.request
+import io
+import torch
 
 
 def get_ip(ipv4=True):
@@ -14,3 +16,14 @@ def get_ip(ipv4=True):
     external_ip = urllib.request.urlopen(
         f"https://{prefix}.ident.me").read().decode('utf8')
     return external_ip.strip()
+
+
+def tensor_to_bytes(tensor):
+    buffer = io.BytesIO()
+    torch.save(tensor, buffer)
+    return buffer.getvalue()
+
+
+def bytes_to_tensor(bytes):
+    buffer = io.BytesIO(bytes)
+    return torch.load(buffer)

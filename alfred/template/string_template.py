@@ -46,15 +46,15 @@ class StringTemplate(Template):
         reference: reference
         metadata: metadata
     """
-
-    def __init__(self,
-                 template: str,
-                 id: Optional[str] = None,
-                 name: Optional[str] = None,
-                 reference: Optional[str] = None,
-                 metadata: Optional[Dict[str, Any]] = None,
-                 answer_choices: Optional[Union[str, List[str]]] = None,
-                 ):
+    def __init__(
+        self,
+        template: str,
+        id: Optional[str] = None,
+        name: Optional[str] = None,
+        reference: Optional[str] = None,
+        metadata: Optional[Dict[str, Any]] = None,
+        answer_choices: Optional[Union[str, List[str]]] = None,
+    ):
         """
 
         Static Prompt Template Constructor:
@@ -95,12 +95,14 @@ class StringTemplate(Template):
         if answer_choices:
             if isinstance(answer_choices, str):
                 self._answer_candidates = [
-                    _x.strip() for _x in answer_choices.split("|||")]
+                    _x.strip() for _x in answer_choices.split("|||")
+                ]
             elif isinstance(answer_choices, list):
                 self._answer_candidates = answer_choices
             else:
                 logger.warning(
-                    f"Unsupported answer choices format: {type(answer_choices)}")
+                    f"Unsupported answer choices format: {type(answer_choices)}"
+                )
                 self._answer_choices = None
 
     def from_promptsource(self, promptsource_template):
@@ -117,9 +119,7 @@ class StringTemplate(Template):
         self._metadata = promptsource_template['metadata']
         self._answer_choices = promptsource_template['answer_choices']
 
-    def apply(self,
-              example: Dict,
-              **kawrgs) -> Query:
+    def apply(self, example: Dict, **kawrgs) -> Query:
         """
         Apply template to an example and returns a query object
 
@@ -164,25 +164,28 @@ class StringTemplate(Template):
                         end = len(prompt)
                     r = int(end) - int(start)
                     assert r == len(
-                        value), f"Length of the value {len(value)} does not match the range {r}"
+                        value
+                    ), f"Length of the value {len(value)} does not match the range {r}"
                     prompt[int(start):int(end)] = value
                 else:
                     logger.error(
-                        f"Key {key} is not an integer. Cannot replace with list.")
+                        f"Key {key} is not an integer. Cannot replace with list."
+                    )
                     raise ValueError(
-                        f"Key {key} is not an integer. Cannot replace with list.")
+                        f"Key {key} is not an integer. Cannot replace with list."
+                    )
 
         if self._answer_choices:
-            return RankedQuery(
-                prompt=prompt,
-                candidates=self._answer_candidates)
+            return RankedQuery(prompt=prompt,
+                               candidates=self._answer_candidates)
         else:
             return CompletionQuery(prompt)
 
-    def apply_to_dataset(self,
-                         dataset: Iterable[Dict],
-                         **kwargs: Any,
-                         ) -> Iterable[Query]:
+    def apply_to_dataset(
+        self,
+        dataset: Iterable[Dict],
+        **kwargs: Any,
+    ) -> Iterable[Query]:
         """
         A wrapper function to apply the template to a dataset iteratively
 
@@ -246,16 +249,14 @@ class StringTemplate(Template):
         :return: json string of dictionary
         :rtype: str
         """
-        return json.dumps(
-            {
-                "id": self._id,
-                "name": self._name,
-                "reference": self._reference,
-                "template": self._template,
-                "metadata": self._metadata,
-                "answer_choices": self._answer_choices,
-            }
-        )
+        return json.dumps({
+            "id": self._id,
+            "name": self._name,
+            "reference": self._reference,
+            "template": self._template,
+            "metadata": self._metadata,
+            "answer_choices": self._answer_choices,
+        })
 
     def deserialize(self, json_str: str) -> Template:
         """
@@ -276,10 +277,11 @@ class StringTemplate(Template):
         )
         return self
 
-    def __call__(self,
-                 example: Dict,
-                 **kawrgs: Any,
-                 ) -> Query:
+    def __call__(
+        self,
+        example: Dict,
+        **kawrgs: Any,
+    ) -> Query:
         """
         A wrapper function to apply the template to a single example
 

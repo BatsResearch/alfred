@@ -14,12 +14,12 @@ class CompletionResponse(Response):
     which includes the predicted completion string, a score indicating
     the confidence of the prediction, and an optional embedding output.
     '''
-
-    def __init__(self,
-                 prediction: str,
-                 score: Optional[float] = None,
-                 embedding: Optional[Union[torch.Tensor, np.ndarray]] = None,
-                 ):
+    def __init__(
+        self,
+        prediction: str,
+        score: Optional[float] = None,
+        embedding: Optional[Union[torch.Tensor, np.ndarray]] = None,
+    ):
         """
         Initializes the CompletionResponse object.
 
@@ -55,6 +55,16 @@ class CompletionResponse(Response):
         """
         return self['score']
 
+    @property
+    def embedding(self) -> Union[torch.Tensor, np.ndarray]:
+        """
+        Returns the embedding of the completion prediction.
+
+        :return: The embedding of the completion prediction.
+        :rtype: Union[torch.Tensor, np.ndarray]
+        """
+        return self['embedding']
+
     def __eq__(self, other):
         """
         Determines if two CompletionResponse objects are equal.
@@ -70,11 +80,11 @@ class CompletionResponse(Response):
         """
         if isinstance(other, CompletionResponse):
             consistent_flag = self.prediction == other.prediction
-            consistent_flag &= (
-                                       self.score == other.score) or (
-                                       self.score is None and other.score is None)
+            consistent_flag &= (self.score
+                                == other.score) or (self.score is None
+                                                    and other.score is None)
             consistent_flag &= (self['embedding'] == other['embedding']) or (
-                    self['embedding'] is None and other['embedding'] is None)
+                self['embedding'] is None and other['embedding'] is None)
             return consistent_flag
         else:
             return False

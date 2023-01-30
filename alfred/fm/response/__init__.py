@@ -16,7 +16,8 @@ def from_dict(json_dict: dict) -> Response:
     :rtype: Responses
     """
     return RankedResponse(
-        **json_dict) if 'scores' in json_dict else CompletionResponse(**json_dict)
+        **json_dict) if 'scores' in json_dict else CompletionResponse(
+            **json_dict)
 
 
 def deserialize(json_str: str) -> Response:
@@ -28,7 +29,6 @@ def deserialize(json_str: str) -> Response:
     :return: The Response object.
     :rtype: Response
     """
-
     def dict_clean(it):
         """
         Cleans a dictionary by converting all string values to their literal values.

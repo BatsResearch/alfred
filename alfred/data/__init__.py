@@ -40,7 +40,8 @@ def from_json(json_file: str) -> IterableArrowDataset:
     return IterableArrowDataset(read_json(json_file))
 
 
-def from_sql_table(sql_table_name, sql_connection_string) -> IterableArrowDataset:
+def from_sql_table(sql_table_name,
+                   sql_connection_string) -> IterableArrowDataset:
     """
     Load a sql table as a dataset
 
@@ -55,5 +56,4 @@ def from_sql_table(sql_table_name, sql_connection_string) -> IterableArrowDatase
         read_sql_table(
             sql_table_name,
             sql_connection_string,
-        )
-    )
+        ))

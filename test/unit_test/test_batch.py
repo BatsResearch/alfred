@@ -2,12 +2,10 @@ import unittest
 
 from alfred.fm.utils import DynamicBatcher
 
-
 # from torch import cuda
 
 
 class TestDynamicBatcher(unittest.TestCase):
-
     def test_init(self):
         queries = ['query 1', 'query 2', 'query 3']
         max_batch_size = 10
@@ -49,7 +47,11 @@ class TestDynamicBatcher(unittest.TestCase):
 
         batcher.len_sorted_idx = [1, 0, 2]
         reordered_inst = batcher.reorder(inst)
-        [self.assertEqual(x, y) for (x, y) in zip(reordered_inst, ['query 2', 'query 1', 'query 3'])]
+        [
+            self.assertEqual(x, y)
+            for (x,
+                 y) in zip(reordered_inst, ['query 2', 'query 1', 'query 3'])
+        ]
 
     def test_simple_batch(self):
         queries = ["query1", "query2", "query3", "query4", "query5"]
@@ -58,7 +60,8 @@ class TestDynamicBatcher(unittest.TestCase):
 
         batches = batcher.batch()
         print(batches)
-        self.assertEqual(batches, [["query1", "query2"], ["query3", "query4"], ["query5"]])
+        self.assertEqual(
+            batches, [["query1", "query2"], ["query3", "query4"], ["query5"]])
 
     def test_batch(self):
         # Figure out how to simulate low GPU memory

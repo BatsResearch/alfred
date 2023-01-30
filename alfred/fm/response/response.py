@@ -9,7 +9,6 @@ class Response(OrderedDict):
     Inherit from OrderedDict.
     Inherited by CompletionResponse and RankedResponse.
     """
-
     @abc.abstractmethod
     def prediction(self):
         """
