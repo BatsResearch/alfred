@@ -19,12 +19,12 @@ class Voter:
 
 
     """
-
-    def __init__(self,
-                 label_map: Dict,
-                 matching_fn: Callable = lambda x, y: x == y,
-                 calibration: Optional[Union[List, np.ndarray, Tuple]] = None,
-                 ):
+    def __init__(
+        self,
+        label_map: Dict,
+        matching_fn: Callable = lambda x, y: x == y,
+        calibration: Optional[Union[List, np.ndarray, Tuple]] = None,
+    ):
         """
         Initialize a voter
 
@@ -50,7 +50,8 @@ class Voter:
         self._calibration = calibration
 
     def vote(self,
-             responses: Union[Iterable[str], str, Iterable[Response], Response],
+             responses: Union[Iterable[str], str, Iterable[Response],
+                              Response],
              matching_function: Optional[Callable] = None,
              label_map: Optional[Dict] = None,
              **kwargs: Any) -> np.ndarray:
@@ -124,8 +125,7 @@ class Voter:
                     votes[idx] = 1
         return votes
 
-    def set_calibration(self,
-                        weights: Union[List[float], np.ndarray],
+    def set_calibration(self, weights: Union[List[float], np.ndarray],
                         biases: Union[List[float], np.ndarray]):
         """
         Set calibration weights and biases

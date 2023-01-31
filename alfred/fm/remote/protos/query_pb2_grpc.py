@@ -13,47 +13,33 @@ except ImportError:
 
 class QueryServiceStub(object):
     """Missing associated documentation comment in .proto file."""
-
     def __init__(self, channel):
         """Constructor.
 
         Args:
             channel: A grpc.Channel.
         """
-        self.Inference = channel.unary_unary(
-            '/unary.QueryService/Inference',
-            request_serializer=query__pb2.InferenceRequest.SerializeToString,
-            response_deserializer=query__pb2.InferenceResponse.FromString,
+        self.Encode = channel.stream_stream(
+            '/unary.QueryService/Encode',
+            request_serializer=query__pb2.EncodeRequest.SerializeToString,
+            response_deserializer=query__pb2.EncodeResponse.FromString,
         )
-        self.DataReady = channel.unary_stream(
-            '/unary.QueryService/DataReady',
-            request_serializer=query__pb2.DataReadySignal.SerializeToString,
-            response_deserializer=query__pb2.InferenceResponse.FromString,
-        )
-        self.DataHeader = channel.unary_unary(
-            '/unary.QueryService/DataHeader',
-            request_serializer=query__pb2.DataHeaderRequest.SerializeToString,
-            response_deserializer=query__pb2.DataHeaderResponse.FromString,
+        self.Run = channel.stream_stream(
+            '/unary.QueryService/Run',
+            request_serializer=query__pb2.RunRequest.SerializeToString,
+            response_deserializer=query__pb2.RunResponse.FromString,
         )
 
 
 class QueryServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
-
-    def Inference(self, request, context):
-        """stream messages
-        """
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def DataReady(self, request, context):
+    def Encode(self, request_iterator, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def DataHeader(self, request, context):
+    def Run(self, request_iterator, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -62,106 +48,59 @@ class QueryServiceServicer(object):
 
 def add_QueryServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-        'Inference': grpc.unary_unary_rpc_method_handler(
-            servicer.Inference,
-            request_deserializer=query__pb2.InferenceRequest.FromString,
-            response_serializer=query__pb2.InferenceResponse.SerializeToString,
+        'Encode':
+        grpc.stream_stream_rpc_method_handler(
+            servicer.Encode,
+            request_deserializer=query__pb2.EncodeRequest.FromString,
+            response_serializer=query__pb2.EncodeResponse.SerializeToString,
         ),
-        'DataReady': grpc.unary_stream_rpc_method_handler(
-            servicer.DataReady,
-            request_deserializer=query__pb2.DataReadySignal.FromString,
-            response_serializer=query__pb2.InferenceResponse.SerializeToString,
-        ),
-        'DataHeader': grpc.unary_unary_rpc_method_handler(
-            servicer.DataHeader,
-            request_deserializer=query__pb2.DataHeaderRequest.FromString,
-            response_serializer=query__pb2.DataHeaderResponse.SerializeToString,
+        'Run':
+        grpc.stream_stream_rpc_method_handler(
+            servicer.Run,
+            request_deserializer=query__pb2.RunRequest.FromString,
+            response_serializer=query__pb2.RunResponse.SerializeToString,
         ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
         'unary.QueryService', rpc_method_handlers)
-    server.add_generic_rpc_handlers((generic_handler,))
+    server.add_generic_rpc_handlers((generic_handler, ))
 
 
 # This class is part of an EXPERIMENTAL API.
-
 class QueryService(object):
     """Missing associated documentation comment in .proto file."""
-
     @staticmethod
-    def Inference(request,
-                  target,
-                  options=(),
-                  channel_credentials=None,
-                  call_credentials=None,
-                  insecure=False,
-                  compression=None,
-                  wait_for_ready=None,
-                  timeout=None,
-                  metadata=None):
-        return grpc.experimental.unary_unary(
-            request,
-            target,
-            '/unary.QueryService/Inference',
-            query__pb2.InferenceRequest.SerializeToString,
-            query__pb2.InferenceResponse.FromString,
-            options,
-            channel_credentials,
-            insecure,
-            call_credentials,
-            compression,
-            wait_for_ready,
-            timeout,
+    def Encode(request_iterator,
+               target,
+               options=(),
+               channel_credentials=None,
+               call_credentials=None,
+               insecure=False,
+               compression=None,
+               wait_for_ready=None,
+               timeout=None,
+               metadata=None):
+        return grpc.experimental.stream_stream(
+            request_iterator, target, '/unary.QueryService/Encode',
+            query__pb2.EncodeRequest.SerializeToString,
+            query__pb2.EncodeResponse.FromString, options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout,
             metadata)
 
     @staticmethod
-    def DataReady(request,
-                  target,
-                  options=(),
-                  channel_credentials=None,
-                  call_credentials=None,
-                  insecure=False,
-                  compression=None,
-                  wait_for_ready=None,
-                  timeout=None,
-                  metadata=None):
-        return grpc.experimental.unary_stream(
-            request,
+    def Run(request_iterator,
             target,
-            '/unary.QueryService/DataReady',
-            query__pb2.DataReadySignal.SerializeToString,
-            query__pb2.InferenceResponse.FromString,
-            options,
-            channel_credentials,
-            insecure,
-            call_credentials,
-            compression,
-            wait_for_ready,
-            timeout,
-            metadata)
-
-    @staticmethod
-    def DataHeader(request,
-                   target,
-                   options=(),
-                   channel_credentials=None,
-                   call_credentials=None,
-                   insecure=False,
-                   compression=None,
-                   wait_for_ready=None,
-                   timeout=None,
-                   metadata=None):
-        return grpc.experimental.unary_unary(
-            request,
-            target,
-            '/unary.QueryService/DataHeader',
-            query__pb2.DataHeaderRequest.SerializeToString,
-            query__pb2.DataHeaderResponse.FromString,
-            options,
-            channel_credentials,
-            insecure,
-            call_credentials,
-            compression,
-            wait_for_ready,
-            timeout,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.stream_stream(
+            request_iterator, target, '/unary.QueryService/Run',
+            query__pb2.RunRequest.SerializeToString,
+            query__pb2.RunResponse.FromString, options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout,
             metadata)

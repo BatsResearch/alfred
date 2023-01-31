@@ -1,6 +1,8 @@
 import logging
 from typing import Optional, List, Union, Any
 
+import torch
+
 from .model import LocalAccessFoundationModel
 from .query import Query
 from .response import CompletionResponse, Response
@@ -15,7 +17,6 @@ class DummyModel(LocalAccessFoundationModel):
     This model implements a dummy model that returns the
     input as the output for both completion and outputs a raw logit of -1 for scoring.
     """
-
     def __init__(self, model: Optional[str] = None):
         """
         Initialize a `DummyModel` object.
@@ -26,10 +27,11 @@ class DummyModel(LocalAccessFoundationModel):
         super().__init__("dummy model")
         self.model = model
 
-    def _generate_batch(self,
-                        batch_instance: Union[List[Query], List[str]],
-                        **kwargs: Any,
-                        ) -> List[Response]:
+    def _generate_batch(
+        self,
+        batch_instance: Union[List[Query], List[str]],
+        **kwargs: Any,
+    ) -> List[Response]:
         """
         Generate completions for a batch of queries.
 
@@ -43,14 +45,39 @@ class DummyModel(LocalAccessFoundationModel):
         """
         return [
             CompletionResponse(
-                content.load()[0] if isinstance(
-                    content,
-                    Query) else content) for content in batch_instance]
+                content.load()[0] if isinstance(content, Query) else content)
+            for content in batch_instance
+        ]
 
-    def _score_batch(self,
-                     batch_instance: Union[List[Query], List[str]],
-                     **kwargs,
-                     ) -> List[dict]:
+    def _encode_batch(
+        self,
+        batch_instance: Union[List[Query], List[str]],
+        **kwargs: Any,
+    ) -> List[torch.Tensor]:
+        """
+        Encode a batch of queries.
+
+        This function returns the same output as the input queries.
+
+        :param batch_instance: A list of queries.
+        :type batch_instance: List[Query]
+        :param reduction: The reduction method to use.
+        :type reduction: str
+        :param kwargs: Additional keyword arguments.
+        :return: A list of `torch.Tensor` objects with the same prediction content as the input.
+        :rtype: List[torch.Tensor]
+        """
+        return [
+            torch.zeros([512])
+            for _ in batch_instance
+        ]
+
+
+    def _score_batch(
+        self,
+        batch_instance: Union[List[Query], List[str]],
+        **kwargs,
+    ) -> List[dict]:
         """
         Score a batch of queries.
 

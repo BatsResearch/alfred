@@ -4,7 +4,6 @@ from alfred.data import from_csv
 
 
 class TestDataset(unittest.TestCase):
-
     def test_load_csv(self):
         # download csv dataset and load as an alfred dataset object
         csv_location = "https://raw.githubusercontent.com/dotpyu/seaborn-datasets/master/iris.csv"

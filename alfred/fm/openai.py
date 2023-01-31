@@ -2,6 +2,8 @@ import logging
 import os
 from typing import Optional, List, Dict, Any
 
+import torch
+
 from .model import APIAccessFoundationModel
 from .response import CompletionResponse
 
@@ -29,14 +31,14 @@ class OpenAIModel(APIAccessFoundationModel):
 
     This class provides a wrapper for the OpenAI API for generating completions.
     """
-
     @staticmethod
-    def _openai_query(query_string: str,
-                      temperature: float = 0.0,
-                      max_tokens: int = 3,
-                      model: str = "text-davinci-002",
-                      **kwargs: Any,
-                      ) -> str:
+    def _openai_query(
+        query_string: str,
+        temperature: float = 0.0,
+        max_tokens: int = 3,
+        model: str = "text-davinci-002",
+        **kwargs: Any,
+    ) -> str:
         """
         Run a single query through the foundation model
 
@@ -63,6 +65,29 @@ class OpenAIModel(APIAccessFoundationModel):
         )
         return response
 
+    @staticmethod
+    def _openai_embedding_query(
+        query_string: str,
+        model: str = "text-davinci-002",
+        **kwargs: Any,
+    ) -> torch.Tensor:
+        """
+        Run a single query to get the embedding through the foundation model
+
+        :param query_string: The prompt to be used for the query
+        :type query_string: str
+        :param model: The model to be used (choose from https://beta.openai.com/docs/api-reference/completions/create)
+        :type model: str
+        :return: The embeddings
+        :rtype: str
+        """
+        openai_api_key = kwargs.get("openai_api_key", None)
+        if openai_api_key is not None:
+            openai.api_key = openai_api_key
+        return torch.tensor(
+            openai.Embedding.create(input=[query_string.replace("\n", " ")],
+                                    model=model)['data'][0]['embedding'])
+
     def __init__(self,
                  model_string: str = "text-davinci-002",
                  cfg: Optional[Dict] = None):
@@ -85,19 +110,18 @@ class OpenAIModel(APIAccessFoundationModel):
             openai.api_key = os.getenv("OPENAI_API_KEY")
             logger.log(logging.INFO, f"OpenAI model api key found")
         else:
-            logger.log(
-                logging.WARNING,
-                f"OpenAI model api key not found in environment")
+            logger.log(logging.WARNING,
+                       f"OpenAI model api key not found in environment")
             try:
                 # Load your API key from a configuration file
                 openai.api_key = cfg['api_key']
-                logger.log(
-                    logging.INFO,
-                    f"OpenAI model api key found in config")
+                logger.log(logging.INFO,
+                           f"OpenAI model api key found in config")
             except KeyError or TypeError:
                 logger.log(
                     logging.WARNING,
-                    "OpenAI API key not found in config, Requesting User Input")
+                    "OpenAI API key not found in config, Requesting User Input"
+                )
                 openai.api_key = input("Please enter your OpenAI API key: ")
                 logger.log(logging.INFO, f"OpenAI model api key stored")
         assert model_string in OPENAI_MODELS, f"Model {model_string} not found. Please choose from {OPENAI_MODELS}"
@@ -105,10 +129,11 @@ class OpenAIModel(APIAccessFoundationModel):
         self.parallel = cfg.get("parallel", False)
         super().__init__(model_string, cfg)
 
-    def _generate_batch(self,
-                        batch_instance: List[str],
-                        **kwargs,
-                        ) -> List[CompletionResponse]:
+    def _generate_batch(
+        self,
+        batch_instance: List[str],
+        **kwargs,
+    ) -> List[CompletionResponse]:
         """
         Generate completions for a batch of prompts using the OpenAI API.
 
@@ -126,9 +151,32 @@ class OpenAIModel(APIAccessFoundationModel):
         for query in batch_instance:
             # TODO: Modify for async parallelized queries
             output.append(
-                CompletionResponse(
-                    text=self._openai_query(
-                        query,
-                        model=self.model_string,
-                        **kwargs)))
+                CompletionResponse(text=self._openai_query(
+                    query, model=self.model_string, **kwargs)))
+        return output
+
+    def _encode_batch(
+        self,
+        batch_instance: [List[str]],
+        **kwargs,
+    ) -> List[torch.Tensor]:
+        """
+        Generate embeddings for a batch of prompts using the OpenAI API.
+
+        This function generates embeddings for a batch of prompts using the OpenAI API.
+        The generated embeddings are returned in a list of `torch.Tensor` objects.
+
+        :param batch_instance: A list of prompts
+        :type batch_instance: List[str]
+        :param kwargs: Additional keyword arguments to pass to the OpenAI API.
+        :type kwargs: Any
+        :return: A list of `torch.Tensor` objects containing the generated embeddings.
+        :rtype: List[torch.Tensor]
+        """
+        output = []
+        for query in batch_instance:
+            output.append(
+                self._openai_embedding_query(query,
+                                             model=self.model_string,
+                                             **kwargs))
         return output

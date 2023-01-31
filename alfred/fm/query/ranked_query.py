@@ -28,11 +28,11 @@ class RankedQuery(Query):
         >>> fm = XFM()
         >>> response = fm(query)
     """
-
-    def __init__(self,
-                 prompt: Union[str, np.ndarray, List, Tuple, torch.Tensor],
-                 candidates: Union[List, Tuple, np.ndarray, torch.Tensor],
-                 ):
+    def __init__(
+        self,
+        prompt: Union[str, np.ndarray, List, Tuple, torch.Tensor],
+        candidates: Union[List, Tuple, np.ndarray, torch.Tensor],
+    ):
         """
         Initializes a RankedQuery class.
 
@@ -65,9 +65,10 @@ class RankedQuery(Query):
         """get the raw candidates as jinja strings (deliminated by '|||')"""
         return "|||".join(self._candidates)
 
-    def load(self,
-             composition_fn: Callable = None,
-             ) -> List:
+    def load(
+        self,
+        composition_fn: Callable = None,
+    ) -> List:
         """
         Load prompt and candidates
 
@@ -79,10 +80,11 @@ class RankedQuery(Query):
         composition_fn = composition_fn or self.compose
 
         return [
-            composition_fn(
-                self._prompt,
-                candidate,
-                strategy=self.composition_strategy) for candidate in self._candidates]
+            composition_fn(self._prompt,
+                           candidate,
+                           strategy=self.composition_strategy)
+            for candidate in self._candidates
+        ]
 
     def __repr__(self):
         """returns the string representation of the query"""
@@ -109,6 +111,6 @@ class RankedQuery(Query):
     def __add__(self, other):
         """concatenates the two queries"""
         assert isinstance(
-            other, type(
-                self._prompt)), f"Cannot add {type(self._prompt)} and {type(other)}"
+            other, type(self._prompt)
+        ), f"Cannot add {type(self._prompt)} and {type(other)}"
         return RankedQuery(self.compose(self._prompt, other), self._candidates)
