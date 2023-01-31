@@ -30,7 +30,7 @@ class gRPCClient:
 
         if credentials:
             self.channel = grpc.secure_channel(f"{self.host}:{self.port}",
-                                                   credentials)
+                                               credentials)
         else:
             self.channel = grpc.insecure_channel(f"{self.host}:{self.port}")
 
@@ -50,10 +50,11 @@ class gRPCClient:
         elif isinstance(msg, Tuple):
             msg, candidate = msg[0], msg[1]
         return msg, candidate
+
     def run(
-            self,
-            queries: Union[Iterable[Query], Iterable[str]],
-            **kwargs: Any,
+        self,
+        queries: Union[Iterable[Query], Iterable[str]],
+        **kwargs: Any,
     ):
         try:
             output = self._run(queries, **kwargs)
@@ -75,31 +76,35 @@ class gRPCClient:
             raise e
         return output
 
-
     def _run(
-            self,
-            queries: Union[Iterable[Query], Iterable[str]],
-            **kwargs: Any,
+        self,
+        queries: Union[Iterable[Query], Iterable[str]],
+        **kwargs: Any,
     ):
         kwargs = json.dumps(kwargs)
 
         def _run_req_gen():
             for query in queries:
                 msg, candidate = self._interpret_msg(query)
-                yield query_pb2.RunRequest(message=msg, candidate=candidate, kwargs=kwargs)
+                yield query_pb2.RunRequest(message=msg,
+                                           candidate=candidate,
+                                           kwargs=kwargs)
 
         output = []
         for response in self.stub.Run(_run_req_gen()):
             if response.ranked:
-                output.append(RankedResponse(
-                    **{
-                        "prediction": response.message,
-                        "scores": ast.literal_eval(response.logit),
-                        "embeddings": bytes_to_tensor(response.embedding)
-                    }))
+                output.append(
+                    RankedResponse(
+                        **{
+                            "prediction": response.message,
+                            "scores": ast.literal_eval(response.logit),
+                            "embeddings": bytes_to_tensor(response.embedding)
+                        }))
             else:
-                output.append(CompletionResponse(response.message,
-                                                 embedding=bytes_to_tensor(response.embedding)))
+                output.append(
+                    CompletionResponse(response.message,
+                                       embedding=bytes_to_tensor(
+                                           response.embedding)))
         return output
 
     def _encode(
@@ -109,11 +114,13 @@ class gRPCClient:
         **kwargs: Any,
     ):
         kwargs = json.dumps(kwargs)
+
         def _encode_req_gen():
             for query in queries:
                 yield query_pb2.EncodeRequest(message=query,
                                               reduction=reduction,
                                               kwargs=kwargs)
+
         output = []
         for response in self.stub.Encode(_encode_req_gen()):
             if response.success:
@@ -127,7 +134,6 @@ class gRPCServer(query_pb2_grpc.QueryServiceServicer):
     """
     Manages connections with gRPCClient
     """
-
     def __init__(
         self,
         model,
@@ -185,16 +191,17 @@ class gRPCServer(query_pb2_grpc.QueryServiceServicer):
             if isinstance(response, CompletionResponse):
                 yield query_pb2.RunResponse(message=response.prediction,
                                             ranked=False,
-                                            embedding=tensor_to_bytes(response.embedding))
+                                            embedding=tensor_to_bytes(
+                                                response.embedding))
             elif isinstance(response, RankedResponse):
                 yield query_pb2.RunResponse(message=response.prediction,
                                             ranked=True,
                                             logit=str(response.scores),
-                                            embedding=tensor_to_bytes(response.embeddings))
+                                            embedding=tensor_to_bytes(
+                                                response.embeddings))
             else:
                 logger.error(f"Response type {type(response)} not supported")
                 raise ValueError("Response type not supported")
-
 
     def Encode(self, request_iterator, context):
         logger.info("Received request")
@@ -213,7 +220,8 @@ class gRPCServer(query_pb2_grpc.QueryServiceServicer):
 
         logger.info(f"Received {len(datasets)} queries for embeddings")
 
-        for response in tqdm(self.model.encode(datasets, reduction=reduction, **kwargs)):
+        for response in tqdm(
+                self.model.encode(datasets, reduction=reduction, **kwargs)):
             yield query_pb2.EncodeResponse(success=True,
                                            embedding=tensor_to_bytes(response))
 

@@ -6,6 +6,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 def get_ip(ipv4=True):
     """
     Returns the Public IP address of the current machine.
@@ -33,8 +34,8 @@ def port_finder(port: int) -> int:
             return port
         except OSError:
             port -= 1
-            logger.warning(
-                f"Port {port + 1} is not available, trying {port}")
+            logger.warning(f"Port {port + 1} is not available, trying {port}")
+
 
 def tensor_to_bytes(tensor):
     try:

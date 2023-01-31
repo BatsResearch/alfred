@@ -5,7 +5,6 @@ import numpy as np
 import torch
 from grpc import FutureTimeoutError
 
-
 from alfred.client.ssh.sshtunnel import SSHTunnel
 from alfred.fm.dummy import DummyModel
 from alfred.fm.huggingface import HuggingFaceModel
