@@ -5,6 +5,7 @@ from typing import List, Union, Tuple, Optional
 
 import numpy as np
 import torch
+from operator import itemgetter
 
 from .query import Query, RankedQuery, CompletionQuery
 from .response import RankedResponse
@@ -53,14 +54,11 @@ def reorder_array(
     :return: The reordered array. Has the same type as the input `arr`.
     :rtype: Union[np.ndarray, torch.Tensor, list]
     """
-    if isinstance(arr, list):
-        if isinstance(arr[0], torch.Tensor):
-            arr = torch.stack(arr)
-        else:
-            arr = np.array(arr, object)
-    if isinstance(order, list):
-        order = np.array(order)
-    return arr[order]
+    if isinstance(arr[0], torch.Tensor):
+        arr = torch.stack(arr)
+        return arr[order]
+    else:
+        return [arr[i] for i in order]
 
 
 class DynamicBatcher:

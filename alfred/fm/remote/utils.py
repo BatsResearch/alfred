@@ -1,7 +1,10 @@
 import urllib.request
 import io
 import torch
+import socket
+import logging
 
+logger = logging.getLogger(__name__)
 
 def get_ip(ipv4=True):
     """
@@ -18,12 +21,35 @@ def get_ip(ipv4=True):
     return external_ip.strip()
 
 
+def port_finder(port: int) -> int:
+    """
+    Finds the next available port if given port is not available
+    """
+    while True:
+        try:
+            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            s.bind(('', port))
+            s.close()
+            return port
+        except OSError:
+            port -= 1
+            logger.warning(
+                f"Port {port + 1} is not available, trying {port}")
+
 def tensor_to_bytes(tensor):
-    buffer = io.BytesIO()
-    torch.save(tensor, buffer)
-    return buffer.getvalue()
+    try:
+        buffer = io.BytesIO()
+        torch.save(tensor, buffer)
+        res = buffer.getvalue()
+        return res
+    except Exception as e:
+        return bytes('error', 'utf-8')
 
 
 def bytes_to_tensor(bytes):
-    buffer = io.BytesIO(bytes)
-    return torch.load(buffer)
+    try:
+        buffer = io.BytesIO(bytes)
+        res = torch.load(buffer)
+        return res
+    except Exception as e:
+        return None

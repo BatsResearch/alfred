@@ -108,7 +108,7 @@ class FoundationModel(abc.ABC):
         no_tqdm = kwargs.get('no_tqdm', False)
 
         if type(queries[0]) in [RankedQuery, tuple]:
-            score = True
+            mode = 'score'
 
         if batch_policy == 'static':
             # To near equally sized batches

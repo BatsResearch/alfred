@@ -5,6 +5,7 @@ import numpy as np
 import torch
 from grpc import FutureTimeoutError
 
+
 from alfred.client.ssh.sshtunnel import SSHTunnel
 from alfred.fm.dummy import DummyModel
 from alfred.fm.huggingface import HuggingFaceModel
@@ -186,10 +187,12 @@ class Client:
         :return: The response(s) from the model.
         :rtype: Union[Response, List[Response]]
         """
+        single_query = False
         if isinstance(queries, str) or isinstance(queries, Query):
-            return self.grpcClient.run(queries, **kwargs)
-        if isinstance(queries, list):
-            return self.grpcClient.run_dataset(queries, **kwargs)
+            single_query = True
+            queries = [queries]
+        responses = self.grpcClient.run(queries, **kwargs)
+        return responses[0] if single_query else responses
 
     def generate(
         self,
