@@ -38,8 +38,13 @@ class TestGRPCServer(unittest.TestCase):
     def test_run_single_query(self):
         # Test running a single query using the client
         query = CompletionQuery(prompt="This is a query")
-        response = self.stub.Inference(
-            query__pb2.InferenceRequest(message=query.prompt))
+
+        def _run_req_gen():
+            yield query__pb2.RunRequest(message=query.prompt)
+
+        response = self.stub.Run(
+            _run_req_gen())
+        response = response.next()
         self.assertEqual(response.message, query.prompt)
 
     def test_run_multiple_queries(self):
@@ -49,12 +54,11 @@ class TestGRPCServer(unittest.TestCase):
             CompletionQuery(prompt="Query 2")
         ]
 
-        _ = self.stub.DataHeader(
-            query__pb2.DataHeaderRequest(data_size=len(queries)))
-        for query in queries:
-            _ = self.stub.Inference(
-                query__pb2.InferenceRequest(message=query.prompt))
-        responses = self.stub.DataReady(
-            query__pb2.DataReadySignal(data_size=len(queries)))
+        def _run_req_gen():
+            for query in queries:
+                yield query__pb2.RunRequest(message=query.prompt)
+
+        responses = self.stub.Run(_run_req_gen())
+
         for i, response in enumerate(responses):
             self.assertEqual(response.message, f"Query {i + 1}")

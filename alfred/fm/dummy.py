@@ -1,6 +1,8 @@
 import logging
 from typing import Optional, List, Union, Any
 
+import torch
+
 from .model import LocalAccessFoundationModel
 from .query import Query
 from .response import CompletionResponse, Response
@@ -46,6 +48,30 @@ class DummyModel(LocalAccessFoundationModel):
                 content.load()[0] if isinstance(content, Query) else content)
             for content in batch_instance
         ]
+
+    def _encode_batch(
+        self,
+        batch_instance: Union[List[Query], List[str]],
+        **kwargs: Any,
+    ) -> List[torch.Tensor]:
+        """
+        Encode a batch of queries.
+
+        This function returns the same output as the input queries.
+
+        :param batch_instance: A list of queries.
+        :type batch_instance: List[Query]
+        :param reduction: The reduction method to use.
+        :type reduction: str
+        :param kwargs: Additional keyword arguments.
+        :return: A list of `torch.Tensor` objects with the same prediction content as the input.
+        :rtype: List[torch.Tensor]
+        """
+        return [
+            torch.zeros([512])
+            for _ in batch_instance
+        ]
+
 
     def _score_batch(
         self,
