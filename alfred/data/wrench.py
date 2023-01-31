@@ -21,7 +21,8 @@ try:
     WRENCH_AVAILABLE = True
 except ModuleNotFoundError:
     logger.warning(
-        "Wrench is not installed. Will only be able to load from local storage.")
+        "Wrench is not installed. Will only be able to load from local storage."
+    )
     WRENCH_AVAILABLE = False
 
 
@@ -42,12 +43,10 @@ class WrenchBenchmarkDataset(IterableArrowDataset):
         url={https://openreview.net/forum?id=Q9SKS5k8io}
     }
     """
-
-    def __init__(
-            self,
-            dataset_name: str,
-            split: str = "train",
-            local_path: Optional[str] = None):
+    def __init__(self,
+                 dataset_name: str,
+                 split: str = "train",
+                 local_path: Optional[str] = None):
         """
         Initialize the Wrench Dataset class.
 
@@ -64,7 +63,8 @@ class WrenchBenchmarkDataset(IterableArrowDataset):
         if split not in ["train", "valid", "test"]:
             logger.error(f"Invalid split: {split}")
             raise ValueError(
-                f"Invalid split: {split}, please choose from ['train', 'valid', 'test']!")
+                f"Invalid split: {split}, please choose from ['train', 'valid', 'test']!"
+            )
         if WRENCH_AVAILABLE:
             local_path = local_path or get_data_home()
             logger.log(
@@ -78,7 +78,8 @@ class WrenchBenchmarkDataset(IterableArrowDataset):
                     "local_path must be specified if wrench is not installed.")
 
         try:
-            with open(os.path.join(local_path, dataset_name, split + '.json')) as f:
+            with open(os.path.join(local_path, dataset_name,
+                                   split + '.json')) as f:
                 raw_data = json.load(f)
         except FileNotFoundError:
             warn_msg = f"No {split} data found under {local_path} for {dataset_name}."
@@ -92,18 +93,26 @@ class WrenchBenchmarkDataset(IterableArrowDataset):
         # Strong assumption: every data has the same fields!!!
         _inst = list(raw_data.values())[0]['data']
         self.valid_field = {
-            key: self.pyarrow_typer(value) for key,
-            value in _inst.items() if type(value) in [
-                str,
-                int,
-                float]}
+            key: self.pyarrow_typer(value)
+            for key, value in _inst.items()
+            if type(value) in [str, int, float]
+        }
         self.uid2idx = {}
         self.data_list = []
         for idx, (uid, inst) in enumerate(raw_data.items()):
-            lean_data = {key: inst['data'][key]
-                         for key in self.valid_field.keys()}
-            lean_data = {**{'uid': uid}, **lean_data,
-                         **{'label': inst['label']}}
+            lean_data = {
+                key: inst['data'][key]
+                for key in self.valid_field.keys()
+            }
+            lean_data = {
+                **{
+                    'uid': uid
+                },
+                **lean_data,
+                **{
+                    'label': inst['label']
+                }
+            }
             self.data_list.append(lean_data)
 
             self.uid2label[uid] = inst['label']
@@ -118,9 +127,13 @@ class WrenchBenchmarkDataset(IterableArrowDataset):
         )
 
         schema = pyarrow.schema({
-            **{"uid": self.pyarrow_typer(self.uids[0])},
+            **{
+                "uid": self.pyarrow_typer(self.uids[0])
+            },
             **self.valid_field,
-            **{"label": self.pyarrow_typer(self.uid2label[self.uids[0]])}
+            **{
+                "label": self.pyarrow_typer(self.uid2label[self.uids[0]])
+            }
         })
 
         _data = pyarrow.Table.from_pylist(self.data_list, schema=schema)

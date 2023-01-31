@@ -140,10 +140,9 @@ async def set_alfred_server_webhook_port(request: Request):
 ###########################################################
 # Connection Handshakes
 
+
 @alfred_app.post("/alfred_server/endpoint_cfg")
-async def set_alfred_server_endpoint_cfg(
-        data: ALFRED_CONFIG
-):
+async def set_alfred_server_endpoint_cfg(data: ALFRED_CONFIG):
     def connect_to_server():
         global client
         global webhook_port
@@ -163,7 +162,10 @@ async def set_alfred_server_endpoint_cfg(
                 # send request to the flutter app
                 # change api field
                 res = requests.post(f'http://localhost:{webhook_port}',
-                                    json={'prompt': prompt, 'echo': echo}).text
+                                    json={
+                                        'prompt': prompt,
+                                        'echo': echo
+                                    }).text
                 user_input.append(res)
             return user_input
 
@@ -177,10 +179,9 @@ async def set_alfred_server_endpoint_cfg(
                     remote_host=ALFRED_META_CONFIG['end_point'],
                     remote_port=ALFRED_META_CONFIG['end_point_port'],
                     username=ALFRED_META_CONFIG['username'],
-                    remote_node_address=ALFRED_META_CONFIG['final_host'] if len(
-                        ALFRED_META_CONFIG['final_host']) > 0 else None,
-                    handler=api_handler
-                )
+                    remote_node_address=ALFRED_META_CONFIG['final_host']
+                    if len(ALFRED_META_CONFIG['final_host']) > 0 else None,
+                    handler=api_handler)
                 ssh_tunnel.start()
             except Exception as e:
                 print(e)
@@ -190,9 +191,7 @@ async def set_alfred_server_endpoint_cfg(
 
         print("SSH Tunnel setup at port {}".format(ssh_tunnel.local_port))
         # Setup Client
-        client = Client(
-            end_point=f"127.0.0.1:{ssh_tunnel.local_port}",
-        )
+        client = Client(end_point=f"127.0.0.1:{ssh_tunnel.local_port}", )
         print("Client setup")
         server_connected = True
         print("Server connected")
@@ -210,6 +209,7 @@ async def set_alfred_server_endpoint_cfg(
 
 
 ###########################################################
+
 
 @alfred_app.post("/alfred_server/completion")
 async def alfred_server_completion(request: Request):

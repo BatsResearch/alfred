@@ -2,6 +2,7 @@ import logging
 from typing import Any, List, Optional, Union, Dict
 
 import numpy as np
+import torch
 from grpc import FutureTimeoutError
 
 from alfred.client.ssh.sshtunnel import SSHTunnel
@@ -26,16 +27,16 @@ class Client:
     The client can be used to specify the model and how to access it,
     and can establish an SSH tunnel to a remote end point for secure access to a remote model.
     """
-
-    def __init__(self,
-                 model: Optional[str] = None,
-                 model_type: Optional[str] = None,
-                 end_point: Optional[str] = None,
-                 local_path: Optional[str] = None,
-                 ssh_tunnel: bool = False,
-                 ssh_node: Optional[str] = None,
-                 **kwargs: Any,
-                 ):
+    def __init__(
+        self,
+        model: Optional[str] = None,
+        model_type: Optional[str] = None,
+        end_point: Optional[str] = None,
+        local_path: Optional[str] = None,
+        ssh_tunnel: bool = False,
+        ssh_node: Optional[str] = None,
+        **kwargs: Any,
+    ):
         '''
         Initialize a Client class.
 
@@ -61,14 +62,17 @@ class Client:
 
         if self.model_type:
             self.model_type = model_type.lower()
-            assert self.model_type in ["huggingface", "openai", "onnx", "tensorrt",
-                                       "torch", "dummy"], f"Invalid model type: {self.model_type}"
+            assert self.model_type in [
+                "huggingface", "openai", "onnx", "tensorrt", "torch", "dummy"
+            ], f"Invalid model type: {self.model_type}"
         else:
             if end_point is None:
                 logger.error(
-                    "Model type is not specified. Please specify model type or end point")
+                    "Model type is not specified. Please specify model type or end point"
+                )
                 raise ValueError(
-                    "Model type is not specified. Please specify model/model_type or end_point")
+                    "Model type is not specified. Please specify model/model_type or end_point"
+                )
 
         self.grpcClient = None
         if end_point:
@@ -87,7 +91,8 @@ class Client:
                     host_name = self.end_point_ip
 
                 logger.info(
-                    f"Trying to connect to {user_name}@{host_name}:{self.end_point_port} via {ssh_node}")
+                    f"Trying to connect to {user_name}@{host_name}:{self.end_point_port} via {ssh_node}"
+                )
 
                 tunnel = SSHTunnel(
                     remote_host=host_name,
@@ -99,20 +104,23 @@ class Client:
                 tunnel.start()
 
                 logger.info(
-                    f"SSH tunnel bound to {self.end_point_ip}:{self.end_point_port} established at localhost:{tunnel.local_port}")
+                    f"SSH tunnel bound to {self.end_point_ip}:{self.end_point_port} established at localhost:{tunnel.local_port}"
+                )
 
                 self.end_point_ip = "127.0.0.1"
                 self.end_point_port = tunnel.local_port
 
             logger.info(
-                f"Connecting to remote end point: {end_point}, looking for model: {model}")
+                f"Connecting to remote end point: {end_point}, looking for model: {model}"
+            )
             # TODO Check remote model registry
 
             try:
                 logger.info(
-                    f"Connecting to remote end point: {self.end_point_ip}:{self.end_point_port}, looking for model: {model}")
-                self.grpcClient = gRPCClient(
-                    self.end_point_ip, self.end_point_port)
+                    f"Connecting to remote end point: {self.end_point_ip}:{self.end_point_port}, looking for model: {model}"
+                )
+                self.grpcClient = gRPCClient(self.end_point_ip,
+                                             self.end_point_port)
                 logger.info(f"Connected to remote end point: {end_point}")
             except FutureTimeoutError:
                 logger.error(
@@ -121,8 +129,9 @@ class Client:
                     f"Cannot connect to remote end point: {end_point}")
         else:
             if self.model_type == "huggingface":
-                self.model = HuggingFaceModel(
-                    self.model, local_path=local_path, **kwargs)
+                self.model = HuggingFaceModel(self.model,
+                                              local_path=local_path,
+                                              **kwargs)
             elif self.model_type == "openai":
                 self.model = OpenAIModel(self.model, **kwargs)
             elif self.model_type == "dummy":
@@ -142,10 +151,11 @@ class Client:
             logger.info(
                 f"Connected to local {self.model_type} model: {self.model}")
 
-    def run(self,
-            queries: Union[Query, str, List[Query], List[str]],
-            **kwargs: Any,
-            ) -> Union[Response, List[Response]]:
+    def run(
+        self,
+        queries: Union[Query, str, List[Query], List[str]],
+        **kwargs: Any,
+    ) -> Union[Response, List[Response]]:
         """
         Run the model on the queries.
 
@@ -161,10 +171,11 @@ class Client:
         else:
             return self.model.run(queries, **kwargs)
 
-    def remote_run(self,
-                   queries: Union[Query, str, List[Query], List[str]],
-                   **kwargs: Any,
-                   ) -> Union[Response, List[Response]]:
+    def remote_run(
+        self,
+        queries: Union[Query, str, List[Query], List[str]],
+        **kwargs: Any,
+    ) -> Union[Response, List[Response]]:
         """
         Wrapper function for running the model on the queries thru a gRPC Server.
 
@@ -175,15 +186,18 @@ class Client:
         :return: The response(s) from the model.
         :rtype: Union[Response, List[Response]]
         """
+        single_query = False
         if isinstance(queries, str) or isinstance(queries, Query):
-            return self.grpcClient.run(queries, **kwargs)
-        if isinstance(queries, list):
-            return self.grpcClient.run_dataset(queries, **kwargs)
+            single_query = True
+            queries = [queries]
+        responses = self.grpcClient.run(queries, **kwargs)
+        return responses[0] if single_query else responses
 
-    def generate(self,
-                 query: Union[CompletionQuery, str, List[CompletionQuery], List[str]],
-                 **kwargs: Any,
-                 ) -> Union[Response, List[Response]]:
+    def generate(
+        self,
+        query: Union[CompletionQuery, str, List[CompletionQuery], List[str]],
+        **kwargs: Any,
+    ) -> Union[Response, List[Response]]:
         """
         Wrapper function to generate the response(s) from the model. (For completion)
 
@@ -196,10 +210,11 @@ class Client:
         """
         return self(query, **kwargs)
 
-    def score(self,
-              query: Union[RankedQuery, Dict, List[RankedQuery], List[str]],
-              **kwargs: Any,
-              ) -> Union[Response, List[Response]]:
+    def score(
+        self,
+        query: Union[RankedQuery, Dict, List[RankedQuery], List[str]],
+        **kwargs: Any,
+    ) -> Union[Response, List[Response]]:
         """
         Wrapper function to score the response(s) from the model. (For ranking)
 
@@ -219,10 +234,8 @@ class Client:
         """
         return self(query, **kwargs)
 
-    def __call__(self,
-                 queries: Union[Query, str, List[Query], List[str]],
-                 **kwargs: Any
-                 ) -> Union[Response, List[Response]]:
+    def __call__(self, queries: Union[Query, str, List[Query], List[str]],
+                 **kwargs: Any) -> Union[Response, List[Response]]:
         """
         __call__() function to run the model on the queries.
         Equivalent to run() function.
@@ -236,13 +249,14 @@ class Client:
         """
         return self.run(queries, **kwargs)
 
-    def calibrate(self,
-                  template: Union[str, Template],
-                  voter: Optional[Voter] = None,
-                  null_tokens: Optional[Union[List[str], str]] = None,
-                  candidates: Optional[Union[List[str], str]] = None,
-                  strategy: int = 1,
-                  ):
+    def calibrate(
+        self,
+        template: Union[str, Template],
+        voter: Optional[Voter] = None,
+        null_tokens: Optional[Union[List[str], str]] = None,
+        candidates: Optional[Union[List[str], str]] = None,
+        strategy: int = 1,
+    ):
         """
         calibrate are used to calibrate foundation models contextually given the template.
         A voter class may be passed to calibrate the model with a specific voter.
@@ -279,11 +293,15 @@ class Client:
             logger.error("No candidates provided for calibration.")
             raise ValueError("No answer candidates provided for calibration.")
 
-        template = StringTemplate(template) if isinstance(template, str) else template
+        template = StringTemplate(template) if isinstance(template,
+                                                          str) else template
 
         # identify the keywords in template_str
         keywords = template.keywords
-        weights = np.empty([len(null_tokens), len(candidates), len(candidates)])
+        weights = np.empty(
+            [len(null_tokens),
+             len(candidates),
+             len(candidates)])
         biases = np.empty([len(null_tokens), len(candidates)])
         scores = np.empty((len(null_tokens), len(candidates)))
         for null_token_id, null_token in enumerate(null_tokens):
@@ -306,3 +324,29 @@ class Client:
             return ensembled_weights, ensembled_biases
 
         voter.set_calibration(ensembled_weights, ensembled_biases)
+
+    def encode(
+        self,
+        queries: Union[str, List[str]],
+        reduction: str = 'mean',
+    ) -> Union[torch.Tensor, List[torch.Tensor]]:
+        """
+        embed() function to embed the queries.
+
+        :param queries: The queries to embed.
+        :type queries: Union[str, List[str]]
+        :param reduction: The reduction method to use on word embeddings. default to 'mean'
+                          choose from ['mean', 'sum', 'none']
+        :type reduction: str
+        """
+        is_single = False
+        if isinstance(queries, str) or isinstance(queries, Query):
+            queries = [queries]
+            is_single = True
+
+        if self.grpcClient:
+            output = self.grpcClient.encode(queries, reduction=reduction)
+        else:
+            output = self.model.encode(queries, reduction=reduction)
+
+        return output[0] if is_single else output

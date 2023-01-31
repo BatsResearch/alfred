@@ -5,6 +5,7 @@ from typing import List, Union, Tuple, Optional
 
 import numpy as np
 import torch
+from operator import itemgetter
 
 from .query import Query, RankedQuery, CompletionQuery
 from .response import RankedResponse
@@ -37,8 +38,10 @@ def normalize_logits(logits: torch.Tensor) -> torch.Tensor:
     return torch.softmax(logits, dim=-1)
 
 
-def reorder_array(arr: Union[np.ndarray, torch.Tensor, list],
-                  order: Union[np.ndarray, torch.Tensor, list]) -> Union[np.ndarray, torch.Tensor, list]:
+def reorder_array(
+    arr: Union[np.ndarray, torch.Tensor,
+               list], order: Union[np.ndarray, torch.Tensor, list]
+) -> Union[np.ndarray, torch.Tensor, list]:
     """
     Reorder an array according to a given order.
 
@@ -51,11 +54,11 @@ def reorder_array(arr: Union[np.ndarray, torch.Tensor, list],
     :return: The reordered array. Has the same type as the input `arr`.
     :rtype: Union[np.ndarray, torch.Tensor, list]
     """
-    if isinstance(arr, list):
-        arr = np.array(arr, object)
-    if isinstance(order, list):
-        order = np.array(order)
-    return arr[order]
+    if isinstance(arr[0], torch.Tensor):
+        arr = torch.stack(arr)
+        return arr[order]
+    else:
+        return [arr[i] for i in order]
 
 
 class DynamicBatcher:
@@ -63,11 +66,10 @@ class DynamicBatcher:
     Dynamic Batching Utility
     Maximize GPU Utilization by batching queries of similar sizes
     """
-
     def __init__(
-            self,
-            queries: Union[List[Query], List[str]],
-            max_batch_size: int = 2048,
+        self,
+        queries: Union[List[Query], List[str]],
+        max_batch_size: int = 2048,
     ):
         """
         Initialize a DynamicBatcher
@@ -88,7 +90,8 @@ class DynamicBatcher:
 
         # Get Approximate Maximum Batch Size
         if free_mem > 0:
-            self.max_batch_size = min(int(free_mem / LMT_SIZE_FACTOR), max_batch_size)
+            self.max_batch_size = min(int(free_mem / LMT_SIZE_FACTOR),
+                                      max_batch_size)
         self.limit_size = LMT_SIZE_FACTOR
         self.ranked = False
         if isinstance(self.queries[0], RankedQuery):
@@ -98,11 +101,12 @@ class DynamicBatcher:
             self.candidate_size = len(self.candidates)
             self.ranked = True
 
-    def merge_rank_response(self,
-                            responses: List[OrderedDict],
-                            softmax: bool = True,
-                            candidate_token_len: Union[List[int], int] = 1,
-                            ) -> RankedResponse:
+    def merge_rank_response(
+        self,
+        responses: List[OrderedDict],
+        softmax: bool = True,
+        candidate_token_len: Union[List[int], int] = 1,
+    ) -> RankedResponse:
         """
         Merge a list of responses with raw logit into a single RankedResponse
         Assumption: Candidate Order is the same across all ranked queries
@@ -120,24 +124,37 @@ class DynamicBatcher:
             candidate_token_len = [candidate_token_len] * len(self.candidates)
 
         scores = torch.empty(len(candidate_token_len))
+        # embeddings = []
         for response_idx, response in enumerate(responses):
             scores[response_idx] = response['logit']
+            # embeddings.append(response['hidden_state'])
 
         if softmax:
             scores = torch.nn.functional.softmax(scores, dim=0)
         pred = self.candidates[int(torch.argmax(scores, dim=0))]
 
-        # TODO: For now we dont support gradient pass thru
-        scores = {candidate: score.item()
-                  for candidate, score in zip(self.candidates, scores)}
+        scores = {
+            candidate: score.item()
+            for candidate, score in zip(self.candidates, scores)
+        }
 
-        return RankedResponse(prediction=pred, scores=scores, )
+        # embeddings = {
+        #     candidate: embedding
+        #     for candidate, embedding in zip(self.candidates, embeddings)
+        # }
 
-    def reorder(self,
-                inst: List,
-                offset: Optional[int] = None,
-                candidate_token_len: Optional[Union[int,
-                List[int]]] = None) -> List:
+        return RankedResponse(
+            prediction=pred,
+            scores=scores,
+            embeddings=responses[0]['hidden_state'],
+        )
+
+    def reorder(
+            self,
+            inst: List,
+            offset: Optional[int] = None,
+            candidate_token_len: Optional[Union[int,
+                                                List[int]]] = None) -> List:
         """
         Reordering the responses according to the original order of the queries
 
@@ -154,12 +171,13 @@ class DynamicBatcher:
         if len(inst) != len(self.len_sorted_idx):
             if offset:
                 _inst = np.empty([len(inst)])
-                for idx, i in enumerate(
-                        self.len_sorted_idx[offset:offset + len(inst)]):
+                for idx, i in enumerate(self.len_sorted_idx[offset:offset +
+                                                            len(inst)]):
                     _inst[idx] = inst[i]
                 return list(_inst)
             raise ValueError(
-                f"Length of inst {len(inst)} does not match length of sorted index {len(self.len_sorted_idx)}")
+                f"Length of inst {len(inst)} does not match length of sorted index {len(self.len_sorted_idx)}"
+            )
         if self.len_sorted_idx is None:
             raise ValueError("Batching has not been performed yet")
 
@@ -167,9 +185,13 @@ class DynamicBatcher:
 
         if self.ranked:
             assert len(candidate_token_len) == len(
-                self.candidates), f"Length of candidate_token_len {len(candidate_token_len)} does not match length of candidates {len(self.candidates)}"
-            reordered_inst = [self.merge_rank_response(reordered_inst[i:i + self.candidate_size]) for i in
-                              range(0, len(reordered_inst), self.candidate_size)]
+                self.candidates
+            ), f"Length of candidate_token_len {len(candidate_token_len)} does not match length of candidates {len(self.candidates)}"
+            reordered_inst = [
+                self.merge_rank_response(reordered_inst[i:i +
+                                                        self.candidate_size])
+                for i in range(0, len(reordered_inst), self.candidate_size)
+            ]
 
         clear_cuda_cache()
         return list(reordered_inst)
@@ -217,8 +239,8 @@ class DynamicBatcher:
         batches = []
         for sorted_idx, index in enumerate(inst_len_sorted_idx):
             inst_len = inst_len_sorted[sorted_idx]
-            curr_inst = (insts[index], candidates[index]
-                         ) if ranked else insts[index]
+            curr_inst = (insts[index],
+                         candidates[index]) if ranked else insts[index]
             if curr_sz < self.limit_size and curr_batch_sz < self.max_batch_size:
                 curr_max = max(curr_max, inst_len)
                 new_sz = curr_max * curr_batch_sz

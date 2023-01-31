@@ -17,10 +17,10 @@ class CompletionQuery(Query):
     It is initialized with a prompt, which can be a string, NumPy array,
     list, tuple, or PyTorch tensor.
     """
-
-    def __init__(self,
-                 prompt: Union[str, np.ndarray, List, Tuple, torch.Tensor],
-                 ):
+    def __init__(
+        self,
+        prompt: Union[str, np.ndarray, List, Tuple, torch.Tensor],
+    ):
         """
         Initializes a CompletionQuery class.
 
@@ -61,6 +61,6 @@ class CompletionQuery(Query):
     def __add__(self, other):
         """concatenates the two queries"""
         assert isinstance(
-            other, type(
-                self._prompt)), f"Cannot add {type(self._prompt)} and {type(other)}"
+            other, type(self._prompt)
+        ), f"Cannot add {type(self._prompt)} and {type(other)}"
         return CompletionQuery(self.compose(self._prompt, other._prompt))

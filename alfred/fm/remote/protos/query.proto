@@ -5,42 +5,31 @@ syntax = "proto3";
 package unary;
 
 service QueryService{
-  // stream messages
-  rpc Inference(InferenceRequest) returns (InferenceResponse) {}
-  rpc DataReady(DataReadySignal) returns (stream InferenceResponse) {}
-  rpc DataHeader(DataHeaderRequest) returns (DataHeaderResponse) {}
+  rpc Encode(stream EncodeRequest) returns (stream EncodeResponse) {}
+  rpc Run(stream RunRequest) returns (stream RunResponse) {}
 }
 
-message DataHeaderRequest {
-  string data_meta = 1;
-  uint64 data_size = 2;
-}
-
-message DataHeaderResponse {
-  string data_meta = 1;
-  uint64 data_size = 2;
-}
-
-message DataReadySignal {
-  uint64 data_size = 1;
-  optional string kwargs = 2;
-}
-
-message InferenceRequest {
+message RunRequest {
   string message = 1;
-  string candidate = 2; // ~formated as answer choices: (i.e. ans1|||ans2|||ans3)
+  optional string candidate = 2;
   optional string kwargs = 3;
 }
 
-message InferenceResponse {
+message RunResponse {
   string message = 1;
   bool ranked = 2;
   bool success = 3;
   optional string logit = 4;
+  optional bytes embedding = 5;
 }
-/**
 
-TODO: [] Nested Tensor Responses [] Scoring Candidates (logits return)
+message EncodeRequest {
+  string message = 1;
+  string reduction = 3;
+  optional string kwargs = 4;
+}
 
-Current design only need to expand InferenceResponse a little bit
-**/
+message EncodeResponse {
+  bytes embedding = 1;
+  bool success = 2;
+}
