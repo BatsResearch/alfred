@@ -12,7 +12,7 @@ from .response import RankedResponse
 
 logger = logging.getLogger(__name__)
 
-LMT_SIZE_FACTOR = 86381
+LMT_SIZE_FACTOR = 107951
 
 
 def clear_cuda_cache():
@@ -92,7 +92,7 @@ class DynamicBatcher:
         if free_mem > 0:
             self.max_batch_size = min(int(free_mem / LMT_SIZE_FACTOR),
                                       max_batch_size)
-        self.limit_size = LMT_SIZE_FACTOR
+        self.limit_size = LMT_SIZE_FACTOR / self.max_batch_size
         self.ranked = False
         if isinstance(self.queries[0], RankedQuery):
             # Enforcing Uniform Candidate sizes and order across one set of
