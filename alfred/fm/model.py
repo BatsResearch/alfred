@@ -10,7 +10,7 @@ from tqdm.auto import tqdm
 
 from .query import Query, RankedQuery, CompletionQuery
 from .response import Response, CompletionResponse, RankedResponse
-from .utils import DynamicBatcher
+from .utils import DynamicBatcher, clear_cuda_cache
 
 logger = logging.getLogger(__name__)
 
@@ -104,11 +104,28 @@ class FoundationModel(abc.ABC):
         :return: A list of responses
         :rtype: Union[List[CompletionResponse], List[RankedResponse], List[OrderedDict], List[torch.Tensor]]
         """
+        def _get_response(batched_queries, inferece_fn, with_grad, no_tqdm):
+            with nullcontext() if with_grad else torch.no_grad():
+                responses = []
+                for batch_id, batch in enumerate(
+                        tqdm(batched_queries, disable=no_tqdm)):
+                    responses += inferece_fn(batch, **kwargs)
+                return responses
+
         with_grad = kwargs.get('with_grad', False)
         no_tqdm = kwargs.get('no_tqdm', False)
 
         if type(queries[0]) in [RankedQuery, tuple]:
             mode = 'score'
+
+        if mode == 'generate':
+            inferece_fn = self._generate_batch
+        elif mode == 'score':
+            inferece_fn = self._score_batch
+        elif mode == 'encode':
+            inferece_fn = self._encode_batch
+        else:
+            raise ValueError(f"mode {mode} not supported")
 
         if batch_policy == 'static':
             # To near equally sized batches
@@ -120,20 +137,32 @@ class FoundationModel(abc.ABC):
         else:
             raise ValueError(f"batch_policy {batch_policy} not supported")
 
-        if mode == 'generate':
-            inferece_fn = self._generate_batch
-        elif mode == 'score':
-            inferece_fn = self._score_batch
-        elif mode == 'encode':
-            inferece_fn = self._encode_batch
 
         logger.log(logging.INFO, f"Inferring {len(batched_queries)} batches")
 
-        with nullcontext() if with_grad else torch.no_grad():
-            responses = []
-            for batch_id, batch in enumerate(
-                    tqdm(batched_queries, disable=no_tqdm)):
-                responses += inferece_fn(batch, **kwargs)
+        try:
+            responses = _get_response(batched_queries, inferece_fn, with_grad,
+                                      no_tqdm)
+        except RuntimeError as e:
+            if "out of memory" in str(e):
+                logger.log(
+                    logging.INFO,
+                    "WARNING: out of memory, trying to allocate a new batch",
+                )
+                clear_cuda_cache()
+                if batch_policy == 'static':
+                    batch_size = int(batch_size * 0.8)
+                    batched_queries = np.array_split(queries,
+                                                     len(queries) // batch_size)
+                    logging.info(f"New batch size: {batch_size}")
+                elif batch_policy == 'dynamic':
+                    DB.limit_size = int(DB.limit_size * 0.9)
+                    DB.max_batch_size = int(DB.max_batch_size * 0.9)
+                    batched_queries = DB.batch()
+                    logging.info(f"New lmt_sz, bs: {DB.limit_size}, {DB.max_batch_size}")
+                responses = _get_response(batched_queries, inferece_fn,
+                                          with_grad, no_tqdm)
+
 
         if mode == 'score':
             # Assuming candidates are the same for all queries for one

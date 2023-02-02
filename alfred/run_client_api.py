@@ -224,7 +224,7 @@ async def alfred_server_completion(request: Request):
 
 ###########################################################
 @alfred_app.get("/alfred_server/cache")
-async def set_alfred_server_connected():
+async def get_cache_table():
     import pandas as pd
     import numpy as np
     from pretty_html_table import build_table
