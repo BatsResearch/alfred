@@ -14,6 +14,7 @@ logger = logging.getLogger(__name__)
 
 LMT_SIZE_FACTOR = 107951
 
+
 def clear_cuda_cache():
     """
     Clear cuda cache via garbage collection

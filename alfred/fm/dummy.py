@@ -67,11 +67,7 @@ class DummyModel(LocalAccessFoundationModel):
         :return: A list of `torch.Tensor` objects with the same prediction content as the input.
         :rtype: List[torch.Tensor]
         """
-        return [
-            torch.zeros([512])
-            for _ in batch_instance
-        ]
-
+        return [torch.zeros([512]) for _ in batch_instance]
 
     def _score_batch(
         self,
