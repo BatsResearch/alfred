@@ -117,18 +117,21 @@ class DynamicBatcher:
         :return: A merged response
         :rtype: RankedResponse
         """
+        assert self.candidate_size == len(responses)
 
         scores = torch.empty(self.candidate_size)
+        candidates = []
         for response_idx, response in enumerate(responses):
             scores[response_idx] = response['logit']
+            candidates.append(response['candidate'])
 
         if softmax:
             scores = torch.nn.functional.softmax(scores, dim=0)
-        pred = self.candidates[int(torch.argmax(scores, dim=0))]
+        pred = candidates[int(torch.argmax(scores, dim=0))]
 
         scores = {
             candidate: score.item()
-            for candidate, score in zip(self.candidates, scores)
+            for candidate, score in zip(candidates, scores)
         }
 
         return RankedResponse(

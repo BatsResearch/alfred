@@ -269,13 +269,15 @@ class HuggingFaceModel(LocalAccessFoundationModel):
                                                     reduction=reduction)
             return [{
                 'logit': logit,
+                'candidate': candidate[logit_id],
                 'hidden_state': _hidden_state[logit_id].squeeze(0)
             } for logit_id, logit in enumerate(torch.flatten(seq_log_prob))]
 
         return [{
             'logit': logit,
+            'candidate': candidate[logit_id],
             'hidden_state': None
-        } for logit in torch.flatten(seq_log_prob)]
+        } for logit_id, logit in enumerate(torch.flatten(seq_log_prob))]
 
     def _generate_batch(
         self,
