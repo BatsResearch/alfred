@@ -139,53 +139,38 @@ class FoundationModel(abc.ABC):
 
         logger.log(logging.INFO, f"Inferring {len(batched_queries)} batches")
 
-        try:
-            responses = _get_response(batched_queries, inferece_fn, with_grad,
-                                      no_tqdm)
-        except RuntimeError as e:
-            if "out of memory" in str(e):
-                logger.log(
-                    logging.INFO,
-                    "WARNING: out of memory, trying to allocate a new batch",
-                )
-                clear_cuda_cache()
-                if batch_policy == 'static':
-                    batch_size = int(batch_size * 0.8)
-                    batched_queries = np.array_split(
-                        queries,
-                        len(queries) // batch_size)
-                    logging.info(f"New batch size: {batch_size}")
-                elif batch_policy == 'dynamic':
-                    DB.limit_size = int(DB.limit_size * 0.9)
-                    DB.max_batch_size = int(DB.max_batch_size * 0.9)
-                    batched_queries = DB.batch()
-                    logging.info(
-                        f"New lmt_sz, bs: {DB.limit_size}, {DB.max_batch_size}"
-                    )
-                responses = _get_response(batched_queries, inferece_fn,
-                                          with_grad, no_tqdm)
-
-        if mode == 'score':
-            # Assuming candidates are the same for all queries for one
-            # run/batch
+        attempts = 0
+        while attempts < 3:
             try:
-                candidate_token_len = [
-                    len(x) for x in self.model.tokenizer(
-                        list(queries[0].candidates),
-                        padding=True,
-                        add_special_tokens=False).input_ids
-                ]
-            except BaseException:
-                logger.info(
-                    "Unable to get candidate token length, defaulting to token length of 1"
-                )
-                candidate_token_len = [1] * len(queries[0].candidates)
-        else:
-            candidate_token_len = None
+                responses = _get_response(batched_queries, inferece_fn, with_grad,
+                                          no_tqdm)
+                break
+            except RuntimeError as e:
+                attempts += 1
+                if "out of memory" in str(e):
+                    logger.log(
+                        logging.INFO,
+                        "WARNING: out of memory, trying to allocate a new batch",
+                    )
+                    clear_cuda_cache()
+                    if batch_policy == 'static':
+                        batch_size = int(batch_size * 0.8)
+                        batched_queries = np.array_split(
+                            queries,
+                            len(queries) // batch_size)
+                        logging.info(f"New batch size: {batch_size}")
+                    elif batch_policy == 'dynamic':
+                        DB.limit_size = int(DB.limit_size * 0.9)
+                        DB.max_batch_size = int(DB.max_batch_size * 0.9)
+                        batched_queries = DB.batch()
+                        logging.info(
+                            f"New lmt_sz, bs: {DB.limit_size}, {DB.max_batch_size}"
+                        )
+                    responses = _get_response(batched_queries, inferece_fn,
+                                              with_grad, no_tqdm)
 
         if batch_policy == 'dynamic':
-            responses = DB.reorder(responses,
-                                   candidate_token_len=candidate_token_len)
+            responses = DB.reorder(responses)
 
         return list(responses)
 

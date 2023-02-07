@@ -105,7 +105,6 @@ class DynamicBatcher:
         self,
         responses: List[OrderedDict],
         softmax: bool = True,
-        candidate_token_len: Union[List[int], int] = 1,
     ) -> RankedResponse:
         """
         Merge a list of responses with raw logit into a single RankedResponse
@@ -115,19 +114,13 @@ class DynamicBatcher:
         :type responses: List[OrderedDict]
         :param softmax: Whether to apply softmax to the logits
         :type softmax: bool
-        :param candidate_token_len: The length of the candidate in terms of tokens
-        :type candidate_token_len: Union[List[int], int]
         :return: A merged response
         :rtype: RankedResponse
         """
-        if isinstance(candidate_token_len, int):
-            candidate_token_len = [candidate_token_len] * len(self.candidates)
 
-        scores = torch.empty(len(candidate_token_len))
-        # embeddings = []
+        scores = torch.empty(self.candidate_size)
         for response_idx, response in enumerate(responses):
             scores[response_idx] = response['logit']
-            # embeddings.append(response['hidden_state'])
 
         if softmax:
             scores = torch.nn.functional.softmax(scores, dim=0)
@@ -137,11 +130,6 @@ class DynamicBatcher:
             candidate: score.item()
             for candidate, score in zip(self.candidates, scores)
         }
-
-        # embeddings = {
-        #     candidate: embedding
-        #     for candidate, embedding in zip(self.candidates, embeddings)
-        # }
 
         return RankedResponse(
             prediction=pred,
@@ -153,8 +141,7 @@ class DynamicBatcher:
             self,
             inst: List,
             offset: Optional[int] = None,
-            candidate_token_len: Optional[Union[int,
-                                                List[int]]] = None) -> List:
+    ) -> List:
         """
         Reordering the responses according to the original order of the queries
 
@@ -162,8 +149,6 @@ class DynamicBatcher:
         :type inst: List
         :param offset: The offset of the responses
         :type offset: Optional[int]
-        :param candidate_token_len: The length of the candidate in terms of tokens
-        :type candidate_token_len: Optional[Union[int, List[int]]]
         :return: The reordered responses
         :rtype: List of responses
         """
@@ -184,9 +169,6 @@ class DynamicBatcher:
         reordered_inst = reorder_array(inst, self.len_sorted_idx)
 
         if self.ranked:
-            assert len(candidate_token_len) == len(
-                self.candidates
-            ), f"Length of candidate_token_len {len(candidate_token_len)} does not match length of candidates {len(self.candidates)}"
             reordered_inst = [
                 self.merge_rank_response(reordered_inst[i:i +
                                                         self.candidate_size])

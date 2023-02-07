@@ -181,7 +181,6 @@ class HuggingFaceModel(LocalAccessFoundationModel):
     def _score_batch(
         self,
         batch: Union[List[str], List[Tuple[str, str]]],
-        padding: bool = True,
         candidate: Optional[List[str]] = None,
         hidden_state: bool = False,
         **kwargs: Any,
@@ -198,8 +197,6 @@ class HuggingFaceModel(LocalAccessFoundationModel):
 
         :param batch: A list of prompts or a list of tuples of prompts and candidates.
         :type batch: Union[List[str], List[Tuple[str, str]]]
-        :param padding: Whether to pad the batch to the maximum length of the batch.
-        :type padding: bool
         :param candidate: A list of candidates to rank. If not provided, the tokenizer's vocabulary is used.
         :type candidate: List[str]
         :param hidden_state: Whether to return the encoder hidden state.
@@ -222,26 +219,17 @@ class HuggingFaceModel(LocalAccessFoundationModel):
         candidate_token_ids = candidate_tokens.input_ids.to(
             list(self.model.hf_device_map.values())[-1])
 
-        if padding:
-            inputs = self.tokenizer(
-                batch,
-                return_tensors="pt",
-                padding=True,
-                add_special_tokens=False,
-                truncation=True,
-                max_length=self.max_position_embeddings,
-            )
-        else:
-            inputs = [
-                self.tokenizer(inst,
-                               return_tensors="pt",
-                               add_special_tokens=False,
-                               max_length=self.max_position_embeddings)
-                for inst in batch
-            ]
+        inputs = self.tokenizer(
+            batch,
+            return_tensors="pt",
+            padding=True,
+            add_special_tokens=False,
+            truncation=True,
+            max_length=self.max_position_embeddings,
+        )
 
         logger.log(logging.INFO,
-                   f"Ranking {len(batch)} instances with padding {padding}")
+                   f"Ranking {len(batch)} instances")
 
         if self.model.config.is_encoder_decoder:
             logits = self.model(
@@ -273,6 +261,7 @@ class HuggingFaceModel(LocalAccessFoundationModel):
             masked_log_probs, -1,
             candidate_token_ids.to(logits.get_device()).unsqueeze(-1))
         seq_log_prob = seq_token_log_probs.squeeze(dim=-1).sum(dim=-1)
+        seq_log_prob = seq_log_prob.view(len(batch), -1)
 
         if hidden_state:
             reduction = kwargs.get("reduction", "mean")
