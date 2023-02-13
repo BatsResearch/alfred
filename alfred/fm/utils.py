@@ -122,9 +122,8 @@ class DynamicBatcher:
         else:
             free_mem = -1
 
-        # Get Approximate Maximum Batch Size
-        self.max_batch_size = min(max_batch_size, int(free_mem / LMT_SIZE_FACTOR))
-        self.limit_size = LMT_SIZE_FACTOR / self.max_batch_size
+        self.max_batch_size = max_batch_size
+        self.limit_size = free_mem / LMT_SIZE_FACTOR
         self.ranked = False
         self.tokenizer = tokenizer
 
