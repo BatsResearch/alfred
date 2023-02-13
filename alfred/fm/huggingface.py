@@ -52,14 +52,15 @@ class HuggingFaceModel(LocalAccessFoundationModel):
     The interface includes implementations of the _score_batch method
     for ranking candidates and the _generate_batch method for generating prompts.
     """
+
     def __init__(
-        self,
-        model_string: str,
-        dtype: str = "auto",
-        local_path: Optional[str] = None,
-        device_map: Optional[str] = "auto",
-        int_8: bool = False,
-        tokenizer: Optional[PreTrainedTokenizer] = None,
+            self,
+            model_string: str,
+            dtype: str = "auto",
+            local_path: Optional[str] = None,
+            device_map: Optional[str] = "auto",
+            int_8: bool = False,
+            tokenizer: Optional[PreTrainedTokenizer] = None,
     ):
         """
         Constructor for the HuggingFaceModel class.
@@ -95,7 +96,7 @@ class HuggingFaceModel(LocalAccessFoundationModel):
         if torch.cuda.is_available():
             n_gpus = torch.cuda.device_count()
             free_in_GB = sum(
-                [int(mem / 1024**3) for mem in torch.cuda.mem_get_info()])
+                [int(mem / 1024 ** 3) for mem in torch.cuda.mem_get_info()])
 
             logger.log(
                 logging.WARNING,
@@ -137,8 +138,6 @@ class HuggingFaceModel(LocalAccessFoundationModel):
             model_name,
             cache_dir=self.local_path) if tokenizer is None else tokenizer
 
-        self.tokenizer.pad_token = self.tokenizer.eos_token
-
     def _get_hidden_states(self, inputs, reduction="mean") -> torch.Tensor:
         """
         Get the hidden states of the inputs.
@@ -179,11 +178,12 @@ class HuggingFaceModel(LocalAccessFoundationModel):
         return embedding
 
     def _score_batch(
-        self,
-        batch: Union[List[str], List[Tuple[str, str]]],
-        candidate: Optional[List[str]] = None,
-        hidden_state: bool = False,
-        **kwargs: Any,
+            self,
+            batch: Union[List[str], List[Tuple[str, str]]],
+            candidate: Optional[List[str]] = None,
+            hidden_state: bool = False,
+            tokenized: bool = False,
+            **kwargs: Any,
     ) -> List[Dict[str, Any]]:
         """
         Score a batch of prompts and candidates using the model.
@@ -204,10 +204,22 @@ class HuggingFaceModel(LocalAccessFoundationModel):
         :return: A list of dictionaries containing the raw logit scores and the encoder/decoder hidden states.
         :rtype: List[Dict[str, Any]]
         """
-        if candidate is None:
-            batch, candidate = zip(*batch)
 
-        batch, candidate = list(batch), list(candidate)
+        if tokenized:
+            inputs, candidate = batch
+        else:
+            if candidate is None:
+                batch, candidate = zip(*batch)
+            batch, candidate = list(batch), list(candidate)
+
+            inputs = self.tokenizer(
+                batch,
+                return_tensors="pt",
+                padding=True,
+                add_special_tokens=False,
+                truncation=True,
+                max_length=self.max_position_embeddings,
+            )
 
         candidate_tokens = self.tokenizer(
             candidate,
@@ -216,17 +228,9 @@ class HuggingFaceModel(LocalAccessFoundationModel):
             max_length=self.max_position_embeddings,
             return_tensors="pt",
         )
+
         candidate_token_ids = candidate_tokens.input_ids.to(
             list(self.model.hf_device_map.values())[-1])
-
-        inputs = self.tokenizer(
-            batch,
-            return_tensors="pt",
-            padding=True,
-            add_special_tokens=False,
-            truncation=True,
-            max_length=self.max_position_embeddings,
-        )
 
         logger.log(logging.INFO,
                    f"Ranking {len(batch)} instances")
@@ -256,7 +260,7 @@ class HuggingFaceModel(LocalAccessFoundationModel):
 
         masked_log_probs = candidate_tokens.attention_mask.to(
             logits.get_device()).unsqueeze(
-                -1) * torch.nn.functional.log_softmax(logits, dim=-1)
+            -1) * torch.nn.functional.log_softmax(logits, dim=-1)
         seq_token_log_probs = torch.gather(
             masked_log_probs, -1,
             candidate_token_ids.to(logits.get_device()).unsqueeze(-1))
@@ -280,12 +284,13 @@ class HuggingFaceModel(LocalAccessFoundationModel):
         } for logit_id, logit in enumerate(torch.flatten(seq_log_prob))]
 
     def _generate_batch(
-        self,
-        batch: List[str],
-        padding: bool = True,
-        hidden_state: bool = False,
-        allow_grad: bool = False,
-        **kwargs: Any,
+            self,
+            batch: List[str],
+            padding: bool = True,
+            hidden_state: bool = False,
+            allow_grad: bool = False,
+            tokenized: bool = False,
+            **kwargs: Any,
     ) -> List[CompletionResponse]:
         """
         Generate completions for a batch of prompts using the model.
@@ -310,15 +315,21 @@ class HuggingFaceModel(LocalAccessFoundationModel):
         """
         logger.log(logging.INFO, f"Inferring {len(batch)} instances")
 
-        if padding:
-            inputs = self.tokenizer(batch, return_tensors="pt", padding=True)
+        if tokenized:
+            inputs = batch
         else:
-            inputs = [
-                self.tokenizer(inst, return_tensors="pt") for inst in batch
-            ]
+            if padding:
+                inputs = self.tokenizer(batch,
+                                        return_tensors="pt",
+                                        padding=True)
+            else:
+                inputs = [
+                    self.tokenizer(inst, return_tensors="pt") for inst in batch
+                ]
 
         temprature = kwargs.get('temperature', 0.0)
         repetition_penalty = kwargs.get('repetition_penalty', None)
+        max_new_tokens = kwargs.get('max_new_tokens', 32)
 
         with nullcontext() if allow_grad else torch.no_grad():
             logger.log(logging.INFO,
@@ -326,7 +337,7 @@ class HuggingFaceModel(LocalAccessFoundationModel):
             if padding:
                 outputs = self.model.generate(
                     inputs.input_ids.to(self.model.device),
-                    max_new_tokens=64,
+                    max_new_tokens=max_new_tokens,
                     temperature=temprature,
                     repetition_penalty=repetition_penalty,
                     return_dict_in_generate=True,
@@ -335,7 +346,7 @@ class HuggingFaceModel(LocalAccessFoundationModel):
                 outputs = [
                     self.model.generate(
                         input.input_ids.to(self.model.device),
-                        max_length=64,
+                        max_length=max_new_tokens,
                     ) for input in inputs
                 ]
 
@@ -362,18 +373,17 @@ class HuggingFaceModel(LocalAccessFoundationModel):
                 for text_id, text in enumerate(texts)
             ]
 
-        del inputs, outputs
-
         return [CompletionResponse(prediction=text) for text in texts]
 
     def _encode_batch(self, batch_instance, **kwargs) -> List[torch.Tensor]:
 
         reduction = kwargs.get('reduction', 'mean')
         padding = kwargs.get('padding', True)
+        tokenized = kwargs.get('tokenized', False)
 
-        inputs = self.tokenizer(batch_instance,
-                                return_tensors="pt",
-                                padding=padding)
+        inputs = batch_instance if tokenized else self.tokenizer(batch_instance,
+                                                                 return_tensors="pt",
+                                                                 padding=padding)
 
         _hidden_state = self._get_hidden_states(inputs, reduction=reduction)
 
