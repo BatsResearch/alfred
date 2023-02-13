@@ -88,6 +88,9 @@ class TokenizedBatch:
                                       padding_value=pad_token_id).long()
         self.attention_mask = (self.input_ids != pad_token_id).long()
 
+    def __len__(self):
+        return len(self.input_ids)
+
 
 class DynamicBatcher:
     """
