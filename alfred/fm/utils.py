@@ -120,11 +120,11 @@ class DynamicBatcher:
         if torch.cuda.is_available():
             gpu_mem = torch.cuda.get_device_properties(0).total_memory
             free_mem = gpu_mem - torch.cuda.memory_allocated(0)
+            self.limit_size = free_mem / LMT_SIZE_FACTOR
         else:
-            free_mem = -1
+            self.limit_size = LMT_SIZE_FACTOR
 
         self.max_batch_size = max_batch_size
-        self.limit_size = free_mem / LMT_SIZE_FACTOR
         self.ranked = False
         self.tokenizer = tokenizer
         self.max_token_length = max_token_length
@@ -228,11 +228,13 @@ class DynamicBatcher:
         '''
 
         def _process_batch(batch):
-            if isinstance(batch[0], tuple):
-                batch, candidate = zip(*batch)
-                return (TokenizedBatch(batch), candidate)
-            else:
-                return TokenizedBatch(batch)
+            if self.tokenizer:
+                if isinstance(batch[0], tuple):
+                    batch, candidate = zip(*batch)
+                    return (TokenizedBatch(batch), candidate)
+                else:
+                    return TokenizedBatch(batch)
+            return batch
 
         logger.info(f"Batching queries with tokenizer? {self.tokenizer is not None}")
 
@@ -266,7 +268,6 @@ class DynamicBatcher:
         self.len_sorted_idx = inst_len_sorted_idx
 
         curr_batch = []
-        curr_sz = 0
         curr_max = -1
         curr_batch_sz = 0
 
@@ -275,25 +276,17 @@ class DynamicBatcher:
             inst_len = inst_len_sorted[sorted_idx]
             curr_inst = (insts[index],
                          candidates[index]) if ranked else insts[index]
-            if curr_sz < self.limit_size and curr_batch_sz < self.max_batch_size:
-                curr_max = max(curr_max, inst_len)
-                new_sz = curr_max * curr_max * curr_batch_sz
-                if new_sz >= self.limit_size or curr_batch_sz >= self.max_batch_size:
-                    batches.append(_process_batch(curr_batch))
-                    curr_batch = [curr_inst]
-                    curr_sz = inst_len ** 2
-                    curr_max = inst_len
-                    curr_batch_sz = 1
-                else:
-                    curr_batch.append(curr_inst)
-                    curr_batch_sz += 1
-                    curr_sz = new_sz
-            else:
+            curr_max = max(curr_max, inst_len)
+            new_sz = curr_max * curr_max * curr_batch_sz
+            if new_sz >= self.limit_size or curr_batch_sz >= self.max_batch_size:
                 batches.append(_process_batch(curr_batch))
                 curr_batch = [curr_inst]
-                curr_sz = inst_len ** 2
                 curr_max = inst_len
                 curr_batch_sz = 1
+            else:
+                curr_batch.append(curr_inst)
+                curr_batch_sz += 1
+
         batches.append(_process_batch(curr_batch))
 
         clear_cuda_cache()
