@@ -230,14 +230,7 @@ class DynamicBatcher:
         def _process_batch(batch):
             if isinstance(batch[0], tuple):
                 batch, candidate = zip(*batch)
-                candidate_tokens = self.tokenizer(
-                    candidate,
-                    padding=True,
-                    truncation=True,
-                    max_length=self.max_token_length,
-                    return_tensors="pt",
-                )
-                return (TokenizedBatch(batch), candidate_tokens)
+                return (TokenizedBatch(batch), candidate)
             else:
                 return TokenizedBatch(batch)
 

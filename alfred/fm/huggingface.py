@@ -206,19 +206,11 @@ class HuggingFaceModel(LocalAccessFoundationModel):
         """
 
         if tokenized:
-            inputs, candidate_tokens = batch
+            inputs, candidate = batch
         else:
             if candidate is None:
                 batch, candidate = zip(*batch)
             batch, candidate = list(batch), list(candidate)
-
-            candidate_tokens = self.tokenizer(
-                candidate,
-                padding=True,
-                truncation=True,
-                max_length=self.max_position_embeddings,
-                return_tensors="pt",
-            )
 
             inputs = self.tokenizer(
                 batch,
@@ -228,6 +220,14 @@ class HuggingFaceModel(LocalAccessFoundationModel):
                 truncation=True,
                 max_length=self.max_position_embeddings,
             )
+
+        candidate_tokens = self.tokenizer(
+            candidate,
+            padding=True,
+            truncation=True,
+            max_length=self.max_position_embeddings,
+            return_tensors="pt",
+        )
 
         candidate_token_ids = candidate_tokens.input_ids.to(
             list(self.model.hf_device_map.values())[-1])
