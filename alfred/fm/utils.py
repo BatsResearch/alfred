@@ -13,7 +13,7 @@ from .response import RankedResponse
 
 logger = logging.getLogger(__name__)
 
-LMT_SIZE_FACTOR = 32768
+LMT_SIZE_FACTOR = 65536
 
 
 def clear_cuda_cache():
