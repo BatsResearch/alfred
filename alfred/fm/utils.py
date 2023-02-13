@@ -13,7 +13,7 @@ from .response import RankedResponse
 
 logger = logging.getLogger(__name__)
 
-LMT_SIZE_FACTOR = 87951
+LMT_SIZE_FACTOR = 2097152
 
 
 def clear_cuda_cache():
@@ -112,6 +112,7 @@ class DynamicBatcher:
         :param max_batch_size: The maximum batch size
         :type max_batch_size: int
         """
+        self.len_sorted_idx = None
         self.queries = queries
         self.max_batch_size = max_batch_size
 
@@ -122,9 +123,7 @@ class DynamicBatcher:
             free_mem = -1
 
         # Get Approximate Maximum Batch Size
-        if free_mem > 0:
-            self.max_batch_size = min(int(free_mem / LMT_SIZE_FACTOR),
-                                      max_batch_size)
+        self.max_batch_size = min(max_batch_size, int(free_mem / LMT_SIZE_FACTOR))
         self.limit_size = LMT_SIZE_FACTOR / self.max_batch_size
         self.ranked = False
         self.tokenizer = tokenizer
@@ -279,11 +278,11 @@ class DynamicBatcher:
                          candidates[index]) if ranked else insts[index]
             if curr_sz < self.limit_size and curr_batch_sz < self.max_batch_size:
                 curr_max = max(curr_max, inst_len)
-                new_sz = curr_max * curr_batch_sz
+                new_sz = curr_max * curr_max * curr_batch_sz
                 if new_sz >= self.limit_size or curr_batch_sz >= self.max_batch_size:
                     batches.append(_process_batch(curr_batch))
                     curr_batch = [curr_inst]
-                    curr_sz = inst_len
+                    curr_sz = inst_len ** 2
                     curr_max = inst_len
                     curr_batch_sz = 1
                 else:
@@ -293,7 +292,7 @@ class DynamicBatcher:
             else:
                 batches.append(_process_batch(curr_batch))
                 curr_batch = [curr_inst]
-                curr_sz = inst_len
+                curr_sz = inst_len ** 2
                 curr_max = inst_len
                 curr_batch_sz = 1
         batches.append(_process_batch(curr_batch))
