@@ -132,7 +132,7 @@ class DynamicBatcher:
             # RankedQueries
             self.candidates = self.queries[0].candidates
             if self.tokenizer:
-                self.tokenized_candidates = [self.tokenizer(cand,
+                self.tokenized_candidates = [self.tokenizer.encode(cand,
                                                             return_tensors='pt') for cand in self.candidates]
             self.candidate_size = len(self.candidates)
             self.ranked = True
