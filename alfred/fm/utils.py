@@ -13,7 +13,7 @@ from .response import RankedResponse
 
 logger = logging.getLogger(__name__)
 
-LMT_SIZE_FACTOR = 65536
+LMT_SIZE_FACTOR = 32768
 
 
 def clear_cuda_cache():
@@ -76,7 +76,7 @@ def tokenize(inst, tokenizer, max_length=512):
     :rtype: List[int]
     """
     if tokenizer:
-        token_ids = tokenizer.encode(inst, max_length=max_length, return_tensors='pt')[0]
+        token_ids = tokenizer.encode(inst, max_length=max_length, truncation=True, return_tensors='pt')[0]
     else:
         token_ids = inst
     return token_ids, len(token_ids)
@@ -227,8 +227,8 @@ class DynamicBatcher:
         :rtype: List[List[Instance]]
         '''
 
-        def _process_batch(batch, ranked=False):
-            if ranked:
+        def _process_batch(batch):
+            if isinstance(batch[0], tuple):
                 batch, candidate = zip(*batch)
                 return (TokenizedBatch(batch), TokenizedBatch(candidate))
             else:
