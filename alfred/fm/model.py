@@ -80,6 +80,7 @@ class FoundationModel(abc.ABC):
         batch_policy: str = 'dynamic',
         batch_size: int = 1024,
         mode: str = 'generate',
+        pretokenize: bool = True,
         **kwargs,
     ) -> Union[List[CompletionResponse], List[RankedResponse],
                List[OrderedDict], List[torch.Tensor]]:
@@ -99,19 +100,13 @@ class FoundationModel(abc.ABC):
         :type batch_size: int
         :param mode: LLM inference mode, choose from ['generate', 'score', 'encode']
         :type mode: str
+        :param pretokenize: Whether to tokenize the queries while batching
+        :type pretokenize: bool
         :param kwargs: Additional arguments to pass to the foundation model
         :type kwargs: Any
         :return: A list of responses
         :rtype: Union[List[CompletionResponse], List[RankedResponse], List[OrderedDict], List[torch.Tensor]]
         """
-        def _get_response(batched_queries, inferece_fn, with_grad, no_tqdm):
-            with nullcontext() if with_grad else torch.no_grad():
-                responses = []
-                for batch_id, batch in enumerate(
-                        tqdm(batched_queries, disable=no_tqdm)):
-                    responses += inferece_fn(batch, **kwargs)
-                return responses
-
         with_grad = kwargs.get('with_grad', False)
         no_tqdm = kwargs.get('no_tqdm', False)
 
@@ -127,23 +122,44 @@ class FoundationModel(abc.ABC):
         else:
             raise ValueError(f"mode {mode} not supported")
 
-        if batch_policy == 'static':
-            # To near equally sized batches
-            batched_queries = np.array_split(queries,
-                                             len(queries) // batch_size)
-        elif batch_policy == 'dynamic':
-            DB = DynamicBatcher(queries, max_batch_size=batch_size)
-            batched_queries = DB.batch()
+        if isinstance(self, LocalAccessFoundationModel):
+            if batch_policy == 'static':
+                # To near equally sized batches
+                batched_queries = np.array_split(queries,
+                                                 len(queries) // batch_size)
+                pretokenized = False
+            elif batch_policy == 'dynamic':
+                if pretokenize:
+                    pretokenized = True
+                    try:
+                        tokenizer = self.tokenizer
+                    except AttributeError:
+                        logger.error("Tokenizer not found. Please set the tokenizer attribute for the model")
+                        tokenizer = None
+                        pretokenized = False
+                else:
+                    pretokenized = False
+                    tokenizer = None
+                DB = DynamicBatcher(queries, tokenizer=tokenizer, max_batch_size=batch_size)
+                batched_queries = DB.batch()
+            else:
+                raise ValueError(f"batch_policy {batch_policy} not supported")
         else:
-            raise ValueError(f"batch_policy {batch_policy} not supported")
+            batch_policy = 'static'
+            batched_queries = np.array_split(queries,
+                                             len(queries))
+            pretokenized = False
 
         logger.log(logging.INFO, f"Inferring {len(batched_queries)} batches")
 
         attempts = 0
         while attempts < 3:
             try:
-                responses = _get_response(batched_queries, inferece_fn, with_grad,
-                                          no_tqdm)
+                with nullcontext() if with_grad else torch.no_grad():
+                    responses = []
+                    for batch_id, batch in enumerate(
+                            tqdm(batched_queries, disable=no_tqdm)):
+                        responses += inferece_fn(batch, tokenized=pretokenized, **kwargs)
                 break
             except RuntimeError as e:
                 attempts += 1
@@ -166,8 +182,6 @@ class FoundationModel(abc.ABC):
                         logging.info(
                             f"New lmt_sz, bs: {DB.limit_size}, {DB.max_batch_size}"
                         )
-                    responses = _get_response(batched_queries, inferece_fn,
-                                              with_grad, no_tqdm)
 
         if batch_policy == 'dynamic':
             responses = DB.reorder(responses)
