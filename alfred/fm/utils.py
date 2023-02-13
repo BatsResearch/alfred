@@ -103,6 +103,7 @@ class DynamicBatcher:
             queries: Union[List[Query], List[str]],
             max_batch_size: int = 2048,
             tokenizer: Optional[transformers.PreTrainedTokenizer] = None,
+            max_token_length: int = 512,
     ):
         """
         Initialize a DynamicBatcher
@@ -126,14 +127,13 @@ class DynamicBatcher:
         self.limit_size = free_mem / LMT_SIZE_FACTOR
         self.ranked = False
         self.tokenizer = tokenizer
+        self.max_token_length = max_token_length
+
 
         if isinstance(self.queries[0], RankedQuery):
             # Enforcing Uniform Candidate sizes and order across one set of
             # RankedQueries
             self.candidates = self.queries[0].candidates
-            if self.tokenizer:
-                self.tokenized_candidates = [self.tokenizer.encode(cand,
-                                                            return_tensors='pt') for cand in self.candidates]
             self.candidate_size = len(self.candidates)
             self.ranked = True
 
@@ -230,7 +230,14 @@ class DynamicBatcher:
         def _process_batch(batch):
             if isinstance(batch[0], tuple):
                 batch, candidate = zip(*batch)
-                return (TokenizedBatch(batch), TokenizedBatch(candidate))
+                candidate_tokens = self.tokenizer(
+                    candidate,
+                    padding=True,
+                    truncation=True,
+                    max_length=self.max_token_length,
+                    return_tensors="pt",
+                )
+                return (TokenizedBatch(batch), candidate_tokens)
             else:
                 return TokenizedBatch(batch)
 
@@ -241,18 +248,18 @@ class DynamicBatcher:
         inst_len = []
         for query in self.queries:
             if isinstance(query, str):
-                inst, ilen = tokenize(query, self.tokenizer)
+                inst, ilen = tokenize(query, self.tokenizer, self.max_token_length)
                 insts.append(inst)
                 inst_len.append(ilen)
             elif isinstance(query, CompletionQuery):
-                inst, ilen = tokenize(query.load()[0], self.tokenizer)
+                inst, ilen = tokenize(query.load()[0], self.tokenizer, self.max_token_length)
                 insts.append(inst)
                 inst_len.append(ilen)
             elif isinstance(query, RankedQuery):
-                inst, ilen = tokenize(query.prompt, self.tokenizer)
+                inst, ilen = tokenize(query.prompt, self.tokenizer, self.max_token_length)
                 insts += [inst] * self.candidate_size
                 inst_len += [ilen] * self.candidate_size
-                candidates += self.tokenized_candidates if self.tokenizer else query.candidates
+                candidates += self.candidates
             else:
                 logger.error(f"Unknown query type {type(query)}")
                 raise ValueError(f"Input type {type(query)} not supported")
