@@ -17,6 +17,7 @@ class Template(abc.ABC):
       primaryClass={cs.LG}
     }
     """
+
     @property
     @abc.abstractmethod
     def template(self):

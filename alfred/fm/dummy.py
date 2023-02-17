@@ -17,6 +17,7 @@ class DummyModel(LocalAccessFoundationModel):
     This model implements a dummy model that returns the
     input as the output for both completion and outputs a raw logit of -1 for scoring.
     """
+
     def __init__(self, model: Optional[str] = None):
         """
         Initialize a `DummyModel` object.
@@ -28,9 +29,9 @@ class DummyModel(LocalAccessFoundationModel):
         self.model = model
 
     def _generate_batch(
-        self,
-        batch_instance: Union[List[Query], List[str]],
-        **kwargs: Any,
+            self,
+            batch_instance: Union[List[Query], List[str]],
+            **kwargs: Any,
     ) -> List[Response]:
         """
         Generate completions for a batch of queries.
@@ -50,9 +51,9 @@ class DummyModel(LocalAccessFoundationModel):
         ]
 
     def _encode_batch(
-        self,
-        batch_instance: Union[List[Query], List[str]],
-        **kwargs: Any,
+            self,
+            batch_instance: Union[List[Query], List[str]],
+            **kwargs: Any,
     ) -> List[torch.Tensor]:
         """
         Encode a batch of queries.
@@ -70,9 +71,9 @@ class DummyModel(LocalAccessFoundationModel):
         return [torch.zeros([512]) for _ in batch_instance]
 
     def _score_batch(
-        self,
-        batch_instance: Union[List[Query], List[str]],
-        **kwargs,
+            self,
+            batch_instance: Union[List[Query], List[str]],
+            **kwargs,
     ) -> List[dict]:
         """
         Score a batch of queries.

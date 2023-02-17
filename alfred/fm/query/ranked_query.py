@@ -4,7 +4,6 @@ Ranked Query Class encompasses query tem
 
 """
 from typing import List, Union, Tuple, Callable
-
 import numpy as np
 import torch
 
@@ -28,10 +27,11 @@ class RankedQuery(Query):
         >>> fm = XFM()
         >>> response = fm(query)
     """
+
     def __init__(
-        self,
-        prompt: Union[str, np.ndarray, List, Tuple, torch.Tensor],
-        candidates: Union[List, Tuple, np.ndarray, torch.Tensor],
+            self,
+            prompt: Union[str, np.ndarray, List, Tuple, torch.Tensor],
+            candidates: Union[List, Tuple, np.ndarray, torch.Tensor],
     ):
         """
         Initializes a RankedQuery class.
@@ -66,8 +66,8 @@ class RankedQuery(Query):
         return "|||".join(self._candidates)
 
     def load(
-        self,
-        composition_fn: Callable = None,
+            self,
+            composition_fn: Callable = None,
     ) -> List:
         """
         Load prompt and candidates

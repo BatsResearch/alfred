@@ -1,7 +1,7 @@
 import gc
 import logging
 from collections import OrderedDict
-from typing import List, Union, Tuple, Optional
+from typing import List, Union, Optional
 
 import numpy as np
 import torch
@@ -82,6 +82,30 @@ def tokenize(inst, tokenizer, max_length=512):
     return token_ids, len(token_ids)
 
 
+def batch_multimodal(queries: List[RankedQuery], batch_size=64):
+    """
+    Batch multimodal queries
+
+    :param queries: A list of multimodal queries
+    :type queries: List[Query]
+    :param batch_size: The batch size
+    :type batch_size: int
+    :return: A list of batches of multimodal queries
+    :rtype: List[List[Query]]
+    """
+    candidates = queries[0].candidates
+    batches = []
+    batch = []
+    for query in queries:
+        if len(batch) == batch_size:
+            batches.append((batch, candidates))
+            batch = []
+        batch.append(query.prompt)
+    if len(batch) > 0:
+        batches.append((batch, candidates))
+    return batches
+
+
 class TokenizedBatch:
     def __init__(self, token_ids, pad_token_id=0):
         self.input_ids = pad_sequence(token_ids, batch_first=True,
@@ -128,7 +152,6 @@ class DynamicBatcher:
         self.ranked = False
         self.tokenizer = tokenizer
         self.max_token_length = max_token_length
-
 
         if isinstance(self.queries[0], RankedQuery):
             # Enforcing Uniform Candidate sizes and order across one set of

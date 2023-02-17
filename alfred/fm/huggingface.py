@@ -16,8 +16,6 @@ from .response import CompletionResponse
 
 logger = logging.getLogger(__name__)
 
-logger = logging.getLogger(__name__)
-
 dtype_match = {
     "auto": "auto",
     "fp32": torch.float32,

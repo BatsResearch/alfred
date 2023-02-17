@@ -17,9 +17,10 @@ class CompletionQuery(Query):
     It is initialized with a prompt, which can be a string, NumPy array,
     list, tuple, or PyTorch tensor.
     """
+
     def __init__(
-        self,
-        prompt: Union[str, np.ndarray, List, Tuple, torch.Tensor],
+            self,
+            prompt: Union[str, np.ndarray, List, Tuple, torch.Tensor],
     ):
         """
         Initializes a CompletionQuery class.

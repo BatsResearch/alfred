@@ -19,11 +19,12 @@ class Voter:
 
 
     """
+
     def __init__(
-        self,
-        label_map: Dict,
-        matching_fn: Callable = lambda x, y: x == y,
-        calibration: Optional[Union[List, np.ndarray, Tuple]] = None,
+            self,
+            label_map: Dict,
+            matching_fn: Callable = lambda x, y: x == y,
+            calibration: Optional[Union[List, np.ndarray, Tuple]] = None,
     ):
         """
         Initialize a voter
@@ -51,7 +52,7 @@ class Voter:
 
     def vote(self,
              responses: Union[Iterable[str], str, Iterable[Response],
-                              Response],
+             Response],
              matching_function: Optional[Callable] = None,
              label_map: Optional[Dict] = None,
              **kwargs: Any) -> np.ndarray:
