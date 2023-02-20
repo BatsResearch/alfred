@@ -6,7 +6,10 @@ import torch
 from grpc import FutureTimeoutError
 
 from alfred.client.ssh.sshtunnel import SSHTunnel
-import alfred.fm as fm
+from alfred.fm.dummy import DummyModel
+from alfred.fm.huggingface import HuggingFaceModel
+from alfred.fm.huggingface_clip import HuggingFaceCLIPModel
+from alfred.fm.openai import OpenAIModel
 from alfred.fm.query import CompletionQuery, Query, RankedQuery
 from alfred.fm.remote.grpc import gRPCClient
 from alfred.fm.response import Response
@@ -62,7 +65,8 @@ class Client:
         if self.model_type:
             self.model_type = model_type.lower()
             assert self.model_type in [
-                "huggingface", "openai", "onnx", "tensorrt", "torch", "dummy"
+                "huggingface", "huggingfacevlm", "openai", "onnx", "tensorrt",
+                "torch", "dummy"
             ], f"Invalid model type: {self.model_type}"
         else:
             if end_point is None:
@@ -128,13 +132,17 @@ class Client:
                     f"Cannot connect to remote end point: {end_point}")
         else:
             if self.model_type == "huggingface":
-                self.model = fm.huggingface.HuggingFaceModel(self.model,
+                self.model = HuggingFaceModel(self.model,
                                               local_path=local_path,
                                               **kwargs)
+            elif self.model_type == "huggingfacevlm":
+                self.model = HuggingFaceCLIPModel(self.model,
+                                                  local_path=local_path,
+                                                  **kwargs)
             elif self.model_type == "openai":
-                self.model = fm.openai.OpenAIModel(self.model, **kwargs)
+                self.model = OpenAIModel(self.model, **kwargs)
             elif self.model_type == "dummy":
-                self.model = fm.dummy.DummyModel(self.model)
+                self.model = DummyModel(self.model)
             elif self.model_type == "onnx":
                 # self.model = ONNXModel(self.model, **kwargs)
                 raise NotImplementedError

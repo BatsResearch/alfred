@@ -1,16 +1,16 @@
 import ast
+import base64
 import io
 import json
 import logging
 import socket
 from concurrent import futures
 from typing import Optional, Union, Iterable, Tuple, Any, List
-import base64
-from PIL import Image
-
-from tqdm.auto import tqdm
 
 import grpc
+from PIL import Image
+from tqdm.auto import tqdm
+
 from alfred.fm.query import Query, RankedQuery, CompletionQuery
 from alfred.fm.remote.protos import query_pb2
 from alfred.fm.remote.protos import query_pb2_grpc
@@ -19,8 +19,8 @@ from alfred.fm.response import RankedResponse, CompletionResponse
 
 logger = logging.getLogger(__name__)
 
-
 IMAGE_SIGNATURE = "[ALFED_IMAGE_BASE64]"
+
 
 class gRPCClient:
     def __init__(
@@ -54,7 +54,8 @@ class gRPCClient:
             if type(msg) == Image:
                 io_output = io.BytesIO()
                 msg.save(io_output, format="png")
-                msg = IMAGE_SIGNATURE + base64.b64encode(io_output.getvalue()).decode('UTF-8')
+                msg = IMAGE_SIGNATURE + base64.b64encode(
+                    io_output.getvalue()).decode('UTF-8')
         elif isinstance(msg, Tuple):
             msg, candidate = msg[0], msg[1]
         return msg, candidate
@@ -184,7 +185,9 @@ class gRPCServer(query_pb2_grpc.QueryServiceServicer):
 
             if candidate:
                 if instance.startswith(IMAGE_SIGNATURE):
-                    instance = Image.open(io.BytesIO(base64.b64decode(instance[len(IMAGE_SIGNATURE):])))
+                    instance = Image.open(
+                        io.BytesIO(
+                            base64.b64decode(instance[len(IMAGE_SIGNATURE):])))
 
             if kwargs:
                 kwargs = json.loads(kwargs)

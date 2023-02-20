@@ -3,7 +3,7 @@ from typing import Optional, List, Union, Any
 
 import torch
 
-from .model import LocalAccessFoundationModel
+from alfred.fm.model import LocalAccessFoundationModel
 from .query import Query
 from .response import CompletionResponse, Response
 

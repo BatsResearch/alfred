@@ -4,6 +4,7 @@ Ranked Query Class encompasses query tem
 
 """
 from typing import List, Union, Tuple, Callable
+
 import numpy as np
 import torch
 
@@ -43,10 +44,6 @@ class RankedQuery(Query):
         """
         assert len(candidates) > 0, \
             "Candidates cannot be empty"
-        assert all([isinstance(candidate, type(prompt)) for candidate in candidates]), \
-            f"Prompt and candidates must be of same type, " \
-            f"got {type(prompt)} and " \
-            f"{[type(candidate) for candidate in candidates]}"
         self._prompt = prompt
         self._candidates = candidates
         self.composition_strategy = "ranked"

@@ -76,7 +76,10 @@ def tokenize(inst, tokenizer, max_length=512):
     :rtype: List[int]
     """
     if tokenizer:
-        token_ids = tokenizer.encode(inst, max_length=max_length, truncation=True, return_tensors='pt')[0]
+        token_ids = tokenizer.encode(inst,
+                                     max_length=max_length,
+                                     truncation=True,
+                                     return_tensors='pt')[0]
     else:
         token_ids = inst
     return token_ids, len(token_ids)
@@ -84,14 +87,14 @@ def tokenize(inst, tokenizer, max_length=512):
 
 def batch_multimodal(queries: List[RankedQuery], batch_size=64):
     """
-    Batch multimodal queries
+    Batch RankedQueries with Multimodal Payloads
 
     :param queries: A list of multimodal queries
-    :type queries: List[Query]
+    :type queries: List[RankedQuery]
     :param batch_size: The batch size
     :type batch_size: int
-    :return: A list of batches of multimodal queries
-    :rtype: List[List[Query]]
+    :return: A list of batches of multimodal ranked queries
+    :rtype: List[List[RankedQuery]]
     """
     candidates = queries[0].candidates
     batches = []
@@ -108,7 +111,8 @@ def batch_multimodal(queries: List[RankedQuery], batch_size=64):
 
 class TokenizedBatch:
     def __init__(self, token_ids, pad_token_id=0):
-        self.input_ids = pad_sequence(token_ids, batch_first=True,
+        self.input_ids = pad_sequence(token_ids,
+                                      batch_first=True,
                                       padding_value=pad_token_id).long()
         self.attention_mask = (self.input_ids != pad_token_id).long()
 
@@ -259,22 +263,26 @@ class DynamicBatcher:
                     return TokenizedBatch(batch)
             return batch
 
-        logger.info(f"Batching queries with tokenizer? {self.tokenizer is not None}")
+        logger.info(
+            f"Batching queries with tokenizer? {self.tokenizer is not None}")
 
         insts = []
         candidates = []
         inst_len = []
         for query in self.queries:
             if isinstance(query, str):
-                inst, ilen = tokenize(query, self.tokenizer, self.max_token_length)
+                inst, ilen = tokenize(query, self.tokenizer,
+                                      self.max_token_length)
                 insts.append(inst)
                 inst_len.append(ilen)
             elif isinstance(query, CompletionQuery):
-                inst, ilen = tokenize(query.load()[0], self.tokenizer, self.max_token_length)
+                inst, ilen = tokenize(query.load()[0], self.tokenizer,
+                                      self.max_token_length)
                 insts.append(inst)
                 inst_len.append(ilen)
             elif isinstance(query, RankedQuery):
-                inst, ilen = tokenize(query.prompt, self.tokenizer, self.max_token_length)
+                inst, ilen = tokenize(query.prompt, self.tokenizer,
+                                      self.max_token_length)
                 insts += [inst] * self.candidate_size
                 inst_len += [ilen] * self.candidate_size
                 candidates += self.candidates

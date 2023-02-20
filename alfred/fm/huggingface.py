@@ -11,8 +11,8 @@ from transformers import (
     AutoTokenizer,
 )
 
-from .model import LocalAccessFoundationModel
-from .response import CompletionResponse
+from alfred.fm.model import LocalAccessFoundationModel
+from alfred.fm.response import CompletionResponse
 
 logger = logging.getLogger(__name__)
 
@@ -230,8 +230,7 @@ class HuggingFaceModel(LocalAccessFoundationModel):
         candidate_token_ids = candidate_tokens.input_ids.to(
             list(self.model.hf_device_map.values())[-1])
 
-        logger.log(logging.INFO,
-                   f"Ranking {len(batch)} instances")
+        logger.log(logging.INFO, f"Ranking {len(batch)} instances")
 
         if self.model.config.is_encoder_decoder:
             logits = self.model(
@@ -379,9 +378,8 @@ class HuggingFaceModel(LocalAccessFoundationModel):
         padding = kwargs.get('padding', True)
         tokenized = kwargs.get('tokenized', False)
 
-        inputs = batch_instance if tokenized else self.tokenizer(batch_instance,
-                                                                 return_tensors="pt",
-                                                                 padding=padding)
+        inputs = batch_instance if tokenized else self.tokenizer(
+            batch_instance, return_tensors="pt", padding=padding)
 
         _hidden_state = self._get_hidden_states(inputs, reduction=reduction)
 
