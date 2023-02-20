@@ -6,6 +6,7 @@ import alfred.fm.remote.grpc as grpc_utils
 from alfred.fm.dummy import DummyModel
 from alfred.fm.huggingface import HuggingFaceModel
 from alfred.fm.openai import OpenAIModel
+from alfred.fm.huggingface_clip import HuggingFaceVLMModel
 
 logging.basicConfig(
     format='ALFRED %(levelname)s: %(asctime)-5s  %(message)s',
@@ -48,10 +49,12 @@ class ModelServer:
         self.model = model
         self.model_type = model_type.lower()
         assert self.model_type in [
-            "huggingface", "openai", "onnx", "tensorrt", "torch", "dummy"
+            "huggingface", "huggingfacevlm", "openai", "onnx", "tensorrt", "torch", "dummy"
         ], f"Invalid model type: {self.model_type}"
         if self.model_type == "huggingface":
             self.model = HuggingFaceModel(self.model, **kwargs)
+        elif self.model_type == "huggingfacevlm":
+            self.model = HuggingFaceVLMModel(self.model, **kwargs)
         elif self.model_type == "openai":
             self.model = OpenAIModel(self.model, **kwargs)
         elif self.model_type == "dummy":
