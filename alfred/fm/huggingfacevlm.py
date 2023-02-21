@@ -3,7 +3,7 @@ from typing import Optional, List, Tuple
 
 import torch
 from transformers import AutoProcessor, CLIPModel
-
+from PIL import Image
 from alfred.fm.model import LocalAccessFoundationModel
 from .response import RankedResponse
 
@@ -24,7 +24,7 @@ class HuggingFaceCLIPModel(LocalAccessFoundationModel):
 
     def _score_batch(
             self,
-            batch_instance: Tuple[List, List[str]],
+            batch_instance: Tuple[List[Image.Image], List[str]],
             **kwargs,
     ):
         return_image_features = kwargs.get("return_image_features", False)

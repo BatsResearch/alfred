@@ -8,7 +8,7 @@ from grpc import FutureTimeoutError
 from alfred.client.ssh.sshtunnel import SSHTunnel
 from alfred.fm.dummy import DummyModel
 from alfred.fm.huggingface import HuggingFaceModel
-from alfred.fm.huggingface_clip import HuggingFaceCLIPModel
+from alfred.fm.huggingfacevlm import HuggingFaceCLIPModel
 from alfred.fm.openai import OpenAIModel
 from alfred.fm.query import CompletionQuery, Query, RankedQuery
 from alfred.fm.remote.grpc import gRPCClient

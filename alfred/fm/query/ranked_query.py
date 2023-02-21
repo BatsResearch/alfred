@@ -5,6 +5,7 @@ Ranked Query Class encompasses query tem
 """
 from typing import List, Union, Tuple, Callable
 
+from PIL import Image
 import numpy as np
 import torch
 
@@ -31,7 +32,7 @@ class RankedQuery(Query):
 
     def __init__(
             self,
-            prompt: Union[str, np.ndarray, List, Tuple, torch.Tensor],
+            prompt: Union[str, np.ndarray, Image.Image, Tuple, torch.Tensor],
             candidates: Union[List, Tuple, np.ndarray, torch.Tensor],
     ):
         """

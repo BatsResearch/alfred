@@ -51,7 +51,7 @@ class gRPCClient:
             msg = msg.load()[0]
         elif isinstance(msg, RankedQuery):
             msg, candidate = msg.prompt, msg.get_answer_choices_str()
-            if type(msg) == Image:
+            if isinstance(msg, Image.Image):
                 io_output = io.BytesIO()
                 msg.save(io_output, format="png")
                 msg = IMAGE_SIGNATURE + base64.b64encode(
@@ -182,7 +182,6 @@ class gRPCServer(query_pb2_grpc.QueryServiceServicer):
             instance = request.message
             candidate = request.candidate
             kwargs = request.kwargs
-
             if candidate:
                 if instance.startswith(IMAGE_SIGNATURE):
                     instance = Image.open(
