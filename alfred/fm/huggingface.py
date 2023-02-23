@@ -262,7 +262,7 @@ class HuggingFaceModel(LocalAccessFoundationModel):
             masked_log_probs, -1,
             candidate_token_ids.to(logits.get_device()).unsqueeze(-1))
         seq_log_prob = seq_token_log_probs.squeeze(dim=-1).sum(dim=-1)
-        seq_log_prob = seq_log_prob.view(len(batch), -1)
+        seq_log_prob = seq_log_prob.view(len(candidate), -1)
 
         if hidden_state:
             reduction = kwargs.get("reduction", "mean")
