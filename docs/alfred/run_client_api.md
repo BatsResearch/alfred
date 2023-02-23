@@ -16,10 +16,10 @@ Run Client Api
   - [get_alfred_server_port](#get_alfred_server_port)
   - [get_alfred_server_username](#get_alfred_server_username)
   - [get_alfred_server_webhook_port](#get_alfred_server_webhook_port)
+  - [get_cache_table](#get_cache_table)
   - [main](#main)
   - [root](#root)
   - [set_alfred_server_connected](#set_alfred_server_connected)
-  - [set_alfred_server_connected](#set_alfred_server_connected-1)
   - [set_alfred_server_end_point](#set_alfred_server_end_point)
   - [set_alfred_server_endpoint_cfg](#set_alfred_server_endpoint_cfg)
   - [set_alfred_server_final_host](#set_alfred_server_final_host)
@@ -155,6 +155,20 @@ async def get_alfred_server_webhook_port():
 
 
 
+## get_cache_table
+
+[Show source in run_client_api.py:226](../../alfred/run_client_api.py#L226)
+
+#### Signature
+
+```python
+@alfred_app.get("/alfred_server/cache")
+async def get_cache_table():
+    ...
+```
+
+
+
 ## main
 
 [Show source in run_client_api.py:238](../../alfred/run_client_api.py#L238)
@@ -196,20 +210,6 @@ async def set_alfred_server_connected():
 
 
 
-## set_alfred_server_connected
-
-[Show source in run_client_api.py:226](../../alfred/run_client_api.py#L226)
-
-#### Signature
-
-```python
-@alfred_app.get("/alfred_server/cache")
-async def set_alfred_server_connected():
-    ...
-```
-
-
-
 ## set_alfred_server_end_point
 
 [Show source in run_client_api.py:110](../../alfred/run_client_api.py#L110)
@@ -226,7 +226,7 @@ async def set_alfred_server_end_point(request: Request):
 
 ## set_alfred_server_endpoint_cfg
 
-[Show source in run_client_api.py:143](../../alfred/run_client_api.py#L143)
+[Show source in run_client_api.py:144](../../alfred/run_client_api.py#L144)
 
 #### Signature
 

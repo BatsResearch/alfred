@@ -1,13 +1,12 @@
 import json
 import logging
-import re
 from typing import Dict, Any, Optional, Iterable, List, Union
 
 import numpy as np
 import torch
 from PIL import Image
 
-from alfred.fm.query import Query, CompletionQuery, RankedQuery
+from alfred.fm.query import Query, RankedQuery
 from alfred.template.template import Template
 
 logger = logging.getLogger(__name__)
@@ -39,7 +38,6 @@ class ImageTemplate(Template):
             >>> image_template = ImageTemplate(candidate_replacement, template)
 
 
-
         :param candidate_replacement: a dictionary of candidate replacement
         :type candidate_replacement: dict
         :param template: template strings with keywords enclosed in *double square brackets*
@@ -53,15 +51,6 @@ class ImageTemplate(Template):
         :type reference: str
         :param metadata: (optional) metadata of the template
         :type metadata: Dict[str, Any]
-        :param answer_choices:  (optional) can be one of the following formats:
-                                -  a ||| delimited string of choices that enumerates
-                                   the possible completions. (PromptSource Convention)
-                                   e.g. "cat ||| dog"
-                                   This is for compatibility with promptsource templates
-                                - a list of strings that enumerates the possible completions
-                                    e.g. ["cat", "dog"]
-                               If None is given, then the template is open-ended completion.
-        :type answer_choices: str
         """
 
         self._template = template
@@ -80,19 +69,19 @@ class ImageTemplate(Template):
                 self._templated_candidates.append(self._template.replace(f"[[{keyword}]]", f"{candidate}"))
 
     def apply(self,
-              example: Union[Dict, Image.Image, torch.tensor, np.ndarray, str],
+              example: Union[Image.Image, torch.tensor, np.ndarray, str, tuple],
               keyword: str = "image_path",
               **kwargs: Any,
-              ) -> Query:
+              ) -> RankedQuery:
         """
         Apply the template to a single image example
 
         :param example: a single example in format of a dictionary
-        :type example: Dict
+        :type example: PIL Image, torch.tensor, numpy.ndarray, str, tuple
         :param kwargs: Additional arguments to pass to apply
         :type kwargs: Any
-        :return: a query object
-        :rtype: Query
+        :return: a RankedQuery object
+        :rtype: RankedQuery
         """
         if isinstance(example, Image.Image):
             image = example
@@ -185,7 +174,7 @@ class ImageTemplate(Template):
             "reference": self._reference,
             "template": self._template,
             "metadata": self._metadata,
-            "answer_choices": self._answer_choices,
+            "candidate_replacement": self._candidate_replacement,
         })
 
     def deserialize(self, json_str: str) -> Template:
@@ -203,13 +192,13 @@ class ImageTemplate(Template):
             json_str['reference'],
             json_str['template'],
             json_str['metadata'],
-            json_str['answer_choices'],
+            json_str['candidate_replacement'],
         )
         return self
 
     def __call__(
             self,
-            example: Dict,
+            example: Union[Image.Image, torch.tensor, np.ndarray, str, tuple],
             **kawrgs: Any,
     ) -> Query:
         """

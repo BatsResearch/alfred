@@ -1,6 +1,6 @@
-<h1 style="font-size: 48px">  <img src="assets/icons/icon.png" style="float: left; margin-right: 15px;" width="64" height="64" alt="Alfred"></img>  ALFRED: The Ultimate Toolbox for using LLMs for Weak Supervision  </h1>
+<h1 style="font-size: 48px">  <img src="assets/icons/icon.png" style="float: left; margin-right: 15px;" width="64" height="64" alt="Alfred"></img>  Alfred: A System for Prompted Weak Supervision </h1>
 
-Internal Alpha Run, Build Status:  ![test status](https://github.com/BatsResearch/alfred/actions/workflows/tests.yml/badge.svg?branch=main)
+Build Status:  ![test status](https://github.com/BatsResearch/alfred/actions/workflows/tests.yml/badge.svg?branch=main)
 
 # Overview
 

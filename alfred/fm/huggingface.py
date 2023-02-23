@@ -230,7 +230,7 @@ class HuggingFaceModel(LocalAccessFoundationModel):
         candidate_token_ids = candidate_tokens.input_ids.to(
             list(self.model.hf_device_map.values())[-1])
 
-        logger.log(logging.INFO, f"Ranking {len(batch)} instances")
+        logger.log(logging.INFO, f"Ranking {len(candidate)} instances")
 
         if self.model.config.is_encoder_decoder:
             logits = self.model(
@@ -373,6 +373,16 @@ class HuggingFaceModel(LocalAccessFoundationModel):
         return [CompletionResponse(prediction=text) for text in texts]
 
     def _encode_batch(self, batch_instance, **kwargs) -> List[torch.Tensor]:
+        """
+        Encode given batch of instances.
+
+        :param batch_instance: A list of raw text prompts.
+        :type batch_instance: List[str]
+        :param kwargs: Additional keyword arguments to pass to the model's `generate` method.
+        :type kwargs: Any
+        :return: A list of torch.Tensor objects containing the encoded instances.
+        :rtype: List[torch.Tensor]
+        """
 
         reduction = kwargs.get('reduction', 'mean')
         padding = kwargs.get('padding', True)

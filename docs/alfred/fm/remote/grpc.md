@@ -10,19 +10,18 @@ Grpc
 
 - [Grpc](#grpc)
   - [gRPCClient](#grpcclient)
+    - [gRPCClient().encode](#grpcclient()encode)
     - [gRPCClient().run](#grpcclient()run)
-    - [gRPCClient().run_dataset](#grpcclient()run_dataset)
   - [gRPCServer](#grpcserver)
-    - [gRPCServer().DataHeader](#grpcserver()dataheader)
-    - [gRPCServer().DataReady](#grpcserver()dataready)
-    - [gRPCServer().Inference](#grpcserver()inference)
+    - [gRPCServer().Encode](#grpcserver()encode)
+    - [gRPCServer().Run](#grpcserver()run)
     - [gRPCServer().close](#grpcserver()close)
-    - [gRPCServer.port_finder](#grpcserverport_finder)
     - [gRPCServer().restart](#grpcserver()restart)
+    - [gRPCServer().serve](#grpcserver()serve)
 
 ## gRPCClient
 
-[Show source in grpc.py:20](../../../../alfred/fm/remote/grpc.py#L20)
+[Show source in grpc.py:25](../../../../alfred/fm/remote/grpc.py#L25)
 
 #### Signature
 
@@ -37,29 +36,25 @@ class gRPCClient:
         ...
 ```
 
-### gRPCClient().run
+### gRPCClient().encode
 
-[Show source in grpc.py:54](../../../../alfred/fm/remote/grpc.py#L54)
+[Show source in grpc.py:75](../../../../alfred/fm/remote/grpc.py#L75)
 
 #### Signature
 
 ```python
-def run(self, msg: Union[str, Query, Tuple[str, str]], **kwargs):
+def encode(self, queries: List[str], reduction: str = "mean", **kwargs: Any):
     ...
 ```
 
-### gRPCClient().run_dataset
+### gRPCClient().run
 
-[Show source in grpc.py:78](../../../../alfred/fm/remote/grpc.py#L78)
+[Show source in grpc.py:63](../../../../alfred/fm/remote/grpc.py#L63)
 
 #### Signature
 
 ```python
-def run_dataset(
-    self,
-    dataset: Union[Iterable[Query], Iterable[str], Iterable[Tuple[str, str]]],
-    **kwargs
-):
+def run(self, queries: Union[Iterable[Query], Iterable[str]], **kwargs: Any):
     ...
 ```
 
@@ -67,7 +62,7 @@ def run_dataset(
 
 ## gRPCServer
 
-[Show source in grpc.py:120](../../../../alfred/fm/remote/grpc.py#L120)
+[Show source in grpc.py:142](../../../../alfred/fm/remote/grpc.py#L142)
 
 Manages connections with gRPCClient
 
@@ -84,42 +79,31 @@ class gRPCServer(query_pb2_grpc.QueryServiceServicer):
         ...
 ```
 
-### gRPCServer().DataHeader
+### gRPCServer().Encode
 
-[Show source in grpc.py:241](../../../../alfred/fm/remote/grpc.py#L241)
+[Show source in grpc.py:221](../../../../alfred/fm/remote/grpc.py#L221)
 
 #### Signature
 
 ```python
-def DataHeader(self, request, context):
+def Encode(self, request_iterator, context):
     ...
 ```
 
-### gRPCServer().DataReady
+### gRPCServer().Run
 
-[Show source in grpc.py:209](../../../../alfred/fm/remote/grpc.py#L209)
-
-#### Signature
-
-```python
-def DataReady(self, request, context):
-    ...
-```
-
-### gRPCServer().Inference
-
-[Show source in grpc.py:170](../../../../alfred/fm/remote/grpc.py#L170)
+[Show source in grpc.py:178](../../../../alfred/fm/remote/grpc.py#L178)
 
 #### Signature
 
 ```python
-def Inference(self, request, context):
+def Run(self, request_iterator, context):
     ...
 ```
 
 ### gRPCServer().close
 
-[Show source in grpc.py:247](../../../../alfred/fm/remote/grpc.py#L247)
+[Show source in grpc.py:243](../../../../alfred/fm/remote/grpc.py#L243)
 
 #### Signature
 
@@ -128,28 +112,25 @@ def close(self):
     ...
 ```
 
-### gRPCServer.port_finder
-
-[Show source in grpc.py:125](../../../../alfred/fm/remote/grpc.py#L125)
-
-Finds the next available port if given port is not available
-
-#### Signature
-
-```python
-@staticmethod
-def port_finder(port: int) -> int:
-    ...
-```
-
 ### gRPCServer().restart
 
-[Show source in grpc.py:250](../../../../alfred/fm/remote/grpc.py#L250)
+[Show source in grpc.py:246](../../../../alfred/fm/remote/grpc.py#L246)
 
 #### Signature
 
 ```python
 def restart(self):
+    ...
+```
+
+### gRPCServer().serve
+
+[Show source in grpc.py:158](../../../../alfred/fm/remote/grpc.py#L158)
+
+#### Signature
+
+```python
+def serve(self, credentials: Optional[grpc.ServerCredentials] = None):
     ...
 ```
 

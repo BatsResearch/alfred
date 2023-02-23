@@ -2,8 +2,9 @@ import logging
 from typing import Optional, List, Tuple
 
 import torch
-from transformers import AutoProcessor, CLIPModel
 from PIL import Image
+from transformers import AutoProcessor, CLIPModel
+
 from alfred.fm.model import LocalAccessFoundationModel
 from .response import RankedResponse
 
@@ -11,7 +12,20 @@ logger = logging.getLogger(__name__)
 
 
 class HuggingFaceCLIPModel(LocalAccessFoundationModel):
+    """
+     The HuggingFaceModel class is a wrapper for HuggingFace VLM Models
+     Currently supports CLIP models.
+    """
+
     def __init__(self, model_string: str, local_path: Optional[str] = None):
+        """
+        Constructor for HuggingFaceVLMModel
+
+        :param model_string: model string for the HuggingFace model
+        :type model_string: str
+        :param local_path: (optional) local path to store the model
+        :type local_path: Optional[str]
+        """
         super().__init__(model_string, local_path)
         self.device = "cuda:0" if torch.cuda.is_available() else "cpu"
         self.model = CLIPModel.from_pretrained(model_string,
@@ -27,6 +41,16 @@ class HuggingFaceCLIPModel(LocalAccessFoundationModel):
             batch_instance: Tuple[List[Image.Image], List[str]],
             **kwargs,
     ):
+        """
+        Scores a batch of instances
+
+        :param batch_instance: batch of instances
+        :type batch_instance: Tuple[List[Image.Image], List[str]]
+        :param kwargs: (optional) additional arguments
+        :type kwargs: Dict
+        :return: list of RankedResponse
+        :rtype: List[RankedResponse]
+        """
         return_image_features = kwargs.get("return_image_features", False)
         return_raw_logits = kwargs.get("raw_logits", False)
 

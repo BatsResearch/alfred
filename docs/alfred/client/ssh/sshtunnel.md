@@ -57,9 +57,9 @@ def adaptive_handler(title, instructions, prompt_list):
 
 ### SSHTunnel().start
 
-[Show source in sshtunnel.py:74](../../../../alfred/client/ssh/sshtunnel.py#L74)
+[Show source in sshtunnel.py:75](../../../../alfred/client/ssh/sshtunnel.py#L75)
 
-Start the tunnel
+Wrapper for _start() with exception handling
 
 #### Signature
 
@@ -70,7 +70,7 @@ def start(self):
 
 ### SSHTunnel().stop
 
-[Show source in sshtunnel.py:117](../../../../alfred/client/ssh/sshtunnel.py#L117)
+[Show source in sshtunnel.py:128](../../../../alfred/client/ssh/sshtunnel.py#L128)
 
 Stop the tunnel
 
