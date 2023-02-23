@@ -100,6 +100,8 @@ class ImageTemplate(Template):
             image = Image.fromarray(example.numpy())
         elif isinstance(example, np.ndarray):
             image = Image.fromarray(example)
+        elif isinstance(example, tuple):
+            image = example[0]
         elif isinstance(example, dict):
             image = Image.open(example[keyword])
         elif isinstance(example, str):

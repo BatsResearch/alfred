@@ -174,7 +174,6 @@ class FoundationModel(abc.ABC):
                         responses += inferece_fn(batch,
                                                  tokenized=pretokenized,
                                                  **kwargs)
-                break
             except RuntimeError as e:
                 attempts += 1
                 if "out of memory" in str(e):
