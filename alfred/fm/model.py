@@ -174,6 +174,7 @@ class FoundationModel(abc.ABC):
                         responses += inferece_fn(batch,
                                                  tokenized=pretokenized,
                                                  **kwargs)
+                    break
             except RuntimeError as e:
                 attempts += 1
                 if "out of memory" in str(e):
@@ -196,7 +197,7 @@ class FoundationModel(abc.ABC):
                             f"New lmt_sz, bs: {DB.limit_size}, {DB.max_batch_size}"
                         )
                 else:
-                    attempts = 3
+                    raise e
 
         if batch_policy == 'dynamic':
             responses = DB.reorder(responses)
