@@ -3,11 +3,10 @@
 Ranked Query Class encompasses query tem
 
 """
-from typing import List, Union, Tuple, Callable
-
-from PIL import Image
 import numpy as np
 import torch
+from PIL import Image
+from typing import List, Union, Tuple, Callable
 
 from .query import Query
 

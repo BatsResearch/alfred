@@ -1,8 +1,6 @@
 import logging
-from contextlib import nullcontext
-from typing import Optional, List, Union, Tuple, Dict, Any
-
 import torch
+from contextlib import nullcontext
 from transformers import (
     AutoModelForSeq2SeqLM,
     AutoModelForCausalLM,
@@ -10,6 +8,7 @@ from transformers import (
     AutoModel,
     AutoTokenizer,
 )
+from typing import Optional, List, Union, Tuple, Dict, Any
 
 from alfred.fm.model import LocalAccessFoundationModel
 from alfred.fm.response import CompletionResponse

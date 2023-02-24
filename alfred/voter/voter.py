@@ -1,8 +1,7 @@
 import logging
-from typing import Dict, Callable, Union, List, Any, Iterable, Optional, Tuple
-
 import numpy as np
 from tqdm.auto import tqdm
+from typing import Dict, Callable, Union, List, Any, Iterable, Optional, Tuple
 
 from alfred.fm.response.completion_response import CompletionResponse
 from alfred.fm.response.ranked_response import RankedResponse

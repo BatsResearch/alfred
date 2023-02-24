@@ -1,10 +1,9 @@
 import json
 import logging
-from typing import Dict, Any, Optional, Iterable, List, Union
-
 import numpy as np
 import torch
 from PIL import Image
+from typing import Dict, Any, Optional, Iterable, List, Union
 
 from alfred.fm.query import Query, RankedQuery
 from alfred.template.template import Template

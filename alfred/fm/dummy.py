@@ -1,7 +1,6 @@
 import logging
-from typing import Optional, List, Union, Any
-
 import torch
+from typing import Optional, List, Union, Any
 
 from alfred.fm.model import LocalAccessFoundationModel
 from .query import Query

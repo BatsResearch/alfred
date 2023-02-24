@@ -1,9 +1,8 @@
 import logging
-from typing import Any, List, Optional, Union, Dict
-
 import numpy as np
 import torch
 from grpc import FutureTimeoutError
+from typing import Any, List, Optional, Union, Dict
 
 from alfred.client.ssh.sshtunnel import SSHTunnel
 from alfred.fm.dummy import DummyModel

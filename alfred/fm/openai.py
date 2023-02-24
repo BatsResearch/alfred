@@ -1,8 +1,7 @@
 import logging
 import os
-from typing import Optional, List, Dict, Any
-
 import torch
+from typing import Optional, List, Dict, Any
 
 from .model import APIAccessFoundationModel
 from .response import CompletionResponse

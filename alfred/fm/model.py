@@ -1,12 +1,11 @@
 import abc
 import logging
-import os
-from contextlib import nullcontext
-from typing import List, Optional, Dict, Union, Tuple, OrderedDict, Any
-
 import numpy as np
+import os
 import torch
+from contextlib import nullcontext
 from tqdm.auto import tqdm
+from typing import List, Optional, Dict, Union, Tuple, OrderedDict, Any
 
 from .query import Query, RankedQuery, CompletionQuery
 from .response import Response, CompletionResponse, RankedResponse

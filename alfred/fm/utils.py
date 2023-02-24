@@ -1,12 +1,11 @@
 import gc
 import logging
-from collections import OrderedDict
-from typing import List, Union, Optional
-
 import numpy as np
 import torch
 import transformers
+from collections import OrderedDict
 from torch.nn.utils.rnn import pad_sequence
+from typing import List, Union, Optional
 
 from .query import Query, RankedQuery, CompletionQuery
 from .response import RankedResponse

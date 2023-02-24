@@ -5,8 +5,8 @@ from typing import Any
 import alfred.fm.remote.grpc as grpc_utils
 from alfred.fm.dummy import DummyModel
 from alfred.fm.huggingface import HuggingFaceModel
-from alfred.fm.openai import OpenAIModel
 from alfred.fm.huggingfacevlm import HuggingFaceCLIPModel
+from alfred.fm.openai import OpenAIModel
 
 logging.basicConfig(
     format='ALFRED %(levelname)s: %(asctime)-5s  %(message)s',

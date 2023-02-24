@@ -6,10 +6,9 @@
 import json
 import logging
 import os
-from typing import Optional
-
 import pyarrow
 from datasets.info import DatasetInfo
+from typing import Optional
 
 from .arrow import IterableArrowDataset
 

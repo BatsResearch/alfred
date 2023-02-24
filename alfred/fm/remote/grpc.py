@@ -4,13 +4,12 @@ import io
 import json
 import logging
 import socket
+from PIL import Image
 from concurrent import futures
+from tqdm.auto import tqdm
 from typing import Optional, Union, Iterable, Tuple, Any, List
 
 import grpc
-from PIL import Image
-from tqdm.auto import tqdm
-
 from alfred.fm.query import Query, RankedQuery, CompletionQuery
 from alfred.fm.remote.protos import query_pb2
 from alfred.fm.remote.protos import query_pb2_grpc

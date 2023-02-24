@@ -1,7 +1,6 @@
-from typing import Dict, Union, Optional
-
 import numpy as np
 import torch
+from typing import Dict, Union, Optional
 
 from .response import Response
 

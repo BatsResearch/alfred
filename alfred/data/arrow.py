@@ -1,9 +1,8 @@
-from typing import Union, Optional, Dict, Tuple, Iterable, Any, List
-
 import pandas
 import pyarrow
 from datasets.info import DatasetInfo
 from datasets.splits import NamedSplit
+from typing import Union, Optional, Dict, Tuple, Iterable, Any, List
 
 from .dataset import Dataset
 

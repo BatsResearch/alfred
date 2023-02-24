@@ -1,9 +1,8 @@
 import logging
-from typing import Optional, List, Tuple
-
 import torch
 from PIL import Image
 from transformers import AutoProcessor, CLIPModel
+from typing import Optional, List, Tuple
 
 from alfred.fm.model import LocalAccessFoundationModel
 from .response import RankedResponse

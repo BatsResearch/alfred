@@ -1,8 +1,7 @@
 import getpass
 import logging
-from typing import Optional, Union, Callable
-
 import paramiko
+from typing import Optional, Union, Callable
 
 from alfred.client.ssh.utils import port_finder, forward_tunnel
 
