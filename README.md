@@ -4,8 +4,10 @@ Build Status:  ![test status](https://github.com/BatsResearch/alfred/actions/wor
 
 # Overview
 
-Alfred is the swiss-knife toolbox for using large pretrained models for weak supervision. 
-
+Alfred provides an intuitive and user-friendly interface, enabling users to quickly create and refine prompts as supervision sources and interact with large models.
+Furthermore, Alfred includes tools for label modeling, allowing the mixed signals from prompted model responses to be combined, distilled and denoised. 
+Additionally, Alfred enables memory- and computation- intensive models to be run on cloud or computing clusters with optimized batching mechanisms, significantly increasing query throughput. 
+Alfred aims to reduce annotation cost and time by making efficient use of LLMs, allowing users to make the most of their resources.
 
 # Guides:
 
