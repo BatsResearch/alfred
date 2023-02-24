@@ -84,6 +84,10 @@ class HuggingFaceCLIPModel(LocalAccessFoundationModel):
                                candidate: logits[cidx][i].item()
                                for cidx, candidate in enumerate(candidates)
                            },
+                           logits={
+                               candidate: logits_per_text[cidx][i].item()
+                               for cidx, candidate in enumerate(candidates)
+                           },
                            embeddings=image_features[i]
                            if return_image_features else None)
             for i in range(len(prediction))

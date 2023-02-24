@@ -97,7 +97,7 @@ class HuggingFaceModel(LocalAccessFoundationModel):
                 [int(mem / 1024 ** 3) for mem in torch.cuda.mem_get_info()])
 
             logger.log(
-                logging.WARNING,
+                logging.INFO,
                 f"Found {n_gpus} GPUs with {free_in_GB}GB free GPU memory")
 
             [

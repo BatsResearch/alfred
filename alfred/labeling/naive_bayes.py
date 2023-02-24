@@ -4,24 +4,23 @@ import torch
 from .labelmodel import LabelModel
 
 
-class NPLM(LabelModel):
+class NaiveBayes(LabelModel):
     """
     LabelModel wrapper to perform label modeling for partial labelers on the responses
     """
 
-    def __init__(self, num_classes, label_partition, device='cuda:0' if torch.cuda.is_available() else 'cpu'):
+    def __init__(self, num_classes, num_lfs):
         """Constructor"""
         try:
-            from labelmodels import PartialLabelModel
+            from labelmodels import NaiveBayes
         except ImportError:
             raise ImportError(
                 "Could not import labelmodel. Please install it from https://github.com/BatsResearch/labelmodels.")
 
         super().__init__(trainable=True)
-        self.model = PartialLabelModel(
+        self.model = NaiveBayes(
             num_classes=num_classes,
-            label_partition=label_partition,
-            device=device,
+            num_lfs=num_lfs,
         )
 
     def label(self, votes: np.ndarray) -> np.ndarray:

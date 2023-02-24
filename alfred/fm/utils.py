@@ -44,7 +44,7 @@ def reorder_array(
         list], order: Union[np.ndarray, torch.Tensor, list]
 ) -> Union[np.ndarray, torch.Tensor, list]:
     """
-    Reorder an array according to a given order.
+    Recover an array according to a given order index.
 
     This function reorders the elements in an array according to the order specified by a separate array.
 
@@ -55,11 +55,7 @@ def reorder_array(
     :return: The reordered array. Has the same type as the input `arr`.
     :rtype: Union[np.ndarray, torch.Tensor, list]
     """
-    if isinstance(arr[0], torch.Tensor):
-        arr = torch.stack(arr)
-        return arr[order]
-    else:
-        return [arr[i] for i in order]
+    return [x[0] for x in sorted(list(zip(arr, order)), key=lambda x: x[1])]
 
 
 def tokenize(inst, tokenizer, max_length=512):
@@ -188,6 +184,11 @@ class DynamicBatcher:
             scores[response_idx] = response['logit']
             candidates.append(response['candidate'])
 
+        logits = {
+            candidate: score.item()
+            for candidate, score in zip(candidates, scores)
+        }
+
         if softmax:
             scores = torch.nn.functional.softmax(scores, dim=0)
         pred = candidates[int(torch.argmax(scores, dim=0))]
@@ -200,6 +201,7 @@ class DynamicBatcher:
         return RankedResponse(
             prediction=pred,
             scores=scores,
+            logits=logits,
             embeddings=responses[0]['hidden_state'],
         )
 

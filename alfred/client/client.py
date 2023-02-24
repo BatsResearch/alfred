@@ -315,7 +315,7 @@ class Client:
             null_instance = dict(((k, null_token) for k in keywords))
             query = template.apply(null_instance)
             query._candidates = candidates
-            p = np.array(list(self.score(query).scores.values()))
+            p = np.array(list(self.score(query, no_tqdm=True).scores.values()))
             scores[null_token_id, :] = p
             if strategy == 1:
                 weights[null_token_id, :, :] = np.linalg.inv(np.diag(p))
