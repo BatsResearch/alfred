@@ -1,9 +1,10 @@
 <h1 style="font-size: 48px">  <img src="assets/icons/icon.png" style="float: left; margin-right: 15px;" width="64" height="64" alt="Alfred"></img>  Alfred: A System for Prompted Weak Supervision </h1>
 
-Build Status:  ![test status](https://github.com/BatsResearch/alfred/actions/workflows/tests.yml/badge.svg?branch=main)
+Test Status:  ![test status](https://github.com/BatsResearch/alfred/actions/workflows/tests.yml/badge.svg?branch=main)
 
 # Overview
 
+Alfred is a prototype framework for integrating large pretrained model into programmatic weak supervision pipelines.
 Alfred provides an intuitive and user-friendly interface, enabling users to quickly create and refine prompts as supervision sources and interact with large models.
 Furthermore, Alfred includes tools for label modeling, allowing the mixed signals from prompted model responses to be combined, distilled and denoised. 
 Additionally, Alfred enables memory- and computation- intensive models to be run on cloud or computing clusters with optimized batching mechanisms, significantly increasing query throughput. 
@@ -24,7 +25,7 @@ pip install -r requirements.txt
 ```
 Run Alfred directly in its root directory or install it as a pip package at the end of the setup process.
 ```bash
-pip install .
+pip3 install .
 ```
 
 ### 2. Run and play with the model!
@@ -63,7 +64,7 @@ python alfred.run_server --model_type <model_type> --model <model_name> --local_
 > **_NOTE:_**  It is better to check the standard output logs to make sure the port number given is used by the server. If not, alfred will automatically find the nearest available port number.
 ##### Example
 ```shell
-python alfred.run_server --model_type "huggingface" --model "bigscience/T0pp"  --local_path "/users/pyu12/data/bats/models/huggingface/" --port 10719
+python alfred.run_server --model_type "huggingface" --model "bigscience/T0pp"  --local_path "/data/models/huggingface/" --port 10719
 ```
 You may launch the server with cluster manager (e.g. SLURM) and use the login node as jump host.
 A example slurm bash script:
@@ -71,15 +72,9 @@ A example slurm bash script:
 #!/bin/bash
 #SBATCH --job-name=alfred_server_session   
 #SBATCH --nodes=1               
-#SBATCH --ntasks=1               
-#SBATCH --array=0
-#SBATCH --cpus-per-task=8        
-#SBATCH --mem=256G               
-#SBATCH --partition=gpu-he  --gres=gpu:4
-#SBATCH --constraint=v100
+#SBATCH --partition=<partition>  --gres=gpu:4
 
-export PY=YOUR_ENV/bin/python
-$PY -m alfred.run_server --port 10719 --model_type "huggingface" --model "bigscience/T0pp"  --local_path '/users/pyu12/data/bats/models/huggingface/'
+python -m alfred.run_server --port 10719 --model_type "huggingface" --model "bigscience/T0pp"  --local_path '/data/models/huggingface/'
 ```
 
 
@@ -89,7 +84,7 @@ $PY -m alfred.run_server --port 10719 --model_type "huggingface" --model "bigsci
 
 ```python
 from alfred.client import Client
-t0pp = Client(model_type="huggingface", model="bigscience/t0pp", end_point="pyu12@ssh.ccv.brown.edu:10719", ssh_tunnel=True, ssh_node="gpu1404")
+t0pp = Client(model_type="huggingface", model="bigscience/t0pp", end_point="", ssh_tunnel=True, ssh_node="")
 ```
 
 > **_NOTE:_** `end_point` contains user name, server address and port numbers in the form of `[username]@[server]:[port]`.The `ssh_tunnel` flag is used to indicate whether the client should use ssh tunnel to connect to the server. The `ssh_node` is only used if the server that is running the model is a compute node sitting behind a jump server. 

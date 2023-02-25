@@ -9,6 +9,9 @@ from alfred.fm.dummy import DummyModel
 from alfred.fm.huggingface import HuggingFaceModel
 from alfred.fm.huggingfacevlm import HuggingFaceCLIPModel
 from alfred.fm.openai import OpenAIModel
+from alfred.fm.cohere import CohereModel
+from alfred.fm.ai21 import AI21Model
+from alfred.fm.onnx import ONNXModel
 from alfred.fm.query import CompletionQuery, Query, RankedQuery
 from alfred.fm.remote.grpc import gRPCClient
 from alfred.fm.response import Response
@@ -41,8 +44,6 @@ class Client:
         '''
         Initialize a Client class.
 
-        TODO: implement ngrok/cloudflare/localhost.run tunneling
-
         :param model: (optional) The name of the model. (e.g. bigscience/T0pp or text-davinci-003)
         :type model: str
         :param model_type: (optional) The type of the model. (e.g. "openai", "huggingface", "dummy")
@@ -64,7 +65,8 @@ class Client:
         if self.model_type:
             self.model_type = model_type.lower()
             assert self.model_type in [
-                "huggingface", "huggingfacevlm", "openai", "onnx", "tensorrt",
+                "huggingface", "huggingfacevlm", "onnx", "tensorrt",
+                "openai", "cohere", "ai21"
                 "torch", "dummy"
             ], f"Invalid model type: {self.model_type}"
         else:
@@ -140,11 +142,14 @@ class Client:
                                                   **kwargs)
             elif self.model_type == "openai":
                 self.model = OpenAIModel(self.model, **kwargs)
+            elif self.model_type == "cohere":
+                self.model = CohereModel(self.model, **kwargs)
+            elif self.model_type == "ai21":
+                self.model = AI21Model(self.model, **kwargs)
             elif self.model_type == "dummy":
                 self.model = DummyModel(self.model)
             elif self.model_type == "onnx":
-                # self.model = ONNXModel(self.model, **kwargs)
-                raise NotImplementedError
+                self.model = ONNXModel(self.model, **kwargs)
             elif self.model_type == "tensorrt":
                 # self.model = TensorRTModel(self.model, **kwargs)
                 raise NotImplementedError
