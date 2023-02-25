@@ -34,7 +34,7 @@ from alfred.client import Client
 
 
 AlfredT0pp = Client(model_type="huggingface", model="bigscience/T0pp",
-                local_path='/users/pyu12/data/bats/models/huggingface/')
+                local_path='/data/models/huggingface/')
 
 # Get the model's predictions for given queries:
 AlfredT0pp("What is the capital of France?")
