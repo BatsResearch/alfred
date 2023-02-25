@@ -1,14 +1,17 @@
 import logging
-from typing import Any, List, Optional, Union, Dict
-
 import numpy as np
 import torch
 from grpc import FutureTimeoutError
+from typing import Any, List, Optional, Union, Dict
 
 from alfred.client.ssh.sshtunnel import SSHTunnel
 from alfred.fm.dummy import DummyModel
 from alfred.fm.huggingface import HuggingFaceModel
+from alfred.fm.huggingfacevlm import HuggingFaceCLIPModel
 from alfred.fm.openai import OpenAIModel
+from alfred.fm.cohere import CohereModel
+from alfred.fm.ai21 import AI21Model
+from alfred.fm.onnx import ONNXModel
 from alfred.fm.query import CompletionQuery, Query, RankedQuery
 from alfred.fm.remote.grpc import gRPCClient
 from alfred.fm.response import Response
@@ -27,20 +30,19 @@ class Client:
     The client can be used to specify the model and how to access it,
     and can establish an SSH tunnel to a remote end point for secure access to a remote model.
     """
+
     def __init__(
-        self,
-        model: Optional[str] = None,
-        model_type: Optional[str] = None,
-        end_point: Optional[str] = None,
-        local_path: Optional[str] = None,
-        ssh_tunnel: bool = False,
-        ssh_node: Optional[str] = None,
-        **kwargs: Any,
+            self,
+            model: Optional[str] = None,
+            model_type: Optional[str] = None,
+            end_point: Optional[str] = None,
+            local_path: Optional[str] = None,
+            ssh_tunnel: bool = False,
+            ssh_node: Optional[str] = None,
+            **kwargs: Any,
     ):
         '''
         Initialize a Client class.
-
-        TODO: implement ngrok/cloudflare/localhost.run tunneling
 
         :param model: (optional) The name of the model. (e.g. bigscience/T0pp or text-davinci-003)
         :type model: str
@@ -63,7 +65,9 @@ class Client:
         if self.model_type:
             self.model_type = model_type.lower()
             assert self.model_type in [
-                "huggingface", "openai", "onnx", "tensorrt", "torch", "dummy"
+                "huggingface", "huggingfacevlm", "onnx", "tensorrt",
+                "openai", "cohere", "ai21"
+                "torch", "dummy"
             ], f"Invalid model type: {self.model_type}"
         else:
             if end_point is None:
@@ -132,13 +136,20 @@ class Client:
                 self.model = HuggingFaceModel(self.model,
                                               local_path=local_path,
                                               **kwargs)
+            elif self.model_type == "huggingfacevlm":
+                self.model = HuggingFaceCLIPModel(self.model,
+                                                  local_path=local_path,
+                                                  **kwargs)
             elif self.model_type == "openai":
                 self.model = OpenAIModel(self.model, **kwargs)
+            elif self.model_type == "cohere":
+                self.model = CohereModel(self.model, **kwargs)
+            elif self.model_type == "ai21":
+                self.model = AI21Model(self.model, **kwargs)
             elif self.model_type == "dummy":
                 self.model = DummyModel(self.model)
             elif self.model_type == "onnx":
-                # self.model = ONNXModel(self.model, **kwargs)
-                raise NotImplementedError
+                self.model = ONNXModel(self.model, **kwargs)
             elif self.model_type == "tensorrt":
                 # self.model = TensorRTModel(self.model, **kwargs)
                 raise NotImplementedError
@@ -152,9 +163,9 @@ class Client:
                 f"Connected to local {self.model_type} model: {self.model}")
 
     def run(
-        self,
-        queries: Union[Query, str, List[Query], List[str]],
-        **kwargs: Any,
+            self,
+            queries: Union[Query, str, List[Query], List[str]],
+            **kwargs: Any,
     ) -> Union[Response, List[Response]]:
         """
         Run the model on the queries.
@@ -172,9 +183,9 @@ class Client:
             return self.model.run(queries, **kwargs)
 
     def remote_run(
-        self,
-        queries: Union[Query, str, List[Query], List[str]],
-        **kwargs: Any,
+            self,
+            queries: Union[Query, str, List[Query], List[str]],
+            **kwargs: Any,
     ) -> Union[Response, List[Response]]:
         """
         Wrapper function for running the model on the queries thru a gRPC Server.
@@ -194,9 +205,9 @@ class Client:
         return responses[0] if single_query else responses
 
     def generate(
-        self,
-        query: Union[CompletionQuery, str, List[CompletionQuery], List[str]],
-        **kwargs: Any,
+            self,
+            query: Union[CompletionQuery, str, List[CompletionQuery], List[str]],
+            **kwargs: Any,
     ) -> Union[Response, List[Response]]:
         """
         Wrapper function to generate the response(s) from the model. (For completion)
@@ -211,9 +222,9 @@ class Client:
         return self(query, **kwargs)
 
     def score(
-        self,
-        query: Union[RankedQuery, Dict, List[RankedQuery], List[str]],
-        **kwargs: Any,
+            self,
+            query: Union[RankedQuery, Dict, List[RankedQuery], List[str]],
+            **kwargs: Any,
     ) -> Union[Response, List[Response]]:
         """
         Wrapper function to score the response(s) from the model. (For ranking)
@@ -250,12 +261,12 @@ class Client:
         return self.run(queries, **kwargs)
 
     def calibrate(
-        self,
-        template: Union[str, Template],
-        voter: Optional[Voter] = None,
-        null_tokens: Optional[Union[List[str], str]] = None,
-        candidates: Optional[Union[List[str], str]] = None,
-        strategy: int = 1,
+            self,
+            template: Union[str, Template],
+            voter: Optional[Voter] = None,
+            null_tokens: Optional[Union[List[str], str]] = None,
+            candidates: Optional[Union[List[str], str]] = None,
+            strategy: int = 1,
     ):
         """
         calibrate are used to calibrate foundation models contextually given the template.
@@ -308,7 +319,7 @@ class Client:
             null_instance = dict(((k, null_token) for k in keywords))
             query = template.apply(null_instance)
             query._candidates = candidates
-            p = np.array(list(self.score(query).scores.values()))
+            p = np.array(list(self.score(query, no_tqdm=True).scores.values()))
             scores[null_token_id, :] = p
             if strategy == 1:
                 weights[null_token_id, :, :] = np.linalg.inv(np.diag(p))
@@ -326,9 +337,9 @@ class Client:
         voter.set_calibration(ensembled_weights, ensembled_biases)
 
     def encode(
-        self,
-        queries: Union[str, List[str]],
-        reduction: str = 'mean',
+            self,
+            queries: Union[str, List[str]],
+            reduction: str = 'mean',
     ) -> Union[torch.Tensor, List[torch.Tensor]]:
         """
         embed() function to embed the queries.

@@ -11,19 +11,17 @@ Query Pb2 Grpc
 
 - [Query Pb2 Grpc](#query-pb2-grpc)
   - [QueryService](#queryservice)
-    - [QueryService.DataHeader](#queryservicedataheader)
-    - [QueryService.DataReady](#queryservicedataready)
-    - [QueryService.Inference](#queryserviceinference)
+    - [QueryService.Encode](#queryserviceencode)
+    - [QueryService.Run](#queryservicerun)
   - [QueryServiceServicer](#queryserviceservicer)
-    - [QueryServiceServicer().DataHeader](#queryserviceservicer()dataheader)
-    - [QueryServiceServicer().DataReady](#queryserviceservicer()dataready)
-    - [QueryServiceServicer().Inference](#queryserviceservicer()inference)
+    - [QueryServiceServicer().Encode](#queryserviceservicer()encode)
+    - [QueryServiceServicer().Run](#queryserviceservicer()run)
   - [QueryServiceStub](#queryservicestub)
   - [add_QueryServiceServicer_to_server](#add_queryserviceservicer_to_server)
 
 ## QueryService
 
-[Show source in query_pb2_grpc.py:88](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L88)
+[Show source in query_pb2_grpc.py:72](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L72)
 
 Missing associated documentation comment in .proto file.
 
@@ -34,16 +32,16 @@ class QueryService(object):
     ...
 ```
 
-### QueryService.DataHeader
+### QueryService.Encode
 
-[Show source in query_pb2_grpc.py:143](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L143)
+[Show source in query_pb2_grpc.py:75](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L75)
 
 #### Signature
 
 ```python
 @staticmethod
-def DataHeader(
-    request,
+def Encode(
+    request_iterator,
     target,
     options=(),
     channel_credentials=None,
@@ -57,39 +55,16 @@ def DataHeader(
     ...
 ```
 
-### QueryService.DataReady
+### QueryService.Run
 
-[Show source in query_pb2_grpc.py:117](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L117)
-
-#### Signature
-
-```python
-@staticmethod
-def DataReady(
-    request,
-    target,
-    options=(),
-    channel_credentials=None,
-    call_credentials=None,
-    insecure=False,
-    compression=None,
-    wait_for_ready=None,
-    timeout=None,
-    metadata=None,
-):
-    ...
-```
-
-### QueryService.Inference
-
-[Show source in query_pb2_grpc.py:91](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L91)
+[Show source in query_pb2_grpc.py:93](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L93)
 
 #### Signature
 
 ```python
 @staticmethod
-def Inference(
-    request,
+def Run(
+    request_iterator,
     target,
     options=(),
     channel_credentials=None,
@@ -107,7 +82,7 @@ def Inference(
 
 ## QueryServiceServicer
 
-[Show source in query_pb2_grpc.py:40](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L40)
+[Show source in query_pb2_grpc.py:35](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L35)
 
 Missing associated documentation comment in .proto file.
 
@@ -118,42 +93,29 @@ class QueryServiceServicer(object):
     ...
 ```
 
-### QueryServiceServicer().DataHeader
+### QueryServiceServicer().Encode
 
-[Show source in query_pb2_grpc.py:56](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L56)
-
-Missing associated documentation comment in .proto file.
-
-#### Signature
-
-```python
-def DataHeader(self, request, context):
-    ...
-```
-
-### QueryServiceServicer().DataReady
-
-[Show source in query_pb2_grpc.py:50](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L50)
+[Show source in query_pb2_grpc.py:38](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L38)
 
 Missing associated documentation comment in .proto file.
 
 #### Signature
 
 ```python
-def DataReady(self, request, context):
+def Encode(self, request_iterator, context):
     ...
 ```
 
-### QueryServiceServicer().Inference
+### QueryServiceServicer().Run
 
-[Show source in query_pb2_grpc.py:43](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L43)
+[Show source in query_pb2_grpc.py:44](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L44)
 
-stream messages
+Missing associated documentation comment in .proto file.
 
 #### Signature
 
 ```python
-def Inference(self, request, context):
+def Run(self, request_iterator, context):
     ...
 ```
 
@@ -177,7 +139,7 @@ class QueryServiceStub(object):
 
 ## add_QueryServiceServicer_to_server
 
-[Show source in query_pb2_grpc.py:63](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L63)
+[Show source in query_pb2_grpc.py:51](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L51)
 
 #### Signature
 

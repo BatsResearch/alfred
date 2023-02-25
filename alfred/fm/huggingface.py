@@ -1,8 +1,6 @@
 import logging
-from contextlib import nullcontext
-from typing import Optional, List, Union, Tuple, Dict, Any
-
 import torch
+from contextlib import nullcontext
 from transformers import (
     AutoModelForSeq2SeqLM,
     AutoModelForCausalLM,
@@ -10,11 +8,10 @@ from transformers import (
     AutoModel,
     AutoTokenizer,
 )
+from typing import Optional, List, Union, Tuple, Dict, Any
 
-from .model import LocalAccessFoundationModel
-from .response import CompletionResponse
-
-logger = logging.getLogger(__name__)
+from alfred.fm.model import LocalAccessFoundationModel
+from alfred.fm.response import CompletionResponse
 
 logger = logging.getLogger(__name__)
 
@@ -99,7 +96,7 @@ class HuggingFaceModel(LocalAccessFoundationModel):
                 [int(mem / 1024 ** 3) for mem in torch.cuda.mem_get_info()])
 
             logger.log(
-                logging.WARNING,
+                logging.INFO,
                 f"Found {n_gpus} GPUs with {free_in_GB}GB free GPU memory")
 
             [
@@ -232,8 +229,7 @@ class HuggingFaceModel(LocalAccessFoundationModel):
         candidate_token_ids = candidate_tokens.input_ids.to(
             list(self.model.hf_device_map.values())[-1])
 
-        logger.log(logging.INFO,
-                   f"Ranking {len(batch)} instances")
+        logger.log(logging.INFO, f"Ranking {len(candidate)} instances")
 
         if self.model.config.is_encoder_decoder:
             logits = self.model(
@@ -265,7 +261,7 @@ class HuggingFaceModel(LocalAccessFoundationModel):
             masked_log_probs, -1,
             candidate_token_ids.to(logits.get_device()).unsqueeze(-1))
         seq_log_prob = seq_token_log_probs.squeeze(dim=-1).sum(dim=-1)
-        seq_log_prob = seq_log_prob.view(len(batch), -1)
+        seq_log_prob = seq_log_prob.view(len(candidate), -1)
 
         if hidden_state:
             reduction = kwargs.get("reduction", "mean")
@@ -376,14 +372,23 @@ class HuggingFaceModel(LocalAccessFoundationModel):
         return [CompletionResponse(prediction=text) for text in texts]
 
     def _encode_batch(self, batch_instance, **kwargs) -> List[torch.Tensor]:
+        """
+        Encode given batch of instances.
+
+        :param batch_instance: A list of raw text prompts.
+        :type batch_instance: List[str]
+        :param kwargs: Additional keyword arguments to pass to the model's `generate` method.
+        :type kwargs: Any
+        :return: A list of torch.Tensor objects containing the encoded instances.
+        :rtype: List[torch.Tensor]
+        """
 
         reduction = kwargs.get('reduction', 'mean')
         padding = kwargs.get('padding', True)
         tokenized = kwargs.get('tokenized', False)
 
-        inputs = batch_instance if tokenized else self.tokenizer(batch_instance,
-                                                                 return_tensors="pt",
-                                                                 padding=padding)
+        inputs = batch_instance if tokenized else self.tokenizer(
+            batch_instance, return_tensors="pt", padding=padding)
 
         _hidden_state = self._get_hidden_states(inputs, reduction=reduction)
 

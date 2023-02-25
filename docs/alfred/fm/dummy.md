@@ -12,7 +12,7 @@ Dummy
 
 ## DummyModel
 
-[Show source in dummy.py:11](../../../alfred/fm/dummy.py#L11)
+[Show source in dummy.py:13](../../../alfred/fm/dummy.py#L13)
 
 A dummy model that returns the input as the output.
 
@@ -26,5 +26,9 @@ class DummyModel(LocalAccessFoundationModel):
     def __init__(self, model: Optional[str] = None):
         ...
 ```
+
+#### See also
+
+- [LocalAccessFoundationModel](./model.md#localaccessfoundationmodel)
 
 

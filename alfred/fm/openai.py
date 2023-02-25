@@ -1,19 +1,12 @@
 import logging
 import os
-from typing import Optional, List, Dict, Any
-
 import torch
+from typing import Optional, List, Dict, Any
 
 from .model import APIAccessFoundationModel
 from .response import CompletionResponse
 
 logger = logging.getLogger(__name__)
-
-try:
-    import openai
-except ModuleNotFoundError:
-    logger.info("OpenAI module not found. Skipping OpenAI prompt template.")
-    pass
 
 OPENAI_MODELS = (
     "text-davinci-003"
@@ -23,7 +16,11 @@ OPENAI_MODELS = (
     "text-babbage-001",
     "text-ada-001",
 )
-
+try:
+    import openai
+except ModuleNotFoundError:
+    logger.info("OpenAI module not found. Skipping OpenAI-based Models.")
+    pass
 
 class OpenAIModel(APIAccessFoundationModel):
     """
@@ -31,13 +28,14 @@ class OpenAIModel(APIAccessFoundationModel):
 
     This class provides a wrapper for the OpenAI API for generating completions.
     """
+
     @staticmethod
     def _openai_query(
-        query_string: str,
-        temperature: float = 0.0,
-        max_tokens: int = 3,
-        model: str = "text-davinci-002",
-        **kwargs: Any,
+            query_string: str,
+            temperature: float = 0.0,
+            max_tokens: int = 3,
+            model: str = "text-davinci-002",
+            **kwargs: Any,
     ) -> str:
         """
         Run a single query through the foundation model
@@ -67,9 +65,9 @@ class OpenAIModel(APIAccessFoundationModel):
 
     @staticmethod
     def _openai_embedding_query(
-        query_string: str,
-        model: str = "text-davinci-002",
-        **kwargs: Any,
+            query_string: str,
+            model: str = "text-davinci-002",
+            **kwargs: Any,
     ) -> torch.Tensor:
         """
         Run a single query to get the embedding through the foundation model
@@ -81,6 +79,10 @@ class OpenAIModel(APIAccessFoundationModel):
         :return: The embeddings
         :rtype: str
         """
+        try:
+            import openai
+        except ImportError:
+            raise ImportError("OpenAI module not found. Please install openai.")
         openai_api_key = kwargs.get("openai_api_key", None)
         if openai_api_key is not None:
             openai.api_key = openai_api_key
@@ -130,9 +132,9 @@ class OpenAIModel(APIAccessFoundationModel):
         super().__init__(model_string, cfg)
 
     def _generate_batch(
-        self,
-        batch_instance: List[str],
-        **kwargs,
+            self,
+            batch_instance: List[str],
+            **kwargs,
     ) -> List[CompletionResponse]:
         """
         Generate completions for a batch of prompts using the OpenAI API.
@@ -149,16 +151,15 @@ class OpenAIModel(APIAccessFoundationModel):
         """
         output = []
         for query in batch_instance:
-            # TODO: Modify for async parallelized queries
             output.append(
                 CompletionResponse(text=self._openai_query(
                     query, model=self.model_string, **kwargs)))
         return output
 
     def _encode_batch(
-        self,
-        batch_instance: [List[str]],
-        **kwargs,
+            self,
+            batch_instance: [List[str]],
+            **kwargs,
     ) -> List[torch.Tensor]:
         """
         Generate embeddings for a batch of prompts using the OpenAI API.

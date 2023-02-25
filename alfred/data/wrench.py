@@ -6,10 +6,9 @@
 import json
 import logging
 import os
-from typing import Optional
-
 import pyarrow
 from datasets.info import DatasetInfo
+from typing import Optional
 
 from .arrow import IterableArrowDataset
 
@@ -43,6 +42,7 @@ class WrenchBenchmarkDataset(IterableArrowDataset):
         url={https://openreview.net/forum?id=Q9SKS5k8io}
     }
     """
+
     def __init__(self,
                  dataset_name: str,
                  split: str = "train",

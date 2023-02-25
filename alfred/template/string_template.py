@@ -1,10 +1,9 @@
 import json
 import logging
-import re
-from typing import Dict, Any, Optional, Iterable, List, Union
-
 import numpy as np
+import re
 import torch
+from typing import Dict, Any, Optional, Iterable, List, Union
 
 from alfred.fm.query import Query, CompletionQuery, RankedQuery
 from alfred.template.template import Template
@@ -46,14 +45,15 @@ class StringTemplate(Template):
         reference: reference
         metadata: metadata
     """
+
     def __init__(
-        self,
-        template: str,
-        id: Optional[str] = None,
-        name: Optional[str] = None,
-        reference: Optional[str] = None,
-        metadata: Optional[Dict[str, Any]] = None,
-        answer_choices: Optional[Union[str, List[str]]] = None,
+            self,
+            template: str,
+            id: Optional[str] = None,
+            name: Optional[str] = None,
+            reference: Optional[str] = None,
+            metadata: Optional[Dict[str, Any]] = None,
+            answer_choices: Optional[Union[str, List[str]]] = None,
     ):
         """
 
@@ -182,9 +182,9 @@ class StringTemplate(Template):
             return CompletionQuery(prompt)
 
     def apply_to_dataset(
-        self,
-        dataset: Iterable[Dict],
-        **kwargs: Any,
+            self,
+            dataset: Iterable[Dict],
+            **kwargs: Any,
     ) -> Iterable[Query]:
         """
         A wrapper function to apply the template to a dataset iteratively
@@ -278,9 +278,9 @@ class StringTemplate(Template):
         return self
 
     def __call__(
-        self,
-        example: Dict,
-        **kawrgs: Any,
+            self,
+            example: Dict,
+            **kawrgs: Any,
     ) -> Query:
         """
         A wrapper function to apply the template to a single example

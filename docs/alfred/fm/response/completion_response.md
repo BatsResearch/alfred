@@ -11,6 +11,7 @@ CompletionResponse
 - [CompletionResponse](#completionresponse)
   - [CompletionResponse](#completionresponse-1)
     - [CompletionResponse().__eq__](#completionresponse()__eq__)
+    - [CompletionResponse().embedding](#completionresponse()embedding)
     - [CompletionResponse().prediction](#completionresponse()prediction)
     - [CompletionResponse().score](#completionresponse()score)
 
@@ -39,7 +40,7 @@ class CompletionResponse(Response):
 
 ### CompletionResponse().__eq__
 
-[Show source in completion_response.py:58](../../../../alfred/fm/response/completion_response.py#L58)
+[Show source in completion_response.py:69](../../../../alfred/fm/response/completion_response.py#L69)
 
 Determines if two CompletionResponse objects are equal.
 
@@ -64,9 +65,28 @@ def __eq__(self, other):
     ...
 ```
 
+### CompletionResponse().embedding
+
+[Show source in completion_response.py:59](../../../../alfred/fm/response/completion_response.py#L59)
+
+Returns the embedding of the completion prediction.
+
+#### Returns
+
+The embedding of the completion prediction.
+Type: *Union[torch.Tensor, np.ndarray]*
+
+#### Signature
+
+```python
+@property
+def embedding(self) -> Union[torch.Tensor, np.ndarray]:
+    ...
+```
+
 ### CompletionResponse().prediction
 
-[Show source in completion_response.py:38](../../../../alfred/fm/response/completion_response.py#L38)
+[Show source in completion_response.py:39](../../../../alfred/fm/response/completion_response.py#L39)
 
 Returns the predicted completion string.
 
@@ -85,7 +105,7 @@ def prediction(self) -> str:
 
 ### CompletionResponse().score
 
-[Show source in completion_response.py:48](../../../../alfred/fm/response/completion_response.py#L48)
+[Show source in completion_response.py:49](../../../../alfred/fm/response/completion_response.py#L49)
 
 Returns the score of the completion prediction.
 

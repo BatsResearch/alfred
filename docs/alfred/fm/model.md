@@ -11,6 +11,7 @@ Model
   - [APIAccessFoundationModel](#apiaccessfoundationmodel)
   - [FoundationModel](#foundationmodel)
     - [FoundationModel().__call__](#foundationmodel()__call__)
+    - [FoundationModel().encode](#foundationmodel()encode)
     - [FoundationModel().forward](#foundationmodel()forward)
     - [FoundationModel().generate](#foundationmodel()generate)
     - [FoundationModel().run](#foundationmodel()run)
@@ -19,7 +20,7 @@ Model
 
 ## APIAccessFoundationModel
 
-[Show source in model.py:250](../../../alfred/fm/model.py#L250)
+[Show source in model.py:348](../../../alfred/fm/model.py#L348)
 
 #### Signature
 
@@ -50,7 +51,7 @@ class FoundationModel(abc.ABC):
 
 ### FoundationModel().__call__
 
-[Show source in model.py:230](../../../alfred/fm/model.py#L230)
+[Show source in model.py:328](../../../alfred/fm/model.py#L328)
 
 This function returns the output of the run function when the
  model is called as a function. It can be used as model(queries),
@@ -79,9 +80,45 @@ def __call__(
     ...
 ```
 
+### FoundationModel().encode
+
+[Show source in model.py:262](../../../alfred/fm/model.py#L262)
+
+This function is a wrapper around the forward function
+
+#### Arguments
+
+- `queries` - A list of Query or raw query content (as string)
+:type queries: Union[List[Query], List[str]]
+- `batch_policy` - The batching policy to use. Can be either 'dynamic' or 'static'
+:type batch_policy: str
+- `batch_size` - The batch size to use for static batching or maximum batch size for dynamic batching
+:type batch_size: int
+- `reduction` - The reduction method to use for the encoded queries. Can be either 'mean' or 'concat'
+:type reduction: str
+
+#### Returns
+
+A list of encoded queries
+Type: *List[torch.Tensor]*
+
+#### Signature
+
+```python
+def encode(
+    self,
+    queries: Union[List[Query], List[str]],
+    batch_policy: str = "dynamic",
+    batch_size: int = 1024,
+    reduction: str = "mean",
+    **kwargs: Any
+) -> List[torch.Tensor]:
+    ...
+```
+
 ### FoundationModel().forward
 
-[Show source in model.py:59](../../../alfred/fm/model.py#L59)
+[Show source in model.py:76](../../../alfred/fm/model.py#L76)
 
 This function is the main entry point for running queries through the foundation model.
 It accepts raw query content and automatically converts it into query objects.
@@ -98,15 +135,17 @@ through the foundation model.
 :type batch_policy: str
 - `batch_size` - The batch size to use for static batching or maximum batch size for dynamic batching
 :type batch_size: int
-- [FoundationModel().score](#foundationmodelscore) - Whether to run the queries through the _score_batch() method
-:type score: bool
+- `mode` - LLM inference mode, choose from ['generate', 'score', 'encode']
+:type mode: str
+- `pretokenize` - Whether to tokenize the queries while batching
+:type pretokenize: bool
 - `kwargs` - Additional arguments to pass to the foundation model
 :type kwargs: Any
 
 #### Returns
 
 A list of responses
-Type: *Union[List[CompletionResponse], List[RankedResponse], List[OrderedDict]]*
+Type: *Union[List[CompletionResponse], List[RankedResponse], List[OrderedDict], List[torch.Tensor]]*
 
 #### Signature
 
@@ -116,15 +155,18 @@ def forward(
     queries: Union[List[Query], List[str], List[Tuple[str, str]]],
     batch_policy: str = "dynamic",
     batch_size: int = 1024,
-    score: bool = False,
+    mode: str = "generate",
+    pretokenize: bool = True,
     **kwargs
-) -> Union[List[CompletionResponse], List[RankedResponse], List[OrderedDict]]:
+) -> Union[
+    List[CompletionResponse], List[RankedResponse], List[OrderedDict], List[torch.Tensor]
+]:
     ...
 ```
 
 ### FoundationModel().generate
 
-[Show source in model.py:141](../../../alfred/fm/model.py#L141)
+[Show source in model.py:207](../../../alfred/fm/model.py#L207)
 
 This function is a wrapper around the forward function for running
 CompletionQuery objects through the foundation model. It returns a list
@@ -161,7 +203,7 @@ def generate(
 
 ### FoundationModel().run
 
-[Show source in model.py:195](../../../alfred/fm/model.py#L195)
+[Show source in model.py:291](../../../alfred/fm/model.py#L291)
 
 This function is the main entry point for users to run queries through the foundation model.
 It accepts raw query content and automatically converts it into query objects.
@@ -193,7 +235,7 @@ def run(
 
 ### FoundationModel().score
 
-[Show source in model.py:165](../../../alfred/fm/model.py#L165)
+[Show source in model.py:232](../../../alfred/fm/model.py#L232)
 
 This function is a wrapper around the forward function
 for running RankedQuery objects through the foundation model.
@@ -222,7 +264,7 @@ def score(
     self,
     queries: List[RankedQuery],
     batch_policy: str = "dynamic",
-    batch_size: int = 1024,
+    batch_size: int = 64,
     **kwargs: Any
 ) -> List[RankedResponse]:
     ...
@@ -232,7 +274,7 @@ def score(
 
 ## LocalAccessFoundationModel
 
-[Show source in model.py:267](../../../alfred/fm/model.py#L267)
+[Show source in model.py:363](../../../alfred/fm/model.py#L363)
 
 #### Signature
 

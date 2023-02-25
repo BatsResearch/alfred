@@ -1,8 +1,7 @@
 import logging
-from typing import Dict, Callable, Union, List, Any, Iterable, Optional, Tuple
-
 import numpy as np
 from tqdm.auto import tqdm
+from typing import Dict, Callable, Union, List, Any, Iterable, Optional, Tuple
 
 from alfred.fm.response.completion_response import CompletionResponse
 from alfred.fm.response.ranked_response import RankedResponse
@@ -19,11 +18,12 @@ class Voter:
 
 
     """
+
     def __init__(
-        self,
-        label_map: Dict,
-        matching_fn: Callable = lambda x, y: x == y,
-        calibration: Optional[Union[List, np.ndarray, Tuple]] = None,
+            self,
+            label_map: Dict,
+            matching_fn: Callable = lambda x, y: x == y,
+            calibration: Optional[Union[List, np.ndarray, Tuple]] = None,
     ):
         """
         Initialize a voter
@@ -51,7 +51,7 @@ class Voter:
 
     def vote(self,
              responses: Union[Iterable[str], str, Iterable[Response],
-                              Response],
+             Response],
              matching_function: Optional[Callable] = None,
              label_map: Optional[Dict] = None,
              **kwargs: Any) -> np.ndarray:
@@ -98,13 +98,14 @@ class Voter:
                 response = response.prediction
             elif type(response) == RankedResponse:
                 if self._calibration:
-                    scores = np.array(list(response.scores.values()))
-                    labels = np.array(list(response.scores.keys()))
+                    scores = list(response.logits.values())
+                    labels = list(response.logits.keys())
                     if type(self._calibration) == tuple:
                         weights, biases = self._calibration
-                        calibrated_scores = scores @ weights + biases
+                        weights, biases = np.array(weights), np.array(biases)
+                        calibrated_scores = weights @ np.array(scores) + biases
                     elif type(self._calibration) in [list, np.ndarray]:
-                        calibrated_scores = scores @ self._calibration
+                        calibrated_scores = np.array(scores) @ self._calibration
                     response = labels[np.argmax(calibrated_scores)]
                 else:
                     response = response.prediction

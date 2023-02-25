@@ -1,7 +1,6 @@
-from typing import Dict, Union, Optional
-
 import numpy as np
 import torch
+from typing import Dict, Union, Optional
 
 from .response import Response
 
@@ -14,11 +13,12 @@ class CompletionResponse(Response):
     which includes the predicted completion string, a score indicating
     the confidence of the prediction, and an optional embedding output.
     '''
+
     def __init__(
-        self,
-        prediction: str,
-        score: Optional[float] = None,
-        embedding: Optional[Union[torch.Tensor, np.ndarray]] = None,
+            self,
+            prediction: str,
+            score: Optional[float] = None,
+            embedding: Optional[Union[torch.Tensor, np.ndarray]] = None,
     ):
         """
         Initializes the CompletionResponse object.
@@ -84,7 +84,7 @@ class CompletionResponse(Response):
                                 == other.score) or (self.score is None
                                                     and other.score is None)
             consistent_flag &= (self['embedding'] == other['embedding']) or (
-                self['embedding'] is None and other['embedding'] is None)
+                    self['embedding'] is None and other['embedding'] is None)
             return consistent_flag
         else:
             return False

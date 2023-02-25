@@ -1,12 +1,11 @@
 import gc
 import logging
-from collections import OrderedDict
-from typing import List, Union, Tuple, Optional
-
 import numpy as np
 import torch
 import transformers
+from collections import OrderedDict
 from torch.nn.utils.rnn import pad_sequence
+from typing import List, Union, Optional
 
 from .query import Query, RankedQuery, CompletionQuery
 from .response import RankedResponse
@@ -44,7 +43,7 @@ def reorder_array(
         list], order: Union[np.ndarray, torch.Tensor, list]
 ) -> Union[np.ndarray, torch.Tensor, list]:
     """
-    Reorder an array according to a given order.
+    Recover an array according to a given order index.
 
     This function reorders the elements in an array according to the order specified by a separate array.
 
@@ -55,11 +54,7 @@ def reorder_array(
     :return: The reordered array. Has the same type as the input `arr`.
     :rtype: Union[np.ndarray, torch.Tensor, list]
     """
-    if isinstance(arr[0], torch.Tensor):
-        arr = torch.stack(arr)
-        return arr[order]
-    else:
-        return [arr[i] for i in order]
+    return [x[0] for x in sorted(list(zip(arr, order)), key=lambda x: x[1])]
 
 
 def tokenize(inst, tokenizer, max_length=512):
@@ -76,15 +71,43 @@ def tokenize(inst, tokenizer, max_length=512):
     :rtype: List[int]
     """
     if tokenizer:
-        token_ids = tokenizer.encode(inst, max_length=max_length, truncation=True, return_tensors='pt')[0]
+        token_ids = tokenizer.encode(inst,
+                                     max_length=max_length,
+                                     truncation=True,
+                                     return_tensors='pt')[0]
     else:
         token_ids = inst
     return token_ids, len(token_ids)
 
 
+def batch_multimodal(queries: List[RankedQuery], batch_size=64):
+    """
+    Batch RankedQueries with Multimodal Payloads
+
+    :param queries: A list of multimodal queries
+    :type queries: List[RankedQuery]
+    :param batch_size: The batch size
+    :type batch_size: int
+    :return: A list of batches of multimodal ranked queries
+    :rtype: List[List[RankedQuery]]
+    """
+    candidates = queries[0].candidates
+    batches = []
+    batch = []
+    for query in queries:
+        if len(batch) == batch_size:
+            batches.append((batch, candidates))
+            batch = []
+        batch.append(query.prompt)
+    if len(batch) > 0:
+        batches.append((batch, candidates))
+    return batches
+
+
 class TokenizedBatch:
     def __init__(self, token_ids, pad_token_id=0):
-        self.input_ids = pad_sequence(token_ids, batch_first=True,
+        self.input_ids = pad_sequence(token_ids,
+                                      batch_first=True,
                                       padding_value=pad_token_id).long()
         self.attention_mask = (self.input_ids != pad_token_id).long()
 
@@ -129,7 +152,6 @@ class DynamicBatcher:
         self.tokenizer = tokenizer
         self.max_token_length = max_token_length
 
-
         if isinstance(self.queries[0], RankedQuery):
             # Enforcing Uniform Candidate sizes and order across one set of
             # RankedQueries
@@ -161,6 +183,11 @@ class DynamicBatcher:
             scores[response_idx] = response['logit']
             candidates.append(response['candidate'])
 
+        logits = {
+            candidate: score.item()
+            for candidate, score in zip(candidates, scores)
+        }
+
         if softmax:
             scores = torch.nn.functional.softmax(scores, dim=0)
         pred = candidates[int(torch.argmax(scores, dim=0))]
@@ -173,6 +200,7 @@ class DynamicBatcher:
         return RankedResponse(
             prediction=pred,
             scores=scores,
+            logits=logits,
             embeddings=responses[0]['hidden_state'],
         )
 
@@ -236,22 +264,26 @@ class DynamicBatcher:
                     return TokenizedBatch(batch)
             return batch
 
-        logger.info(f"Batching queries with tokenizer? {self.tokenizer is not None}")
+        logger.info(
+            f"Batching queries with tokenizer? {self.tokenizer is not None}")
 
         insts = []
         candidates = []
         inst_len = []
         for query in self.queries:
             if isinstance(query, str):
-                inst, ilen = tokenize(query, self.tokenizer, self.max_token_length)
+                inst, ilen = tokenize(query, self.tokenizer,
+                                      self.max_token_length)
                 insts.append(inst)
                 inst_len.append(ilen)
             elif isinstance(query, CompletionQuery):
-                inst, ilen = tokenize(query.load()[0], self.tokenizer, self.max_token_length)
+                inst, ilen = tokenize(query.load()[0], self.tokenizer,
+                                      self.max_token_length)
                 insts.append(inst)
                 inst_len.append(ilen)
             elif isinstance(query, RankedQuery):
-                inst, ilen = tokenize(query.prompt, self.tokenizer, self.max_token_length)
+                inst, ilen = tokenize(query.prompt, self.tokenizer,
+                                      self.max_token_length)
                 insts += [inst] * self.candidate_size
                 inst_len += [ilen] * self.candidate_size
                 candidates += self.candidates

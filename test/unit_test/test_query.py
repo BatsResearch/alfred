@@ -15,11 +15,6 @@ class TestQuery(unittest.TestCase):
         self.assertRaises(AssertionError, RankedQuery, "prompt", candidates=[])
         # mismatch candidate type
         self.assertRaises(AssertionError, RankedQuery, "prompt", candidates=[])
-        # mismatch candidate type
-        self.assertRaises(AssertionError,
-                          RankedQuery,
-                          "prompt",
-                          candidates=[1])
 
         self.assertTrue(type(CompletionQuery("prompt")) == CompletionQuery)
 

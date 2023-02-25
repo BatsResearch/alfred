@@ -11,5 +11,6 @@ Template
 
 ## Modules
 
+- [ImageTemplate](./image_template.md)
 - [StringTemplate](./string_template.md)
 - [Template](./template.md)

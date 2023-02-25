@@ -1,16 +1,15 @@
 import abc
 import logging
-import os
-from contextlib import nullcontext
-from typing import List, Optional, Dict, Union, Tuple, OrderedDict, Any
-
 import numpy as np
+import os
 import torch
+from contextlib import nullcontext
 from tqdm.auto import tqdm
+from typing import List, Optional, Dict, Union, Tuple, OrderedDict, Any
 
 from .query import Query, RankedQuery, CompletionQuery
 from .response import Response, CompletionResponse, RankedResponse
-from .utils import DynamicBatcher, clear_cuda_cache
+from .utils import DynamicBatcher, clear_cuda_cache, batch_multimodal
 
 logger = logging.getLogger(__name__)
 
@@ -19,11 +18,11 @@ class FoundationModel(abc.ABC):
     """
     Generic interface for foundation model class
     """
-    @abc.abstractmethod
+
     def _generate_batch(
-        self,
-        batch_instance: Union[List[str]],
-        **kwargs,
+            self,
+            batch_instance: Union[List[str]],
+            **kwargs,
     ) -> List[Response]:
         """
         For completing / generating given a batch of queries
@@ -39,11 +38,10 @@ class FoundationModel(abc.ABC):
         raise NotImplementedError(
             f"_infer_batch() is not implemented for {self.__class__.__name__}")
 
-    @abc.abstractmethod
     def _score_batch(
-        self,
-        batch_instance: Union[List[Tuple[str, str]], List[str]],
-        **kwargs,
+            self,
+            batch_instance: Union[List[Tuple[str, str]], List[str]],
+            **kwargs,
     ) -> List[Response]:
         """
         For scoring / ranking candidate queries.
@@ -58,9 +56,9 @@ class FoundationModel(abc.ABC):
             f"_score_batch() is not implemented for {self.__class__.__name__}")
 
     def _encode_batch(
-        self,
-        batch_instance: Union[List[str]],
-        **kwargs: Any,
+            self,
+            batch_instance: Union[List[str]],
+            **kwargs: Any,
     ) -> List[torch.Tensor]:
         """
         For encoding queries into embeddings.
@@ -75,15 +73,15 @@ class FoundationModel(abc.ABC):
         )
 
     def forward(
-        self,
-        queries: Union[List[Query], List[str], List[Tuple[str, str]]],
-        batch_policy: str = 'dynamic',
-        batch_size: int = 1024,
-        mode: str = 'generate',
-        pretokenize: bool = True,
-        **kwargs,
+            self,
+            queries: Union[List[Query], List[str], List[Tuple[str, str]]],
+            batch_policy: str = 'dynamic',
+            batch_size: int = 1024,
+            mode: str = 'generate',
+            pretokenize: bool = True,
+            **kwargs,
     ) -> Union[List[CompletionResponse], List[RankedResponse],
-               List[OrderedDict], List[torch.Tensor]]:
+    List[OrderedDict], List[torch.Tensor]]:
         """
         This function is the main entry point for running queries through the foundation model.
         It accepts raw query content and automatically converts it into query objects.
@@ -123,31 +121,44 @@ class FoundationModel(abc.ABC):
             raise ValueError(f"mode {mode} not supported")
 
         if isinstance(self, LocalAccessFoundationModel):
-            if batch_policy == 'static':
-                # To near equally sized batches
-                batched_queries = np.array_split(queries,
-                                                 len(queries) // batch_size)
-                pretokenized = False
-            elif batch_policy == 'dynamic':
-                if pretokenize:
-                    pretokenized = True
-                    try:
-                        tokenizer = self.tokenizer
-                    except AttributeError:
-                        logger.error("Tokenizer not found. Please set the tokenizer attribute for the model")
-                        tokenizer = None
-                        pretokenized = False
-                else:
+            try:
+                if self.processor:
+                    batch_policy = 'static'
+                    batched_queries = batch_multimodal(queries,
+                                                       batch_size=batch_size)
                     pretokenized = False
-                    tokenizer = None
-                DB = DynamicBatcher(queries, tokenizer=tokenizer, max_batch_size=batch_size)
-                batched_queries = DB.batch()
-            else:
-                raise ValueError(f"batch_policy {batch_policy} not supported")
+                    inferece_fn = self._score_batch
+            except AttributeError:
+                if batch_policy == 'static':
+                    # To near equally sized batches
+                    batched_queries = np.array_split(
+                        queries,
+                        len(queries) // batch_size)
+                    pretokenized = False
+                elif batch_policy == 'dynamic':
+                    if pretokenize:
+                        pretokenized = True
+                        try:
+                            tokenizer = self.tokenizer
+                        except AttributeError:
+                            logger.error(
+                                "Tokenizer not found. Please set the tokenizer attribute for the model"
+                            )
+                            tokenizer = None
+                            pretokenized = False
+                    else:
+                        pretokenized = False
+                        tokenizer = None
+                    DB = DynamicBatcher(queries,
+                                        tokenizer=tokenizer,
+                                        max_batch_size=batch_size)
+                    batched_queries = DB.batch()
+                else:
+                    raise ValueError(
+                        f"batch_policy {batch_policy} not supported")
         else:
             batch_policy = 'static'
-            batched_queries = np.array_split(queries,
-                                             len(queries))
+            batched_queries = np.array_split(queries, len(queries))
             pretokenized = False
 
         logger.log(logging.INFO, f"Inferring {len(batched_queries)} batches")
@@ -159,8 +170,10 @@ class FoundationModel(abc.ABC):
                     responses = []
                     for batch_id, batch in enumerate(
                             tqdm(batched_queries, disable=no_tqdm)):
-                        responses += inferece_fn(batch, tokenized=pretokenized, **kwargs)
-                break
+                        responses += inferece_fn(batch,
+                                                 tokenized=pretokenized,
+                                                 **kwargs)
+                    break
             except RuntimeError as e:
                 attempts += 1
                 if "out of memory" in str(e):
@@ -182,6 +195,8 @@ class FoundationModel(abc.ABC):
                         logging.info(
                             f"New lmt_sz, bs: {DB.limit_size}, {DB.max_batch_size}"
                         )
+                else:
+                    raise e
 
         if batch_policy == 'dynamic':
             responses = DB.reorder(responses)
@@ -189,11 +204,11 @@ class FoundationModel(abc.ABC):
         return list(responses)
 
     def generate(
-        self,
-        queries: Union[List[CompletionQuery], List[str]],
-        batch_policy: str = 'dynamic',
-        batch_size: int = 1024,
-        **kwargs,
+            self,
+            queries: Union[List[CompletionQuery], List[str]],
+            batch_policy: str = 'dynamic',
+            batch_size: int = 1024,
+            **kwargs,
     ) -> List[CompletionResponse]:
         """
         This function is a wrapper around the forward function for running
@@ -214,11 +229,11 @@ class FoundationModel(abc.ABC):
         return self.forward(queries, batch_policy, batch_size, **kwargs)
 
     def score(
-        self,
-        queries: List[RankedQuery],
-        batch_policy: str = 'dynamic',
-        batch_size: int = 1024,
-        **kwargs: Any,
+            self,
+            queries: List[RankedQuery],
+            batch_policy: str = 'dynamic',
+            batch_size: int = 64,
+            **kwargs: Any,
     ) -> List[RankedResponse]:
         """
         This function is a wrapper around the forward function
@@ -244,12 +259,12 @@ class FoundationModel(abc.ABC):
                             **kwargs)
 
     def encode(
-        self,
-        queries: Union[List[Query], List[str]],
-        batch_policy: str = 'dynamic',
-        batch_size: int = 1024,
-        reduction: str = 'mean',
-        **kwargs: Any,
+            self,
+            queries: Union[List[Query], List[str]],
+            batch_policy: str = 'dynamic',
+            batch_size: int = 1024,
+            reduction: str = 'mean',
+            **kwargs: Any,
     ) -> List[torch.Tensor]:
         """
         This function is a wrapper around the forward function
@@ -273,9 +288,9 @@ class FoundationModel(abc.ABC):
                             **kwargs)
 
     def run(
-        self,
-        queries: Union[Query, str, Tuple[str, str], List[Query], List[str]],
-        **kwargs: Any,
+            self,
+            queries: Union[Query, str, Tuple[str, str], List[Query], List[str]],
+            **kwargs: Any,
     ) -> Union[str, Response, List[Response]]:
         """
         This function is the main entry point for users to run queries through the foundation model.
@@ -310,9 +325,9 @@ class FoundationModel(abc.ABC):
             return self.forward(queries, **kwargs)
 
     def __call__(
-        self,
-        queries: Union[Query, str, Tuple[str, str], List[Query], List[str]],
-        **kwargs: Any,
+            self,
+            queries: Union[Query, str, Tuple[str, str], List[Query], List[str]],
+            **kwargs: Any,
     ) -> Union[str, Response, List[Response]]:
         """
         This function returns the output of the run function when the

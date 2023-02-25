@@ -70,7 +70,7 @@ def forward_tunnel(local_port, remote_host, remote_port, transport):
 
 ## get_host_port
 
-[Show source in utils.py:64](../../../../alfred/client/ssh/utils.py#L64)
+[Show source in utils.py:67](../../../../alfred/client/ssh/utils.py#L67)
 
 parse 'hostname:22' into a host and port, with the port optional
 
@@ -85,7 +85,7 @@ def get_host_port(spec, default_port):
 
 ## port_finder
 
-[Show source in utils.py:71](../../../../alfred/client/ssh/utils.py#L71)
+[Show source in utils.py:74](../../../../alfred/client/ssh/utils.py#L74)
 
 Finds the next available port if given port is not available
 
