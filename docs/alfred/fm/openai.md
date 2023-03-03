@@ -12,7 +12,7 @@ Openai
 
 ## OpenAIModel
 
-[Show source in openai.py:28](../../../alfred/fm/openai.py#L28)
+[Show source in openai.py:27](../../../alfred/fm/openai.py#L27)
 
 A wrapper for the OpenAI API.
 

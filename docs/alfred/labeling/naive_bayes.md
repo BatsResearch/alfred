@@ -1,38 +1,33 @@
-# NPLM
+# NaiveBayes
 
 [Alfred Index](../../README.md#alfred-index) /
 [Alfred](../index.md#alfred) /
 [Labeling](./index.md#labeling) /
-NPLM
+NaiveBayes
 
-> Auto-generated documentation for [alfred.labeling.nplm](../../../alfred/labeling/nplm.py) module.
+> Auto-generated documentation for [alfred.labeling.naive_bayes](../../../alfred/labeling/naive_bayes.py) module.
 
-- [NPLM](#nplm)
-  - [NPLM](#nplm-1)
-    - [NPLM().label](#nplm()label)
+- [NaiveBayes](#naivebayes)
+  - [NaiveBayes](#naivebayes-1)
+    - [NaiveBayes().label](#naivebayes()label)
 
-## NPLM
+## NaiveBayes
 
-[Show source in nplm.py:7](../../../alfred/labeling/nplm.py#L7)
+[Show source in naive_bayes.py:6](../../../alfred/labeling/naive_bayes.py#L6)
 
 LabelModel wrapper to perform label modeling for partial labelers on the responses
 
 #### Signature
 
 ```python
-class NPLM(LabelModel):
-    def __init__(
-        self,
-        num_classes,
-        label_partition,
-        device="cuda:0" if torch.cuda.is_available() else "cpu",
-    ):
+class NaiveBayes(LabelModel):
+    def __init__(self, num_classes, num_lfs):
         ...
 ```
 
-### NPLM().label
+### NaiveBayes().label
 
-[Show source in nplm.py:30](../../../alfred/labeling/nplm.py#L30)
+[Show source in naive_bayes.py:25](../../../alfred/labeling/naive_bayes.py#L25)
 
 Label the responses using the label model.
 Similar to standard PWS practice, abstention = 0 (i.e. classes are 1-indexed)

@@ -12,7 +12,7 @@ Huggingfacevlm
 
 ## HuggingFaceCLIPModel
 
-[Show source in huggingfacevlm.py:13](../../../alfred/fm/huggingfacevlm.py#L13)
+[Show source in huggingfacevlm.py:14](../../../alfred/fm/huggingfacevlm.py#L14)
 
 The HuggingFaceModel class is a wrapper for HuggingFace VLM Models
 Currently supports CLIP models.

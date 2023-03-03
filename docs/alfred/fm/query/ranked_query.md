@@ -57,7 +57,7 @@ class RankedQuery(Query):
 
 ### RankedQuery().__add__
 
-[Show source in ranked_query.py:109](../../../../alfred/fm/query/ranked_query.py#L109)
+[Show source in ranked_query.py:108](../../../../alfred/fm/query/ranked_query.py#L108)
 
 concatenates the two queries
 
@@ -70,7 +70,7 @@ def __add__(self, other):
 
 ### RankedQuery().__eq__
 
-[Show source in ranked_query.py:95](../../../../alfred/fm/query/ranked_query.py#L95)
+[Show source in ranked_query.py:94](../../../../alfred/fm/query/ranked_query.py#L94)
 
 returns whether the two queries are equal
 
@@ -83,7 +83,7 @@ def __eq__(self, other):
 
 ### RankedQuery().__hash__
 
-[Show source in ranked_query.py:101](../../../../alfred/fm/query/ranked_query.py#L101)
+[Show source in ranked_query.py:100](../../../../alfred/fm/query/ranked_query.py#L100)
 
 returns the hash of the query
 
@@ -96,7 +96,7 @@ def __hash__(self):
 
 ### RankedQuery().__len__
 
-[Show source in ranked_query.py:105](../../../../alfred/fm/query/ranked_query.py#L105)
+[Show source in ranked_query.py:104](../../../../alfred/fm/query/ranked_query.py#L104)
 
 returns the length of the query
 
@@ -109,7 +109,7 @@ def __len__(self):
 
 ### RankedQuery().__repr__
 
-[Show source in ranked_query.py:87](../../../../alfred/fm/query/ranked_query.py#L87)
+[Show source in ranked_query.py:86](../../../../alfred/fm/query/ranked_query.py#L86)
 
 returns the string representation of the query
 
@@ -122,7 +122,7 @@ def __repr__(self):
 
 ### RankedQuery().__str__
 
-[Show source in ranked_query.py:91](../../../../alfred/fm/query/ranked_query.py#L91)
+[Show source in ranked_query.py:90](../../../../alfred/fm/query/ranked_query.py#L90)
 
 returns the string representation of the query
 
@@ -135,7 +135,7 @@ def __str__(self):
 
 ### RankedQuery().candidates
 
-[Show source in ranked_query.py:52](../../../../alfred/fm/query/ranked_query.py#L52)
+[Show source in ranked_query.py:51](../../../../alfred/fm/query/ranked_query.py#L51)
 
 returns the raw candidates content
 
@@ -149,7 +149,7 @@ def candidates(self):
 
 ### RankedQuery().get_answer_choices_str
 
-[Show source in ranked_query.py:62](../../../../alfred/fm/query/ranked_query.py#L62)
+[Show source in ranked_query.py:61](../../../../alfred/fm/query/ranked_query.py#L61)
 
 get the raw candidates as jinja strings (deliminated by '|||')
 
@@ -162,7 +162,7 @@ def get_answer_choices_str(self):
 
 ### RankedQuery().load
 
-[Show source in ranked_query.py:66](../../../../alfred/fm/query/ranked_query.py#L66)
+[Show source in ranked_query.py:65](../../../../alfred/fm/query/ranked_query.py#L65)
 
 Load prompt and candidates
 
@@ -185,7 +185,7 @@ def load(self, composition_fn: Callable = None) -> List:
 
 ### RankedQuery().prompt
 
-[Show source in ranked_query.py:57](../../../../alfred/fm/query/ranked_query.py#L57)
+[Show source in ranked_query.py:56](../../../../alfred/fm/query/ranked_query.py#L56)
 
 returns the raw prompt content
 

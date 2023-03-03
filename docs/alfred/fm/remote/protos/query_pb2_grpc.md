@@ -21,7 +21,7 @@ Query Pb2 Grpc
 
 ## QueryService
 
-[Show source in query_pb2_grpc.py:72](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L72)
+[Show source in query_pb2_grpc.py:70](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L70)
 
 Missing associated documentation comment in .proto file.
 
@@ -34,7 +34,7 @@ class QueryService(object):
 
 ### QueryService.Encode
 
-[Show source in query_pb2_grpc.py:75](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L75)
+[Show source in query_pb2_grpc.py:72](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L72)
 
 #### Signature
 
@@ -57,7 +57,7 @@ def Encode(
 
 ### QueryService.Run
 
-[Show source in query_pb2_grpc.py:93](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L93)
+[Show source in query_pb2_grpc.py:90](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L90)
 
 #### Signature
 
@@ -82,7 +82,7 @@ def Run(
 
 ## QueryServiceServicer
 
-[Show source in query_pb2_grpc.py:35](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L35)
+[Show source in query_pb2_grpc.py:34](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L34)
 
 Missing associated documentation comment in .proto file.
 
@@ -95,7 +95,7 @@ class QueryServiceServicer(object):
 
 ### QueryServiceServicer().Encode
 
-[Show source in query_pb2_grpc.py:38](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L38)
+[Show source in query_pb2_grpc.py:36](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L36)
 
 Missing associated documentation comment in .proto file.
 
@@ -108,7 +108,7 @@ def Encode(self, request_iterator, context):
 
 ### QueryServiceServicer().Run
 
-[Show source in query_pb2_grpc.py:44](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L44)
+[Show source in query_pb2_grpc.py:42](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L42)
 
 Missing associated documentation comment in .proto file.
 
@@ -139,7 +139,7 @@ class QueryServiceStub(object):
 
 ## add_QueryServiceServicer_to_server
 
-[Show source in query_pb2_grpc.py:51](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L51)
+[Show source in query_pb2_grpc.py:49](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L49)
 
 #### Signature
 
