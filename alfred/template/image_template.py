@@ -1,9 +1,10 @@
 import json
 import logging
+from typing import Dict, Any, Optional, Iterable, List, Union
+
 import numpy as np
 import torch
 from PIL import Image
-from typing import Dict, Any, Optional, Iterable, List, Union
 
 from alfred.fm.query import Query, RankedQuery
 from alfred.template.template import Template
@@ -17,15 +18,14 @@ class ImageTemplate(Template):
 
     The class handles ranked queries for image data.
     """
-
     def __init__(
-            self,
-            candidate_replacement: dict,
-            template: str = "A photo of [[label]]",
-            id: Optional[str] = None,
-            name: Optional[str] = None,
-            reference: Optional[str] = None,
-            metadata: Optional[Dict[str, Any]] = None,
+        self,
+        candidate_replacement: dict,
+        template: str = "A photo of [[label]]",
+        id: Optional[str] = None,
+        name: Optional[str] = None,
+        reference: Optional[str] = None,
+        metadata: Optional[Dict[str, Any]] = None,
     ):
         """
 
@@ -65,13 +65,15 @@ class ImageTemplate(Template):
         self._templated_candidates = []
         for keyword, candidates in self._candidate_replacement.items():
             for candidate in candidates:
-                self._templated_candidates.append(self._template.replace(f"[[{keyword}]]", f"{candidate}"))
+                self._templated_candidates.append(
+                    self._template.replace(f"[[{keyword}]]", f"{candidate}"))
 
-    def apply(self,
-              example: Union[Image.Image, torch.tensor, np.ndarray, str, tuple],
-              keyword: str = "image_path",
-              **kwargs: Any,
-              ) -> RankedQuery:
+    def apply(
+        self,
+        example: Union[Image.Image, torch.tensor, np.ndarray, str, tuple],
+        keyword: str = "image_path",
+        **kwargs: Any,
+    ) -> RankedQuery:
         """
         Apply the template to a single image example
 
@@ -100,9 +102,9 @@ class ImageTemplate(Template):
         return RankedQuery(image, self._templated_candidates)
 
     def apply_to_dataset(
-            self,
-            dataset: Iterable[Dict],
-            **kwargs: Any,
+        self,
+        dataset: Iterable[Dict],
+        **kwargs: Any,
     ) -> Iterable[Query]:
         """
         A wrapper function to apply the template to a dataset iteratively
@@ -196,9 +198,9 @@ class ImageTemplate(Template):
         return self
 
     def __call__(
-            self,
-            example: Union[Image.Image, torch.tensor, np.ndarray, str, tuple],
-            **kawrgs: Any,
+        self,
+        example: Union[Image.Image, torch.tensor, np.ndarray, str, tuple],
+        **kawrgs: Any,
     ) -> Query:
         """
         A wrapper function to apply the template to a single example

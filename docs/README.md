@@ -6,6 +6,10 @@ A full list of `Alfred` project modules.
 
 - [Alfred](alfred/index.md#alfred)
     - [Client](alfred/client/index.md#client)
+        - [Cache](alfred/client/cache/index.md#cache)
+            - [Cache](alfred/client/cache/cache.md#cache)
+            - [Dummy](alfred/client/cache/dummy.md#dummy)
+            - [Sqlite](alfred/client/cache/sqlite.md#sqlite)
         - [Client](alfred/client/client.md#client)
         - [Ssh](alfred/client/ssh/index.md#ssh)
             - [SSHTunnel](alfred/client/ssh/sshtunnel.md#sshtunnel)

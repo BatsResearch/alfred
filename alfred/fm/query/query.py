@@ -8,7 +8,6 @@ class Query(abc.ABC):
     """
     Abstract base class for a single query for foundation model interfaces
     """
-
     @staticmethod
     def compose(a, b, strategy=None):
         """

@@ -1,6 +1,7 @@
+from typing import Dict, Union, Optional
+
 import numpy as np
 import torch
-from typing import Dict, Union, Optional
 
 from .response import Response
 
@@ -10,13 +11,12 @@ class RankedResponse(Response):
     A subclass of `Response` that represents a language model response for scoring/ranking.
 
     """
-
     def __init__(
-            self,
-            prediction: str,
-            scores: Dict,
-            logits: Optional[Union[torch.Tensor, np.ndarray]] = None,
-            embeddings: Optional[Union[torch.Tensor, np.ndarray]] = None,
+        self,
+        prediction: str,
+        scores: Dict,
+        logits: Optional[Union[torch.Tensor, np.ndarray]] = None,
+        embeddings: Optional[Union[torch.Tensor, np.ndarray]] = None,
     ):
         """
         Initialize a `RankedResponse` object.
@@ -98,7 +98,7 @@ class RankedResponse(Response):
                                 == other.logits) or (self.logits is None
                                                      and other.logits is None)
             consistent_flag &= (self['embeddings'] == other['embeddings']) or (
-                    self['embeddings'] is None and other['embeddings'] is None)
+                self['embeddings'] is None and other['embeddings'] is None)
             return consistent_flag
         else:
             return False

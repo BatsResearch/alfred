@@ -1,11 +1,12 @@
 import gc
 import logging
+from collections import OrderedDict
+from typing import List, Union, Optional
+
 import numpy as np
 import torch
 import transformers
-from collections import OrderedDict
 from torch.nn.utils.rnn import pad_sequence
-from typing import List, Union, Optional
 
 from .query import Query, RankedQuery, CompletionQuery
 from .response import RankedResponse
@@ -39,8 +40,8 @@ def normalize_logits(logits: torch.Tensor) -> torch.Tensor:
 
 
 def reorder_array(
-        arr: Union[np.ndarray, torch.Tensor,
-        list], order: Union[np.ndarray, torch.Tensor, list]
+    arr: Union[np.ndarray, torch.Tensor,
+               list], order: Union[np.ndarray, torch.Tensor, list]
 ) -> Union[np.ndarray, torch.Tensor, list]:
     """
     Recover an array according to a given order index.
@@ -120,13 +121,12 @@ class DynamicBatcher:
     Dynamic Batching Utility
     Maximize GPU Utilization by batching queries of similar sizes
     """
-
     def __init__(
-            self,
-            queries: Union[List[Query], List[str]],
-            max_batch_size: int = 2048,
-            tokenizer: Optional[transformers.PreTrainedTokenizer] = None,
-            max_token_length: int = 512,
+        self,
+        queries: Union[List[Query], List[str]],
+        max_batch_size: int = 2048,
+        tokenizer: Optional[transformers.PreTrainedTokenizer] = None,
+        max_token_length: int = 512,
     ):
         """
         Initialize a DynamicBatcher
@@ -160,9 +160,9 @@ class DynamicBatcher:
             self.ranked = True
 
     def merge_rank_response(
-            self,
-            responses: List[OrderedDict],
-            softmax: bool = True,
+        self,
+        responses: List[OrderedDict],
+        softmax: bool = True,
     ) -> RankedResponse:
         """
         Merge a list of responses with raw logit into a single RankedResponse
@@ -205,9 +205,9 @@ class DynamicBatcher:
         )
 
     def reorder(
-            self,
-            inst: List,
-            offset: Optional[int] = None,
+        self,
+        inst: List,
+        offset: Optional[int] = None,
     ) -> List:
         """
         Reordering the responses according to the original order of the queries
@@ -224,7 +224,7 @@ class DynamicBatcher:
             if offset:
                 _inst = np.empty([len(inst)])
                 for idx, i in enumerate(self.len_sorted_idx[offset:offset +
-                                                                   len(inst)]):
+                                                            len(inst)]):
                     _inst[idx] = inst[i]
                 return list(_inst)
             raise ValueError(
@@ -238,7 +238,7 @@ class DynamicBatcher:
         if self.ranked:
             reordered_inst = [
                 self.merge_rank_response(reordered_inst[i:i +
-                                                          self.candidate_size])
+                                                        self.candidate_size])
                 for i in range(0, len(reordered_inst), self.candidate_size)
             ]
 
@@ -254,7 +254,6 @@ class DynamicBatcher:
         :return: A list of batches
         :rtype: List[List[Instance]]
         '''
-
         def _process_batch(batch):
             if self.tokenizer:
                 if isinstance(batch[0], tuple):

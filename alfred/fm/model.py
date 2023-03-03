@@ -1,11 +1,12 @@
 import abc
 import logging
-import numpy as np
 import os
-import torch
 from contextlib import nullcontext
-from tqdm.auto import tqdm
 from typing import List, Optional, Dict, Union, Tuple, OrderedDict, Any
+
+import numpy as np
+import torch
+from tqdm.auto import tqdm
 
 from .query import Query, RankedQuery, CompletionQuery
 from .response import Response, CompletionResponse, RankedResponse
@@ -18,11 +19,10 @@ class FoundationModel(abc.ABC):
     """
     Generic interface for foundation model class
     """
-
     def _generate_batch(
-            self,
-            batch_instance: Union[List[str]],
-            **kwargs,
+        self,
+        batch_instance: Union[List[str]],
+        **kwargs,
     ) -> List[Response]:
         """
         For completing / generating given a batch of queries
@@ -39,9 +39,9 @@ class FoundationModel(abc.ABC):
             f"_infer_batch() is not implemented for {self.__class__.__name__}")
 
     def _score_batch(
-            self,
-            batch_instance: Union[List[Tuple[str, str]], List[str]],
-            **kwargs,
+        self,
+        batch_instance: Union[List[Tuple[str, str]], List[str]],
+        **kwargs,
     ) -> List[Response]:
         """
         For scoring / ranking candidate queries.
@@ -56,9 +56,9 @@ class FoundationModel(abc.ABC):
             f"_score_batch() is not implemented for {self.__class__.__name__}")
 
     def _encode_batch(
-            self,
-            batch_instance: Union[List[str]],
-            **kwargs: Any,
+        self,
+        batch_instance: Union[List[str]],
+        **kwargs: Any,
     ) -> List[torch.Tensor]:
         """
         For encoding queries into embeddings.
@@ -73,15 +73,15 @@ class FoundationModel(abc.ABC):
         )
 
     def forward(
-            self,
-            queries: Union[List[Query], List[str], List[Tuple[str, str]]],
-            batch_policy: str = 'dynamic',
-            batch_size: int = 1024,
-            mode: str = 'generate',
-            pretokenize: bool = True,
-            **kwargs,
+        self,
+        queries: Union[List[Query], List[str], List[Tuple[str, str]]],
+        batch_policy: str = 'dynamic',
+        batch_size: int = 1024,
+        mode: str = 'generate',
+        pretokenize: bool = True,
+        **kwargs,
     ) -> Union[List[CompletionResponse], List[RankedResponse],
-    List[OrderedDict], List[torch.Tensor]]:
+               List[OrderedDict], List[torch.Tensor]]:
         """
         This function is the main entry point for running queries through the foundation model.
         It accepts raw query content and automatically converts it into query objects.
@@ -204,11 +204,11 @@ class FoundationModel(abc.ABC):
         return list(responses)
 
     def generate(
-            self,
-            queries: Union[List[CompletionQuery], List[str]],
-            batch_policy: str = 'dynamic',
-            batch_size: int = 1024,
-            **kwargs,
+        self,
+        queries: Union[List[CompletionQuery], List[str]],
+        batch_policy: str = 'dynamic',
+        batch_size: int = 1024,
+        **kwargs,
     ) -> List[CompletionResponse]:
         """
         This function is a wrapper around the forward function for running
@@ -229,11 +229,11 @@ class FoundationModel(abc.ABC):
         return self.forward(queries, batch_policy, batch_size, **kwargs)
 
     def score(
-            self,
-            queries: List[RankedQuery],
-            batch_policy: str = 'dynamic',
-            batch_size: int = 64,
-            **kwargs: Any,
+        self,
+        queries: List[RankedQuery],
+        batch_policy: str = 'dynamic',
+        batch_size: int = 64,
+        **kwargs: Any,
     ) -> List[RankedResponse]:
         """
         This function is a wrapper around the forward function
@@ -259,12 +259,12 @@ class FoundationModel(abc.ABC):
                             **kwargs)
 
     def encode(
-            self,
-            queries: Union[List[Query], List[str]],
-            batch_policy: str = 'dynamic',
-            batch_size: int = 1024,
-            reduction: str = 'mean',
-            **kwargs: Any,
+        self,
+        queries: Union[List[Query], List[str]],
+        batch_policy: str = 'dynamic',
+        batch_size: int = 1024,
+        reduction: str = 'mean',
+        **kwargs: Any,
     ) -> List[torch.Tensor]:
         """
         This function is a wrapper around the forward function
@@ -288,9 +288,9 @@ class FoundationModel(abc.ABC):
                             **kwargs)
 
     def run(
-            self,
-            queries: Union[Query, str, Tuple[str, str], List[Query], List[str]],
-            **kwargs: Any,
+        self,
+        queries: Union[Query, str, Tuple[str, str], List[Query], List[str]],
+        **kwargs: Any,
     ) -> Union[str, Response, List[Response]]:
         """
         This function is the main entry point for users to run queries through the foundation model.
@@ -325,9 +325,9 @@ class FoundationModel(abc.ABC):
             return self.forward(queries, **kwargs)
 
     def __call__(
-            self,
-            queries: Union[Query, str, Tuple[str, str], List[Query], List[str]],
-            **kwargs: Any,
+        self,
+        queries: Union[Query, str, Tuple[str, str], List[Query], List[str]],
+        **kwargs: Any,
     ) -> Union[str, Response, List[Response]]:
         """
         This function returns the output of the run function when the

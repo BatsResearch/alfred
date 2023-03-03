@@ -4,12 +4,13 @@ import io
 import json
 import logging
 import socket
-from PIL import Image
 from concurrent import futures
-from tqdm.auto import tqdm
 from typing import Optional, Union, Iterable, Tuple, Any, List
 
 import grpc
+from PIL import Image
+from tqdm.auto import tqdm
+
 from alfred.fm.query import Query, RankedQuery, CompletionQuery
 from alfred.fm.remote.protos import query_pb2
 from alfred.fm.remote.protos import query_pb2_grpc
@@ -23,10 +24,10 @@ IMAGE_SIGNATURE = "[ALFED_IMAGE_BASE64]"
 
 class gRPCClient:
     def __init__(
-            self,
-            host: str,
-            port: int,
-            credentials: Optional[Union[grpc.ChannelCredentials, str]] = None,
+        self,
+        host: str,
+        port: int,
+        credentials: Optional[Union[grpc.ChannelCredentials, str]] = None,
     ):
         self.host = host
         self.port = port
@@ -60,9 +61,9 @@ class gRPCClient:
         return msg, candidate
 
     def run(
-            self,
-            queries: Union[Iterable[Query], Iterable[str]],
-            **kwargs: Any,
+        self,
+        queries: Union[Iterable[Query], Iterable[str]],
+        **kwargs: Any,
     ):
         try:
             output = self._run(queries, **kwargs)
@@ -72,10 +73,10 @@ class gRPCClient:
         return output
 
     def encode(
-            self,
-            queries: List[str],
-            reduction: str = "mean",
-            **kwargs: Any,
+        self,
+        queries: List[str],
+        reduction: str = "mean",
+        **kwargs: Any,
     ):
         try:
             output = self._encode(queries, reduction, **kwargs)
@@ -85,9 +86,9 @@ class gRPCClient:
         return output
 
     def _run(
-            self,
-            queries: Union[Iterable[Query], Iterable[str]],
-            **kwargs: Any,
+        self,
+        queries: Union[Iterable[Query], Iterable[str]],
+        **kwargs: Any,
     ):
         kwargs = json.dumps(kwargs)
 
@@ -116,10 +117,10 @@ class gRPCClient:
         return output
 
     def _encode(
-            self,
-            queries: List[str],
-            reduction: str = "mean",
-            **kwargs: Any,
+        self,
+        queries: List[str],
+        reduction: str = "mean",
+        **kwargs: Any,
     ):
         kwargs = json.dumps(kwargs)
 
@@ -142,12 +143,11 @@ class gRPCServer(query_pb2_grpc.QueryServiceServicer):
     """
     Manages connections with gRPCClient
     """
-
     def __init__(
-            self,
-            model,
-            port: int = 10719,
-            credentials: Optional[grpc.ServerCredentials] = None,
+        self,
+        model,
+        port: int = 10719,
+        credentials: Optional[grpc.ServerCredentials] = None,
     ):
         self.model = model
         self.port = port_finder(port)

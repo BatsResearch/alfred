@@ -1,6 +1,8 @@
 import logging
-import torch
 from contextlib import nullcontext
+from typing import Optional, List, Union, Tuple, Dict, Any
+
+import torch
 from transformers import (
     AutoModelForSeq2SeqLM,
     AutoModelForCausalLM,
@@ -8,7 +10,6 @@ from transformers import (
     AutoModel,
     AutoTokenizer,
 )
-from typing import Optional, List, Union, Tuple, Dict, Any
 
 from alfred.fm.model import LocalAccessFoundationModel
 from alfred.fm.response import CompletionResponse
@@ -49,15 +50,14 @@ class HuggingFaceModel(LocalAccessFoundationModel):
     The interface includes implementations of the _score_batch method
     for ranking candidates and the _generate_batch method for generating prompts.
     """
-
     def __init__(
-            self,
-            model_string: str,
-            dtype: str = "auto",
-            local_path: Optional[str] = None,
-            device_map: Optional[str] = "auto",
-            int_8: bool = False,
-            tokenizer: Optional[PreTrainedTokenizer] = None,
+        self,
+        model_string: str,
+        dtype: str = "auto",
+        local_path: Optional[str] = None,
+        device_map: Optional[str] = "auto",
+        int_8: bool = False,
+        tokenizer: Optional[PreTrainedTokenizer] = None,
     ):
         """
         Constructor for the HuggingFaceModel class.
@@ -93,7 +93,7 @@ class HuggingFaceModel(LocalAccessFoundationModel):
         if torch.cuda.is_available():
             n_gpus = torch.cuda.device_count()
             free_in_GB = sum(
-                [int(mem / 1024 ** 3) for mem in torch.cuda.mem_get_info()])
+                [int(mem / 1024**3) for mem in torch.cuda.mem_get_info()])
 
             logger.log(
                 logging.INFO,
@@ -175,12 +175,12 @@ class HuggingFaceModel(LocalAccessFoundationModel):
         return embedding
 
     def _score_batch(
-            self,
-            batch: Union[List[str], List[Tuple[str, str]]],
-            candidate: Optional[List[str]] = None,
-            hidden_state: bool = False,
-            tokenized: bool = False,
-            **kwargs: Any,
+        self,
+        batch: Union[List[str], List[Tuple[str, str]]],
+        candidate: Optional[List[str]] = None,
+        hidden_state: bool = False,
+        tokenized: bool = False,
+        **kwargs: Any,
     ) -> List[Dict[str, Any]]:
         """
         Score a batch of prompts and candidates using the model.
@@ -256,7 +256,7 @@ class HuggingFaceModel(LocalAccessFoundationModel):
 
         masked_log_probs = candidate_tokens.attention_mask.to(
             logits.get_device()).unsqueeze(
-            -1) * torch.nn.functional.log_softmax(logits, dim=-1)
+                -1) * torch.nn.functional.log_softmax(logits, dim=-1)
         seq_token_log_probs = torch.gather(
             masked_log_probs, -1,
             candidate_token_ids.to(logits.get_device()).unsqueeze(-1))
@@ -280,13 +280,13 @@ class HuggingFaceModel(LocalAccessFoundationModel):
         } for logit_id, logit in enumerate(torch.flatten(seq_log_prob))]
 
     def _generate_batch(
-            self,
-            batch: List[str],
-            padding: bool = True,
-            hidden_state: bool = False,
-            allow_grad: bool = False,
-            tokenized: bool = False,
-            **kwargs: Any,
+        self,
+        batch: List[str],
+        padding: bool = True,
+        hidden_state: bool = False,
+        allow_grad: bool = False,
+        tokenized: bool = False,
+        **kwargs: Any,
     ) -> List[CompletionResponse]:
         """
         Generate completions for a batch of prompts using the model.

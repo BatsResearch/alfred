@@ -1,5 +1,6 @@
 import logging
 from typing import Optional, List, Dict
+
 import requests
 
 from .model import APIAccessFoundationModel
@@ -8,20 +9,18 @@ from .response import CompletionResponse
 logger = logging.getLogger(__name__)
 
 
-
 class AI21Model(APIAccessFoundationModel):
     """
     A wrapper for the OpenAI API.
 
     This class provides a wrapper for the OpenAI API for generating completions.
     """
-
     def _ai21_query(
-            self,
-            query_string: str,
-            temperature: float = 0.0,
-            max_tokens: int = 10,
-            model: str = "j1-large",
+        self,
+        query_string: str,
+        temperature: float = 0.0,
+        max_tokens: int = 10,
+        model: str = "j1-large",
     ) -> str:
         """
         Run a single query through the foundation model
@@ -47,8 +46,7 @@ class AI21Model(APIAccessFoundationModel):
                 "stopSequences": ["."],
                 "topKReturn": 0,
                 "temperature": temperature
-            }
-        )
+            })
         return response['completions']['data']['text']
 
     def __init__(self,
@@ -67,9 +65,9 @@ class AI21Model(APIAccessFoundationModel):
         super().__init__(model_string, cfg)
 
     def _generate_batch(
-            self,
-            batch_instance: List[str],
-            **kwargs,
+        self,
+        batch_instance: List[str],
+        **kwargs,
     ) -> List[CompletionResponse]:
         """
         Generate completions for a batch of prompts using the AI21 API.

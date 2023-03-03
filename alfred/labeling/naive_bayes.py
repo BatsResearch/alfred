@@ -1,5 +1,4 @@
 import numpy as np
-import torch
 
 from .labelmodel import LabelModel
 
@@ -8,14 +7,14 @@ class NaiveBayes(LabelModel):
     """
     LabelModel wrapper to perform label modeling for partial labelers on the responses
     """
-
     def __init__(self, num_classes, num_lfs):
         """Constructor"""
         try:
             from labelmodels import NaiveBayes
         except ImportError:
             raise ImportError(
-                "Could not import labelmodel. Please install it from https://github.com/BatsResearch/labelmodels.")
+                "Could not import labelmodel. Please install it from https://github.com/BatsResearch/labelmodels."
+            )
 
         super().__init__(trainable=True)
         self.model = NaiveBayes(

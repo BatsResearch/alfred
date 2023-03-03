@@ -1,7 +1,8 @@
 import getpass
 import logging
-import paramiko
 from typing import Optional, Union, Callable
+
+import paramiko
 
 from alfred.client.ssh.utils import port_finder, forward_tunnel
 
@@ -16,7 +17,6 @@ class SSHTunnel:
     e.g. model on a gpu node of a cluster can use login node as jump
          This will be equivalent to SSH -L commands
     """
-
     @staticmethod
     def adaptive_handler(title, instructions, prompt_list):
         """Authentication handler for paramiko's interactive authentication"""
@@ -32,14 +32,14 @@ class SSHTunnel:
         return user_input
 
     def __init__(
-            self,
-            remote_host: str,
-            remote_port: Union[int, str],
-            local_port: Union[int, str] = 10705,
-            username: Optional[str] = None,
-            remote_node_address: Optional[str] = None,
-            remote_bind_port: Optional[Union[int, str]] = 443,
-            handler: Callable = None,
+        self,
+        remote_host: str,
+        remote_port: Union[int, str],
+        local_port: Union[int, str] = 10705,
+        username: Optional[str] = None,
+        remote_node_address: Optional[str] = None,
+        remote_bind_port: Optional[Union[int, str]] = 443,
+        handler: Callable = None,
     ):
         """
         Initialize the SSH Tunnel

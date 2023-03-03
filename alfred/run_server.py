@@ -22,13 +22,12 @@ class ModelServer:
     ModelServer is the server-side interface that wraps a certain alfred.fm class.
     ModelServer is used to launch the specified alfred.fm model as a gRPC Server and find the proper port.
     """
-
     def __init__(
-            self,
-            model: str,
-            model_type: str,
-            port: int = 10719,
-            **kwargs: Any,
+        self,
+        model: str,
+        model_type: str,
+        port: int = 10719,
+        **kwargs: Any,
     ):
         """
 
@@ -49,7 +48,8 @@ class ModelServer:
         self.model = model
         self.model_type = model_type.lower()
         assert self.model_type in [
-            "huggingface", "huggingfacevlm", "openai", "onnx", "tensorrt", "torch", "dummy"
+            "huggingface", "huggingfacevlm", "openai", "onnx", "tensorrt",
+            "torch", "dummy"
         ], f"Invalid model type: {self.model_type}"
         if self.model_type == "huggingface":
             self.model = HuggingFaceModel(self.model, **kwargs)
@@ -107,7 +107,7 @@ if __name__ == "__main__":
         # run start_server in a daemon thread
         import threading
 
-        t = threading.Thread(target=start_server, args=(args,), daemon=True)
+        t = threading.Thread(target=start_server, args=(args, ), daemon=True)
         t.start()
     else:
         start_server(args)

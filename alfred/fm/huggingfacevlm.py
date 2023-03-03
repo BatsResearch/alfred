@@ -1,8 +1,9 @@
 import logging
+from typing import Optional, List, Tuple
+
 import torch
 from PIL import Image
 from transformers import AutoProcessor, CLIPModel
-from typing import Optional, List, Tuple
 
 from alfred.fm.model import LocalAccessFoundationModel
 from .response import RankedResponse
@@ -15,7 +16,6 @@ class HuggingFaceCLIPModel(LocalAccessFoundationModel):
      The HuggingFaceModel class is a wrapper for HuggingFace VLM Models
      Currently supports CLIP models.
     """
-
     def __init__(self, model_string: str, local_path: Optional[str] = None):
         """
         Constructor for HuggingFaceVLMModel
@@ -29,16 +29,16 @@ class HuggingFaceCLIPModel(LocalAccessFoundationModel):
         self.device = "cuda:0" if torch.cuda.is_available() else "cpu"
         self.model = CLIPModel.from_pretrained(model_string,
                                                cache_dir=local_path).to(
-            self.device)
+                                                   self.device)
         self.tokenizer = None
         self.processor = AutoProcessor.from_pretrained(model_string,
                                                        cache_dir=local_path)
         self.model.eval()
 
     def _score_batch(
-            self,
-            batch_instance: Tuple[List[Image.Image], List[str]],
-            **kwargs,
+        self,
+        batch_instance: Tuple[List[Image.Image], List[str]],
+        **kwargs,
     ):
         """
         Scores a batch of instances

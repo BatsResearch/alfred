@@ -1,6 +1,7 @@
+from typing import List, Union, Tuple
+
 import numpy as np
 import torch
-from typing import List, Union, Tuple
 
 from .query import Query
 
@@ -16,10 +17,9 @@ class CompletionQuery(Query):
     It is initialized with a prompt, which can be a string, NumPy array,
     list, tuple, or PyTorch tensor.
     """
-
     def __init__(
-            self,
-            prompt: Union[str, np.ndarray, List, Tuple, torch.Tensor],
+        self,
+        prompt: Union[str, np.ndarray, List, Tuple, torch.Tensor],
     ):
         """
         Initializes a CompletionQuery class.

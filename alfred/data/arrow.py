@@ -1,8 +1,9 @@
+from typing import Union, Optional, Dict, Tuple, Iterable, Any, List
+
 import pandas
 import pyarrow
 from datasets.info import DatasetInfo
 from datasets.splits import NamedSplit
-from typing import Union, Optional, Dict, Tuple, Iterable, Any, List
 
 from .dataset import Dataset
 
@@ -30,12 +31,11 @@ class IterableArrowDataset(Dataset):
     - save_to_disk(path: str): Save the dataset to disk at the specified path.
     - load_from_disk(path: str): Load the dataset from disk from the specified path.
     """
-
     def __init__(
-            self,
-            table: Union[pyarrow.Table, pandas.DataFrame],
-            info: Optional[DatasetInfo] = None,
-            split: Optional[Union[str, NamedSplit]] = None,
+        self,
+        table: Union[pyarrow.Table, pandas.DataFrame],
+        info: Optional[DatasetInfo] = None,
+        split: Optional[Union[str, NamedSplit]] = None,
     ):
         """
         Initialize the dataset with the given table and metadata.
@@ -225,12 +225,11 @@ class BufferedArrowDataset(Dataset):
     - save_to_disk(path: str): Save the dataset to disk at the specified path.
     - load_from_disk(path: str): Load the dataset from disk from the specified path.
     """
-
     def __init__(
-            self,
-            buffer: pyarrow.Buffer,
-            info: Optional[DatasetInfo] = None,
-            split: Optional[Union[str, NamedSplit]] = None,
+        self,
+        buffer: pyarrow.Buffer,
+        info: Optional[DatasetInfo] = None,
+        split: Optional[Union[str, NamedSplit]] = None,
     ):
         """
         Initializes a  BufferedArrowDataset class.

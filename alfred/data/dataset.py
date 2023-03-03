@@ -25,7 +25,6 @@ class Dataset(abc.ABC):
     - save_to_disk(path: str): Save the dataset to disk at the specified path.
     - load_from_disk(path: str): Load the dataset from disk from the specified path.
     """
-
     @property
     @abc.abstractmethod
     def data(self):
