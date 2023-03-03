@@ -47,7 +47,7 @@ class TestVoter(unittest.TestCase):
         },
                                matching_fn=lambda x, y: x == y)
 
-        response = RankedResponse("Yes", scores={"Yes": 0.9, "No": 0.1})
+        response = RankedResponse("Yes", logits={"Yes": 0.9, "No": 0.1}, scores={"Yes": 0.9, "No": 0.1})
         votes = template_voter.vote(response)
         self.assertEqual(len(votes), 1)
         self.assertEqual(votes[0], 1)

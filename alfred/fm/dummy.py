@@ -3,7 +3,7 @@ from typing import Optional, List, Union, Any
 
 import torch
 
-from .model import LocalAccessFoundationModel
+from alfred.fm.model import LocalAccessFoundationModel
 from .query import Query
 from .response import CompletionResponse, Response
 
@@ -57,7 +57,7 @@ class DummyModel(LocalAccessFoundationModel):
         """
         Encode a batch of queries.
 
-        This function returns the same output as the input queries.
+        This function returns a zero vector of size 512 for all queries.
 
         :param batch_instance: A list of queries.
         :type batch_instance: List[Query]
@@ -67,11 +67,7 @@ class DummyModel(LocalAccessFoundationModel):
         :return: A list of `torch.Tensor` objects with the same prediction content as the input.
         :rtype: List[torch.Tensor]
         """
-        return [
-            torch.zeros([512])
-            for _ in batch_instance
-        ]
-
+        return [torch.zeros([512]) for _ in batch_instance]
 
     def _score_batch(
         self,

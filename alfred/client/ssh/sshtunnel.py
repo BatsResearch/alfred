@@ -72,6 +72,19 @@ class SSHTunnel:
         self.handler = handler or self.adaptive_handler
 
     def start(self):
+        """Wrapper for _start() with exception handling"""
+        attempts = 0
+        while attempts < 3:
+            try:
+                self._start()
+                break
+            except Exception as e:
+                logger.error(e)
+                attempts += 1
+                logger.warning(f"Attempt {attempts} failed, retrying...")
+        logger.info("Tunnel started")
+
+    def _start(self):
         """Start the tunnel"""
 
         self.client = paramiko.SSHClient()

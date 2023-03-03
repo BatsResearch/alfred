@@ -9,7 +9,6 @@ class DummyCache(Cache):
 
     This class is intended as a dummy implementation of the `Cache` interface for testing purposes. It stores cache entries in a dictionary in memory and does not persist them to disk.
     """
-
     def __init__(self):
         """
         Initialize the cache as a simple key-value dictionary
@@ -28,13 +27,18 @@ class DummyCache(Cache):
         :rtype: List
         """
         try:
-            response = [
-                {'response': self.cache[prompt + metadata if metadata else prompt]}]
+            response = [{
+                'response':
+                self.cache[prompt + metadata if metadata else prompt]
+            }]
         except KeyError:
             return []
         return response
 
-    def write(self, prompt: str, response: str, metadata: Optional[str] = None):
+    def write(self,
+              prompt: str,
+              response: str,
+              metadata: Optional[str] = None):
         """
         Write a prompt-response pair to the cache
 

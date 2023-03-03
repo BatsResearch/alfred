@@ -13,6 +13,7 @@ Fm
 
 - [Dummy](./dummy.md)
 - [Huggingface](./huggingface.md)
+- [Huggingfacevlm](./huggingfacevlm.md)
 - [Model](./model.md)
 - [Openai](./openai.md)
 - [Query](query/index.md)

@@ -11,5 +11,7 @@ Labeling
 
 ## Modules
 
+- [FlyingSquid](./flyingsquid.md)
 - [LabelModel](./labelmodel.md)
 - [MajorityVote](./majority_vote.md)
+- [NPLM](./nplm.md)

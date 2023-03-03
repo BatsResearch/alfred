@@ -12,7 +12,7 @@ Huggingface
 
 ## HuggingFaceModel
 
-[Show source in huggingface.py:40](../../../alfred/fm/huggingface.py#L40)
+[Show source in huggingface.py:39](../../../alfred/fm/huggingface.py#L39)
 
 The HuggingFaceModel class is a wrapper for HuggingFace models,
 including both Seq2Seq (Encoder-Decoder, e.g. T5, T0) and Causal
@@ -41,5 +41,9 @@ class HuggingFaceModel(LocalAccessFoundationModel):
     ):
         ...
 ```
+
+#### See also
+
+- [LocalAccessFoundationModel](./model.md#localaccessfoundationmodel)
 
 

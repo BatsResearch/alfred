@@ -1,6 +1,5 @@
 import argparse
 import ast
-import json
 
 import requests
 from fastapi import FastAPI, Request
@@ -8,7 +7,7 @@ from pydantic import BaseModel
 
 from alfred.client import Client
 from alfred.client.ssh.sshtunnel import SSHTunnel
-from alfred.fm.query import RankedQuery, CompletionQuery
+from alfred.fm.query import RankedQuery
 from alfred.template import StringTemplate
 
 alfred_app = FastAPI()
@@ -241,6 +240,7 @@ async def alfred_server_completion(request: Request):
 
 ###########################################################
 
+
 @alfred_app.post("/alfred_server/apply_template")
 async def alfred_server_apply_template(request: Request):
     request = await request.json()
@@ -256,7 +256,7 @@ async def alfred_server_apply_template(request: Request):
 
 ###########################################################
 @alfred_app.get("/alfred_server/cache")
-async def set_alfred_server_connected():
+async def get_cache_table():
     import pandas as pd
     import numpy as np
     from pretty_html_table import build_table

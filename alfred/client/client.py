@@ -7,8 +7,12 @@ from grpc import FutureTimeoutError
 
 from alfred.client.cache import Cache, DummyCache, SQLiteCache
 from alfred.client.ssh.sshtunnel import SSHTunnel
+from alfred.fm.ai21 import AI21Model
+from alfred.fm.cohere import CohereModel
 from alfred.fm.dummy import DummyModel
 from alfred.fm.huggingface import HuggingFaceModel
+from alfred.fm.huggingfacevlm import HuggingFaceCLIPModel
+from alfred.fm.onnx import ONNXModel
 from alfred.fm.openai import OpenAIModel
 from alfred.fm.query import CompletionQuery, Query, RankedQuery
 from alfred.fm.remote.grpc import gRPCClient
@@ -28,22 +32,19 @@ class Client:
     The client can be used to specify the model and how to access it,
     and can establish an SSH tunnel to a remote end point for secure access to a remote model.
     """
-
-    def __init__(self,
-                 model: Optional[str] = None,
-                 model_type: Optional[str] = None,
-                 end_point: Optional[str] = None,
-                 local_path: Optional[str] = None,
-                 ssh_tunnel: bool = False,
-                 ssh_node: Optional[str] = None,
-                 cache: Optional[Cache] = "SQLite",
-                 **kwargs: Any,
-                 ):
-
+    def __init__(
+        self,
+        model: Optional[str] = None,
+        model_type: Optional[str] = None,
+        end_point: Optional[str] = None,
+        local_path: Optional[str] = None,
+        ssh_tunnel: bool = False,
+        ssh_node: Optional[str] = None,
+        cache: Optional[Cache] = None,
+        **kwargs: Any,
+    ):
         '''
         Initialize a Client class.
-
-        TODO: implement ngrok/cloudflare/localhost.run tunneling
 
         :param model: (optional) The name of the model. (e.g. bigscience/T0pp or text-davinci-003)
         :type model: str
@@ -68,7 +69,9 @@ class Client:
         if self.model_type:
             self.model_type = model_type.lower()
             assert self.model_type in [
-                "huggingface", "openai", "onnx", "tensorrt", "torch", "dummy"
+                "huggingface", "huggingfacevlm", "onnx", "tensorrt", "openai",
+                "cohere", "ai21"
+                "torch", "dummy"
             ], f"Invalid model type: {self.model_type}"
         else:
             if end_point is None:
@@ -144,13 +147,20 @@ class Client:
                 self.model = HuggingFaceModel(self.model,
                                               local_path=local_path,
                                               **kwargs)
+            elif self.model_type == "huggingfacevlm":
+                self.model = HuggingFaceCLIPModel(self.model,
+                                                  local_path=local_path,
+                                                  **kwargs)
             elif self.model_type == "openai":
                 self.model = OpenAIModel(self.model, **kwargs)
+            elif self.model_type == "cohere":
+                self.model = CohereModel(self.model, **kwargs)
+            elif self.model_type == "ai21":
+                self.model = AI21Model(self.model, **kwargs)
             elif self.model_type == "dummy":
                 self.model = DummyModel(self.model)
             elif self.model_type == "onnx":
-                # self.model = ONNXModel(self.model, **kwargs)
-                raise NotImplementedError
+                self.model = ONNXModel(self.model, **kwargs)
             elif self.model_type == "tensorrt":
                 # self.model = TensorRTModel(self.model, **kwargs)
                 raise NotImplementedError
@@ -320,7 +330,7 @@ class Client:
             null_instance = dict(((k, null_token) for k in keywords))
             query = template.apply(null_instance)
             query._candidates = candidates
-            p = np.array(list(self.score(query).scores.values()))
+            p = np.array(list(self.score(query, no_tqdm=True).scores.values()))
             scores[null_token_id, :] = p
             if strategy == 1:
                 weights[null_token_id, :, :] = np.linalg.inv(np.diag(p))

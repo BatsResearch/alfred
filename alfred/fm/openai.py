@@ -9,12 +9,6 @@ from .response import CompletionResponse
 
 logger = logging.getLogger(__name__)
 
-try:
-    import openai
-except ModuleNotFoundError:
-    logger.info("OpenAI module not found. Skipping OpenAI prompt template.")
-    pass
-
 OPENAI_MODELS = (
     "text-davinci-003"
     "text-davinci-002",
@@ -23,6 +17,11 @@ OPENAI_MODELS = (
     "text-babbage-001",
     "text-ada-001",
 )
+try:
+    import openai
+except ModuleNotFoundError:
+    logger.info("OpenAI module not found. Skipping OpenAI-based Models.")
+    pass
 
 
 class OpenAIModel(APIAccessFoundationModel):
@@ -81,6 +80,11 @@ class OpenAIModel(APIAccessFoundationModel):
         :return: The embeddings
         :rtype: str
         """
+        try:
+            import openai
+        except ImportError:
+            raise ImportError(
+                "OpenAI module not found. Please install openai.")
         openai_api_key = kwargs.get("openai_api_key", None)
         if openai_api_key is not None:
             openai.api_key = openai_api_key
@@ -149,7 +153,6 @@ class OpenAIModel(APIAccessFoundationModel):
         """
         output = []
         for query in batch_instance:
-            # TODO: Modify for async parallelized queries
             output.append(
                 CompletionResponse(text=self._openai_query(
                     query, model=self.model_string, **kwargs)))

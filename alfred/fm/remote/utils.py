@@ -1,8 +1,9 @@
-import urllib.request
 import io
-import torch
-import socket
 import logging
+import socket
+import urllib.request
+
+import torch
 
 logger = logging.getLogger(__name__)
 

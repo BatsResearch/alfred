@@ -23,7 +23,7 @@ RankedQuery
 
 ## RankedQuery
 
-[Show source in ranked_query.py:14](../../../../alfred/fm/query/ranked_query.py#L14)
+[Show source in ranked_query.py:15](../../../../alfred/fm/query/ranked_query.py#L15)
 
 Ranked Query Class encompasses query terms that operate in
 scoring scheme with FM interfaces
@@ -49,7 +49,7 @@ or
 class RankedQuery(Query):
     def __init__(
         self,
-        prompt: Union[str, np.ndarray, List, Tuple, torch.Tensor],
+        prompt: Union[str, np.ndarray, Image.Image, Tuple, torch.Tensor],
         candidates: Union[List, Tuple, np.ndarray, torch.Tensor],
     ):
         ...
@@ -135,7 +135,7 @@ def __str__(self):
 
 ### RankedQuery().candidates
 
-[Show source in ranked_query.py:54](../../../../alfred/fm/query/ranked_query.py#L54)
+[Show source in ranked_query.py:52](../../../../alfred/fm/query/ranked_query.py#L52)
 
 returns the raw candidates content
 
@@ -149,7 +149,7 @@ def candidates(self):
 
 ### RankedQuery().get_answer_choices_str
 
-[Show source in ranked_query.py:64](../../../../alfred/fm/query/ranked_query.py#L64)
+[Show source in ranked_query.py:62](../../../../alfred/fm/query/ranked_query.py#L62)
 
 get the raw candidates as jinja strings (deliminated by '|||')
 
@@ -162,7 +162,7 @@ def get_answer_choices_str(self):
 
 ### RankedQuery().load
 
-[Show source in ranked_query.py:68](../../../../alfred/fm/query/ranked_query.py#L68)
+[Show source in ranked_query.py:66](../../../../alfred/fm/query/ranked_query.py#L66)
 
 Load prompt and candidates
 
@@ -185,7 +185,7 @@ def load(self, composition_fn: Callable = None) -> List:
 
 ### RankedQuery().prompt
 
-[Show source in ranked_query.py:59](../../../../alfred/fm/query/ranked_query.py#L59)
+[Show source in ranked_query.py:57](../../../../alfred/fm/query/ranked_query.py#L57)
 
 returns the raw prompt content
 

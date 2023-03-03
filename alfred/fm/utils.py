@@ -1,18 +1,19 @@
 import gc
 import logging
 from collections import OrderedDict
-from typing import List, Union, Tuple, Optional
+from typing import List, Union, Optional
 
 import numpy as np
 import torch
-from operator import itemgetter
+import transformers
+from torch.nn.utils.rnn import pad_sequence
 
 from .query import Query, RankedQuery, CompletionQuery
 from .response import RankedResponse
 
 logger = logging.getLogger(__name__)
 
-LMT_SIZE_FACTOR = 1048576
+LMT_SIZE_FACTOR = 65536
 
 
 def clear_cuda_cache():
@@ -43,7 +44,7 @@ def reorder_array(
                list], order: Union[np.ndarray, torch.Tensor, list]
 ) -> Union[np.ndarray, torch.Tensor, list]:
     """
-    Reorder an array according to a given order.
+    Recover an array according to a given order index.
 
     This function reorders the elements in an array according to the order specified by a separate array.
 
@@ -54,11 +55,65 @@ def reorder_array(
     :return: The reordered array. Has the same type as the input `arr`.
     :rtype: Union[np.ndarray, torch.Tensor, list]
     """
-    if isinstance(arr[0], torch.Tensor):
-        arr = torch.stack(arr)
-        return arr[order]
+    return [x[0] for x in sorted(list(zip(arr, order)), key=lambda x: x[1])]
+
+
+def tokenize(inst, tokenizer, max_length=512):
+    """
+    Tokenize a query instance
+
+    :param inst: A query instance
+    :type inst: Union[Query, str]
+    :param tokenizer: A tokenizer
+    :type tokenizer: transformers.PreTrainedTokenizer
+    :param max_length: The maximum length of the tokenized sequence
+    :type max_length: int
+    :return: A list of token ids
+    :rtype: List[int]
+    """
+    if tokenizer:
+        token_ids = tokenizer.encode(inst,
+                                     max_length=max_length,
+                                     truncation=True,
+                                     return_tensors='pt')[0]
     else:
-        return [arr[i] for i in order]
+        token_ids = inst
+    return token_ids, len(token_ids)
+
+
+def batch_multimodal(queries: List[RankedQuery], batch_size=64):
+    """
+    Batch RankedQueries with Multimodal Payloads
+
+    :param queries: A list of multimodal queries
+    :type queries: List[RankedQuery]
+    :param batch_size: The batch size
+    :type batch_size: int
+    :return: A list of batches of multimodal ranked queries
+    :rtype: List[List[RankedQuery]]
+    """
+    candidates = queries[0].candidates
+    batches = []
+    batch = []
+    for query in queries:
+        if len(batch) == batch_size:
+            batches.append((batch, candidates))
+            batch = []
+        batch.append(query.prompt)
+    if len(batch) > 0:
+        batches.append((batch, candidates))
+    return batches
+
+
+class TokenizedBatch:
+    def __init__(self, token_ids, pad_token_id=0):
+        self.input_ids = pad_sequence(token_ids,
+                                      batch_first=True,
+                                      padding_value=pad_token_id).long()
+        self.attention_mask = (self.input_ids != pad_token_id).long()
+
+    def __len__(self):
+        return len(self.input_ids)
 
 
 class DynamicBatcher:
@@ -70,6 +125,8 @@ class DynamicBatcher:
         self,
         queries: Union[List[Query], List[str]],
         max_batch_size: int = 2048,
+        tokenizer: Optional[transformers.PreTrainedTokenizer] = None,
+        max_token_length: int = 512,
     ):
         """
         Initialize a DynamicBatcher
@@ -79,21 +136,22 @@ class DynamicBatcher:
         :param max_batch_size: The maximum batch size
         :type max_batch_size: int
         """
+        self.len_sorted_idx = None
         self.queries = queries
         self.max_batch_size = max_batch_size
 
         if torch.cuda.is_available():
             gpu_mem = torch.cuda.get_device_properties(0).total_memory
             free_mem = gpu_mem - torch.cuda.memory_allocated(0)
+            self.limit_size = free_mem / LMT_SIZE_FACTOR
         else:
-            free_mem = -1
+            self.limit_size = LMT_SIZE_FACTOR
 
-        # Get Approximate Maximum Batch Size
-        if free_mem > 0:
-            self.max_batch_size = min(int(free_mem / LMT_SIZE_FACTOR * 2), max_batch_size)
-
-        self.limit_size = LMT_SIZE_FACTOR
+        self.max_batch_size = max_batch_size
         self.ranked = False
+        self.tokenizer = tokenizer
+        self.max_token_length = max_token_length
+
         if isinstance(self.queries[0], RankedQuery):
             # Enforcing Uniform Candidate sizes and order across one set of
             # RankedQueries
@@ -105,7 +163,6 @@ class DynamicBatcher:
         self,
         responses: List[OrderedDict],
         softmax: bool = True,
-        candidate_token_len: Union[List[int], int] = 1,
     ) -> RankedResponse:
         """
         Merge a list of responses with raw logit into a single RankedResponse
@@ -115,46 +172,43 @@ class DynamicBatcher:
         :type responses: List[OrderedDict]
         :param softmax: Whether to apply softmax to the logits
         :type softmax: bool
-        :param candidate_token_len: The length of the candidate in terms of tokens
-        :type candidate_token_len: Union[List[int], int]
         :return: A merged response
         :rtype: RankedResponse
         """
-        if isinstance(candidate_token_len, int):
-            candidate_token_len = [candidate_token_len] * len(self.candidates)
+        assert self.candidate_size == len(responses)
 
-        scores = torch.empty(len(candidate_token_len))
-        # embeddings = []
+        scores = torch.empty(self.candidate_size)
+        candidates = []
         for response_idx, response in enumerate(responses):
             scores[response_idx] = response['logit']
-            # embeddings.append(response['hidden_state'])
+            candidates.append(response['candidate'])
+
+        logits = {
+            candidate: score.item()
+            for candidate, score in zip(candidates, scores)
+        }
 
         if softmax:
             scores = torch.nn.functional.softmax(scores, dim=0)
-        pred = self.candidates[int(torch.argmax(scores, dim=0))]
+        pred = candidates[int(torch.argmax(scores, dim=0))]
 
         scores = {
             candidate: score.item()
-            for candidate, score in zip(self.candidates, scores)
+            for candidate, score in zip(candidates, scores)
         }
-
-        # embeddings = {
-        #     candidate: embedding
-        #     for candidate, embedding in zip(self.candidates, embeddings)
-        # }
 
         return RankedResponse(
             prediction=pred,
             scores=scores,
+            logits=logits,
             embeddings=responses[0]['hidden_state'],
         )
 
     def reorder(
-            self,
-            inst: List,
-            offset: Optional[int] = None,
-            candidate_token_len: Optional[Union[int,
-                                                List[int]]] = None) -> List:
+        self,
+        inst: List,
+        offset: Optional[int] = None,
+    ) -> List:
         """
         Reordering the responses according to the original order of the queries
 
@@ -162,8 +216,6 @@ class DynamicBatcher:
         :type inst: List
         :param offset: The offset of the responses
         :type offset: Optional[int]
-        :param candidate_token_len: The length of the candidate in terms of tokens
-        :type candidate_token_len: Optional[Union[int, List[int]]]
         :return: The reordered responses
         :rtype: List of responses
         """
@@ -184,9 +236,6 @@ class DynamicBatcher:
         reordered_inst = reorder_array(inst, self.len_sorted_idx)
 
         if self.ranked:
-            assert len(candidate_token_len) == len(
-                self.candidates
-            ), f"Length of candidate_token_len {len(candidate_token_len)} does not match length of candidates {len(self.candidates)}"
             reordered_inst = [
                 self.merge_rank_response(reordered_inst[i:i +
                                                         self.candidate_size])
@@ -205,19 +254,38 @@ class DynamicBatcher:
         :return: A list of batches
         :rtype: List[List[Instance]]
         '''
+        def _process_batch(batch):
+            if self.tokenizer:
+                if isinstance(batch[0], tuple):
+                    batch, candidate = zip(*batch)
+                    return (TokenizedBatch(batch), candidate)
+                else:
+                    return TokenizedBatch(batch)
+            return batch
+
+        logger.info(
+            f"Batching queries with tokenizer? {self.tokenizer is not None}")
+
         insts = []
         candidates = []
+        inst_len = []
         for query in self.queries:
             if isinstance(query, str):
-                insts.append(query)
+                inst, ilen = tokenize(query, self.tokenizer,
+                                      self.max_token_length)
+                insts.append(inst)
+                inst_len.append(ilen)
             elif isinstance(query, CompletionQuery):
-                insts += query.load()
+                inst, ilen = tokenize(query.load()[0], self.tokenizer,
+                                      self.max_token_length)
+                insts.append(inst)
+                inst_len.append(ilen)
             elif isinstance(query, RankedQuery):
-                insts += [query.prompt] * len(query.candidates)
-                candidates += query.candidates
-            elif isinstance(query, Tuple):
-                insts.append(query[0])
-                candidates.append(query[1])
+                inst, ilen = tokenize(query.prompt, self.tokenizer,
+                                      self.max_token_length)
+                insts += [inst] * self.candidate_size
+                inst_len += [ilen] * self.candidate_size
+                candidates += self.candidates
             else:
                 logger.error(f"Unknown query type {type(query)}")
                 raise ValueError(f"Input type {type(query)} not supported")
@@ -225,14 +293,12 @@ class DynamicBatcher:
         ranked = len(candidates) > 0
         if ranked:
             self.limit_size /= self.candidate_size
-        inst_len = [len(inst) for inst in insts]
         inst_len_sorted, inst_len_sorted_idx = torch.sort(
             torch.tensor(inst_len), descending=True)
 
         self.len_sorted_idx = inst_len_sorted_idx
 
         curr_batch = []
-        curr_sz = 0
         curr_max = -1
         curr_batch_sz = 0
 
@@ -241,26 +307,18 @@ class DynamicBatcher:
             inst_len = inst_len_sorted[sorted_idx]
             curr_inst = (insts[index],
                          candidates[index]) if ranked else insts[index]
-            if curr_sz < self.limit_size and curr_batch_sz < self.max_batch_size:
-                curr_max = max(curr_max, inst_len)
-                new_sz = curr_max * curr_batch_sz
-                if new_sz >= self.limit_size or curr_batch_sz >= self.max_batch_size:
-                    batches.append(curr_batch)
-                    curr_batch = [curr_inst]
-                    curr_sz = inst_len
-                    curr_max = inst_len
-                    curr_batch_sz = 1
-                else:
-                    curr_batch.append(curr_inst)
-                    curr_batch_sz += 1
-                    curr_sz = new_sz
-            else:
-                batches.append(curr_batch)
+            curr_max = max(curr_max, inst_len)
+            new_sz = curr_max * curr_max * curr_batch_sz
+            if new_sz >= self.limit_size or curr_batch_sz >= self.max_batch_size:
+                batches.append(_process_batch(curr_batch))
                 curr_batch = [curr_inst]
-                curr_sz = inst_len
                 curr_max = inst_len
                 curr_batch_sz = 1
-        batches.append(curr_batch)
+            else:
+                curr_batch.append(curr_inst)
+                curr_batch_sz += 1
+
+        batches.append(_process_batch(curr_batch))
 
         clear_cuda_cache()
 

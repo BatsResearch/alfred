@@ -1,6 +1,6 @@
+import logging
 import os
 import sqlite3
-import logging
 from typing import Optional, Any, List
 
 import pandas as pd
@@ -8,6 +8,7 @@ import pandas as pd
 from alfred.client.cache.cache import Cache
 
 logger = logging.getLogger(__name__)
+
 
 class SQLiteCache(Cache):
     """
@@ -22,11 +23,11 @@ class SQLiteCache(Cache):
 
     # TODO: Make response (de)serializable such that it fits in to the entries
     """
-
-    def __init__(self,
-                 session_name: str = "prompt-session-0",
-                 cache_location: Optional[str] = None,
-                 ):
+    def __init__(
+        self,
+        session_name: str = "prompt-session-0",
+        cache_location: Optional[str] = None,
+    ):
         """
         Initialize the SQLite-based cache
 
@@ -51,7 +52,8 @@ class SQLiteCache(Cache):
                                   " PRIMARY KEY (prompt, metadata));")
             self.cache_db.commit()
 
-    def write(self, prompt: str,
+    def write(self,
+              prompt: str,
               response: str,
               metadata: Optional[str] = None):
         """
@@ -66,12 +68,13 @@ class SQLiteCache(Cache):
         """
         self.cache_db.execute(
             'INSERT INTO prompt_cache (prompt, metadata, response) VALUES (?, ?, ?)',
-            (prompt,
-             metadata,
-             response))
+            (prompt, metadata, response))
         self.cache_db.commit()
 
-    def write_batch(self, prompts: List[str], responses: List[str], metadata: Optional[str] = None):
+    def write_batch(self,
+                    prompts: List[str],
+                    responses: List[str],
+                    metadata: Optional[str] = None):
         """
         Write a batch of serialized prompt, serialized response, and metadata records to the cache
 
@@ -87,8 +90,8 @@ class SQLiteCache(Cache):
         else:
             metadata = [metadata] * len(prompts)
         self.cache_db.executemany(
-            'INSERT INTO prompt_cache (prompt, metadata, response) VALUES (?, ?, ?)', zip(
-                prompts, metadata, responses))
+            'INSERT INTO prompt_cache (prompt, metadata, response) VALUES (?, ?, ?)',
+            zip(prompts, metadata, responses))
         self.cache_db.commit()
 
     def fetch_data(self, sql_suffix: str, *args: Any) -> List:
@@ -132,10 +135,11 @@ class SQLiteCache(Cache):
         :return: The records as a list
         :rtype: List
         """
-        return self.fetch_data(
-            f"WHERE prompt = ? AND metadata = ?", (prompt, metadata))
+        return self.fetch_data(f"WHERE prompt = ? AND metadata = ?",
+                               (prompt, metadata))
 
-    def read_by_prompts_and_metadata(self, prompts: List[str], metadata: str) -> List:
+    def read_by_prompts_and_metadata(self, prompts: List[str],
+                                     metadata: str) -> List:
         """
         Read records from the cache by list of prompts and metadata
 
@@ -148,8 +152,7 @@ class SQLiteCache(Cache):
         """
         return self.fetch_data(
             f"WHERE prompt IN ({','.join('?' * len(prompts))}) AND metadata = ?",
-            (*prompts,
-             metadata))
+            (*prompts, metadata))
 
     def read_by_metadata(self, metadata: str) -> List:
         """
@@ -180,7 +183,9 @@ class SQLiteCache(Cache):
         except IndexError:
             return None
 
-    def read_batch(self, prompts: List[str], metadata: Optional[str] = None) -> List:
+    def read_batch(self,
+                   prompts: List[str],
+                   metadata: Optional[str] = None) -> List:
         """
         Read a batch of values from the cache by prompt
 
@@ -238,4 +243,3 @@ class SQLiteCache(Cache):
             con.close()
         else:
             logger.warning("Cache file does not exist")
-
