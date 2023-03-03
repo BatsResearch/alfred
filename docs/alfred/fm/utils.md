@@ -21,7 +21,7 @@ Utils
 
 ## DynamicBatcher
 
-[Show source in utils.py:123](../../../alfred/fm/utils.py#L123)
+[Show source in utils.py:119](../../../alfred/fm/utils.py#L119)
 
 Dynamic Batching Utility
 Maximize GPU Utilization by batching queries of similar sizes
@@ -42,7 +42,7 @@ class DynamicBatcher:
 
 ### DynamicBatcher().batch
 
-[Show source in utils.py:247](../../../alfred/fm/utils.py#L247)
+[Show source in utils.py:248](../../../alfred/fm/utils.py#L248)
 
 Batch a list of instances into a list of batches.
 If the instances are of different sizes, they will be sorted by size
@@ -62,7 +62,7 @@ def batch(self) -> List:
 
 ### DynamicBatcher().merge_rank_response
 
-[Show source in utils.py:167](../../../alfred/fm/utils.py#L167)
+[Show source in utils.py:162](../../../alfred/fm/utils.py#L162)
 
 Merge a list of responses with raw logit into a single RankedResponse
 Assumption: Candidate Order is the same across all ranked queries
@@ -90,7 +90,7 @@ def merge_rank_response(
 
 ### DynamicBatcher().reorder
 
-[Show source in utils.py:206](../../../alfred/fm/utils.py#L206)
+[Show source in utils.py:207](../../../alfred/fm/utils.py#L207)
 
 Reordering the responses according to the original order of the queries
 
@@ -117,7 +117,7 @@ def reorder(self, inst: List, offset: Optional[int] = None) -> List:
 
 ## TokenizedBatch
 
-[Show source in utils.py:112](../../../alfred/fm/utils.py#L112)
+[Show source in utils.py:108](../../../alfred/fm/utils.py#L108)
 
 #### Signature
 
@@ -131,7 +131,7 @@ class TokenizedBatch:
 
 ## batch_multimodal
 
-[Show source in utils.py:88](../../../alfred/fm/utils.py#L88)
+[Show source in utils.py:84](../../../alfred/fm/utils.py#L84)
 
 Batch RankedQueries with Multimodal Payloads
 
@@ -203,7 +203,7 @@ def normalize_logits(logits: torch.Tensor) -> torch.Tensor:
 
 [Show source in utils.py:42](../../../alfred/fm/utils.py#L42)
 
-Reorder an array according to a given order.
+Recover an array according to a given order index.
 
 This function reorders the elements in an array according to the order specified by a separate array.
 
@@ -233,7 +233,7 @@ def reorder_array(
 
 ## tokenize
 
-[Show source in utils.py:65](../../../alfred/fm/utils.py#L65)
+[Show source in utils.py:61](../../../alfred/fm/utils.py#L61)
 
 Tokenize a query instance
 

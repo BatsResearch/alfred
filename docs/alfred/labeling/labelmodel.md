@@ -28,7 +28,7 @@ class LabelModel:
 
 ### LabelModel().__call__
 
-[Show source in labelmodel.py:31](../../../alfred/labeling/labelmodel.py#L31)
+[Show source in labelmodel.py:30](../../../alfred/labeling/labelmodel.py#L30)
 
 functional style of label
 
@@ -41,7 +41,7 @@ def __call__(self, votes):
 
 ### LabelModel().label
 
-[Show source in labelmodel.py:27](../../../alfred/labeling/labelmodel.py#L27)
+[Show source in labelmodel.py:26](../../../alfred/labeling/labelmodel.py#L26)
 
 #### Signature
 

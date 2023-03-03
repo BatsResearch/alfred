@@ -35,7 +35,7 @@ class Voter:
 
 ### Voter().clear_calibration
 
-[Show source in voter.py:143](../../../alfred/voter/voter.py#L143)
+[Show source in voter.py:144](../../../alfred/voter/voter.py#L144)
 
 Clear calibration weights and biases
 
@@ -48,7 +48,7 @@ def clear_calibration(self):
 
 ### Voter().set_calibration
 
-[Show source in voter.py:129](../../../alfred/voter/voter.py#L129)
+[Show source in voter.py:130](../../../alfred/voter/voter.py#L130)
 
 Set calibration weights and biases
 
@@ -72,7 +72,7 @@ def set_calibration(
 
 ### Voter().vote
 
-[Show source in voter.py:53](../../../alfred/voter/voter.py#L53)
+[Show source in voter.py:52](../../../alfred/voter/voter.py#L52)
 
 Vote for the responses based on the matching function and the label maps
 

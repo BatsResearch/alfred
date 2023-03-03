@@ -25,7 +25,7 @@ ImageTemplate
 
 ## ImageTemplate
 
-[Show source in image_template.py:16](../../../alfred/template/image_template.py#L16)
+[Show source in image_template.py:15](../../../alfred/template/image_template.py#L15)
 
 Template Class for Image data
 
@@ -82,7 +82,7 @@ def __call__(
 
 ### ImageTemplate().apply
 
-[Show source in image_template.py:72](../../../alfred/template/image_template.py#L72)
+[Show source in image_template.py:71](../../../alfred/template/image_template.py#L71)
 
 Apply the template to a single image example
 

@@ -14,4 +14,5 @@ Labeling
 - [FlyingSquid](./flyingsquid.md)
 - [LabelModel](./labelmodel.md)
 - [MajorityVote](./majority_vote.md)
+- [NaiveBayes](./naive_bayes.md)
 - [NPLM](./nplm.md)

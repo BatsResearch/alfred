@@ -20,7 +20,7 @@ Model
 
 ## APIAccessFoundationModel
 
-[Show source in model.py:348](../../../alfred/fm/model.py#L348)
+[Show source in model.py:347](../../../alfred/fm/model.py#L347)
 
 #### Signature
 
@@ -51,7 +51,7 @@ class FoundationModel(abc.ABC):
 
 ### FoundationModel().__call__
 
-[Show source in model.py:328](../../../alfred/fm/model.py#L328)
+[Show source in model.py:327](../../../alfred/fm/model.py#L327)
 
 This function returns the output of the run function when the
  model is called as a function. It can be used as model(queries),
@@ -82,7 +82,7 @@ def __call__(
 
 ### FoundationModel().encode
 
-[Show source in model.py:262](../../../alfred/fm/model.py#L262)
+[Show source in model.py:261](../../../alfred/fm/model.py#L261)
 
 This function is a wrapper around the forward function
 
@@ -118,7 +118,7 @@ def encode(
 
 ### FoundationModel().forward
 
-[Show source in model.py:76](../../../alfred/fm/model.py#L76)
+[Show source in model.py:75](../../../alfred/fm/model.py#L75)
 
 This function is the main entry point for running queries through the foundation model.
 It accepts raw query content and automatically converts it into query objects.
@@ -166,7 +166,7 @@ def forward(
 
 ### FoundationModel().generate
 
-[Show source in model.py:207](../../../alfred/fm/model.py#L207)
+[Show source in model.py:206](../../../alfred/fm/model.py#L206)
 
 This function is a wrapper around the forward function for running
 CompletionQuery objects through the foundation model. It returns a list
@@ -203,7 +203,7 @@ def generate(
 
 ### FoundationModel().run
 
-[Show source in model.py:291](../../../alfred/fm/model.py#L291)
+[Show source in model.py:290](../../../alfred/fm/model.py#L290)
 
 This function is the main entry point for users to run queries through the foundation model.
 It accepts raw query content and automatically converts it into query objects.
@@ -235,7 +235,7 @@ def run(
 
 ### FoundationModel().score
 
-[Show source in model.py:232](../../../alfred/fm/model.py#L232)
+[Show source in model.py:231](../../../alfred/fm/model.py#L231)
 
 This function is a wrapper around the forward function
 for running RankedQuery objects through the foundation model.
@@ -274,7 +274,7 @@ def score(
 
 ## LocalAccessFoundationModel
 
-[Show source in model.py:363](../../../alfred/fm/model.py#L363)
+[Show source in model.py:362](../../../alfred/fm/model.py#L362)
 
 #### Signature
 

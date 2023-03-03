@@ -13,7 +13,7 @@ NPLM
 
 ## NPLM
 
-[Show source in nplm.py:6](../../../alfred/labeling/nplm.py#L6)
+[Show source in nplm.py:7](../../../alfred/labeling/nplm.py#L7)
 
 LabelModel wrapper to perform label modeling for partial labelers on the responses
 
@@ -21,13 +21,18 @@ LabelModel wrapper to perform label modeling for partial labelers on the respons
 
 ```python
 class NPLM(LabelModel):
-    def __init__(self, num_classes, label_partition):
+    def __init__(
+        self,
+        num_classes,
+        label_partition,
+        device="cuda:0" if torch.cuda.is_available() else "cpu",
+    ):
         ...
 ```
 
 ### NPLM().label
 
-[Show source in nplm.py:26](../../../alfred/labeling/nplm.py#L26)
+[Show source in nplm.py:30](../../../alfred/labeling/nplm.py#L30)
 
 Label the responses using the label model.
 Similar to standard PWS practice, abstention = 0 (i.e. classes are 1-indexed)

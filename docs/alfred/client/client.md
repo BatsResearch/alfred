@@ -19,11 +19,7 @@ Client
 
 ## Client
 
-<<<<<<< HEAD
-[Show source in client.py:23](../../../alfred/client/client.py#L23)
-=======
-[Show source in client.py:24](../../../alfred/client/client.py#L24)
->>>>>>> 0993af6d721d7140ca5af1194987c04052c20003
+[Show source in client.py:28](../../../alfred/client/client.py#L28)
 
 Client is the primary user interface that wraps around foundation models.
 A client interface for accessing various models, such as those implemented by OpenAI, Hugging Face, etc.
@@ -42,7 +38,7 @@ class Client:
         local_path: Optional[str] = None,
         ssh_tunnel: bool = False,
         ssh_node: Optional[str] = None,
-        cache: Optional[Cache] = "SQLite",
+        cache: Optional[Cache] = None,
         **kwargs: Any
     ):
         ...
@@ -50,11 +46,7 @@ class Client:
 
 ### Client().__call__
 
-<<<<<<< HEAD
-[Show source in client.py:233](../../../alfred/client/client.py#L233)
-=======
-[Show source in client.py:244](../../../alfred/client/client.py#L244)
->>>>>>> 0993af6d721d7140ca5af1194987c04052c20003
+[Show source in client.py:259](../../../alfred/client/client.py#L259)
 
 __call__() function to run the model on the queries.
 Equivalent to run() function.
@@ -82,11 +74,7 @@ def __call__(
 
 ### Client().calibrate
 
-<<<<<<< HEAD
-[Show source in client.py:250](../../../alfred/client/client.py#L250)
-=======
-[Show source in client.py:259](../../../alfred/client/client.py#L259)
->>>>>>> 0993af6d721d7140ca5af1194987c04052c20003
+[Show source in client.py:274](../../../alfred/client/client.py#L274)
 
 calibrate are used to calibrate foundation models contextually given the template.
 A voter class may be passed to calibrate the model with a specific voter.
@@ -131,7 +119,7 @@ def calibrate(
 
 ### Client().encode
 
-[Show source in client.py:335](../../../alfred/client/client.py#L335)
+[Show source in client.py:350](../../../alfred/client/client.py#L350)
 
 embed() function to embed the queries.
 
@@ -154,11 +142,7 @@ def encode(
 
 ### Client().generate
 
-<<<<<<< HEAD
-[Show source in client.py:194](../../../alfred/client/client.py#L194)
-=======
-[Show source in client.py:203](../../../alfred/client/client.py#L203)
->>>>>>> 0993af6d721d7140ca5af1194987c04052c20003
+[Show source in client.py:218](../../../alfred/client/client.py#L218)
 
 Wrapper function to generate the response(s) from the model. (For completion)
 
@@ -187,11 +171,7 @@ def generate(
 
 ### Client().remote_run
 
-<<<<<<< HEAD
-[Show source in client.py:175](../../../alfred/client/client.py#L175)
-=======
-[Show source in client.py:181](../../../alfred/client/client.py#L181)
->>>>>>> 0993af6d721d7140ca5af1194987c04052c20003
+[Show source in client.py:196](../../../alfred/client/client.py#L196)
 
 Wrapper function for running the model on the queries thru a gRPC Server.
 
@@ -218,11 +198,7 @@ def remote_run(
 
 ### Client().run
 
-<<<<<<< HEAD
-[Show source in client.py:156](../../../alfred/client/client.py#L156)
-=======
-[Show source in client.py:161](../../../alfred/client/client.py#L161)
->>>>>>> 0993af6d721d7140ca5af1194987c04052c20003
+[Show source in client.py:176](../../../alfred/client/client.py#L176)
 
 Run the model on the queries.
 
@@ -249,11 +225,7 @@ def run(
 
 ### Client().score
 
-<<<<<<< HEAD
-[Show source in client.py:210](../../../alfred/client/client.py#L210)
-=======
-[Show source in client.py:220](../../../alfred/client/client.py#L220)
->>>>>>> 0993af6d721d7140ca5af1194987c04052c20003
+[Show source in client.py:235](../../../alfred/client/client.py#L235)
 
 Wrapper function to score the response(s) from the model. (For ranking)
 

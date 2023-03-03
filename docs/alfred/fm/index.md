@@ -11,10 +11,13 @@ Fm
 
 ## Modules
 
+- [Ai21](./ai21.md)
+- [Cohere](./cohere.md)
 - [Dummy](./dummy.md)
 - [Huggingface](./huggingface.md)
 - [Huggingfacevlm](./huggingfacevlm.md)
 - [Model](./model.md)
+- [Onnx](./onnx.md)
 - [Openai](./openai.md)
 - [Query](query/index.md)
 - [Remote](remote/index.md)
