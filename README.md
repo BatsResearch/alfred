@@ -1,12 +1,7 @@
 <h1 style="font-size: 48px">  <img src="assets/icons/icon.png" style="float: left; margin-right: 15px;" width="64" height="64" alt="Alfred"></img>  Alfred: A System for Prompted Weak Supervision </h1>
 
-<<<<<<< HEAD
-_Now with Cache!_
 
-Internal Alpha Run, Build Status:  ![test status](https://github.com/BatsResearch/alfred/actions/workflows/tests.yml/badge.svg?branch=main)
-=======
 Test Status:  ![test status](https://github.com/BatsResearch/alfred/actions/workflows/tests.yml/badge.svg?branch=main)
->>>>>>> 0993af6d721d7140ca5af1194987c04052c20003
 
 # Overview
 
