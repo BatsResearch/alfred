@@ -211,8 +211,6 @@ class Cache(abc.ABC):
         """
         Decorator function for model queries, fetch from cache db if exist else write into cache_db
 
-        TODO: [1]standardize serailized prompts str [2] Merge redundent queries
-
         :param model_run: Model run function
         :type model_run: Callable
         :return: Decorated function
@@ -232,37 +230,21 @@ class Cache(abc.ABC):
             :return: List of responses
             :rtype: Union[Response, List[Response]]
             """
-
             metadata = to_metadata_string(**kwargs)
             list_flag = isinstance(queries, list)
             queries = [queries] if not list_flag else queries
 
-            try:
-                # TODO: For now skip read_batch
-                raise NotImplementedError
-                responses, new_q_idx, _new_queries = self.read_batch(
-                    queries, metadata)
-                print(
-                    f"Found {len(responses) - len(new_q_idx)} responses in cache"
-                )
-                logger.info(
-                    f"Found {len(responses) - len(new_q_idx)} responses in cache"
-                )
-            except NotImplementedError:
-                logger.info(
-                    "Batch read not implemented, falling back to single read")
-                responses, new_q_idx, new_queries = [], [], []
-                for q_idx, query in enumerate(queries):
-                    # TODO: Optimize for async reading from DB
-                    cached_response = self.read(
-                        query.serialize()
-                        if isinstance(query, Query) else str(query), metadata)
-                    if cached_response:
-                        responses.append(deserialize(cached_response))
-                    else:
-                        responses.append(None)
-                        new_q_idx.append(q_idx)
-                _new_queries = [queries[idx] for idx in new_q_idx]
+            responses, new_q_idx, new_queries = [], [], []
+            for q_idx, query in enumerate(queries):
+                cached_response = self.read(
+                    query.serialize()
+                    if isinstance(query, Query) else str(query), metadata)
+                if cached_response:
+                    responses.append(deserialize(cached_response))
+                else:
+                    responses.append(None)
+                    new_q_idx.append(q_idx)
+            _new_queries = [queries[idx] for idx in new_q_idx]
             if len(new_q_idx) > 0:
                 logger.info(f"Running {len(new_q_idx)} queries")
                 _model_responses = model_run(

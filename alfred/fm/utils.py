@@ -1,12 +1,13 @@
 import gc
 import logging
 from collections import OrderedDict
-from typing import List, Union, Optional
+from typing import List, Union, Optional, Callable
 
 import numpy as np
 import torch
 import transformers
 from torch.nn.utils.rnn import pad_sequence
+from PIL import Image
 
 from .query import Query, RankedQuery, CompletionQuery
 from .response import RankedResponse
@@ -40,8 +41,8 @@ def normalize_logits(logits: torch.Tensor) -> torch.Tensor:
 
 
 def reorder_array(
-    arr: Union[np.ndarray, torch.Tensor,
-               list], order: Union[np.ndarray, torch.Tensor, list]
+        arr: Union[np.ndarray, torch.Tensor,
+        list], order: Union[np.ndarray, torch.Tensor, list]
 ) -> Union[np.ndarray, torch.Tensor, list]:
     """
     Recover an array according to a given order index.
@@ -105,6 +106,66 @@ def batch_multimodal(queries: List[RankedQuery], batch_size=64):
     return batches
 
 
+class EmbeddingCache:
+    """
+    A simple embedding cache for VLM models
+    """
+    def __init__(self, max_size: int = 32):
+        self.max_size = max_size
+        self.cache = {}
+
+    def __contains__(self, key):
+        if isinstance(key, Image.Image):
+            key = key.tobytes()
+        return key in self.cache
+
+    def __getitem__(self, key):
+        if isinstance(key, Image.Image):
+            key = key.tobytes()
+        return self.cache[key]
+
+    def __setitem__(self, key, value):
+        if len(self.cache) >= self.max_size:
+            self.cache.pop(next(iter(self.cache)))
+        if isinstance(key, Image.Image):
+            key = key.tobytes()
+        self.cache[key] = value
+
+    def get(
+            self,
+            inputs: Union[List[Image.Image], List[str]],
+            embedding_proc: Callable,
+    ) -> torch.tensor:
+        """
+        Process the inputs and retrieve from the cache/embed the inputs
+
+        :param inputs: A list of inputs
+        :type inputs: Union[List[Image.Image], List[str]]
+        :param embedding_proc: The embedding function
+        :type embedding_proc: Callable
+        :return: The embeddings
+        :rtype: torch.tensor
+        """
+        cached_embeddings = []
+        new_inputs = []
+
+        cached_idx, new_inp_idx = [], []
+        for inp_idx, inp in enumerate(inputs):
+            if inp in self:
+                cached_embeddings.append(self[inp])
+                cached_idx.append(inp_idx)
+            else:
+                new_inputs.append(inp)
+                new_inp_idx.append(inp_idx)
+
+        if len(new_inputs) == 0:
+            return torch.stack(cached_embeddings)
+
+        new_embeddings = embedding_proc(new_inputs)
+        for inp, embedding in zip(new_inputs, new_embeddings):
+            self[inp] = embedding
+        return torch.stack(reorder_array(list(new_embeddings) + cached_embeddings, new_inp_idx + cached_idx))
+
 class TokenizedBatch:
     def __init__(self, token_ids, pad_token_id=0):
         self.input_ids = pad_sequence(token_ids,
@@ -121,12 +182,13 @@ class DynamicBatcher:
     Dynamic Batching Utility
     Maximize GPU Utilization by batching queries of similar sizes
     """
+
     def __init__(
-        self,
-        queries: Union[List[Query], List[str]],
-        max_batch_size: int = 2048,
-        tokenizer: Optional[transformers.PreTrainedTokenizer] = None,
-        max_token_length: int = 512,
+            self,
+            queries: Union[List[Query], List[str]],
+            max_batch_size: int = 2048,
+            tokenizer: Optional[transformers.PreTrainedTokenizer] = None,
+            max_token_length: int = 512,
     ):
         """
         Initialize a DynamicBatcher
@@ -160,9 +222,9 @@ class DynamicBatcher:
             self.ranked = True
 
     def merge_rank_response(
-        self,
-        responses: List[OrderedDict],
-        softmax: bool = True,
+            self,
+            responses: List[OrderedDict],
+            softmax: bool = True,
     ) -> RankedResponse:
         """
         Merge a list of responses with raw logit into a single RankedResponse
@@ -205,9 +267,9 @@ class DynamicBatcher:
         )
 
     def reorder(
-        self,
-        inst: List,
-        offset: Optional[int] = None,
+            self,
+            inst: List,
+            offset: Optional[int] = None,
     ) -> List:
         """
         Reordering the responses according to the original order of the queries
@@ -224,7 +286,7 @@ class DynamicBatcher:
             if offset:
                 _inst = np.empty([len(inst)])
                 for idx, i in enumerate(self.len_sorted_idx[offset:offset +
-                                                            len(inst)]):
+                                                                   len(inst)]):
                     _inst[idx] = inst[i]
                 return list(_inst)
             raise ValueError(
@@ -238,7 +300,7 @@ class DynamicBatcher:
         if self.ranked:
             reordered_inst = [
                 self.merge_rank_response(reordered_inst[i:i +
-                                                        self.candidate_size])
+                                                          self.candidate_size])
                 for i in range(0, len(reordered_inst), self.candidate_size)
             ]
 
@@ -254,6 +316,7 @@ class DynamicBatcher:
         :return: A list of batches
         :rtype: List[List[Instance]]
         '''
+
         def _process_batch(batch):
             if self.tokenizer:
                 if isinstance(batch[0], tuple):
