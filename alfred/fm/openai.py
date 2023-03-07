@@ -154,7 +154,7 @@ class OpenAIModel(APIAccessFoundationModel):
         output = []
         for query in batch_instance:
             output.append(
-                CompletionResponse(text=self._openai_query(
+                CompletionResponse(prediction=self._openai_query(
                     query, model=self.model_string, **kwargs)))
         return output
 
