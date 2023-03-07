@@ -22,9 +22,7 @@ This class provides a wrapper for the OpenAI API for generating completions.
 
 ```python
 class CohereModel(APIAccessFoundationModel):
-    def __init__(
-        self, api_key: str, model_string: str = "xlarge", cfg: Optional[Dict] = None
-    ):
+    def __init__(self, model_string: str = "xlarge", api_key: Optional[str] = None):
         ...
 ```
 

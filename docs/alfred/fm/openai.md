@@ -12,7 +12,7 @@ Openai
 
 ## OpenAIModel
 
-[Show source in openai.py:27](../../../alfred/fm/openai.py#L27)
+[Show source in openai.py:32](../../../alfred/fm/openai.py#L32)
 
 A wrapper for the OpenAI API.
 
@@ -23,7 +23,7 @@ This class provides a wrapper for the OpenAI API for generating completions.
 ```python
 class OpenAIModel(APIAccessFoundationModel):
     def __init__(
-        self, model_string: str = "text-davinci-002", cfg: Optional[Dict] = None
+        self, model_string: str = "text-davinci-002", api_key: Optional[str] = None
     ):
         ...
 ```
