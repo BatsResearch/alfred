@@ -12,6 +12,8 @@ Utils
     - [DynamicBatcher().batch](#dynamicbatcher()batch)
     - [DynamicBatcher().merge_rank_response](#dynamicbatcher()merge_rank_response)
     - [DynamicBatcher().reorder](#dynamicbatcher()reorder)
+  - [EmbeddingCache](#embeddingcache)
+    - [EmbeddingCache().get](#embeddingcache()get)
   - [TokenizedBatch](#tokenizedbatch)
   - [batch_multimodal](#batch_multimodal)
   - [clear_cuda_cache](#clear_cuda_cache)
@@ -21,7 +23,7 @@ Utils
 
 ## DynamicBatcher
 
-[Show source in utils.py:119](../../../alfred/fm/utils.py#L119)
+[Show source in utils.py:180](../../../alfred/fm/utils.py#L180)
 
 Dynamic Batching Utility
 Maximize GPU Utilization by batching queries of similar sizes
@@ -42,7 +44,7 @@ class DynamicBatcher:
 
 ### DynamicBatcher().batch
 
-[Show source in utils.py:248](../../../alfred/fm/utils.py#L248)
+[Show source in utils.py:310](../../../alfred/fm/utils.py#L310)
 
 Batch a list of instances into a list of batches.
 If the instances are of different sizes, they will be sorted by size
@@ -62,7 +64,7 @@ def batch(self) -> List:
 
 ### DynamicBatcher().merge_rank_response
 
-[Show source in utils.py:162](../../../alfred/fm/utils.py#L162)
+[Show source in utils.py:224](../../../alfred/fm/utils.py#L224)
 
 Merge a list of responses with raw logit into a single RankedResponse
 Assumption: Candidate Order is the same across all ranked queries
@@ -90,7 +92,7 @@ def merge_rank_response(
 
 ### DynamicBatcher().reorder
 
-[Show source in utils.py:207](../../../alfred/fm/utils.py#L207)
+[Show source in utils.py:269](../../../alfred/fm/utils.py#L269)
 
 Reordering the responses according to the original order of the queries
 
@@ -115,9 +117,52 @@ def reorder(self, inst: List, offset: Optional[int] = None) -> List:
 
 
 
+## EmbeddingCache
+
+[Show source in utils.py:109](../../../alfred/fm/utils.py#L109)
+
+A simple embedding cache for VLM models
+
+#### Signature
+
+```python
+class EmbeddingCache:
+    def __init__(self, max_size: int = 32):
+        ...
+```
+
+### EmbeddingCache().get
+
+[Show source in utils.py:134](../../../alfred/fm/utils.py#L134)
+
+Process the inputs and retrieve from the cache/embed the inputs
+
+#### Arguments
+
+- `inputs` - A list of inputs
+:type inputs: Union[List[Image.Image], List[str]]
+- `embedding_proc` - The embedding function
+:type embedding_proc: Callable
+
+#### Returns
+
+The embeddings
+Type: *torch.tensor*
+
+#### Signature
+
+```python
+def get(
+    self, inputs: Union[List[Image.Image], List[str]], embedding_proc: Callable
+) -> torch.tensor:
+    ...
+```
+
+
+
 ## TokenizedBatch
 
-[Show source in utils.py:108](../../../alfred/fm/utils.py#L108)
+[Show source in utils.py:169](../../../alfred/fm/utils.py#L169)
 
 #### Signature
 
@@ -131,7 +176,7 @@ class TokenizedBatch:
 
 ## batch_multimodal
 
-[Show source in utils.py:84](../../../alfred/fm/utils.py#L84)
+[Show source in utils.py:85](../../../alfred/fm/utils.py#L85)
 
 Batch RankedQueries with Multimodal Payloads
 
@@ -158,7 +203,7 @@ def batch_multimodal(queries: List[RankedQuery], batch_size=64):
 
 ## clear_cuda_cache
 
-[Show source in utils.py:19](../../../alfred/fm/utils.py#L19)
+[Show source in utils.py:20](../../../alfred/fm/utils.py#L20)
 
 Clear cuda cache via garbage collection
 
@@ -173,7 +218,7 @@ def clear_cuda_cache():
 
 ## normalize_logits
 
-[Show source in utils.py:27](../../../alfred/fm/utils.py#L27)
+[Show source in utils.py:28](../../../alfred/fm/utils.py#L28)
 
 Normalize raw logit scores from a foundation model.
 
@@ -201,7 +246,7 @@ def normalize_logits(logits: torch.Tensor) -> torch.Tensor:
 
 ## reorder_array
 
-[Show source in utils.py:42](../../../alfred/fm/utils.py#L42)
+[Show source in utils.py:43](../../../alfred/fm/utils.py#L43)
 
 Recover an array according to a given order index.
 
@@ -233,7 +278,7 @@ def reorder_array(
 
 ## tokenize
 
-[Show source in utils.py:61](../../../alfred/fm/utils.py#L61)
+[Show source in utils.py:62](../../../alfred/fm/utils.py#L62)
 
 Tokenize a query instance
 

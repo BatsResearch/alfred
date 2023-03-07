@@ -50,8 +50,6 @@ class Cache(abc.ABC):
 
 Decorator function for model queries, fetch from cache db if exist else write into cache_db
 
-TODO: [1]standardize serailized prompts str [2] Merge redundent queries
-
 #### Arguments
 
 - `model_run` - Model run function

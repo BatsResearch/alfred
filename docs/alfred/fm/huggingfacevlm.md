@@ -12,7 +12,7 @@ Huggingfacevlm
 
 ## HuggingFaceCLIPModel
 
-[Show source in huggingfacevlm.py:14](../../../alfred/fm/huggingfacevlm.py#L14)
+[Show source in huggingfacevlm.py:15](../../../alfred/fm/huggingfacevlm.py#L15)
 
 The HuggingFaceModel class is a wrapper for HuggingFace VLM Models
 Currently supports CLIP models.
@@ -21,7 +21,13 @@ Currently supports CLIP models.
 
 ```python
 class HuggingFaceCLIPModel(LocalAccessFoundationModel):
-    def __init__(self, model_string: str, local_path: Optional[str] = None):
+    def __init__(
+        self,
+        model_string: str,
+        local_path: Optional[str] = None,
+        image_cache_limit: int = 32,
+        text_cache_limit: int = 64,
+    ):
         ...
 ```
 
