@@ -1,5 +1,5 @@
 import logging
-from typing import Optional, List, Dict, Any
+from typing import Optional, List, Any
 
 import torch
 
@@ -37,7 +37,7 @@ class CohereModel(APIAccessFoundationModel):
         :return: The generated completion
         :rtype: str
         """
-        response = self.model(prompt=query_string,
+        response = self.cohere_model.generate(prompt=query_string,
                               model=model,
                               max_tokens=max_tokens,
                               temperature=temperature,
@@ -56,27 +56,35 @@ class CohereModel(APIAccessFoundationModel):
         :return: The embeddings
         :rtype: str
         """
-        return self.model.embed(texts=[query_string]).embeddings
+        return torch.FloatTensor(self.cohere_model.embed(texts=[query_string]).embeddings)
 
-    def __init__(self,
-                 api_key: str,
-                 model_string: str = "xlarge",
-                 cfg: Optional[Dict] = None):
+    def __init__(
+            self,
+            model_string: str = "xlarge",
+            api_key: Optional[str] = None,
+    ):
         """
         Initialize the Cohere API wrapper.
 
         :param model_string: The model to be used for generating completions.
         :type model_string: str
-        :param cfg: The configuration dictionary containing the API key and other optional parameters.
-        :type cfg: Dict
+        :param api_key: The API key to be used for the Cohere API.
+        :type api_key: Optional[str]
         """
         try:
             import cohere
         except ModuleNotFoundError:
             raise ModuleNotFoundError(
                 "cohere module not found. Please install it.")
-        self.model = cohere.Client(api_key)
-        super().__init__(model_string, cfg)
+        if api_key is None:
+            logger.log(
+                logging.WARNING,
+                "Cohere API key not found, Requesting User Input"
+            )
+            api_key = input("Please enter your Cohere API key: ")
+            logger.log(logging.INFO, f"Cohere model api key stored")
+        self.cohere_model = cohere.Client(api_key)
+        super().__init__(model_string, {'api_key': api_key})
 
     def _generate_batch(
         self,
