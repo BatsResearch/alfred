@@ -8,5 +8,5 @@ setup(
     author_email='peilin_yu@brown.edu',
     description='Toolkit for Prompted Weak Supervisions',
     packages=find_packages(),
-    install_requires=['numpy >= 1.11', 'scipy >= 1.5', 'torch >= 1.4', 'tqdm >= 4.62.3', 'torchvision >= 0.10'],
+    install_requires=['numpy', 'scipy', 'torch', 'tqdm', 'torchvision', "paramiko>=2.7.2", "pyarrow>=3.0.0", "grpcio==1.48.1", "protobuf==3.20.0"],
 )
