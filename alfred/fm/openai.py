@@ -99,7 +99,7 @@ class OpenAIModel(APIAccessFoundationModel):
 
     def __init__(self,
                  model_string: str = "text-davinci-002",
-                 cfg: Optional[Dict] = None):
+                 api_key: Optional[str] = None):
         """
         Initialize the OpenAI API wrapper.
 
@@ -109,34 +109,27 @@ class OpenAIModel(APIAccessFoundationModel):
 
         :param model_string: The model to be used for generating completions.
         :type model_string: str
-        :param cfg: The configuration dictionary containing the API key and other optional parameters.
-        :type cfg: Dict
+        :param api_key: The API key to be used for the OpenAI API.
+        :type api_key: Optional[str]
         """
+        assert model_string in OPENAI_MODELS, f"Model {model_string} not found. Please choose from {OPENAI_MODELS}"
 
-        # Load your API key from an environment variable or secret management
-        # service
         if "OPENAI_API_KEY" in os.environ:
             openai.api_key = os.getenv("OPENAI_API_KEY")
             logger.log(logging.INFO, f"OpenAI model api key found")
         else:
             logger.log(logging.WARNING,
                        f"OpenAI model api key not found in environment")
-            try:
-                # Load your API key from a configuration file
-                openai.api_key = cfg['api_key']
-                logger.log(logging.INFO,
-                           f"OpenAI model api key found in config")
-            except KeyError or TypeError:
+            if api_key:
+                openai.api_key = api_key
+            else:
                 logger.log(
                     logging.WARNING,
                     "OpenAI API key not found in config, Requesting User Input"
                 )
                 openai.api_key = input("Please enter your OpenAI API key: ")
                 logger.log(logging.INFO, f"OpenAI model api key stored")
-        assert model_string in OPENAI_MODELS, f"Model {model_string} not found. Please choose from {OPENAI_MODELS}"
-
-        self.parallel = cfg.get("parallel", False)
-        super().__init__(model_string, cfg)
+        super().__init__(model_string, {"api_key": openai.api_key})
 
     def _generate_batch(
         self,

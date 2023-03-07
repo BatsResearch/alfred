@@ -1,5 +1,5 @@
 import logging
-from typing import Optional, List, Dict
+from typing import Optional, List
 
 import requests
 
@@ -8,6 +8,11 @@ from .response import CompletionResponse
 
 logger = logging.getLogger(__name__)
 
+AI21_MODELS = (
+    "j1-large",
+    "j1-grande",
+    "j1-jumbo",
+)
 
 class AI21Model(APIAccessFoundationModel):
     """
@@ -47,22 +52,36 @@ class AI21Model(APIAccessFoundationModel):
                 "topKReturn": 0,
                 "temperature": temperature
             })
-        return response['completions']['data']['text']
+        response = response.json()
+        try:
+            response = response['completions'][0]['data']['text']
+        except KeyError:
+            raise Exception(response['detail'])
+        return response
 
-    def __init__(self,
-                 api_key: str,
-                 model_string: str = "j1-large",
-                 cfg: Optional[Dict] = None):
+    def __init__(
+            self,
+            model_string: str = "j1-large",
+            api_key: Optional[str] = None,
+    ):
         """
         Initialize the Cohere API wrapper.
 
         :param model_string: The model to be used for generating completions.
         :type model_string: str
-        :param cfg: The configuration dictionary containing the API key and other optional parameters.
-        :type cfg: Dict
+        :param api_key: The API key to be used for accessing the AI21 API.
+        :type api_key: Optional[str]
         """
+        assert model_string in AI21_MODELS, f"Model {model_string} not found. Please choose from {AI21_MODELS}"
+        if api_key is None:
+            logger.log(
+                logging.WARNING,
+                "AI21 API key not found, Requesting User Input"
+            )
+            api_key = input("Please enter your AI21 API key: ")
+            logger.log(logging.INFO, f"AI21 model api key stored")
         self.api_key = api_key
-        super().__init__(model_string, cfg)
+        super().__init__(model_string, {'api_key': api_key})
 
     def _generate_batch(
         self,
