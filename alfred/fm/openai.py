@@ -10,12 +10,17 @@ from .response import CompletionResponse
 logger = logging.getLogger(__name__)
 
 OPENAI_MODELS = (
+    "gpt-3.5-turbo",
+    "gpt-3.5-turbo-0301",
     "text-davinci-003"
     "text-davinci-002",
     "text-davinci-001",
     "text-curie-001",
     "text-babbage-001",
     "text-ada-001",
+    "text-embedding-ada-002",
+    "code-davinci-002",
+    "code-cushman-001",
 )
 try:
     import openai
@@ -62,7 +67,7 @@ class OpenAIModel(APIAccessFoundationModel):
             temperature=temperature,
             max_tokens=max_tokens,
         )
-        return response
+        return response["choices"][0]["text"]
 
     @staticmethod
     def _openai_embedding_query(

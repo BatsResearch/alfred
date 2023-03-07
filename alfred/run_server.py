@@ -7,6 +7,9 @@ from alfred.fm.dummy import DummyModel
 from alfred.fm.huggingface import HuggingFaceModel
 from alfred.fm.huggingfacevlm import HuggingFaceCLIPModel
 from alfred.fm.openai import OpenAIModel
+from alfred.fm.cohere import CohereModel
+from alfred.fm.ai21 import AI21Model
+from alfred.fm.onnx import ONNXModel
 
 logging.basicConfig(
     format='ALFRED %(levelname)s: %(asctime)-5s  %(message)s',
@@ -48,7 +51,8 @@ class ModelServer:
         self.model = model
         self.model_type = model_type.lower()
         assert self.model_type in [
-            "huggingface", "huggingfacevlm", "openai", "onnx", "tensorrt",
+            "huggingface", "huggingfacevlm", "onnx", "tensorrt", "openai",
+            "cohere", "ai21"
             "torch", "dummy"
         ], f"Invalid model type: {self.model_type}"
         if self.model_type == "huggingface":
@@ -57,6 +61,12 @@ class ModelServer:
             self.model = HuggingFaceCLIPModel(self.model, **kwargs)
         elif self.model_type == "openai":
             self.model = OpenAIModel(self.model, **kwargs)
+        elif self.model_type == "cohere":
+            self.model = CohereModel(self.model, **kwargs)
+        elif self.model_type == "ai21":
+            self.model = AI21Model(self.model, **kwargs)
+        elif self.model_type == "onnx":
+            self.model = ONNXModel(self.model, **kwargs)
         elif self.model_type == "dummy":
             self.model = DummyModel(self.model)
         else:
