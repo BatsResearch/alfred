@@ -36,6 +36,8 @@ from alfred.client import Client
 
 AlfredT0pp = Client(model_type="huggingface", model="bigscience/T0pp",
                 local_path='/data/models/huggingface/')
+# Or use API-based AI21/Cohere/OpenAI Models
+GPTClient = Client(model_type="openai", model="gpt-3.5-turbo", api_key="<api_key>")
 
 # Get the model's predictions for given queries:
 AlfredT0pp("What is the capital of France?")
