@@ -1,11 +1,12 @@
 import logging
 import os
-from typing import Optional, List, Dict, Any
-
+from typing import Optional, List, Any, Union
+import readline
 import torch
 
 from .model import APIAccessFoundationModel
 from .response import CompletionResponse
+from .utils import colorize_str
 
 logger = logging.getLogger(__name__)
 
@@ -37,7 +38,7 @@ class OpenAIModel(APIAccessFoundationModel):
     """
     @staticmethod
     def _openai_query(
-        query_string: str,
+        query: Union[str, List],
         temperature: float = 0.0,
         max_tokens: int = 3,
         model: str = "text-davinci-002",
@@ -46,28 +47,41 @@ class OpenAIModel(APIAccessFoundationModel):
         """
         Run a single query through the foundation model
 
-        :param query_string: The prompt to be used for the query
-        :type query_string: str
+        :param query: The prompt to be used for the query
+        :type query: Union[str, List]
         :param temperature: The temperature of the model
         :type temperature: float
         :param max_tokens: The maximum number of tokens to be returned
         :type max_tokens: int
         :param model: The model to be used (choose from https://beta.openai.com/docs/api-reference/completions/create)
         :type model: str
+        :param kwargs: Additional keyword arguments
+        :type kwargs: Any
         :return: The generated completion
         :rtype: str
         """
+        chat = kwargs.get("chat", False)
         openai_api_key = kwargs.get("openai_api_key", None)
         if openai_api_key is not None:
             openai.api_key = openai_api_key
 
-        response = openai.Completion.create(
-            model=model,
-            prompt=query_string,
-            temperature=temperature,
-            max_tokens=max_tokens,
-        )
-        return response["choices"][0]["text"]
+        if chat:
+            return openai.ChatCompletion.create(
+                                                model=model,
+                                                messages=query,
+                                                max_tokens=max_tokens,
+                                                stop=None,
+                                                temperature=temperature,
+                                                stream=True,
+                                            )
+        else:
+            response = openai.Completion.create(
+                model=model,
+                prompt=query,
+                temperature=temperature,
+                max_tokens=max_tokens,
+            )
+            return response["choices"][0]["text"]
 
     @staticmethod
     def _openai_embedding_query(
@@ -118,13 +132,13 @@ class OpenAIModel(APIAccessFoundationModel):
             openai.api_key = os.getenv("OPENAI_API_KEY")
             logger.log(logging.INFO, f"OpenAI model api key found")
         else:
-            logger.log(logging.WARNING,
+            logger.log(logging.INFO,
                        f"OpenAI model api key not found in environment")
             if api_key:
                 openai.api_key = api_key
             else:
                 logger.log(
-                    logging.WARNING,
+                    logging.INFO,
                     "OpenAI API key not found in config, Requesting User Input"
                 )
                 openai.api_key = input("Please enter your OpenAI API key: ")
@@ -181,3 +195,52 @@ class OpenAIModel(APIAccessFoundationModel):
                                              model=self.model_string,
                                              **kwargs))
         return output
+
+    def chat(self, model: str="gpt-3.5-turbo", **kwargs: Any):
+        """
+        Launch an interactive chat session with the OpenAI API.
+        """
+        def _feedback(feedback: str, no_newline=False):
+            print(colorize_str("Chat AI: ", "GREEN") + feedback, end="\n" if not no_newline else "")
+        c_title = colorize_str("Alfred's OpenAI Chat", "BLUE")
+        c_model = colorize_str(model, "WARNING")
+        c_exit = colorize_str("exit", "FAIL")
+        c_ctrlc = colorize_str("Ctrl+C", "FAIL")
+
+        temperature = kwargs.get("temperature", 0.7)
+        max_tokens = kwargs.get("max_tokens", 1024)
+
+        print(f"Welcome to the {c_title} session!\nYou are using the {c_model} model.")
+        print(f"Type '{c_exit}' or hit {c_ctrlc} to exit the chat session.")
+
+        message_log = [
+            {"role": "system", "content": "You are a intelligent assistant. Please answer the user with professional language."}
+        ]
+
+        try:
+            while True:
+                query = input(colorize_str("You: "))
+                if query == "exit":
+                    _feedback("Goodbye!")
+                    break
+                message_log.append({"role": "user", "content": query})
+                _feedback("", no_newline=True)
+                response = []
+                for resp in self._openai_query(message_log, chat=True, model=model, temperature=temperature, max_tokens=max_tokens):
+                    if resp.choices[0].finish_reason == "stop":
+                        break
+                    try:
+                        txt = resp.choices[0].delta.content
+                        print(txt, end="")
+                    except AttributeError:
+                        txt = ''
+                    response.append(txt)
+                print()
+                response = "".join(response).strip()
+                response = response.replace("\n", "")
+                message_log.append({"role": "assistant", "content": response})
+        except KeyboardInterrupt:
+            _feedback("Goodbye!")
+        print()
+        print(colorize_str("Thank you for using Alfred!"))
+
