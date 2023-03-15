@@ -7,13 +7,6 @@ from grpc import FutureTimeoutError
 
 from alfred.client.cache import Cache, DummyCache, SQLiteCache
 from alfred.client.ssh.sshtunnel import SSHTunnel
-from alfred.fm.ai21 import AI21Model
-from alfred.fm.cohere import CohereModel
-from alfred.fm.dummy import DummyModel
-from alfred.fm.huggingface import HuggingFaceModel
-from alfred.fm.huggingfacevlm import HuggingFaceCLIPModel
-from alfred.fm.onnx import ONNXModel
-from alfred.fm.openai import OpenAIModel
 from alfred.fm.query import CompletionQuery, Query, RankedQuery
 from alfred.fm.remote.grpc import gRPCClient
 from alfred.fm.response import Response
@@ -144,22 +137,29 @@ class Client:
                     f"Cannot connect to remote end point: {end_point}")
         else:
             if self.model_type == "huggingface":
+                from alfred.fm.huggingface import HuggingFaceModel
                 self.model = HuggingFaceModel(self.model,
                                               local_path=local_path,
                                               **kwargs)
             elif self.model_type == "huggingfacevlm":
+                from alfred.fm.huggingfacevlm import HuggingFaceCLIPModel
                 self.model = HuggingFaceCLIPModel(self.model,
                                                   local_path=local_path,
                                                   **kwargs)
             elif self.model_type == "openai":
+                from alfred.fm.openai import OpenAIModel
                 self.model = OpenAIModel(self.model, **kwargs)
             elif self.model_type == "cohere":
+                from alfred.fm.cohere import CohereModel
                 self.model = CohereModel(self.model, **kwargs)
             elif self.model_type == "ai21":
+                from alfred.fm.ai21 import AI21Model
                 self.model = AI21Model(self.model, **kwargs)
             elif self.model_type == "dummy":
+                from alfred.fm.dummy import DummyModel
                 self.model = DummyModel(self.model)
             elif self.model_type == "onnx":
+                from alfred.fm.onnx import ONNXModel
                 self.model = ONNXModel(self.model, **kwargs)
             elif self.model_type == "tensorrt":
                 # self.model = TensorRTModel(self.model, **kwargs)
@@ -372,3 +372,15 @@ class Client:
             output = self.model.encode(queries, reduction=reduction)
 
         return output[0] if is_single else output
+
+
+    def chat(self):
+        """
+        Chat with the model APIs.
+        Currently supports Chat APIs from OpenAI
+        """
+        if self.model_type == "openai":
+            self.model.chat()
+        else:
+            logger.error("Chat APIs are only supported for OpenAI models.")
+            raise NotImplementedError("Currently Chat are only supported for OpenAI models.")

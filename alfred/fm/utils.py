@@ -105,6 +105,29 @@ def batch_multimodal(queries: List[RankedQuery], batch_size=64):
         batches.append((batch, candidates))
     return batches
 
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
+def colorize_str(str, color="CYAN"):
+    bcolor_ref = {
+        "HEADER": bcolors.HEADER,
+        "BLUE": bcolors.OKBLUE,
+        "CYAN": bcolors.OKCYAN,
+        "GREEN": bcolors.OKGREEN,
+        "WARNING": bcolors.WARNING,
+        "FAIL": bcolors.FAIL,
+        "BOLD": bcolors.BOLD,
+        "UNDERLINE": bcolors.UNDERLINE
+    }
+    return f"{bcolor_ref[color]}{str}{bcolors.ENDC}"
 
 class EmbeddingCache:
     """
