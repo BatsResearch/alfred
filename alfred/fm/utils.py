@@ -6,8 +6,8 @@ from typing import List, Union, Optional, Callable
 import numpy as np
 import torch
 import transformers
-from torch.nn.utils.rnn import pad_sequence
 from PIL import Image
+from torch.nn.utils.rnn import pad_sequence
 
 from .query import Query, RankedQuery, CompletionQuery
 from .response import RankedResponse

@@ -1,8 +1,8 @@
+import json
 import logging
 import os
 from typing import Optional, List, Any, Union
-import readline
-import json
+
 import torch
 
 from .model import APIAccessFoundationModel

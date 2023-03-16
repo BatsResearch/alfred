@@ -3,13 +3,13 @@ import logging
 from typing import Any
 
 import alfred.fm.remote.grpc as grpc_utils
+from alfred.fm.ai21 import AI21Model
+from alfred.fm.cohere import CohereModel
 from alfred.fm.dummy import DummyModel
 from alfred.fm.huggingface import HuggingFaceModel
 from alfred.fm.huggingfacevlm import HuggingFaceCLIPModel
-from alfred.fm.openai import OpenAIModel
-from alfred.fm.cohere import CohereModel
-from alfred.fm.ai21 import AI21Model
 from alfred.fm.onnx import ONNXModel
+from alfred.fm.openai import OpenAIModel
 
 logging.basicConfig(
     format='ALFRED %(levelname)s: %(asctime)-5s  %(message)s',
