@@ -63,8 +63,7 @@ class Client:
             self.model_type = model_type.lower()
             assert self.model_type in [
                 "huggingface", "huggingfacevlm", "onnx", "tensorrt", "openai",
-                "cohere", "ai21",
-                "torch", "dummy"
+                "cohere", "ai21", "torch", "dummy"
             ], f"Invalid model type: {self.model_type}"
         else:
             if end_point is None:
@@ -373,7 +372,6 @@ class Client:
 
         return output[0] if is_single else output
 
-
     def chat(self):
         """
         Chat with the model APIs.
@@ -383,4 +381,5 @@ class Client:
             self.model.chat()
         else:
             logger.error("Chat APIs are only supported for OpenAI models.")
-            raise NotImplementedError("Currently Chat are only supported for OpenAI models.")
+            raise NotImplementedError(
+                "Currently Chat are only supported for OpenAI models.")

@@ -79,12 +79,15 @@ class HuggingFaceModel(LocalAccessFoundationModel):
         :type tokenizer: transformers.PreTrainedTokenizer
         """
         if not local_path:
-            for HF_ENV_PATH in ['TRANSFORMERS_CACHE', 'HUGGINGFACE_HUB_CACHE', 'HF_HOME']:
+            for HF_ENV_PATH in [
+                    'TRANSFORMERS_CACHE', 'HUGGINGFACE_HUB_CACHE', 'HF_HOME'
+            ]:
                 value = os.environ.get(HF_ENV_PATH)
                 if value is not None:
                     local_path = value
             if not local_path:
-                local_path = os.path.join(Path.home(), ".cache", "huggingface", "hub")
+                local_path = os.path.join(Path.home(), ".cache", "huggingface",
+                                          "hub")
 
         super().__init__(model_string, local_path)
 

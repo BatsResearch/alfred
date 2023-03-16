@@ -67,13 +67,13 @@ class OpenAIModel(APIAccessFoundationModel):
 
         if chat:
             return openai.ChatCompletion.create(
-                                                model=model,
-                                                messages=query,
-                                                max_tokens=max_tokens,
-                                                stop=None,
-                                                temperature=temperature,
-                                                stream=True,
-                                            )
+                model=model,
+                messages=query,
+                max_tokens=max_tokens,
+                stop=None,
+                temperature=temperature,
+                stream=True,
+            )
         else:
             response = openai.Completion.create(
                 model=model,
@@ -196,12 +196,14 @@ class OpenAIModel(APIAccessFoundationModel):
                                              **kwargs))
         return output
 
-    def chat(self, model: str="gpt-3.5-turbo", **kwargs: Any):
+    def chat(self, model: str = "gpt-3.5-turbo", **kwargs: Any):
         """
         Launch an interactive chat session with the OpenAI API.
         """
         def _feedback(feedback: str, no_newline=False):
-            print(colorize_str("Chat AI: ", "GREEN") + feedback, end="\n" if not no_newline else "")
+            print(colorize_str("Chat AI: ", "GREEN") + feedback,
+                  end="\n" if not no_newline else "")
+
         c_title = colorize_str("Alfred's OpenAI Chat", "BLUE")
         c_model = colorize_str(model, "WARNING")
         c_exit = colorize_str("exit", "FAIL")
@@ -210,12 +212,17 @@ class OpenAIModel(APIAccessFoundationModel):
         temperature = kwargs.get("temperature", 0.7)
         max_tokens = kwargs.get("max_tokens", 1024)
 
-        print(f"Welcome to the {c_title} session!\nYou are using the {c_model} model.")
+        print(
+            f"Welcome to the {c_title} session!\nYou are using the {c_model} model."
+        )
         print(f"Type '{c_exit}' or hit {c_ctrlc} to exit the chat session.")
 
-        message_log = [
-            {"role": "system", "content": "You are a intelligent assistant. Please answer the user with professional language."}
-        ]
+        message_log = [{
+            "role":
+            "system",
+            "content":
+            "You are a intelligent assistant. Please answer the user with professional language."
+        }]
 
         try:
             while True:
@@ -226,7 +233,11 @@ class OpenAIModel(APIAccessFoundationModel):
                 message_log.append({"role": "user", "content": query})
                 _feedback("", no_newline=True)
                 response = []
-                for resp in self._openai_query(message_log, chat=True, model=model, temperature=temperature, max_tokens=max_tokens):
+                for resp in self._openai_query(message_log,
+                                               chat=True,
+                                               model=model,
+                                               temperature=temperature,
+                                               max_tokens=max_tokens):
                     if resp.choices[0].finish_reason == "stop":
                         break
                     try:
@@ -243,4 +254,3 @@ class OpenAIModel(APIAccessFoundationModel):
             _feedback("Goodbye!")
         print()
         print(colorize_str("Thank you for using Alfred!"))
-
