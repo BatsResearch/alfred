@@ -106,6 +106,14 @@ class HuggingFaceModel(LocalAccessFoundationModel):
         else:
             model_name = model_string
 
+        auto_model_class = [
+            HF_MODEL_BANK_PREFIX[key] for key in HF_MODEL_BANK_PREFIX
+            if model_name.startswith(key)
+        ]
+
+        auto_model_class = AutoModel if len(
+            auto_model_class) == 0 else auto_model_class[0][0]
+
         if torch.cuda.is_available():
             n_gpus = torch.cuda.device_count()
             free_in_GB = sum(
@@ -120,28 +128,23 @@ class HuggingFaceModel(LocalAccessFoundationModel):
                            f"GPU {i}: {torch.cuda.get_device_name(i)}")
                 for i in range(n_gpus)
             ]
+
+            self.model = auto_model_class.from_pretrained(
+                model_name,
+                cache_dir=self.local_path,
+                device_map=device_map,
+                load_in_8bit=int_8,
+                torch_dtype=self.dtype,
+                offload_folder=offload_folder,
+                max_memory={i: f'{free_in_GB - 2}GB'
+                            for i in range(n_gpus)},
+            )
         else:
-            n_gpus = 0
-            free_in_GB = 0
-
-        auto_model_class = [
-            HF_MODEL_BANK_PREFIX[key] for key in HF_MODEL_BANK_PREFIX
-            if model_name.startswith(key)
-        ]
-
-        auto_model_class = AutoModel if len(
-            auto_model_class) == 0 else auto_model_class[0][0]
-
-        self.model = auto_model_class.from_pretrained(
-            model_name,
-            cache_dir=self.local_path,
-            device_map=device_map,
-            load_in_8bit=int_8,
-            torch_dtype=self.dtype,
-            offload_folder=offload_folder,
-            max_memory={i: f'{free_in_GB - 2}GB'
-                        for i in range(n_gpus)},
-        )
+            self.model = auto_model_class.from_pretrained(
+                model_name,
+                cache_dir=self.local_path,
+                torch_dtype=self.dtype,
+            )
 
         try:
             self.max_position_embeddings = self.model.config.max_position_embeddings

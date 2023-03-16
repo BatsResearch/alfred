@@ -12,6 +12,10 @@ from .utils import colorize_str
 logger = logging.getLogger(__name__)
 
 OPENAI_MODELS = (
+    "gpt-4",
+    "gpt-4-0314",
+    "gpt-4-32k",
+    "gpt-4-32k-0314",
     "gpt-3.5-turbo",
     "gpt-3.5-turbo-0301",
     "text-davinci-003"
@@ -259,11 +263,12 @@ class OpenAIModel(APIAccessFoundationModel):
         except KeyboardInterrupt:
             _feedback("Goodbye!")
 
-        if log_save_path:
-            with open(log_save_path, "w") as f:
-                json.dump(message_log, f)
-
         print()
         print("======== Chat End ========")
         print()
         print(colorize_str("Thank you for using Alfred!"))
+
+        if log_save_path:
+            with open(log_save_path, "w") as f:
+                json.dump(message_log, f)
+            print(f"Your chat log is saved to {log_save_path}")
