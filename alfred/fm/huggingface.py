@@ -57,7 +57,7 @@ class HuggingFaceModel(LocalAccessFoundationModel):
         model_string: str,
         dtype: str = "auto",
         local_path: Optional[str] = None,
-        device_map: Optional[str] = "auto",
+        device_map: Optional[Union[str, dict]] = "auto",
         offload_folder: Optional[str] = None,
         int_8: bool = False,
         tokenizer: Optional[PreTrainedTokenizer] = None,
@@ -123,7 +123,6 @@ class HuggingFaceModel(LocalAccessFoundationModel):
         else:
             n_gpus = 0
             free_in_GB = 0
-            device_map = {"cpu"}
 
         auto_model_class = [
             HF_MODEL_BANK_PREFIX[key] for key in HF_MODEL_BANK_PREFIX
