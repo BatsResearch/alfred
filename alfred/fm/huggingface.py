@@ -1,6 +1,8 @@
 import logging
+import os
 from contextlib import nullcontext
 from typing import Optional, List, Union, Tuple, Dict, Any
+from pathlib import Path
 
 import torch
 from transformers import (
@@ -76,6 +78,14 @@ class HuggingFaceModel(LocalAccessFoundationModel):
         :param tokenizer: (optional) A custom tokenizer to use, if desired.
         :type tokenizer: transformers.PreTrainedTokenizer
         """
+        if not local_path:
+            for HF_ENV_PATH in ['TRANSFORMERS_CACHE', 'HUGGINGFACE_HUB_CACHE', 'HF_HOME']:
+                value = os.environ.get(HF_ENV_PATH)
+                if value is not None:
+                    local_path = value
+            if not local_path:
+                local_path = os.path.join(Path.home(), ".cache", "huggingface", "hub")
+
         super().__init__(model_string, local_path)
 
         try:
