@@ -12,7 +12,7 @@ Huggingface
 
 ## HuggingFaceModel
 
-[Show source in huggingface.py:39](../../../alfred/fm/huggingface.py#L39)
+[Show source in huggingface.py:41](../../../alfred/fm/huggingface.py#L41)
 
 The HuggingFaceModel class is a wrapper for HuggingFace models,
 including both Seq2Seq (Encoder-Decoder, e.g. T5, T0) and Causal

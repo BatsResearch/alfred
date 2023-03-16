@@ -15,15 +15,17 @@ Utils
   - [EmbeddingCache](#embeddingcache)
     - [EmbeddingCache().get](#embeddingcache()get)
   - [TokenizedBatch](#tokenizedbatch)
+  - [bcolors](#bcolors)
   - [batch_multimodal](#batch_multimodal)
   - [clear_cuda_cache](#clear_cuda_cache)
+  - [colorize_str](#colorize_str)
   - [normalize_logits](#normalize_logits)
   - [reorder_array](#reorder_array)
   - [tokenize](#tokenize)
 
 ## DynamicBatcher
 
-[Show source in utils.py:180](../../../alfred/fm/utils.py#L180)
+[Show source in utils.py:203](../../../alfred/fm/utils.py#L203)
 
 Dynamic Batching Utility
 Maximize GPU Utilization by batching queries of similar sizes
@@ -44,7 +46,7 @@ class DynamicBatcher:
 
 ### DynamicBatcher().batch
 
-[Show source in utils.py:310](../../../alfred/fm/utils.py#L310)
+[Show source in utils.py:333](../../../alfred/fm/utils.py#L333)
 
 Batch a list of instances into a list of batches.
 If the instances are of different sizes, they will be sorted by size
@@ -64,7 +66,7 @@ def batch(self) -> List:
 
 ### DynamicBatcher().merge_rank_response
 
-[Show source in utils.py:224](../../../alfred/fm/utils.py#L224)
+[Show source in utils.py:247](../../../alfred/fm/utils.py#L247)
 
 Merge a list of responses with raw logit into a single RankedResponse
 Assumption: Candidate Order is the same across all ranked queries
@@ -92,7 +94,7 @@ def merge_rank_response(
 
 ### DynamicBatcher().reorder
 
-[Show source in utils.py:269](../../../alfred/fm/utils.py#L269)
+[Show source in utils.py:292](../../../alfred/fm/utils.py#L292)
 
 Reordering the responses according to the original order of the queries
 
@@ -119,7 +121,7 @@ def reorder(self, inst: List, offset: Optional[int] = None) -> List:
 
 ## EmbeddingCache
 
-[Show source in utils.py:109](../../../alfred/fm/utils.py#L109)
+[Show source in utils.py:132](../../../alfred/fm/utils.py#L132)
 
 A simple embedding cache for VLM models
 
@@ -133,7 +135,7 @@ class EmbeddingCache:
 
 ### EmbeddingCache().get
 
-[Show source in utils.py:134](../../../alfred/fm/utils.py#L134)
+[Show source in utils.py:157](../../../alfred/fm/utils.py#L157)
 
 Process the inputs and retrieve from the cache/embed the inputs
 
@@ -162,7 +164,7 @@ def get(
 
 ## TokenizedBatch
 
-[Show source in utils.py:169](../../../alfred/fm/utils.py#L169)
+[Show source in utils.py:192](../../../alfred/fm/utils.py#L192)
 
 #### Signature
 
@@ -170,6 +172,19 @@ def get(
 class TokenizedBatch:
     def __init__(self, token_ids, pad_token_id=0):
         ...
+```
+
+
+
+## bcolors
+
+[Show source in utils.py:108](../../../alfred/fm/utils.py#L108)
+
+#### Signature
+
+```python
+class bcolors:
+    ...
 ```
 
 
@@ -211,6 +226,19 @@ Clear cuda cache via garbage collection
 
 ```python
 def clear_cuda_cache():
+    ...
+```
+
+
+
+## colorize_str
+
+[Show source in utils.py:119](../../../alfred/fm/utils.py#L119)
+
+#### Signature
+
+```python
+def colorize_str(str, color="CYAN"):
     ...
 ```
 
