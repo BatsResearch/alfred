@@ -4,6 +4,7 @@ import os
 from typing import Optional, List, Any, Union
 
 import torch
+import readline
 
 from .model import APIAccessFoundationModel
 from .response import CompletionResponse
@@ -28,6 +29,7 @@ OPENAI_MODELS = (
     "code-davinci-002",
     "code-cushman-001",
 )
+
 try:
     import openai
 except ModuleNotFoundError:
