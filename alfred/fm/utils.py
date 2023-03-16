@@ -41,8 +41,8 @@ def normalize_logits(logits: torch.Tensor) -> torch.Tensor:
 
 
 def reorder_array(
-        arr: Union[np.ndarray, torch.Tensor,
-        list], order: Union[np.ndarray, torch.Tensor, list]
+    arr: Union[np.ndarray, torch.Tensor,
+               list], order: Union[np.ndarray, torch.Tensor, list]
 ) -> Union[np.ndarray, torch.Tensor, list]:
     """
     Recover an array according to a given order index.
@@ -105,6 +105,7 @@ def batch_multimodal(queries: List[RankedQuery], batch_size=64):
         batches.append((batch, candidates))
     return batches
 
+
 class bcolors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
@@ -115,6 +116,7 @@ class bcolors:
     ENDC = '\033[0m'
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
+
 
 def colorize_str(str, color="CYAN"):
     bcolor_ref = {
@@ -128,6 +130,7 @@ def colorize_str(str, color="CYAN"):
         "UNDERLINE": bcolors.UNDERLINE
     }
     return f"{bcolor_ref[color]}{str}{bcolors.ENDC}"
+
 
 class EmbeddingCache:
     """
@@ -155,9 +158,9 @@ class EmbeddingCache:
         self.cache[key] = value
 
     def get(
-            self,
-            inputs: Union[List[Image.Image], List[str]],
-            embedding_proc: Callable,
+        self,
+        inputs: Union[List[Image.Image], List[str]],
+        embedding_proc: Callable,
     ) -> torch.tensor:
         """
         Process the inputs and retrieve from the cache/embed the inputs
@@ -187,7 +190,11 @@ class EmbeddingCache:
         new_embeddings = embedding_proc(new_inputs)
         for inp, embedding in zip(new_inputs, new_embeddings):
             self[inp] = embedding
-        return torch.stack(reorder_array(list(new_embeddings) + cached_embeddings, new_inp_idx + cached_idx))
+        return torch.stack(
+            reorder_array(
+                list(new_embeddings) + cached_embeddings,
+                new_inp_idx + cached_idx))
+
 
 class TokenizedBatch:
     def __init__(self, token_ids, pad_token_id=0):
@@ -205,13 +212,12 @@ class DynamicBatcher:
     Dynamic Batching Utility
     Maximize GPU Utilization by batching queries of similar sizes
     """
-
     def __init__(
-            self,
-            queries: Union[List[Query], List[str]],
-            max_batch_size: int = 2048,
-            tokenizer: Optional[transformers.PreTrainedTokenizer] = None,
-            max_token_length: int = 512,
+        self,
+        queries: Union[List[Query], List[str]],
+        max_batch_size: int = 2048,
+        tokenizer: Optional[transformers.PreTrainedTokenizer] = None,
+        max_token_length: int = 512,
     ):
         """
         Initialize a DynamicBatcher
@@ -245,9 +251,9 @@ class DynamicBatcher:
             self.ranked = True
 
     def merge_rank_response(
-            self,
-            responses: List[OrderedDict],
-            softmax: bool = True,
+        self,
+        responses: List[OrderedDict],
+        softmax: bool = True,
     ) -> RankedResponse:
         """
         Merge a list of responses with raw logit into a single RankedResponse
@@ -290,9 +296,9 @@ class DynamicBatcher:
         )
 
     def reorder(
-            self,
-            inst: List,
-            offset: Optional[int] = None,
+        self,
+        inst: List,
+        offset: Optional[int] = None,
     ) -> List:
         """
         Reordering the responses according to the original order of the queries
@@ -309,7 +315,7 @@ class DynamicBatcher:
             if offset:
                 _inst = np.empty([len(inst)])
                 for idx, i in enumerate(self.len_sorted_idx[offset:offset +
-                                                                   len(inst)]):
+                                                            len(inst)]):
                     _inst[idx] = inst[i]
                 return list(_inst)
             raise ValueError(
@@ -323,7 +329,7 @@ class DynamicBatcher:
         if self.ranked:
             reordered_inst = [
                 self.merge_rank_response(reordered_inst[i:i +
-                                                          self.candidate_size])
+                                                        self.candidate_size])
                 for i in range(0, len(reordered_inst), self.candidate_size)
             ]
 
@@ -339,7 +345,6 @@ class DynamicBatcher:
         :return: A list of batches
         :rtype: List[List[Instance]]
         '''
-
         def _process_batch(batch):
             if self.tokenizer:
                 if isinstance(batch[0], tuple):

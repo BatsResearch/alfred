@@ -17,13 +17,12 @@ class HuggingFaceCLIPModel(LocalAccessFoundationModel):
      The HuggingFaceModel class is a wrapper for HuggingFace VLM Models
      Currently supports CLIP models.
     """
-
     def __init__(
-            self,
-            model_string: str,
-            local_path: Optional[str] = None,
-            image_cache_limit: int = 32,
-            text_cache_limit: int = 64,
+        self,
+        model_string: str,
+        local_path: Optional[str] = None,
+        image_cache_limit: int = 32,
+        text_cache_limit: int = 64,
     ):
         """
         Constructor for HuggingFaceVLMModel
@@ -39,7 +38,7 @@ class HuggingFaceCLIPModel(LocalAccessFoundationModel):
         self.device = "cuda:0" if torch.cuda.is_available() else "cpu"
         self.model = CLIPModel.from_pretrained(model_string,
                                                cache_dir=local_path).to(
-            self.device)
+                                                   self.device)
         self.tokenizer = None
         self.processor = AutoProcessor.from_pretrained(model_string,
                                                        cache_dir=local_path)
@@ -53,9 +52,9 @@ class HuggingFaceCLIPModel(LocalAccessFoundationModel):
         self.text_cache = EmbeddingCache(text_cache_limit)
 
     def _score_batch(
-            self,
-            batch_instance: Tuple[List[Image.Image], List[str]],
-            **kwargs,
+        self,
+        batch_instance: Tuple[List[Image.Image], List[str]],
+        **kwargs,
     ):
         """
         Scores a batch of instances
@@ -67,7 +66,6 @@ class HuggingFaceCLIPModel(LocalAccessFoundationModel):
         :return: list of RankedResponse
         :rtype: List[RankedResponse]
         """
-
         def _get_image_features(image):
             image = self.processor(images=image,
                                    return_tensors="pt").to(self.device)

@@ -14,6 +14,7 @@ AI21_MODELS = (
     "j1-jumbo",
 )
 
+
 class AI21Model(APIAccessFoundationModel):
     """
     A wrapper for the OpenAI API.
@@ -60,9 +61,9 @@ class AI21Model(APIAccessFoundationModel):
         return response
 
     def __init__(
-            self,
-            model_string: str = "j1-large",
-            api_key: Optional[str] = None,
+        self,
+        model_string: str = "j1-large",
+        api_key: Optional[str] = None,
     ):
         """
         Initialize the Cohere API wrapper.
@@ -74,10 +75,8 @@ class AI21Model(APIAccessFoundationModel):
         """
         assert model_string in AI21_MODELS, f"Model {model_string} not found. Please choose from {AI21_MODELS}"
         if api_key is None:
-            logger.log(
-                logging.WARNING,
-                "AI21 API key not found, Requesting User Input"
-            )
+            logger.log(logging.WARNING,
+                       "AI21 API key not found, Requesting User Input")
             api_key = input("Please enter your AI21 API key: ")
             logger.log(logging.INFO, f"AI21 model api key stored")
         self.api_key = api_key

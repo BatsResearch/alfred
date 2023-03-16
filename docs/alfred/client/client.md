@@ -11,6 +11,7 @@ Client
   - [Client](#client-1)
     - [Client().__call__](#client()__call__)
     - [Client().calibrate](#client()calibrate)
+    - [Client().chat](#client()chat)
     - [Client().encode](#client()encode)
     - [Client().generate](#client()generate)
     - [Client().remote_run](#client()remote_run)
@@ -19,7 +20,7 @@ Client
 
 ## Client
 
-[Show source in client.py:28](../../../alfred/client/client.py#L28)
+[Show source in client.py:21](../../../alfred/client/client.py#L21)
 
 Client is the primary user interface that wraps around foundation models.
 A client interface for accessing various models, such as those implemented by OpenAI, Hugging Face, etc.
@@ -114,6 +115,20 @@ def calibrate(
     candidates: Optional[Union[List[str], str]] = None,
     strategy: int = 1,
 ):
+    ...
+```
+
+### Client().chat
+
+[Show source in client.py:377](../../../alfred/client/client.py#L377)
+
+Chat with the model APIs.
+Currently supports Chat APIs from OpenAI
+
+#### Signature
+
+```python
+def chat(self):
     ...
 ```
 

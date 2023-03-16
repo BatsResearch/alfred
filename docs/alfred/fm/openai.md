@@ -9,10 +9,11 @@ Openai
 
 - [Openai](#openai)
   - [OpenAIModel](#openaimodel)
+    - [OpenAIModel().chat](#openaimodel()chat)
 
 ## OpenAIModel
 
-[Show source in openai.py:32](../../../alfred/fm/openai.py#L32)
+[Show source in openai.py:33](../../../alfred/fm/openai.py#L33)
 
 A wrapper for the OpenAI API.
 
@@ -26,6 +27,19 @@ class OpenAIModel(APIAccessFoundationModel):
         self, model_string: str = "text-davinci-002", api_key: Optional[str] = None
     ):
         ...
+```
+
+### OpenAIModel().chat
+
+[Show source in openai.py:199](../../../alfred/fm/openai.py#L199)
+
+Launch an interactive chat session with the OpenAI API.
+
+#### Signature
+
+```python
+def chat(self, model: str = "gpt-3.5-turbo", **kwargs: Any):
+    ...
 ```
 
 

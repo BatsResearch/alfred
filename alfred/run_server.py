@@ -52,8 +52,7 @@ class ModelServer:
         self.model_type = model_type.lower()
         assert self.model_type in [
             "huggingface", "huggingfacevlm", "onnx", "tensorrt", "openai",
-            "cohere", "ai21",
-            "torch", "dummy"
+            "cohere", "ai21", "torch", "dummy"
         ], f"Invalid model type: {self.model_type}"
         if self.model_type == "huggingface":
             self.model = HuggingFaceModel(self.model, **kwargs)

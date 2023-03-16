@@ -38,10 +38,10 @@ class CohereModel(APIAccessFoundationModel):
         :rtype: str
         """
         response = self.cohere_model.generate(prompt=query_string,
-                              model=model,
-                              max_tokens=max_tokens,
-                              temperature=temperature,
-                              **kwargs)
+                                              model=model,
+                                              max_tokens=max_tokens,
+                                              temperature=temperature,
+                                              **kwargs)
         return response.generations[0].text
 
     def _cohere_embedding_query(
@@ -56,12 +56,13 @@ class CohereModel(APIAccessFoundationModel):
         :return: The embeddings
         :rtype: str
         """
-        return torch.FloatTensor(self.cohere_model.embed(texts=[query_string]).embeddings)
+        return torch.FloatTensor(
+            self.cohere_model.embed(texts=[query_string]).embeddings)
 
     def __init__(
-            self,
-            model_string: str = "xlarge",
-            api_key: Optional[str] = None,
+        self,
+        model_string: str = "xlarge",
+        api_key: Optional[str] = None,
     ):
         """
         Initialize the Cohere API wrapper.
@@ -77,10 +78,8 @@ class CohereModel(APIAccessFoundationModel):
             raise ModuleNotFoundError(
                 "cohere module not found. Please install it.")
         if api_key is None:
-            logger.log(
-                logging.WARNING,
-                "Cohere API key not found, Requesting User Input"
-            )
+            logger.log(logging.WARNING,
+                       "Cohere API key not found, Requesting User Input")
             api_key = input("Please enter your Cohere API key: ")
             logger.log(logging.INFO, f"Cohere model api key stored")
         self.cohere_model = cohere.Client(api_key)
