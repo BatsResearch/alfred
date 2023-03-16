@@ -2,6 +2,7 @@ import logging
 import os
 from typing import Optional, List, Any, Union
 import readline
+import json
 import torch
 
 from .model import APIAccessFoundationModel
@@ -211,6 +212,7 @@ class OpenAIModel(APIAccessFoundationModel):
 
         temperature = kwargs.get("temperature", 0.7)
         max_tokens = kwargs.get("max_tokens", 1024)
+        log_save_path = kwargs.get("log_save_path", None)
 
         print(
             f"Welcome to the {c_title} session!\nYou are using the {c_model} model."
@@ -223,6 +225,10 @@ class OpenAIModel(APIAccessFoundationModel):
             "content":
             "You are a intelligent assistant. Please answer the user with professional language."
         }]
+
+        print()
+        print("======== Chat Begin ========")
+        print()
 
         try:
             while True:
@@ -252,5 +258,12 @@ class OpenAIModel(APIAccessFoundationModel):
                 message_log.append({"role": "assistant", "content": response})
         except KeyboardInterrupt:
             _feedback("Goodbye!")
+
+        if log_save_path:
+            with open(log_save_path, "w") as f:
+                json.dump(message_log, f)
+
+        print()
+        print("======== Chat End ========")
         print()
         print(colorize_str("Thank you for using Alfred!"))

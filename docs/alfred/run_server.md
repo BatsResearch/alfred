@@ -29,7 +29,7 @@ class ModelServer:
 
 ## start_server
 
-[Show source in run_server.py:82](../../alfred/run_server.py#L82)
+[Show source in run_server.py:81](../../alfred/run_server.py#L81)
 
 Wrapper function to start gRPC Server.
 

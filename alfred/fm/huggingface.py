@@ -58,6 +58,7 @@ class HuggingFaceModel(LocalAccessFoundationModel):
         dtype: str = "auto",
         local_path: Optional[str] = None,
         device_map: Optional[str] = "auto",
+        offload_folder: Optional[str] = None,
         int_8: bool = False,
         tokenizer: Optional[PreTrainedTokenizer] = None,
     ):
@@ -73,6 +74,8 @@ class HuggingFaceModel(LocalAccessFoundationModel):
         :type local_path: str
         :param device_map: (optional) A device map for parallelization. This wrapper uses the accelerate library for parallelization, and the device map should be provided in the same format as for accelerate.
         :type device_map: str
+        :param offload_folder: (optional) A folder to offload the model to. This is useful for large models that cannot fit in memory.
+        :type offload_folder: str
         :param int_8: (optional) A boolean indicating whether to use .int8() quantization (default: False)
         :type int_8: bool
         :param tokenizer: (optional) A custom tokenizer to use, if desired.
@@ -135,6 +138,7 @@ class HuggingFaceModel(LocalAccessFoundationModel):
             device_map=device_map,
             load_in_8bit=int_8,
             torch_dtype=self.dtype,
+            offload_folder=offload_folder,
             max_memory={i: f'{free_in_GB - 2}GB'
                         for i in range(n_gpus)},
         )

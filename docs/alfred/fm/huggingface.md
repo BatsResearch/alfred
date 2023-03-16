@@ -36,6 +36,7 @@ class HuggingFaceModel(LocalAccessFoundationModel):
         dtype: str = "auto",
         local_path: Optional[str] = None,
         device_map: Optional[str] = "auto",
+        offload_folder: Optional[str] = None,
         int_8: bool = False,
         tokenizer: Optional[PreTrainedTokenizer] = None,
     ):
