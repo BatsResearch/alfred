@@ -123,6 +123,7 @@ class HuggingFaceModel(LocalAccessFoundationModel):
         else:
             n_gpus = 0
             free_in_GB = 0
+            device_map = {"cpu"}
 
         auto_model_class = [
             HF_MODEL_BANK_PREFIX[key] for key in HF_MODEL_BANK_PREFIX
