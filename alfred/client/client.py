@@ -372,13 +372,15 @@ class Client:
 
         return output[0] if is_single else output
 
-    def chat(self):
+    def chat(self, log_save_path: Optional[str] = None, **kwargs: Any):
         """
         Chat with the model APIs.
-        Currently supports Chat APIs from OpenAI
+        Currently, Alfred supports Chat APIs from OpenAI
+        :param log_save_path: The file to save the chat logs.
+        :type log_save_path: Optional[str]
         """
         if self.model_type == "openai":
-            self.model.chat()
+            self.model.chat(log_save_path=log_save_path, **kwargs)
         else:
             logger.error("Chat APIs are only supported for OpenAI models.")
             raise NotImplementedError(

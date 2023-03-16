@@ -25,7 +25,7 @@ Utils
 
 ## DynamicBatcher
 
-[Show source in utils.py:203](../../../alfred/fm/utils.py#L203)
+[Show source in utils.py:210](../../../alfred/fm/utils.py#L210)
 
 Dynamic Batching Utility
 Maximize GPU Utilization by batching queries of similar sizes
@@ -46,7 +46,7 @@ class DynamicBatcher:
 
 ### DynamicBatcher().batch
 
-[Show source in utils.py:333](../../../alfred/fm/utils.py#L333)
+[Show source in utils.py:339](../../../alfred/fm/utils.py#L339)
 
 Batch a list of instances into a list of batches.
 If the instances are of different sizes, they will be sorted by size
@@ -66,7 +66,7 @@ def batch(self) -> List:
 
 ### DynamicBatcher().merge_rank_response
 
-[Show source in utils.py:247](../../../alfred/fm/utils.py#L247)
+[Show source in utils.py:253](../../../alfred/fm/utils.py#L253)
 
 Merge a list of responses with raw logit into a single RankedResponse
 Assumption: Candidate Order is the same across all ranked queries
@@ -94,7 +94,7 @@ def merge_rank_response(
 
 ### DynamicBatcher().reorder
 
-[Show source in utils.py:292](../../../alfred/fm/utils.py#L292)
+[Show source in utils.py:298](../../../alfred/fm/utils.py#L298)
 
 Reordering the responses according to the original order of the queries
 
@@ -121,7 +121,7 @@ def reorder(self, inst: List, offset: Optional[int] = None) -> List:
 
 ## EmbeddingCache
 
-[Show source in utils.py:132](../../../alfred/fm/utils.py#L132)
+[Show source in utils.py:135](../../../alfred/fm/utils.py#L135)
 
 A simple embedding cache for VLM models
 
@@ -135,7 +135,7 @@ class EmbeddingCache:
 
 ### EmbeddingCache().get
 
-[Show source in utils.py:157](../../../alfred/fm/utils.py#L157)
+[Show source in utils.py:160](../../../alfred/fm/utils.py#L160)
 
 Process the inputs and retrieve from the cache/embed the inputs
 
@@ -164,7 +164,7 @@ def get(
 
 ## TokenizedBatch
 
-[Show source in utils.py:192](../../../alfred/fm/utils.py#L192)
+[Show source in utils.py:199](../../../alfred/fm/utils.py#L199)
 
 #### Signature
 
@@ -178,7 +178,7 @@ class TokenizedBatch:
 
 ## bcolors
 
-[Show source in utils.py:108](../../../alfred/fm/utils.py#L108)
+[Show source in utils.py:109](../../../alfred/fm/utils.py#L109)
 
 #### Signature
 
@@ -233,7 +233,7 @@ def clear_cuda_cache():
 
 ## colorize_str
 
-[Show source in utils.py:119](../../../alfred/fm/utils.py#L119)
+[Show source in utils.py:121](../../../alfred/fm/utils.py#L121)
 
 #### Signature
 
