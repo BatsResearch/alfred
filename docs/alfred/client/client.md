@@ -133,7 +133,7 @@ Currently, Alfred supports Chat APIs from OpenAI
 #### Signature
 
 ```python
-def chat(self, log_save_path: Optional[str] = None):
+def chat(self, log_save_path: Optional[str] = None, **kwargs: Any):
     ...
 ```
 
