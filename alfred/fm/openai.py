@@ -219,6 +219,7 @@ class OpenAIModel(APIAccessFoundationModel):
         temperature = kwargs.get("temperature", 0.7)
         max_tokens = kwargs.get("max_tokens", 1024)
         log_save_path = kwargs.get("log_save_path", None)
+        manual_chat_sequence = kwargs.get("manual_chat_sequence", None)
 
         print(
             f"Welcome to the {c_title} session!\nYou are using the {c_model} model."
@@ -238,7 +239,14 @@ class OpenAIModel(APIAccessFoundationModel):
 
         try:
             while True:
-                query = input(colorize_str("You: "))
+                if manual_chat_sequence is not None:
+                    query = manual_chat_sequence.pop(0)
+                    _feedback(query, no_newline=True)
+                    print()
+                    if len(manual_chat_sequence) == 0:
+                        break
+                else:
+                    query = input(colorize_str("You: "))
                 if query == "exit":
                     _feedback("Goodbye!")
                     break
