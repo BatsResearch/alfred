@@ -11,7 +11,17 @@ Furthermore, Alfred includes tools for label modeling, allowing the mixed signal
 Additionally, Alfred enables memory- and computation- intensive models to be run on cloud or computing clusters with optimized batching mechanisms, significantly increasing query throughput. 
 Alfred aims to reduce annotation cost and time by making efficient use of LLMs, allowing users to make the most of their resources.
 
-# Guides:
+# News Update
+
+Alfred now supports chat with openai api-based models, to use simply:
+```python
+from alfred import Client
+
+openai = Client(model_type="openai", model="gpt-3.5-turbo")
+openai.chat()
+```
+
+# Guides
 
 ##  <span style="color: cyan;">GUIDE 1</span>: Steps to setup and run Alfred locally
 ### 1. Install dependencies & Alfred
