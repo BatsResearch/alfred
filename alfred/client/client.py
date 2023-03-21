@@ -120,7 +120,6 @@ class Client:
             logger.info(
                 f"Connecting to remote end point: {end_point}, looking for model: {model}"
             )
-            # TODO Check remote model registry
 
             try:
                 logger.info(

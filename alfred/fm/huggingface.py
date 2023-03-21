@@ -268,29 +268,33 @@ class HuggingFaceModel(LocalAccessFoundationModel):
                 attention_mask=inputs.attention_mask.cuda(),
                 labels=candidate_token_ids,
             ).logits
-        elif is_llama:
-            _, prefix_length = inputs.input_ids.shape
-            logits = self.model(
-                input_ids=inputs.input_ids.cuda(),
-                attention_mask=inputs.attention_mask.cuda(),
-                labels=candidate_token_ids,
-            ).logits[:, prefix_length - 1:-1]
         else:
             _, prefix_length = inputs.input_ids.shape
-            position_ids = torch.maximum(
-                torch.cumsum(inputs.attention_mask.cuda().to(torch.long),
-                             dim=-1) - 1,
-                torch.zeros(
-                    1,
-                    dtype=torch.long,
-                ).cuda()[None, None])
+            input_ids = torch.cat(
+                [inputs.input_ids, candidate_token_ids], dim=-1).to(self.model.device)
+            attention_mask = torch.cat(
+                [inputs.attention_mask,
+                 candidate_tokens.attention_mask.to(inputs.get_device())],
+                dim=-1)
+            if is_llama:
+                logits = self.model(
+                    input_ids=input_ids,
+                    attention_mask=attention_mask,
+                ).logits[:, prefix_length - 1:-1]
+            else:
+                position_ids = torch.maximum(
+                    torch.cumsum(attention_mask.cuda().to(torch.long),
+                                 dim=-1) - 1,
+                    torch.zeros(
+                        1,
+                        dtype=torch.long,
+                    ).cuda()[None, None])
 
-            logits = self.model(
-                input_ids=inputs.input_ids.cuda(),
-                position_ids=position_ids,
-                attention_mask=inputs.attention_mask.cuda(),
-                labels=candidate_token_ids,
-            ).logits[:, prefix_length - 1:-1]
+                logits = self.model(
+                    input_ids=input_ids,
+                    position_ids=position_ids,
+                    attention_mask=attention_mask,
+                ).logits[:, prefix_length - 1:-1]
 
         masked_log_probs = candidate_tokens.attention_mask.to(
             logits.get_device()).unsqueeze(
