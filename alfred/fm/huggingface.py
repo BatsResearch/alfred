@@ -111,7 +111,7 @@ class HuggingFaceModel(LocalAccessFoundationModel):
             if model_name.startswith(key)
         ]
 
-        auto_model_class = AutoModel if len(
+        auto_model_class = AutoModelForCausalLM if len(
             auto_model_class) == 0 else auto_model_class[0][0]
 
         if torch.cuda.is_available():
