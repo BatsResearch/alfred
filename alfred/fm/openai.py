@@ -1,7 +1,7 @@
 import json
 import logging
 import os
-from typing import Optional, List, Any, Union
+from typing import Optional, List, Any, Union, Tuple, Dict
 
 import torch
 import readline
@@ -152,6 +152,20 @@ class OpenAIModel(APIAccessFoundationModel):
                 logger.log(logging.INFO, f"OpenAI model api key stored")
         super().__init__(model_string, {"api_key": openai.api_key})
 
+    def _score_batch(
+            self,
+            batch: Union[List[str], List[Tuple[str, str]]],
+            candidate: Optional[List[str]] = None,
+            **kwargs: Any,
+    ) -> List[Dict[str, Any]]:
+        """
+
+        """
+
+
+        return self._generate_batch(batch, **kwargs)
+
+
     def _generate_batch(
         self,
         batch_instance: List[str],
@@ -203,7 +217,7 @@ class OpenAIModel(APIAccessFoundationModel):
                                              **kwargs))
         return output
 
-    def chat(self, model: str = "gpt-3.5-turbo", **kwargs: Any):
+    def chat(self, **kwargs: Any):
         """
         Launch an interactive chat session with the OpenAI API.
         """
@@ -211,6 +225,7 @@ class OpenAIModel(APIAccessFoundationModel):
             print(colorize_str("Chat AI: ", "GREEN") + feedback,
                   end="\n" if not no_newline else "")
 
+        model = kwargs.get("model", self.model_string)
         c_title = colorize_str("Alfred's OpenAI Chat", "BLUE")
         c_model = colorize_str(model, "WARNING")
         c_exit = colorize_str("exit", "FAIL")
