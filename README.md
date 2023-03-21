@@ -13,13 +13,23 @@ Alfred aims to reduce annotation cost and time by making efficient use of LLMs, 
 
 # News Update
 
-Alfred now supports chat with openai api-based models, to use simply:
-```python
-from alfred import Client
+- [Llama Support]
+  Alfred now supports locally hosted Llama through transformers.
 
-openai = Client(model_type="openai", model="gpt-3.5-turbo")
-openai.chat()
-```
+- [Embedding with Alfred]
+  Get a vector representation for any input strings! Alfred now supports embedding from locally hosteed huggingface models or api-based calls from Cohere   and OpenAI. To use:
+  ```python
+  Client.encode(Union[str, List[str]]) -> Union[torch.tensor, List[torch.tensor]]
+  ```
+  
+- [Chat with GPTs on Alfred]
+  Alfred now supports chat with openai api-based models, to use simply type:
+  ```python
+  from alfred import Client
+
+  openai = Client(model_type="openai", model="gpt-3.5-turbo")
+  openai.chat()
+  ```
 
 # Guides
 
