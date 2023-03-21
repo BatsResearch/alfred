@@ -18,6 +18,12 @@ from alfred.fm.response import CompletionResponse
 
 logger = logging.getLogger(__name__)
 
+try:
+    from transformers import LlamaPreTrainedModel
+except ImportError:
+    LlamaPreTrainedModel = None
+    logger.info("LlamaPreTrainedModel not Found. Please upgrade transformers to support Llama.")
+
 dtype_match = {
     "auto": "auto",
     "fp32": torch.float32,
@@ -251,13 +257,26 @@ class HuggingFaceModel(LocalAccessFoundationModel):
 
         logger.log(logging.INFO, f"Ranking {len(candidate)} instances")
 
+        if LlamaPreTrainedModel:
+            is_llama = isinstance(self.model, LlamaPreTrainedModel)
+        else:
+            is_llama = False
+
         if self.model.config.is_encoder_decoder:
             logits = self.model(
                 input_ids=inputs.input_ids.cuda(),
                 attention_mask=inputs.attention_mask.cuda(),
                 labels=candidate_token_ids,
             ).logits
+        elif is_llama:
+            _, prefix_length = inputs.input_ids.shape
+            logits = self.model(
+                input_ids=inputs.input_ids.cuda(),
+                attention_mask=inputs.attention_mask.cuda(),
+                labels=candidate_token_ids,
+            ).logits[:, prefix_length - 1:-1]
         else:
+            _, prefix_length = inputs.input_ids.shape
             position_ids = torch.maximum(
                 torch.cumsum(inputs.attention_mask.cuda().to(torch.long),
                              dim=-1) - 1,
@@ -265,7 +284,6 @@ class HuggingFaceModel(LocalAccessFoundationModel):
                     1,
                     dtype=torch.long,
                 ).cuda()[None, None])
-            _, prefix_length = inputs.input_ids.shape
 
             logits = self.model(
                 input_ids=inputs.input_ids.cuda(),
