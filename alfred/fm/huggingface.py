@@ -252,8 +252,8 @@ class HuggingFaceModel(LocalAccessFoundationModel):
             return_tensors="pt",
         )
 
-        candidate_token_ids = candidate_tokens.input_ids.to(
-            list(self.model.hf_device_map.values())[-1])
+        end_device = list(self.model.hf_device_map.values())[-1]
+        candidate_token_ids = candidate_tokens.input_ids.to(end_device)
 
         logger.log(logging.INFO, f"Ranking {len(candidate)} instances")
 
@@ -271,10 +271,10 @@ class HuggingFaceModel(LocalAccessFoundationModel):
         else:
             _, prefix_length = inputs.input_ids.shape
             input_ids = torch.cat(
-                [inputs.input_ids, candidate_token_ids], dim=-1).to(self.model.device)
+                [inputs.input_ids.to(end_device), candidate_token_ids], dim=-1).to(end_device)
             attention_mask = torch.cat(
-                [inputs.attention_mask,
-                 candidate_tokens.attention_mask.to(inputs.get_device())],
+                [inputs.attention_mask.to(end_device),
+                 candidate_tokens.attention_mask.to(end_device)],
                 dim=-1)
             if is_llama:
                 logits = self.model(
