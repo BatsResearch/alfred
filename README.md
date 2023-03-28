@@ -17,10 +17,13 @@ Alfred aims to reduce annotation cost and time by making efficient use of LLMs, 
   Alfred now supports locally hosted Llama through transformers.
 
 - **[Embedding with Alfred]**
-  Get a vector representation for any input strings! Alfred now supports embedding from locally hosteed huggingface models or api-based calls from Cohere   and OpenAI. To use:
+  Get a vector representation for any input strings! Alfred now supports embedding from locally hosted huggingface models or api-based calls from Cohere   and OpenAI. To use:
   ```python
   Client.encode(Union[str, List[str]]) -> Union[torch.tensor, List[torch.tensor]]
   ```
+ 
+- **[Server-side Caching for CLIP]**
+  Alfred has now incorporated an automatic server-side caching mechanism to avoid redudent encoding of text or image prompts. Further latency reduction! 
   
 - **[Chat with GPTs on Alfred]**
   Alfred now supports chat with openai api-based models, to use simply type:
