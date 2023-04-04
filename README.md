@@ -13,6 +13,9 @@ Alfred aims to reduce annotation cost and time by making efficient use of LLMs, 
 
 # News Update
 
+- **[[Claude](https://console.anthropic.com/claude) Support]**
+  Alfred now supports Claude models through API. Similarly you can start a chat session with "Client.chat()"!
+
 - **[[Llama](https://arxiv.org/pdf/2302.13971.pdf) Support]**
   Alfred now supports locally hosted Llama through transformers.
 
