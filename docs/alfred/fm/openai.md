@@ -31,14 +31,14 @@ class OpenAIModel(APIAccessFoundationModel):
 
 ### OpenAIModel().chat
 
-[Show source in openai.py:206](../../../alfred/fm/openai.py#L206)
+[Show source in openai.py:202](../../../alfred/fm/openai.py#L202)
 
 Launch an interactive chat session with the OpenAI API.
 
 #### Signature
 
 ```python
-def chat(self, model: str = "gpt-3.5-turbo", **kwargs: Any):
+def chat(self, **kwargs: Any):
     ...
 ```
 

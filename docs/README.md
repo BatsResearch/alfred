@@ -20,6 +20,7 @@ A full list of `Alfred` project modules.
         - [Wrench](alfred/data/wrench.md#wrench)
     - [Fm](alfred/fm/index.md#fm)
         - [Ai21](alfred/fm/ai21.md#ai21)
+        - [Anthropic](alfred/fm/anthropic.md#anthropic)
         - [Cohere](alfred/fm/cohere.md#cohere)
         - [Dummy](alfred/fm/dummy.md#dummy)
         - [Huggingface](alfred/fm/huggingface.md#huggingface)

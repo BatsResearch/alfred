@@ -33,8 +33,8 @@ OPENAI_MODELS = (
 try:
     import openai
 except ModuleNotFoundError:
-    logger.info("OpenAI module not found. Skipping OpenAI-based Models.")
-    pass
+    logger.warning("OpenAI module not found. Please install it to use the OpenAI model.")
+    raise ModuleNotFoundError("OpenAI module not found. Please install it to use the OpenAI model.")
 
 
 class OpenAIModel(APIAccessFoundationModel):
@@ -106,11 +106,6 @@ class OpenAIModel(APIAccessFoundationModel):
         :return: The embeddings
         :rtype: str
         """
-        try:
-            import openai
-        except ImportError:
-            raise ImportError(
-                "OpenAI module not found. Please install openai.")
         openai_api_key = kwargs.get("openai_api_key", None)
         if openai_api_key is not None:
             openai.api_key = openai_api_key
@@ -151,19 +146,6 @@ class OpenAIModel(APIAccessFoundationModel):
                 openai.api_key = input("Please enter your OpenAI API key: ")
                 logger.log(logging.INFO, f"OpenAI model api key stored")
         super().__init__(model_string, {"api_key": openai.api_key})
-
-    def _score_batch(
-            self,
-            batch: Union[List[str], List[Tuple[str, str]]],
-            candidate: Optional[List[str]] = None,
-            **kwargs: Any,
-    ) -> List[Dict[str, Any]]:
-        """
-
-        """
-
-
-        return self._generate_batch(batch, **kwargs)
 
 
     def _generate_batch(
