@@ -62,7 +62,7 @@ class Client:
         if self.model_type:
             self.model_type = model_type.lower()
             assert self.model_type in [
-                "huggingface", "huggingfacevlm", "onnx", "tensorrt", "openai",
+                "huggingface", "huggingfacevlm", "onnx", "tensorrt", "openai", "anthropic",
                 "cohere", "ai21", "torch", "dummy"
             ], f"Invalid model type: {self.model_type}"
         else:
@@ -144,6 +144,9 @@ class Client:
                 self.model = HuggingFaceCLIPModel(self.model,
                                                   local_path=local_path,
                                                   **kwargs)
+            elif self.model_type == "anthropic":
+                from alfred.fm.anthropic import AnthropicModel
+                self.model = AnthropicModel(self.model, **kwargs)
             elif self.model_type == "openai":
                 from alfred.fm.openai import OpenAIModel
                 self.model = OpenAIModel(self.model, **kwargs)
@@ -374,13 +377,14 @@ class Client:
     def chat(self, log_save_path: Optional[str] = None, **kwargs: Any):
         """
         Chat with the model APIs.
-        Currently, Alfred supports Chat APIs from OpenAI
+        Currently, Alfred supports Chat APIs from Anthropic and OpenAI
+
         :param log_save_path: The file to save the chat logs.
         :type log_save_path: Optional[str]
         """
-        if self.model_type == "openai":
+        if self.model_type in ["openai", "anthropic"]:
             self.model.chat(log_save_path=log_save_path, **kwargs)
         else:
-            logger.error("Chat APIs are only supported for OpenAI models.")
+            logger.error("Chat APIs are only supported for Anthropic and OpenAI models.")
             raise NotImplementedError(
-                "Currently Chat are only supported for OpenAI models.")
+                "Currently Chat are only supported for Anthropic and OpenAI models.")

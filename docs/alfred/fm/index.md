@@ -12,6 +12,7 @@ Fm
 ## Modules
 
 - [Ai21](./ai21.md)
+- [Anthropic](./anthropic.md)
 - [Cohere](./cohere.md)
 - [Dummy](./dummy.md)
 - [Huggingface](./huggingface.md)

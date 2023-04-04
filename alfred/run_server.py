@@ -3,13 +3,6 @@ import logging
 from typing import Any
 
 import alfred.fm.remote.grpc as grpc_utils
-from alfred.fm.ai21 import AI21Model
-from alfred.fm.cohere import CohereModel
-from alfred.fm.dummy import DummyModel
-from alfred.fm.huggingface import HuggingFaceModel
-from alfred.fm.huggingfacevlm import HuggingFaceCLIPModel
-from alfred.fm.onnx import ONNXModel
-from alfred.fm.openai import OpenAIModel
 
 logging.basicConfig(
     format='ALFRED %(levelname)s: %(asctime)-5s  %(message)s',
@@ -51,23 +44,41 @@ class ModelServer:
         self.model = model
         self.model_type = model_type.lower()
         assert self.model_type in [
-            "huggingface", "huggingfacevlm", "onnx", "tensorrt", "openai",
+            "huggingface", "huggingfacevlm", "onnx", "tensorrt", "openai", "anthropic",
             "cohere", "ai21", "torch", "dummy"
         ], f"Invalid model type: {self.model_type}"
         if self.model_type == "huggingface":
-            self.model = HuggingFaceModel(self.model, **kwargs)
+            from alfred.fm.huggingface import HuggingFaceModel
+            self.model = HuggingFaceModel(self.model,
+                                          **kwargs)
         elif self.model_type == "huggingfacevlm":
-            self.model = HuggingFaceCLIPModel(self.model, **kwargs)
+            from alfred.fm.huggingfacevlm import HuggingFaceCLIPModel
+            self.model = HuggingFaceCLIPModel(self.model,
+                                              **kwargs)
+        elif self.model_type == "anthropic":
+            from alfred.fm.anthropic import AnthropicModel
+            self.model = AnthropicModel(self.model, **kwargs)
         elif self.model_type == "openai":
+            from alfred.fm.openai import OpenAIModel
             self.model = OpenAIModel(self.model, **kwargs)
         elif self.model_type == "cohere":
+            from alfred.fm.cohere import CohereModel
             self.model = CohereModel(self.model, **kwargs)
         elif self.model_type == "ai21":
+            from alfred.fm.ai21 import AI21Model
             self.model = AI21Model(self.model, **kwargs)
-        elif self.model_type == "onnx":
-            self.model = ONNXModel(self.model, **kwargs)
         elif self.model_type == "dummy":
+            from alfred.fm.dummy import DummyModel
             self.model = DummyModel(self.model)
+        elif self.model_type == "onnx":
+            from alfred.fm.onnx import ONNXModel
+            self.model = ONNXModel(self.model, **kwargs)
+        elif self.model_type == "tensorrt":
+            # self.model = TensorRTModel(self.model, **kwargs)
+            raise NotImplementedError
+        elif self.model_type == "torch":
+            # self.model = TorchModel(self.model, **kwargs)
+            raise NotImplementedError
         else:
             logger.error(f"Invalid model type: {self.model_type}")
             raise ValueError(f"Invalid model type: {self.model_type}")
