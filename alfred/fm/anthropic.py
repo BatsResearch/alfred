@@ -33,6 +33,7 @@ class AnthropicModel(APIAccessFoundationModel):
 
     This class provides a wrapper for the anthropic API for generating completions.
     """
+
     def _anthropic_query(
         self,
         query: Union[str, List],

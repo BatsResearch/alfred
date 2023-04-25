@@ -9,6 +9,9 @@ import transformers
 from PIL import Image
 from torch.nn.utils.rnn import pad_sequence
 
+import time
+from functools import wraps
+
 from .query import Query, RankedQuery, CompletionQuery
 from .response import RankedResponse
 
@@ -104,6 +107,39 @@ def batch_multimodal(queries: List[RankedQuery], batch_size=64):
     if len(batch) > 0:
         batches.append((batch, candidates))
     return batches
+
+def retry(num_retries=3, wait_time=0.1, exceptions=(Exception,)):
+    """
+    A decorator to retry a function call if it raises an exception.
+
+    Useful for running API-based models that may fail due to network/server issues.
+
+    :param num_retries: The number of retries
+    :type num_retries: int
+    :param wait_time: The time to wait between retries
+    :type wait_time: float
+    :param exceptions: The exceptions to catch
+    :type exceptions: Tuple[Exception]
+    :return: The decorated function
+    :rtype: Callable
+    """
+    def decorator(func):
+        # @wraps(func)
+        def wrapper(*args, **kwargs):
+            for i in range(num_retries + 1):
+                try:
+                    result = func(*args, **kwargs)
+                except exceptions as e:
+                    if i < num_retries:
+                        time.sleep(wait_time)
+                        continue
+                    else:
+                        raise e
+                return result
+        return wrapper
+    return decorator
+
+
 
 
 class bcolors:
