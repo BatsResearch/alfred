@@ -8,9 +8,25 @@ import readline
 
 from .model import APIAccessFoundationModel
 from .response import CompletionResponse
-from .utils import colorize_str
+from .utils import colorize_str, retry
 
 logger = logging.getLogger(__name__)
+
+try:
+    import openai
+except ModuleNotFoundError:
+    logger.warning("OpenAI module not found. Please install it to use the OpenAI model.")
+    raise ModuleNotFoundError("OpenAI module not found. Please install it to use the OpenAI model.")
+
+from openai.error import (
+    AuthenticationError,
+    APIError,
+    Timeout,
+    RateLimitError,
+    InvalidRequestError,
+    APIConnectionError,
+    ServiceUnavailableError,
+)
 
 OPENAI_MODELS = (
     "gpt-4",
@@ -30,13 +46,6 @@ OPENAI_MODELS = (
     "code-cushman-001",
 )
 
-try:
-    import openai
-except ModuleNotFoundError:
-    logger.warning("OpenAI module not found. Please install it to use the OpenAI model.")
-    raise ModuleNotFoundError("OpenAI module not found. Please install it to use the OpenAI model.")
-
-
 class OpenAIModel(APIAccessFoundationModel):
     """
     A wrapper for the OpenAI API.
@@ -44,6 +53,15 @@ class OpenAIModel(APIAccessFoundationModel):
     This class provides a wrapper for the OpenAI API for generating completions.
     """
     @staticmethod
+    @retry(num_retries=3, wait_time=0.1, exceptions=(
+            AuthenticationError,
+            APIError,
+            Timeout,
+            RateLimitError,
+            InvalidRequestError,
+            APIConnectionError,
+            ServiceUnavailableError,
+    ))
     def _openai_query(
         query: Union[str, List],
         temperature: float = 0.0,
@@ -91,6 +109,14 @@ class OpenAIModel(APIAccessFoundationModel):
             return response["choices"][0]["text"]
 
     @staticmethod
+    @retry(num_retries=3, wait_time=0.1, exceptions=(
+            APIError,
+            Timeout,
+            RateLimitError,
+            InvalidRequestError,
+            APIConnectionError,
+            ServiceUnavailableError,
+    ))
     def _openai_embedding_query(
         query_string: str,
         model: str = "text-davinci-002",
