@@ -23,6 +23,7 @@ A full list of `Alfred` project modules.
         - [Anthropic](alfred/fm/anthropic.md#anthropic)
         - [Cohere](alfred/fm/cohere.md#cohere)
         - [Dummy](alfred/fm/dummy.md#dummy)
+        - [Flexgen](alfred/fm/flexgen.md#flexgen)
         - [Huggingface](alfred/fm/huggingface.md#huggingface)
         - [Huggingfacevlm](alfred/fm/huggingfacevlm.md#huggingfacevlm)
         - [Model](alfred/fm/model.md#model)

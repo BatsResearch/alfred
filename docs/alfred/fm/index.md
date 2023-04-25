@@ -15,6 +15,7 @@ Fm
 - [Anthropic](./anthropic.md)
 - [Cohere](./cohere.md)
 - [Dummy](./dummy.md)
+- [Flexgen](./flexgen.md)
 - [Huggingface](./huggingface.md)
 - [Huggingfacevlm](./huggingfacevlm.md)
 - [Model](./model.md)

@@ -13,6 +13,12 @@ Alfred aims to reduce annotation cost and time by making efficient use of LLMs, 
 
 # News Update
 
+- **[[FlexGen](https://github.com/FMInference/FlexGen) Support]**
+  Alfred now supports FlexGen, a high-throughput inference pipeline with single GPU. Example usage:
+  ```python
+  from alfred import Client
+  flexgen = Client(model_type="flexgen", model="facebook/opt-30b", local_path='<model_path>', offload_dir="./flexgen-offload-cache")
+  ```
 - **[[Claude](https://console.anthropic.com/claude) Support]**
   Alfred now supports Claude models through API. Similarly you can start a chat session with "Client.chat()"!
 
@@ -37,7 +43,8 @@ Alfred aims to reduce annotation cost and time by making efficient use of LLMs, 
   openai.chat()
   ```
 
-# Guides
+
+# Basics
 
 ##  <span style="color: cyan;">GUIDE 1</span>: Steps to setup and run Alfred locally
 ### 1. Install dependencies & Alfred
@@ -197,7 +204,7 @@ prompts = [mention_template.apply(instance) for instance in spouse_test]
 responses = t0pp(prompts)
 ```
 
-### 5. Finally we can get the votes from the responses based on the `label_maps` defined in the template
+### 5. Finally, we can get the votes from the responses based on the `label_maps` defined in the template
 ```python
 votes = mention_voter.vote(responses)
 ```

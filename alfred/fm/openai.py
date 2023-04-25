@@ -1,7 +1,7 @@
 import json
 import logging
 import os
-from typing import Optional, List, Any, Union, Tuple, Dict
+from typing import Optional, List, Any, Union
 
 import torch
 import readline
