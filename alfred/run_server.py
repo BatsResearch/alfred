@@ -45,6 +45,7 @@ class ModelServer:
         self.model_type = model_type.lower()
         assert self.model_type in [
             "huggingface", "huggingfacevlm", "onnx", "tensorrt", "openai", "anthropic",
+            "flexgen",
             "cohere", "ai21", "torch", "dummy"
         ], f"Invalid model type: {self.model_type}"
         if self.model_type == "huggingface":
@@ -73,6 +74,9 @@ class ModelServer:
         elif self.model_type == "onnx":
             from alfred.fm.onnx import ONNXModel
             self.model = ONNXModel(self.model, **kwargs)
+        elif self.model_type == "flexgen":
+            from alfred.fm.flexgen import FlexGenModel
+            self.model = FlexGenModel(self.model, **kwargs)
         elif self.model_type == "tensorrt":
             # self.model = TensorRTModel(self.model, **kwargs)
             raise NotImplementedError
