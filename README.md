@@ -47,7 +47,7 @@ Alfred aims to reduce annotation cost and time by making efficient use of LLMs, 
 If you find Alfred useful, please cite the following work. Thank you!
 [Peilin Yu](https://www.yupeilin.com), [Stephen H. Bach](http://cs.brown.edu/people/sbach/). "Alfred: A System for Prompted Weak Supervision". ACL Demo, 2023.
 ```
-@inproceedings{yu2022nplm,
+@inproceedings{yu2023alfred,
   title = {Alfred: A System for Prompted Weak Supervision},
   author = {Yu, Peilin and Bach, Stephen H.}, 
   booktitle = {ACL Demo}, 
