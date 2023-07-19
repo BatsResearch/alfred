@@ -196,5 +196,3 @@ Write a prompt-response pair to the cache
 def write(self, prompt: str, response: str, metadata: Optional[str] = None):
     ...
 ```
-
-

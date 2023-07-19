@@ -83,5 +83,3 @@ Type: *str*
 def serialize(self) -> str:
     ...
 ```
-
-

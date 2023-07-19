@@ -39,5 +39,3 @@ Launch an interactive chat session with the Anthropic API.
 def chat(self, **kwargs: Any):
     ...
 ```
-
-

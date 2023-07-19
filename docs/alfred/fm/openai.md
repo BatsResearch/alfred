@@ -41,5 +41,3 @@ Launch an interactive chat session with the OpenAI API.
 def chat(self, **kwargs: Any):
     ...
 ```
-
-

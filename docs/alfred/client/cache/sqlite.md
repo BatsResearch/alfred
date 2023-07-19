@@ -329,5 +329,3 @@ def write_batch(
 ):
     ...
 ```
-
-
