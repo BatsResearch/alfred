@@ -2,7 +2,7 @@ datasets~=2.4.0
 paramiko>=2.7.2
 pyarrow>=3.0.0
 torch>=1.8.0
-accelerate~=0.15.0
+accelerate~=0.20.3
 
 transformers>=4.20.0
 numpy>=1.21.0
