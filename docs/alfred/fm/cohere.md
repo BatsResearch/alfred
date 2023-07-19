@@ -25,5 +25,3 @@ class CohereModel(APIAccessFoundationModel):
     def __init__(self, model_string: str = "xlarge", api_key: Optional[str] = None):
         ...
 ```
-
-

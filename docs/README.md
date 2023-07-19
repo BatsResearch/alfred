@@ -44,6 +44,7 @@ A full list of `Alfred` project modules.
             - [RankedResponse](alfred/fm/response/ranked_response.md#rankedresponse)
             - [Response](alfred/fm/response/response.md#response)
         - [Utils](alfred/fm/utils.md#utils)
+        - [Vllm](alfred/fm/vllm.md#vllm)
     - [Labeling](alfred/labeling/index.md#labeling)
         - [FlyingSquid](alfred/labeling/flyingsquid.md#flyingsquid)
         - [LabelModel](alfred/labeling/labelmodel.md#labelmodel)

@@ -367,5 +367,3 @@ async def set_alfred_server_webhook_port(request: Request):
 async def status():
     ...
 ```
-
-

@@ -220,5 +220,3 @@ returns the type of the template
 def type(self):
     ...
 ```
-
-
