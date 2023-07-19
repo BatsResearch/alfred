@@ -64,7 +64,7 @@ class Client:
             assert self.model_type in [
                 "huggingface", "huggingfacevlm",
                 "onnx", "tensorrt",
-                "flexgen",
+                "flexgen", "vllm",
                 "openai", "anthropic",
                 "cohere", "ai21",
                 "torch", "dummy"
@@ -169,6 +169,9 @@ class Client:
             elif self.model_type == "flexgen":
                 from alfred.fm.flexgen import FlexGenModel
                 self.model = FlexGenModel(self.model, **kwargs)
+            elif self.model_type == "vllm":
+                from alfred.fm.vllm import vLLMModel
+                self.model = vLLMModel(self.model, **kwargs)
             elif self.model_type == "tensorrt":
                 # self.model = TensorRTModel(self.model, **kwargs)
                 raise NotImplementedError
