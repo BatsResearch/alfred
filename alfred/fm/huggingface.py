@@ -357,6 +357,7 @@ class HuggingFaceModel(LocalAccessFoundationModel):
             inputs = batch
         else:
             if padding:
+                self.tokenizer.pad_token = self.tokenizer.eos_token
                 inputs = self.tokenizer(batch,
                                         return_tensors="pt",
                                         padding=True)
