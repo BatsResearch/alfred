@@ -47,7 +47,7 @@ class DynamicBatcher:
 
 ### DynamicBatcher().batch
 
-[Show source in utils.py:375](../../../alfred/fm/utils.py#L375)
+[Show source in utils.py:377](../../../alfred/fm/utils.py#L377)
 
 Batch a list of instances into a list of batches.
 If the instances are of different sizes, they will be sorted by size
@@ -67,7 +67,7 @@ def batch(self) -> List:
 
 ### DynamicBatcher().merge_rank_response
 
-[Show source in utils.py:289](../../../alfred/fm/utils.py#L289)
+[Show source in utils.py:291](../../../alfred/fm/utils.py#L291)
 
 Merge a list of responses with raw logit into a single RankedResponse
 Assumption: Candidate Order is the same across all ranked queries
@@ -95,7 +95,7 @@ def merge_rank_response(
 
 ### DynamicBatcher().reorder
 
-[Show source in utils.py:334](../../../alfred/fm/utils.py#L334)
+[Show source in utils.py:336](../../../alfred/fm/utils.py#L336)
 
 Reordering the responses according to the original order of the queries
 
@@ -362,3 +362,5 @@ Type: *List[int]*
 def tokenize(inst, tokenizer, max_length=512):
     ...
 ```
+
+

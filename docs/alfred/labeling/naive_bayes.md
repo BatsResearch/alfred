@@ -48,3 +48,5 @@ Type: *np.ndarray*
 def label(self, votes: np.ndarray) -> np.ndarray:
     ...
 ```
+
+
