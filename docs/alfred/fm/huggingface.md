@@ -38,6 +38,7 @@ class HuggingFaceModel(LocalAccessFoundationModel):
         device_map: Optional[Union[str, dict]] = "auto",
         offload_folder: Optional[str] = None,
         int_8: bool = False,
+        trust_remote_code: bool = True,
         tokenizer: Optional[PreTrainedTokenizer] = None,
     ):
         ...
