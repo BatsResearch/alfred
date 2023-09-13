@@ -66,6 +66,7 @@ class HuggingFaceModel(LocalAccessFoundationModel):
         device_map: Optional[Union[str, dict]] = "auto",
         offload_folder: Optional[str] = None,
         int_8: bool = False,
+        trust_remote_code: bool=True,
         tokenizer: Optional[PreTrainedTokenizer] = None,
     ):
         """
@@ -84,6 +85,8 @@ class HuggingFaceModel(LocalAccessFoundationModel):
         :type offload_folder: str
         :param int_8: (optional) A boolean indicating whether to use .int8() quantization (default: False)
         :type int_8: bool
+        :param trust_remote_code: (optional) A boolean indicating whether allows hf to load models with custom code
+        :type trust_remote_code: bool
         :param tokenizer: (optional) A custom tokenizer to use, if desired.
         :type tokenizer: transformers.PreTrainedTokenizer
         """
@@ -138,6 +141,7 @@ class HuggingFaceModel(LocalAccessFoundationModel):
             self.model = auto_model_class.from_pretrained(
                 model_name,
                 cache_dir=self.local_path,
+                trust_remote_code=trust_remote_code,
                 device_map=device_map,
                 load_in_8bit=int_8,
                 torch_dtype=self.dtype,
@@ -148,6 +152,7 @@ class HuggingFaceModel(LocalAccessFoundationModel):
         else:
             self.model = auto_model_class.from_pretrained(
                 model_name,
+                trust_remote_code=trust_remote_code,
                 cache_dir=self.local_path,
                 torch_dtype=self.dtype,
             )
