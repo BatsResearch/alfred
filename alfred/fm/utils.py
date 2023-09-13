@@ -277,6 +277,8 @@ class DynamicBatcher:
         self.max_batch_size = max_batch_size
         self.ranked = False
         self.tokenizer = tokenizer
+        if self.tokenizer:
+            self.tokenizer.pad_token = self.tokenizer.eos_token
         self.max_token_length = max_token_length
 
         if isinstance(self.queries[0], RankedQuery):

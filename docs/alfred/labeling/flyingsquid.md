@@ -35,3 +35,5 @@ class FlyingSquid(LabelModel):
 def label(self, votes: np.ndarray) -> np.ndarray:
     ...
 ```
+
+
