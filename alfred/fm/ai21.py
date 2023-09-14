@@ -9,9 +9,9 @@ from .response import CompletionResponse
 logger = logging.getLogger(__name__)
 
 AI21_MODELS = (
-    "j1-large",
-    "j1-grande",
-    "j1-jumbo",
+    "j1-light",
+    "j1-mid",
+    "j1-ultra",
 )
 
 
@@ -26,7 +26,7 @@ class AI21Model(APIAccessFoundationModel):
         query_string: str,
         temperature: float = 0.0,
         max_tokens: int = 10,
-        model: str = "j1-large",
+        model: str = "j1-mid",
     ) -> str:
         """
         Run a single query through the foundation model
@@ -62,7 +62,7 @@ class AI21Model(APIAccessFoundationModel):
 
     def __init__(
         self,
-        model_string: str = "j1-large",
+        model_string: str = "j1-mid",
         api_key: Optional[str] = None,
     ):
         """

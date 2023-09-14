@@ -16,7 +16,7 @@ SSHTunnel
 
 ## SSHTunnel
 
-[Show source in sshtunnel.py:12](../../../../alfred/client/ssh/sshtunnel.py#L12)
+[Show source in sshtunnel.py:13](../../../../alfred/client/ssh/sshtunnel.py#L13)
 
 SSH Tunnel implemented with paramiko and supports interactive authentication
 This tunnel would be very useful if you have a alfred.fm model on remote server that you want to access
@@ -36,6 +36,7 @@ class SSHTunnel:
         username: Optional[str] = None,
         remote_node_address: Optional[str] = None,
         remote_bind_port: Optional[Union[int, str]] = 443,
+        key_file: str = "~/.ssh/id_rsa",
         handler: Callable = None,
     ):
         ...
@@ -43,7 +44,7 @@ class SSHTunnel:
 
 ### SSHTunnel.adaptive_handler
 
-[Show source in sshtunnel.py:20](../../../../alfred/client/ssh/sshtunnel.py#L20)
+[Show source in sshtunnel.py:21](../../../../alfred/client/ssh/sshtunnel.py#L21)
 
 Authentication handler for paramiko's interactive authentication
 
@@ -57,7 +58,7 @@ def adaptive_handler(title, instructions, prompt_list):
 
 ### SSHTunnel().start
 
-[Show source in sshtunnel.py:74](../../../../alfred/client/ssh/sshtunnel.py#L74)
+[Show source in sshtunnel.py:82](../../../../alfred/client/ssh/sshtunnel.py#L82)
 
 Wrapper for _start() with exception handling
 
@@ -70,7 +71,7 @@ def start(self):
 
 ### SSHTunnel().stop
 
-[Show source in sshtunnel.py:127](../../../../alfred/client/ssh/sshtunnel.py#L127)
+[Show source in sshtunnel.py:142](../../../../alfred/client/ssh/sshtunnel.py#L142)
 
 Stop the tunnel
 

@@ -32,6 +32,7 @@ class Client:
         end_point: Optional[str] = None,
         local_path: Optional[str] = None,
         ssh_tunnel: bool = False,
+        ssh_pk: str = '~/.ssh/id_rsa',
         ssh_node: Optional[str] = None,
         cache: Optional[Cache] = None,
         **kwargs: Any,
@@ -48,6 +49,8 @@ class Client:
         :param local_path: (optional) The local path of the model. (e.g. "/home/user/.cache/model")
         :param ssh_tunnel: Whether to establish an SSH tunnel to the end point.
         :type ssh_tunnel: bool
+        :param ssh_pk: ssh RSA key location
+        :type ssh_pk: str
         :param ssh_node: (optional) The final SSH node to establish the SSH tunnel. (e.g. gpu node on a cluster with login node as jump)
         :type ssh_node: str
         :param cache: (optional) The cache to use. (e.g. "SQLite", "Dummy")
@@ -110,6 +113,7 @@ class Client:
                     remote_port=self.end_point_port,
                     remote_node_address=ssh_node,
                     username=user_name,
+                    key_file=ssh_pk,
                 )
 
                 tunnel.start()
