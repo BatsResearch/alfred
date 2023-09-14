@@ -38,6 +38,7 @@ class Client:
         end_point: Optional[str] = None,
         local_path: Optional[str] = None,
         ssh_tunnel: bool = False,
+        ssh_pk: str = "~/.ssh/id_rsa",
         ssh_node: Optional[str] = None,
         cache: Optional[Cache] = None,
         **kwargs: Any
@@ -47,7 +48,7 @@ class Client:
 
 ### Client().__call__
 
-[Show source in client.py:270](../../../alfred/client/client.py#L270)
+[Show source in client.py:274](../../../alfred/client/client.py#L274)
 
 __call__() function to run the model on the queries.
 Equivalent to run() function.
@@ -75,7 +76,7 @@ def __call__(
 
 ### Client().calibrate
 
-[Show source in client.py:285](../../../alfred/client/client.py#L285)
+[Show source in client.py:289](../../../alfred/client/client.py#L289)
 
 calibrate are used to calibrate foundation models contextually given the template.
 A voter class may be passed to calibrate the model with a specific voter.
@@ -120,7 +121,7 @@ def calibrate(
 
 ### Client().chat
 
-[Show source in client.py:387](../../../alfred/client/client.py#L387)
+[Show source in client.py:391](../../../alfred/client/client.py#L391)
 
 Chat with the model APIs.
 Currently, Alfred supports Chat APIs from Anthropic and OpenAI
@@ -139,7 +140,7 @@ def chat(self, log_save_path: Optional[str] = None, **kwargs: Any):
 
 ### Client().encode
 
-[Show source in client.py:361](../../../alfred/client/client.py#L361)
+[Show source in client.py:365](../../../alfred/client/client.py#L365)
 
 embed() function to embed the queries.
 
@@ -162,7 +163,7 @@ def encode(
 
 ### Client().generate
 
-[Show source in client.py:229](../../../alfred/client/client.py#L229)
+[Show source in client.py:233](../../../alfred/client/client.py#L233)
 
 Wrapper function to generate the response(s) from the model. (For completion)
 
@@ -191,7 +192,7 @@ def generate(
 
 ### Client().remote_run
 
-[Show source in client.py:207](../../../alfred/client/client.py#L207)
+[Show source in client.py:211](../../../alfred/client/client.py#L211)
 
 Wrapper function for running the model on the queries thru a gRPC Server.
 
@@ -218,7 +219,7 @@ def remote_run(
 
 ### Client().run
 
-[Show source in client.py:187](../../../alfred/client/client.py#L187)
+[Show source in client.py:191](../../../alfred/client/client.py#L191)
 
 Run the model on the queries.
 
@@ -245,7 +246,7 @@ def run(
 
 ### Client().score
 
-[Show source in client.py:246](../../../alfred/client/client.py#L246)
+[Show source in client.py:250](../../../alfred/client/client.py#L250)
 
 Wrapper function to score the response(s) from the model. (For ranking)
 

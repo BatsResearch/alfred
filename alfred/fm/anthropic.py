@@ -13,11 +13,10 @@ from .utils import colorize_str
 logger = logging.getLogger(__name__)
 
 ANTHROPIC_MODELS = (
-    "claude-v1",
-    "claude-v1.0",
-    "claude-v1.2",
-    "claude-instant-v1",
-    "claude-instant-v1.0",
+    "claude-instant-1",
+    "claude-instant-1.2",
+    "claude-2",
+    "claude-2.0",
 )
 
 try:
@@ -39,7 +38,7 @@ class AnthropicModel(APIAccessFoundationModel):
         query: Union[str, List],
         temperature: float = 0.0,
         max_tokens: int = 3,
-        model: str = "claude-v1",
+        model: str = "claude-instant-1",
         **kwargs: Any,
     ) -> str:
         """
@@ -82,7 +81,7 @@ class AnthropicModel(APIAccessFoundationModel):
             return response["completion"]
 
     def __init__(self,
-                 model_string: str = "claude-v1",
+                 model_string: str = "claude-instant-1",
                  api_key: Optional[str] = None):
         """
         Initialize the Anthropic API wrapper.

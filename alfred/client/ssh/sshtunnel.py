@@ -3,6 +3,7 @@ import logging
 from typing import Optional, Union, Callable
 
 import paramiko
+import os
 
 from alfred.client.ssh.utils import port_finder, forward_tunnel
 
@@ -39,6 +40,7 @@ class SSHTunnel:
         username: Optional[str] = None,
         remote_node_address: Optional[str] = None,
         remote_bind_port: Optional[Union[int, str]] = 443,
+        key_file: str="~/.ssh/id_rsa",
         handler: Callable = None,
     ):
         """
@@ -56,6 +58,8 @@ class SSHTunnel:
         :type remote_node_address: str
         :param remote_bind_port: (optional) The remote bind port to connect to, defaults to 443
         :type remote_bind_port: Optional[Union[int, str]], optional
+        :param key_file: (optional) SSH key file
+        :type key_file: str
         :param handler: The handler for interactive authentication, defaults to adaptive handler
         :type handler: Callable, optional
         """
@@ -69,6 +73,10 @@ class SSHTunnel:
         self.username = username or input("Username: ")
         self.remote_node_address = remote_node_address
         self.remote_bind_port = remote_bind_port
+
+        # if key file exist the nuse key_file else None
+        self.key_file = paramiko.RSAKey.from_private_key_file(os.path.expanduser(key_file)) if os.path.isfile(os.path.expanduser(key_file)) else None
+
         self.handler = handler or self.adaptive_handler
 
     def start(self):
@@ -89,19 +97,26 @@ class SSHTunnel:
 
         self.client = paramiko.SSHClient()
         self.client.load_system_host_keys()
-        self.client.set_missing_host_key_policy(paramiko.WarningPolicy())
+        self.client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
         try:
-            self.client.connect(self.remote_host, username=self.username)
+            self.client.connect(
+                self.remote_host,
+                username=self.username,
+                pkey=self.key_file,
+                look_for_keys=False
+            )
         except paramiko.ssh_exception.SSHException:
             pass
 
-        try:
-            self.client.get_transport().auth_interactive(
-                username=self.username, handler=self.handler)
-        except paramiko.ssh_exception.AuthenticationException:
-            logger.error("Wrong Password, Please restart the Tunnel")
-            raise paramiko.ssh_exception.AuthenticationException
+        if not self.client.get_transport().is_authenticated():
+            try:
+                self.client.get_transport().auth_interactive(
+                    username=self.username, handler=self.handler)
+            except paramiko.ssh_exception.AuthenticationException:
+                logger.error("Wrong Password, Please restart the Tunnel")
+                raise paramiko.ssh_exception.AuthenticationException
+
         logger.log(logging.INFO, f"Connected to {self.remote_host} @ port 22")
 
         port = self.client.get_transport().sock.getsockname()[1]
