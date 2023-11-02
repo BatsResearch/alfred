@@ -34,6 +34,7 @@ class vLLMModel(LocalAccessFoundationModel):
         super().__init__(model_string)
         self.gpu_count = torch.cuda.device_count()
         self.model = LLM(local_dir if local_dir is not None else model, tensor_parallel_size=self.gpu_count)
+
     def _generate_batch(
             self,
             batch_instance: List[str],
@@ -51,7 +52,8 @@ class vLLMModel(LocalAccessFoundationModel):
 
         temperature = kwargs.get("temperature", 0)
         max_new_tokens = kwargs.get("max_new_tokens", 16)
+        top_k = kwargs.get("top_k", -1)
 
-        sampling_params = SamplingParams(temperature=temperature, max_tokens=max_new_tokens, top_k=1)
+        sampling_params = SamplingParams(temperature=temperature, max_tokens=max_new_tokens, top_k=top_k)
 
         return [CompletionResponse(prediction=output.outputs[0].text) for output in self.model.generate(batch_instance, sampling_params)]
