@@ -17,6 +17,7 @@ Fm
 - [Dummy](./dummy.md)
 - [Flexgen](./flexgen.md)
 - [Huggingface](./huggingface.md)
+- [Huggingfacedocument](./huggingfacedocument.md)
 - [Huggingfacevlm](./huggingfacevlm.md)
 - [Model](./model.md)
 - [Onnx](./onnx.md)

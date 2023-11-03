@@ -25,6 +25,7 @@ A full list of `Alfred` project modules.
         - [Dummy](alfred/fm/dummy.md#dummy)
         - [Flexgen](alfred/fm/flexgen.md#flexgen)
         - [Huggingface](alfred/fm/huggingface.md#huggingface)
+        - [Huggingfacedocument](alfred/fm/huggingfacedocument.md#huggingfacedocument)
         - [Huggingfacevlm](alfred/fm/huggingfacevlm.md#huggingfacevlm)
         - [Model](alfred/fm/model.md#model)
         - [Onnx](alfred/fm/onnx.md#onnx)
