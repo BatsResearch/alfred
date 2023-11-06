@@ -65,7 +65,7 @@ class Client:
         if self.model_type:
             self.model_type = model_type.lower()
             assert self.model_type in [
-                "huggingface", "huggingfacevlm",
+                "huggingface", "huggingfacevlm", ""
                 "onnx", "tensorrt",
                 "flexgen", "vllm",
                 "openai", "anthropic",
@@ -152,6 +152,11 @@ class Client:
                 self.model = HuggingFaceCLIPModel(self.model,
                                                   local_path=local_path,
                                                   **kwargs)
+            elif self.model_type == "huggingfacedocument":
+                from alfred.fm.huggingfacedocument import HuggingFaceDocumentModel
+                self.model = HuggingFaceDocumentModel(self.model,
+                                                      local_path=local_path,
+                                                      **kwargs)
             elif self.model_type == "anthropic":
                 from alfred.fm.anthropic import AnthropicModel
                 self.model = AnthropicModel(self.model, **kwargs)

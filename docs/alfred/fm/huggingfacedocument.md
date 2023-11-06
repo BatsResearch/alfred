@@ -27,7 +27,9 @@ Currently supports:
 
 ```python
 class HuggingFaceDocumentModel(LocalAccessFoundationModel):
-    def __init__(self, model_string: str, local_path: Optional[str] = None):
+    def __init__(
+        self, model_string: str, local_path: Optional[str] = None, **kwargs: Any
+    ):
         ...
 ```
 
