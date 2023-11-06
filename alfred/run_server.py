@@ -44,7 +44,8 @@ class ModelServer:
         self.model = model
         self.model_type = model_type.lower()
         assert self.model_type in [
-            "huggingface", "huggingfacevlm", "onnx", "tensorrt", "openai", "anthropic",
+            "huggingface", "huggingfacevlm", "huggingfacedocument",
+            "onnx", "tensorrt", "openai", "anthropic",
             "flexgen", "vllm",
             "cohere", "ai21", "torch", "dummy"
         ], f"Invalid model type: {self.model_type}"
@@ -56,6 +57,10 @@ class ModelServer:
             from alfred.fm.huggingfacevlm import HuggingFaceCLIPModel
             self.model = HuggingFaceCLIPModel(self.model,
                                               **kwargs)
+        elif self.model_type == "huggingfacedocument":
+            from alfred.fm.huggingfacedocument import HuggingFaceDocumentModel
+            self.model = HuggingFaceDocumentModel(self.model,
+                                                    **kwargs)
         elif self.model_type == "anthropic":
             from alfred.fm.anthropic import AnthropicModel
             self.model = AnthropicModel(self.model, **kwargs)

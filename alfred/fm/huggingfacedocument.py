@@ -1,6 +1,6 @@
 import logging
 import re
-from typing import Optional, List, Tuple
+from typing import Optional, List, Tuple, Any
 
 import torch
 from PIL import Image
@@ -26,6 +26,7 @@ class HuggingFaceDocumentModel(LocalAccessFoundationModel):
         self,
         model_string: str,
         local_path: Optional[str] = None,
+        **kwargs: Any,
     ):
         """
         Constructor for HuggingFaceDocumentModel
