@@ -23,13 +23,15 @@ class TestGRPCServer(unittest.TestCase):
         #
         # # Start the gRPC server in a separate thread
         self.server = gRPCServer
-        self.server_thread = threading.Thread(target=server_starter,
-                                              args=(
-                                                  self.server,
-                                                  cli,
-                                                  self.port,
-                                              ),
-                                              daemon=True)
+        self.server_thread = threading.Thread(
+            target=server_starter,
+            args=(
+                self.server,
+                cli,
+                self.port,
+            ),
+            daemon=True,
+        )
         self.server_thread.start()
 
         self.channel = grpc.insecure_channel(f"localhost:{self.port}")
@@ -42,17 +44,13 @@ class TestGRPCServer(unittest.TestCase):
         def _run_req_gen():
             yield query__pb2.RunRequest(message=query.prompt)
 
-        response = self.stub.Run(
-            _run_req_gen())
+        response = self.stub.Run(_run_req_gen())
         response = response.next()
         self.assertEqual(response.message, query.prompt)
 
     def test_run_multiple_queries(self):
         # Test running a dataset of queries using the client
-        queries = [
-            CompletionQuery(prompt="Query 1"),
-            CompletionQuery(prompt="Query 2")
-        ]
+        queries = [CompletionQuery(prompt="Query 1"), CompletionQuery(prompt="Query 2")]
 
         def _run_req_gen():
             for query in queries:

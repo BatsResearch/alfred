@@ -29,6 +29,7 @@ class RankedQuery(Query):
         >>> fm = XFM()
         >>> response = fm(query)
     """
+
     def __init__(
         self,
         prompt: Union[str, np.ndarray, Image.Image, Tuple, torch.Tensor],
@@ -42,8 +43,7 @@ class RankedQuery(Query):
         :param candidates: list of candidates for appending to prompt
         :type candidates: Union[List, Tuple, np.ndarray, torch.Tensor]
         """
-        assert len(candidates) > 0, \
-            "Candidates cannot be empty"
+        assert len(candidates) > 0, "Candidates cannot be empty"
         self._prompt = prompt
         self._candidates = candidates
         self.composition_strategy = "ranked"
@@ -77,9 +77,7 @@ class RankedQuery(Query):
         composition_fn = composition_fn or self.compose
 
         return [
-            composition_fn(self._prompt,
-                           candidate,
-                           strategy=self.composition_strategy)
+            composition_fn(self._prompt, candidate, strategy=self.composition_strategy)
             for candidate in self._candidates
         ]
 
@@ -94,7 +92,8 @@ class RankedQuery(Query):
     def __eq__(self, other):
         """returns whether the two queries are equal"""
         assert isinstance(
-            other, Query), f"Cannot compare {type(self)} and {type(other)}"
+            other, Query
+        ), f"Cannot compare {type(self)} and {type(other)}"
         return self._prompt == other._prompt
 
     def __hash__(self):

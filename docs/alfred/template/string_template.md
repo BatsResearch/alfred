@@ -85,7 +85,7 @@ class StringTemplate(Template):
 
 ### StringTemplate().__call__
 
-[Show source in string_template.py:280](../../../alfred/template/string_template.py#L280)
+[Show source in string_template.py:282](../../../alfred/template/string_template.py#L282)
 
 A wrapper function to apply the template to a single example
 
@@ -110,7 +110,7 @@ def __call__(self, example: Dict, **kawrgs: Any) -> Query:
 
 ### StringTemplate().apply
 
-[Show source in string_template.py:122](../../../alfred/template/string_template.py#L122)
+[Show source in string_template.py:123](../../../alfred/template/string_template.py#L123)
 
 Apply template to an example and returns a query object
 
@@ -160,7 +160,7 @@ def apply_to_dataset(self, dataset: Iterable[Dict], **kwargs: Any) -> Iterable[Q
 
 ### StringTemplate().deserialize
 
-[Show source in string_template.py:261](../../../alfred/template/string_template.py#L261)
+[Show source in string_template.py:263](../../../alfred/template/string_template.py#L263)
 
 returns a template object from a json string of dictionary
 
@@ -186,7 +186,7 @@ def deserialize(self, json_str: str) -> Template:
 
 ### StringTemplate().from_promptsource
 
-[Show source in string_template.py:108](../../../alfred/template/string_template.py#L108)
+[Show source in string_template.py:109](../../../alfred/template/string_template.py#L109)
 
 Update the template from a promptsource template
 

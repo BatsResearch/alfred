@@ -47,7 +47,7 @@ class ALFRED_CONFIG(BaseModel):
 
 ## alfred_server_apply_template
 
-[Show source in run_client_api.py:244](../../alfred/run_client_api.py#L244)
+[Show source in run_client_api.py:247](../../alfred/run_client_api.py#L247)
 
 #### Signature
 
@@ -61,7 +61,7 @@ async def alfred_server_apply_template(request: Request):
 
 ## alfred_server_completion
 
-[Show source in run_client_api.py:218](../../alfred/run_client_api.py#L218)
+[Show source in run_client_api.py:221](../../alfred/run_client_api.py#L221)
 
 #### Signature
 
@@ -75,7 +75,7 @@ async def alfred_server_completion(request: Request):
 
 ## alfred_server_completion
 
-[Show source in run_client_api.py:229](../../alfred/run_client_api.py#L229)
+[Show source in run_client_api.py:232](../../alfred/run_client_api.py#L232)
 
 #### Signature
 
@@ -187,7 +187,7 @@ async def get_alfred_server_webhook_port():
 
 ## get_cache_table
 
-[Show source in run_client_api.py:258](../../alfred/run_client_api.py#L258)
+[Show source in run_client_api.py:261](../../alfred/run_client_api.py#L261)
 
 #### Signature
 
@@ -201,7 +201,7 @@ async def get_cache_table():
 
 ## main
 
-[Show source in run_client_api.py:270](../../alfred/run_client_api.py#L270)
+[Show source in run_client_api.py:273](../../alfred/run_client_api.py#L273)
 
 #### Signature
 

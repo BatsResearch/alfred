@@ -23,8 +23,7 @@ class TestTemplate(unittest.TestCase):
         self.assertEqual(query.prompt, "This is a Test data.")
 
         # Test with completion template
-        template = StringTemplate("This is a [[data]].",
-                                  answer_choices="Yes ||| No")
+        template = StringTemplate("This is a [[data]].", answer_choices="Yes ||| No")
         query = template.apply({"data": "Test data"})
         self.assertIsInstance(query, RankedQuery)
         self.assertEqual(query.prompt, "This is a Test data.")

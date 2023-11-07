@@ -19,6 +19,7 @@ class Voter:
 
 
     """
+
     def __init__(
         self,
         label_map: Dict,
@@ -49,12 +50,13 @@ class Voter:
         self._matching_fn = matching_fn
         self._calibration = calibration
 
-    def vote(self,
-             responses: Union[Iterable[str], str, Iterable[Response],
-                              Response],
-             matching_function: Optional[Callable] = None,
-             label_map: Optional[Dict] = None,
-             **kwargs: Any) -> np.ndarray:
+    def vote(
+        self,
+        responses: Union[Iterable[str], str, Iterable[Response], Response],
+        matching_function: Optional[Callable] = None,
+        label_map: Optional[Dict] = None,
+        **kwargs: Any,
+    ) -> np.ndarray:
         """
         Vote for the responses based on the matching function and the label maps
 
@@ -78,19 +80,19 @@ class Voter:
         :rtype: np.ndarray
         """
         label_map = self._label_map if label_map is None else label_map
-        matching_function = self._matching_fn if matching_function is None else matching_function
+        matching_function = (
+            self._matching_fn if matching_function is None else matching_function
+        )
 
         if isinstance(responses, str) or isinstance(responses, Response):
             responses = [responses]
 
         if label_map is None:
-            logger.warning(
-                "No answer label map found, voting will not be done")
-            raise ValueError(
-                "No answer label map found, voting will not be done")
+            logger.warning("No answer label map found, voting will not be done")
+            raise ValueError("No answer label map found, voting will not be done")
 
-        no_tqdm = kwargs.get('no_tqdm', True)
-        abstention = kwargs.get('abstention', 0)
+        no_tqdm = kwargs.get("no_tqdm", True)
+        abstention = kwargs.get("abstention", 0)
 
         votes = np.ones(len(responses)) * abstention
         for idx, response in enumerate(tqdm(responses, disable=no_tqdm)):
@@ -105,8 +107,7 @@ class Voter:
                         weights, biases = np.array(weights), np.array(biases)
                         calibrated_scores = weights @ np.array(scores) + biases
                     elif type(self._calibration) in [list, np.ndarray]:
-                        calibrated_scores = np.array(
-                            scores) @ self._calibration
+                        calibrated_scores = np.array(scores) @ self._calibration
                     response = labels[np.argmax(calibrated_scores)]
                 else:
                     response = response.prediction
@@ -114,21 +115,26 @@ class Voter:
                 pass
             else:
                 logger.error(f"Unsupported response type: {type(response)}")
-                raise ValueError(
-                    f"Unsupported response type: {type(response)}")
+                raise ValueError(f"Unsupported response type: {type(response)}")
 
             if isinstance(label_map, dict):
                 for k_idx, key in enumerate(label_map.keys()):
                     if matching_function(response, key):
-                        votes[idx] = label_map[key] if isinstance(
-                            label_map[key], int) else k_idx + 1
+                        votes[idx] = (
+                            label_map[key]
+                            if isinstance(label_map[key], int)
+                            else k_idx + 1
+                        )
             else:
                 if matching_function(response, label_map):
                     votes[idx] = 1
         return votes
 
-    def set_calibration(self, weights: Union[List[float], np.ndarray],
-                        biases: Union[List[float], np.ndarray]):
+    def set_calibration(
+        self,
+        weights: Union[List[float], np.ndarray],
+        biases: Union[List[float], np.ndarray],
+    ):
         """
         Set calibration weights and biases
 

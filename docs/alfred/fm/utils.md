@@ -26,7 +26,7 @@ Utils
 
 ## DynamicBatcher
 
-[Show source in utils.py:246](../../../alfred/fm/utils.py#L246)
+[Show source in utils.py:267](../../../alfred/fm/utils.py#L267)
 
 Dynamic Batching Utility
 Maximize GPU Utilization by batching queries of similar sizes
@@ -47,7 +47,7 @@ class DynamicBatcher:
 
 ### DynamicBatcher().batch
 
-[Show source in utils.py:377](../../../alfred/fm/utils.py#L377)
+[Show source in utils.py:396](../../../alfred/fm/utils.py#L396)
 
 Batch a list of instances into a list of batches.
 If the instances are of different sizes, they will be sorted by size
@@ -67,7 +67,7 @@ def batch(self) -> List:
 
 ### DynamicBatcher().merge_rank_response
 
-[Show source in utils.py:291](../../../alfred/fm/utils.py#L291)
+[Show source in utils.py:312](../../../alfred/fm/utils.py#L312)
 
 Merge a list of responses with raw logit into a single RankedResponse
 Assumption: Candidate Order is the same across all ranked queries
@@ -95,7 +95,7 @@ def merge_rank_response(
 
 ### DynamicBatcher().reorder
 
-[Show source in utils.py:336](../../../alfred/fm/utils.py#L336)
+[Show source in utils.py:355](../../../alfred/fm/utils.py#L355)
 
 Reordering the responses according to the original order of the queries
 
@@ -122,7 +122,7 @@ def reorder(self, inst: List, offset: Optional[int] = None) -> List:
 
 ## EmbeddingCache
 
-[Show source in utils.py:171](../../../alfred/fm/utils.py#L171)
+[Show source in utils.py:190](../../../alfred/fm/utils.py#L190)
 
 A simple embedding cache for VLM models
 
@@ -136,7 +136,7 @@ class EmbeddingCache:
 
 ### EmbeddingCache().get
 
-[Show source in utils.py:196](../../../alfred/fm/utils.py#L196)
+[Show source in utils.py:216](../../../alfred/fm/utils.py#L216)
 
 Process the inputs and retrieve from the cache/embed the inputs
 
@@ -165,7 +165,7 @@ def get(
 
 ## TokenizedBatch
 
-[Show source in utils.py:235](../../../alfred/fm/utils.py#L235)
+[Show source in utils.py:256](../../../alfred/fm/utils.py#L256)
 
 #### Signature
 
@@ -179,7 +179,7 @@ class TokenizedBatch:
 
 ## bcolors
 
-[Show source in utils.py:145](../../../alfred/fm/utils.py#L145)
+[Show source in utils.py:164](../../../alfred/fm/utils.py#L164)
 
 #### Signature
 
@@ -192,26 +192,28 @@ class bcolors:
 
 ## batch_multimodal
 
-[Show source in utils.py:88](../../../alfred/fm/utils.py#L88)
+[Show source in utils.py:87](../../../alfred/fm/utils.py#L87)
 
 Batch RankedQueries with Multimodal Payloads
 
 #### Arguments
 
 - `queries` - A list of multimodal queries
-:type queries: List[RankedQuery]
+:type queries: List[Query]
+- `mode` - The mode of the multimodal query ("autoregressive", "contrastive")
+:type mode: str
 - `batch_size` - The batch size
 :type batch_size: int
 
 #### Returns
 
 A list of batches of multimodal ranked queries
-Type: *List[List[RankedQuery]]*
+Type: *List[List[Query]]*
 
 #### Signature
 
 ```python
-def batch_multimodal(queries: List[RankedQuery], batch_size=64):
+def batch_multimodal(queries: List[Query], mode: str, batch_size=64):
     ...
 ```
 
@@ -234,7 +236,7 @@ def clear_cuda_cache():
 
 ## colorize_str
 
-[Show source in utils.py:157](../../../alfred/fm/utils.py#L157)
+[Show source in utils.py:176](../../../alfred/fm/utils.py#L176)
 
 #### Signature
 
@@ -307,7 +309,7 @@ def reorder_array(
 
 ## retry
 
-[Show source in utils.py:111](../../../alfred/fm/utils.py#L111)
+[Show source in utils.py:129](../../../alfred/fm/utils.py#L129)
 
 A decorator to retry a function call if it raises an exception.
 

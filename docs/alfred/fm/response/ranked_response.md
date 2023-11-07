@@ -38,7 +38,7 @@ class RankedResponse(Response):
 
 ### RankedResponse().__eq__
 
-[Show source in ranked_response.py:79](../../../../alfred/fm/response/ranked_response.py#L79)
+[Show source in ranked_response.py:80](../../../../alfred/fm/response/ranked_response.py#L80)
 
 Determines if two RankedResponse objects are equal.
 
@@ -65,7 +65,7 @@ def __eq__(self, other):
 
 ### RankedResponse().embeddings
 
-[Show source in ranked_response.py:69](../../../../alfred/fm/response/ranked_response.py#L69)
+[Show source in ranked_response.py:70](../../../../alfred/fm/response/ranked_response.py#L70)
 
 Get the embedding output by the language model.
 
@@ -84,7 +84,7 @@ def embeddings(self) -> Union[torch.Tensor, np.ndarray]:
 
 ### RankedResponse().logits
 
-[Show source in ranked_response.py:59](../../../../alfred/fm/response/ranked_response.py#L59)
+[Show source in ranked_response.py:60](../../../../alfred/fm/response/ranked_response.py#L60)
 
 Get the raw logits output by the language model.
 
@@ -103,7 +103,7 @@ def logits(self) -> Union[torch.Tensor, np.ndarray]:
 
 ### RankedResponse().prediction
 
-[Show source in ranked_response.py:39](../../../../alfred/fm/response/ranked_response.py#L39)
+[Show source in ranked_response.py:40](../../../../alfred/fm/response/ranked_response.py#L40)
 
 Get the prediction made by the language model.
 
@@ -122,7 +122,7 @@ def prediction(self) -> str:
 
 ### RankedResponse().scores
 
-[Show source in ranked_response.py:49](../../../../alfred/fm/response/ranked_response.py#L49)
+[Show source in ranked_response.py:50](../../../../alfred/fm/response/ranked_response.py#L50)
 
 Get the scores for each candidates in the language model.
 

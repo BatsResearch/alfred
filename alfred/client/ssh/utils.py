@@ -1,6 +1,6 @@
-'''
+"""
 Modified with ideas originated from https://github.com/paramiko/paramiko/blob/main/demos/forward.py
-'''
+"""
 import select
 import socket
 import threading
@@ -16,6 +16,7 @@ class ForwardServer(SocketServer.ThreadingTCPServer):
     """
     A simple TCP forwarding server inherited from SocketServer.ThreadingTCPServer
     """
+
     daemon_threads = True
     allow_reuse_address = True
 
@@ -57,8 +58,7 @@ def forward_tunnel(local_port, remote_host, remote_port, transport):
         ssh_transport = transport
 
     serving_thread = threading.Thread(
-        target=ForwardServer(("127.0.0.1", local_port),
-                             SubHander).serve_forever,
+        target=ForwardServer(("127.0.0.1", local_port), SubHander).serve_forever,
         daemon=True,
     )
     serving_thread.start()
@@ -71,7 +71,7 @@ def get_host_port(spec, default_port):
     return args[0], args[1]
 
 
-def port_finder(port: Union[str, int], host: str = '') -> int:
+def port_finder(port: Union[str, int], host: str = "") -> int:
     """
     Finds the next available port if given port is not available
     """

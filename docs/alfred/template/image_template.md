@@ -53,7 +53,7 @@ class ImageTemplate(Template):
 
 ### ImageTemplate().__call__
 
-[Show source in image_template.py:200](../../../alfred/template/image_template.py#L200)
+[Show source in image_template.py:204](../../../alfred/template/image_template.py#L204)
 
 A wrapper function to apply the template to a single example
 
@@ -82,7 +82,7 @@ def __call__(
 
 ### ImageTemplate().apply
 
-[Show source in image_template.py:71](../../../alfred/template/image_template.py#L71)
+[Show source in image_template.py:73](../../../alfred/template/image_template.py#L73)
 
 Apply the template to a single image example
 
@@ -112,7 +112,7 @@ def apply(
 
 ### ImageTemplate().apply_to_dataset
 
-[Show source in image_template.py:104](../../../alfred/template/image_template.py#L104)
+[Show source in image_template.py:106](../../../alfred/template/image_template.py#L106)
 
 A wrapper function to apply the template to a dataset iteratively
 
@@ -137,7 +137,7 @@ def apply_to_dataset(self, dataset: Iterable[Dict], **kwargs: Any) -> Iterable[Q
 
 ### ImageTemplate().deserialize
 
-[Show source in image_template.py:181](../../../alfred/template/image_template.py#L181)
+[Show source in image_template.py:185](../../../alfred/template/image_template.py#L185)
 
 returns a template object from a json string of dictionary
 
@@ -163,7 +163,7 @@ def deserialize(self, json_str: str) -> Template:
 
 ### ImageTemplate().get_answer_choices_list
 
-[Show source in image_template.py:121](../../../alfred/template/image_template.py#L121)
+[Show source in image_template.py:123](../../../alfred/template/image_template.py#L123)
 
 Get answer choices list
 
@@ -181,7 +181,7 @@ def get_answer_choices_list(self) -> List[str]:
 
 ### ImageTemplate().id
 
-[Show source in image_template.py:145](../../../alfred/template/image_template.py#L145)
+[Show source in image_template.py:147](../../../alfred/template/image_template.py#L147)
 
 returns the template id
 
@@ -195,7 +195,7 @@ def id(self):
 
 ### ImageTemplate().keywords
 
-[Show source in image_template.py:140](../../../alfred/template/image_template.py#L140)
+[Show source in image_template.py:142](../../../alfred/template/image_template.py#L142)
 
 returns the keywords
 
@@ -209,7 +209,7 @@ def keywords(self):
 
 ### ImageTemplate().metadata
 
-[Show source in image_template.py:160](../../../alfred/template/image_template.py#L160)
+[Show source in image_template.py:162](../../../alfred/template/image_template.py#L162)
 
 returns the template metadata
 
@@ -223,7 +223,7 @@ def metadata(self):
 
 ### ImageTemplate().name
 
-[Show source in image_template.py:150](../../../alfred/template/image_template.py#L150)
+[Show source in image_template.py:152](../../../alfred/template/image_template.py#L152)
 
 returns the template name
 
@@ -237,7 +237,7 @@ def name(self):
 
 ### ImageTemplate().reference
 
-[Show source in image_template.py:155](../../../alfred/template/image_template.py#L155)
+[Show source in image_template.py:157](../../../alfred/template/image_template.py#L157)
 
 returns the template reference
 
@@ -251,7 +251,7 @@ def reference(self):
 
 ### ImageTemplate().serialize
 
-[Show source in image_template.py:165](../../../alfred/template/image_template.py#L165)
+[Show source in image_template.py:167](../../../alfred/template/image_template.py#L167)
 
 returns the template as a json string of dictionary
 
@@ -269,7 +269,7 @@ def serialize(self):
 
 ### ImageTemplate().template
 
-[Show source in image_template.py:130](../../../alfred/template/image_template.py#L130)
+[Show source in image_template.py:132](../../../alfred/template/image_template.py#L132)
 
 returns the template
 
@@ -283,7 +283,7 @@ def template(self):
 
 ### ImageTemplate().type
 
-[Show source in image_template.py:135](../../../alfred/template/image_template.py#L135)
+[Show source in image_template.py:137](../../../alfred/template/image_template.py#L137)
 
 returns the template type
 

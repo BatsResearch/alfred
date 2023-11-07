@@ -21,6 +21,7 @@ class AI21Model(APIAccessFoundationModel):
 
     This class provides a wrapper for the OpenAI API for generating completions.
     """
+
     def _ai21_query(
         self,
         query_string: str,
@@ -51,13 +52,14 @@ class AI21Model(APIAccessFoundationModel):
                 "maxTokens": max_tokens,
                 "stopSequences": ["."],
                 "topKReturn": 0,
-                "temperature": temperature
-            })
+                "temperature": temperature,
+            },
+        )
         response = response.json()
         try:
-            response = response['completions'][0]['data']['text']
+            response = response["completions"][0]["data"]["text"]
         except KeyError:
-            raise Exception(response['detail'])
+            raise Exception(response["detail"])
         return response
 
     def __init__(
@@ -73,14 +75,15 @@ class AI21Model(APIAccessFoundationModel):
         :param api_key: The API key to be used for accessing the AI21 API.
         :type api_key: Optional[str]
         """
-        assert model_string in AI21_MODELS, f"Model {model_string} not found. Please choose from {AI21_MODELS}"
+        assert (
+            model_string in AI21_MODELS
+        ), f"Model {model_string} not found. Please choose from {AI21_MODELS}"
         if api_key is None:
-            logger.log(logging.WARNING,
-                       "AI21 API key not found, Requesting User Input")
+            logger.log(logging.WARNING, "AI21 API key not found, Requesting User Input")
             api_key = input("Please enter your AI21 API key: ")
             logger.log(logging.INFO, f"AI21 model api key stored")
         self.api_key = api_key
-        super().__init__(model_string, {'api_key': api_key})
+        super().__init__(model_string, {"api_key": api_key})
 
     def _generate_batch(
         self,
@@ -103,6 +106,10 @@ class AI21Model(APIAccessFoundationModel):
         output = []
         for query in batch_instance:
             output.append(
-                CompletionResponse(prediction=self._ai21_query(
-                    query, model=self.model_string, **kwargs)))
+                CompletionResponse(
+                    prediction=self._ai21_query(
+                        query, model=self.model_string, **kwargs
+                    )
+                )
+            )
         return output

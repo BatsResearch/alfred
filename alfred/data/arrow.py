@@ -31,6 +31,7 @@ class IterableArrowDataset(Dataset):
     - save_to_disk(path: str): Save the dataset to disk at the specified path.
     - load_from_disk(path: str): Load the dataset from disk from the specified path.
     """
+
     def __init__(
         self,
         table: Union[pyarrow.Table, pandas.DataFrame],
@@ -48,8 +49,11 @@ class IterableArrowDataset(Dataset):
         :type split: Optional[Union[str, NamedSplit]], optional
         """
 
-        self._data = table if isinstance(
-            table, pyarrow.Table) else pyarrow.Table.from_pandas(table)
+        self._data = (
+            table
+            if isinstance(table, pyarrow.Table)
+            else pyarrow.Table.from_pandas(table)
+        )
         self._info = info
         self._split = split
         self._info = info or DatasetInfo()
@@ -225,6 +229,7 @@ class BufferedArrowDataset(Dataset):
     - save_to_disk(path: str): Save the dataset to disk at the specified path.
     - load_from_disk(path: str): Load the dataset from disk from the specified path.
     """
+
     def __init__(
         self,
         buffer: pyarrow.Buffer,

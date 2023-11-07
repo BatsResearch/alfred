@@ -8,6 +8,7 @@ class Query(abc.ABC):
     """
     Abstract base class for a single query for foundation model interfaces
     """
+
     @staticmethod
     def compose(a, b, strategy=None):
         """
@@ -21,8 +22,7 @@ class Query(abc.ABC):
         :type strategy: str, optional
         :return: composition of a and b
         """
-        assert isinstance(a,
-                          type(b)), f"Cannot compose {type(a)} and {type(b)}"
+        assert isinstance(a, type(b)), f"Cannot compose {type(a)} and {type(b)}"
 
         if strategy is None:
             if isinstance(a, str) or isinstance(a, list):
@@ -33,7 +33,8 @@ class Query(abc.ABC):
                 return torch.cat([a, b])
             else:
                 raise NotImplementedError(
-                    f"Type {type(a)} not supported for composition")
+                    f"Type {type(a)} not supported for composition"
+                )
         elif strategy == "ranked":
             return (a.strip(), b.strip())
 

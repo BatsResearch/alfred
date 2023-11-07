@@ -13,7 +13,7 @@ Anthropic
 
 ## AnthropicModel
 
-[Show source in anthropic.py:29](../../../alfred/fm/anthropic.py#L29)
+[Show source in anthropic.py:33](../../../alfred/fm/anthropic.py#L33)
 
 A wrapper for the anthropic API.
 
@@ -31,7 +31,7 @@ class AnthropicModel(APIAccessFoundationModel):
 
 ### AnthropicModel().chat
 
-[Show source in anthropic.py:144](../../../alfred/fm/anthropic.py#L144)
+[Show source in anthropic.py:155](../../../alfred/fm/anthropic.py#L155)
 
 Launch an interactive chat session with the Anthropic API.
 

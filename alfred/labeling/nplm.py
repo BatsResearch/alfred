@@ -8,10 +8,13 @@ class NPLM(LabelModel):
     """
     LabelModel wrapper to perform label modeling for partial labelers on the responses
     """
-    def __init__(self,
-                 num_classes,
-                 label_partition,
-                 device='cuda:0' if torch.cuda.is_available() else 'cpu'):
+
+    def __init__(
+        self,
+        num_classes,
+        label_partition,
+        device="cuda:0" if torch.cuda.is_available() else "cpu",
+    ):
         """Constructor"""
         try:
             from labelmodels import PartialLabelModel

@@ -33,8 +33,7 @@ class gRPCClient:
         self.port = port
 
         if credentials:
-            self.channel = grpc.secure_channel(f"{self.host}:{self.port}",
-                                               credentials)
+            self.channel = grpc.secure_channel(f"{self.host}:{self.port}", credentials)
         else:
             self.channel = grpc.insecure_channel(f"{self.host}:{self.port}")
 
@@ -49,20 +48,41 @@ class gRPCClient:
         candidate = None
         if isinstance(msg, CompletionQuery):
             msg = msg.load()[0]
+            if isinstance(msg, Tuple):
+                img, prompt = msg[0], msg[1]
+                io_output = io.BytesIO()
+                img.save(io_output, format="png")
+                msg = (
+                    prompt
+                    + IMAGE_SIGNATURE
+                    + base64.b64encode(io_output.getvalue()).decode("UTF-8")
+                )
         elif isinstance(msg, RankedQuery):
             msg, candidate = msg.prompt, msg.get_answer_choices_str()
             if isinstance(msg, Image.Image):
                 io_output = io.BytesIO()
                 msg.save(io_output, format="png")
-                msg = IMAGE_SIGNATURE + base64.b64encode(
-                    io_output.getvalue()).decode('UTF-8')
+                msg = IMAGE_SIGNATURE + base64.b64encode(io_output.getvalue()).decode(
+                    "UTF-8"
+                )
         elif isinstance(msg, Tuple):
             msg, candidate = msg[0], msg[1]
+            if isinstance(msg, Image.Image):
+                img, prompt = msg, candidate
+                io_output = io.BytesIO()
+                img.save(io_output, format="png")
+                msg = (
+                    prompt
+                    + IMAGE_SIGNATURE
+                    + base64.b64encode(io_output.getvalue()).decode("UTF-8")
+                )
+                candidate = None
+
         return msg, candidate
 
     def run(
         self,
-        queries: Union[Iterable[Query], Iterable[str]],
+        queries: Union[Iterable[Query], Iterable[str], Iterable[Tuple]],
         **kwargs: Any,
     ):
         try:
@@ -95,9 +115,9 @@ class gRPCClient:
         def _run_req_gen():
             for query in queries:
                 msg, candidate = self._interpret_msg(query)
-                yield query_pb2.RunRequest(message=msg,
-                                           candidate=candidate,
-                                           kwargs=kwargs)
+                yield query_pb2.RunRequest(
+                    message=msg, candidate=candidate, kwargs=kwargs
+                )
 
         output = []
         for response in self.stub.Run(_run_req_gen()):
@@ -107,13 +127,16 @@ class gRPCClient:
                         **{
                             "prediction": response.message,
                             "scores": ast.literal_eval(response.logit),
-                            "embeddings": bytes_to_tensor(response.embedding)
-                        }))
+                            "embeddings": bytes_to_tensor(response.embedding),
+                        }
+                    )
+                )
             else:
                 output.append(
-                    CompletionResponse(response.message,
-                                       embedding=bytes_to_tensor(
-                                           response.embedding)))
+                    CompletionResponse(
+                        response.message, embedding=bytes_to_tensor(response.embedding)
+                    )
+                )
         return output
 
     def _encode(
@@ -126,9 +149,9 @@ class gRPCClient:
 
         def _encode_req_gen():
             for query in queries:
-                yield query_pb2.EncodeRequest(message=query,
-                                              reduction=reduction,
-                                              kwargs=kwargs)
+                yield query_pb2.EncodeRequest(
+                    message=query, reduction=reduction, kwargs=kwargs
+                )
 
         output = []
         for response in self.stub.Encode(_encode_req_gen()):
@@ -143,6 +166,7 @@ class gRPCServer(query_pb2_grpc.QueryServiceServicer):
     """
     Manages connections with gRPCClient
     """
+
     def __init__(
         self,
         model,
@@ -155,7 +179,6 @@ class gRPCServer(query_pb2_grpc.QueryServiceServicer):
         self.serve(credentials)
 
     def serve(self, credentials: Optional[grpc.ServerCredentials] = None):
-
         self.server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
         query_pb2_grpc.add_QueryServiceServicer_to_server(self, self.server)
 
@@ -184,16 +207,22 @@ class gRPCServer(query_pb2_grpc.QueryServiceServicer):
             if candidate:
                 if instance.startswith(IMAGE_SIGNATURE):
                     instance = Image.open(
-                        io.BytesIO(
-                            base64.b64decode(instance[len(IMAGE_SIGNATURE):])))
+                        io.BytesIO(base64.b64decode(instance[len(IMAGE_SIGNATURE) :]))
+                    )
+            else:
+                if IMAGE_SIGNATURE in instance:
+                    prompt, img = instance.split(IMAGE_SIGNATURE)
+                    img = Image.open(io.BytesIO(base64.b64decode(img)))
+                    instance = (img, prompt)
 
             if kwargs:
                 kwargs = json.loads(kwargs)
             else:
                 kwargs = {}
             if candidate:
-                instance = RankedQuery(prompt=instance,
-                                       candidates=candidate.split("|||"))
+                instance = RankedQuery(
+                    prompt=instance, candidates=candidate.split("|||")
+                )
             else:
                 instance = CompletionQuery(instance)
             datasets.append(instance)
@@ -203,16 +232,18 @@ class gRPCServer(query_pb2_grpc.QueryServiceServicer):
         responses = self.model.run(datasets, **kwargs)
         for response in tqdm(responses):
             if isinstance(response, CompletionResponse):
-                yield query_pb2.RunResponse(message=response.prediction,
-                                            ranked=False,
-                                            embedding=tensor_to_bytes(
-                                                response.embedding))
+                yield query_pb2.RunResponse(
+                    message=response.prediction,
+                    ranked=False,
+                    embedding=tensor_to_bytes(response.embedding),
+                )
             elif isinstance(response, RankedResponse):
-                yield query_pb2.RunResponse(message=response.prediction,
-                                            ranked=True,
-                                            logit=str(response.scores),
-                                            embedding=tensor_to_bytes(
-                                                response.embeddings))
+                yield query_pb2.RunResponse(
+                    message=response.prediction,
+                    ranked=True,
+                    logit=str(response.scores),
+                    embedding=tensor_to_bytes(response.embeddings),
+                )
             else:
                 logger.error(f"Response type {type(response)} not supported")
                 raise ValueError("Response type not supported")
@@ -235,9 +266,11 @@ class gRPCServer(query_pb2_grpc.QueryServiceServicer):
         logger.info(f"Received {len(datasets)} queries for embeddings")
 
         for response in tqdm(
-                self.model.encode(datasets, reduction=reduction, **kwargs)):
-            yield query_pb2.EncodeResponse(success=True,
-                                           embedding=tensor_to_bytes(response))
+            self.model.encode(datasets, reduction=reduction, **kwargs)
+        ):
+            yield query_pb2.EncodeResponse(
+                success=True, embedding=tensor_to_bytes(response)
+            )
 
     def close(self):
         self.server.stop(0)

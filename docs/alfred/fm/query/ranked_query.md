@@ -57,7 +57,7 @@ class RankedQuery(Query):
 
 ### RankedQuery().__add__
 
-[Show source in ranked_query.py:108](../../../../alfred/fm/query/ranked_query.py#L108)
+[Show source in ranked_query.py:107](../../../../alfred/fm/query/ranked_query.py#L107)
 
 concatenates the two queries
 
@@ -70,7 +70,7 @@ def __add__(self, other):
 
 ### RankedQuery().__eq__
 
-[Show source in ranked_query.py:94](../../../../alfred/fm/query/ranked_query.py#L94)
+[Show source in ranked_query.py:92](../../../../alfred/fm/query/ranked_query.py#L92)
 
 returns whether the two queries are equal
 
@@ -83,7 +83,7 @@ def __eq__(self, other):
 
 ### RankedQuery().__hash__
 
-[Show source in ranked_query.py:100](../../../../alfred/fm/query/ranked_query.py#L100)
+[Show source in ranked_query.py:99](../../../../alfred/fm/query/ranked_query.py#L99)
 
 returns the hash of the query
 
@@ -96,7 +96,7 @@ def __hash__(self):
 
 ### RankedQuery().__len__
 
-[Show source in ranked_query.py:104](../../../../alfred/fm/query/ranked_query.py#L104)
+[Show source in ranked_query.py:103](../../../../alfred/fm/query/ranked_query.py#L103)
 
 returns the length of the query
 
@@ -109,7 +109,7 @@ def __len__(self):
 
 ### RankedQuery().__repr__
 
-[Show source in ranked_query.py:86](../../../../alfred/fm/query/ranked_query.py#L86)
+[Show source in ranked_query.py:84](../../../../alfred/fm/query/ranked_query.py#L84)
 
 returns the string representation of the query
 
@@ -122,7 +122,7 @@ def __repr__(self):
 
 ### RankedQuery().__str__
 
-[Show source in ranked_query.py:90](../../../../alfred/fm/query/ranked_query.py#L90)
+[Show source in ranked_query.py:88](../../../../alfred/fm/query/ranked_query.py#L88)
 
 returns the string representation of the query
 

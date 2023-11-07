@@ -40,7 +40,7 @@ class DummyCache(Cache):
 
 ### DummyCache().read
 
-[Show source in dummy.py:18](../../../../alfred/client/cache/dummy.py#L18)
+[Show source in dummy.py:19](../../../../alfred/client/cache/dummy.py#L19)
 
 Read the record from the cache by serialized prompt and metadata
 
@@ -65,7 +65,7 @@ def read(self, prompt: str, metadata: Optional[str] = None) -> List:
 
 ### DummyCache().read_by_metadata
 
-[Show source in dummy.py:78](../../../../alfred/client/cache/dummy.py#L78)
+[Show source in dummy.py:75](../../../../alfred/client/cache/dummy.py#L75)
 
 Read a dummy empty list
 
@@ -88,7 +88,7 @@ def read_by_metadata(self, metadata: Optional[str] = None) -> List:
 
 ### DummyCache().read_by_prompt
 
-[Show source in dummy.py:54](../../../../alfred/client/cache/dummy.py#L54)
+[Show source in dummy.py:51](../../../../alfred/client/cache/dummy.py#L51)
 
 Read a record from the cache by serialized prompt
 
@@ -111,7 +111,7 @@ def read_by_prompt(self, prompt: str) -> List:
 
 ### DummyCache().read_by_prompt_and_metadata
 
-[Show source in dummy.py:65](../../../../alfred/client/cache/dummy.py#L65)
+[Show source in dummy.py:62](../../../../alfred/client/cache/dummy.py#L62)
 
 Read a record from the cache by serialized prompt and metadata
 
@@ -136,7 +136,7 @@ def read_by_prompt_and_metadata(self, prompt: str, metadata: str) -> List:
 
 ### DummyCache().save
 
-[Show source in dummy.py:89](../../../../alfred/client/cache/dummy.py#L89)
+[Show source in dummy.py:86](../../../../alfred/client/cache/dummy.py#L86)
 
 Does not save but return the path argrument
 
@@ -159,7 +159,7 @@ def save(self, path: str) -> str:
 
 ### DummyCache().to_pandas
 
-[Show source in dummy.py:100](../../../../alfred/client/cache/dummy.py#L100)
+[Show source in dummy.py:97](../../../../alfred/client/cache/dummy.py#L97)
 
 Does nothing. Return None.
 

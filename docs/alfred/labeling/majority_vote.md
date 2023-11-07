@@ -27,7 +27,7 @@ class MajorityVote(LabelModel):
 
 ### MajorityVote().label
 
-[Show source in majority_vote.py:15](../../../alfred/labeling/majority_vote.py#L15)
+[Show source in majority_vote.py:16](../../../alfred/labeling/majority_vote.py#L16)
 
 returns the majority vote for each response row
 

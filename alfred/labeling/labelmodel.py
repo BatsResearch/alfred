@@ -6,6 +6,7 @@ class LabelModel:
     """
     Abstract LabelModel Interface
     """
+
     def __init__(
         self,
         config: Optional[Dict] = None,

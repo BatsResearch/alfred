@@ -3,6 +3,7 @@ import unittest
 import os
 from alfred.fm.huggingface import HuggingFaceModel
 
+
 class TestHuggingFaceModelCache(unittest.TestCase):
     def setUp(self):
         # Set up the test environment
@@ -15,7 +16,7 @@ class TestHuggingFaceModelCache(unittest.TestCase):
         model = HuggingFaceModel(
             model_string=self.test_model_string,
             local_path=self.test_local_path,
-            offload_folder="./.pytest_cache/offload_folder"
+            offload_folder="./.pytest_cache/offload_folder",
         )
         self.assertEqual(model.local_path, self.test_local_path)
 
@@ -23,6 +24,6 @@ class TestHuggingFaceModelCache(unittest.TestCase):
         # Test that the default local path is set correctly
         model = HuggingFaceModel(
             model_string=self.test_model_string,
-            offload_folder="./.pytest_cache/offload_folder"
+            offload_folder="./.pytest_cache/offload_folder",
         )
         self.assertEqual(model.local_path, os.environ.get("TRANSFORMERS_CACHE"))

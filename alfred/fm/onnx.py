@@ -3,7 +3,7 @@ from typing import Optional, List, Any
 
 from transformers import AutoTokenizer
 
-from alfred.fm.model import LocalAccessFoundationModel
+from .model import LocalAccessFoundationModel
 from .response import CompletionResponse
 
 logger = logging.getLogger(__name__)
@@ -11,13 +11,14 @@ logger = logging.getLogger(__name__)
 
 class ONNXModel(LocalAccessFoundationModel):
     """
-     The ONNXMOdel class is a wrapper for ONNX models based on fastT5
-     https://github.com/Ki6an/fastT5
-     Currently it only supports T5-based models.
+    The ONNXMOdel class is a wrapper for ONNX models based on fastT5
+    https://github.com/Ki6an/fastT5
+    Currently it only supports T5-based models.
     """
-    def __init__(self,
-                 model_string: Optional[str] = None,
-                 local_path: Optional[str] = None):
+
+    def __init__(
+        self, model_string: Optional[str] = None, local_path: Optional[str] = None
+    ):
         """
         Constructor for ONNXModel.
         It wraps the fastT5 library to load ONNX models.
@@ -42,12 +43,11 @@ class ONNXModel(LocalAccessFoundationModel):
         batch: List[str],
         **kwargs: Any,
     ):
-        tokens = self.tokenizer(batch,
-                                return_tensors="pt",
-                                padding=True,
-                                truncation=True)
-        output = self.model.generate(input_ids=tokens.input_ids,
-                                     attention_mask=tokens.attention_mask)
-        texts = self.tokenizer.decode(output.squeeze(),
-                                      skip_special_tokens=True)
+        tokens = self.tokenizer(
+            batch, return_tensors="pt", padding=True, truncation=True
+        )
+        output = self.model.generate(
+            input_ids=tokens.input_ids, attention_mask=tokens.attention_mask
+        )
+        texts = self.tokenizer.decode(output.squeeze(), skip_special_tokens=True)
         return [CompletionResponse(prediction=text) for text in texts]

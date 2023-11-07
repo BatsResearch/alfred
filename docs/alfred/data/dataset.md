@@ -55,7 +55,7 @@ class Dataset(abc.ABC):
 
 ### Dataset().__getitem__
 
-[Show source in dataset.py:51](../../../alfred/data/dataset.py#L51)
+[Show source in dataset.py:52](../../../alfred/data/dataset.py#L52)
 
 returns the row with the given unique identifier
 
@@ -69,7 +69,7 @@ def __getitem__(self, uid, **kawrgs):
 
 ### Dataset().__iter__
 
-[Show source in dataset.py:56](../../../alfred/data/dataset.py#L56)
+[Show source in dataset.py:57](../../../alfred/data/dataset.py#L57)
 
 iterates over the rows of the dataset
 
@@ -83,7 +83,7 @@ def __iter__(self):
 
 ### Dataset().__len__
 
-[Show source in dataset.py:46](../../../alfred/data/dataset.py#L46)
+[Show source in dataset.py:47](../../../alfred/data/dataset.py#L47)
 
 returns the number of rows in the dataset
 
@@ -97,7 +97,7 @@ def __len__(self) -> int:
 
 ### Dataset().__version__
 
-[Show source in dataset.py:61](../../../alfred/data/dataset.py#L61)
+[Show source in dataset.py:62](../../../alfred/data/dataset.py#L62)
 
 returns the version of the dataset
 
@@ -111,7 +111,7 @@ def __version__(self) -> str:
 
 ### Dataset().data
 
-[Show source in dataset.py:28](../../../alfred/data/dataset.py#L28)
+[Show source in dataset.py:29](../../../alfred/data/dataset.py#L29)
 
 returns the underlying data
 
@@ -126,7 +126,7 @@ def data(self):
 
 ### Dataset().info
 
-[Show source in dataset.py:34](../../../alfred/data/dataset.py#L34)
+[Show source in dataset.py:35](../../../alfred/data/dataset.py#L35)
 
 returns the metadata about the dataset
 
@@ -141,7 +141,7 @@ def info(self):
 
 ### Dataset.load_from_disk
 
-[Show source in dataset.py:76](../../../alfred/data/dataset.py#L76)
+[Show source in dataset.py:77](../../../alfred/data/dataset.py#L77)
 
 loads the dataset from disk from the specified path
 
@@ -155,7 +155,7 @@ def load_from_disk(self, path: str):
 
 ### Dataset.save_to_disk
 
-[Show source in dataset.py:71](../../../alfred/data/dataset.py#L71)
+[Show source in dataset.py:72](../../../alfred/data/dataset.py#L72)
 
 saves the dataset to disk at the specified path
 
@@ -169,7 +169,7 @@ def save_to_disk(self, path: str):
 
 ### Dataset().split
 
-[Show source in dataset.py:40](../../../alfred/data/dataset.py#L40)
+[Show source in dataset.py:41](../../../alfred/data/dataset.py#L41)
 
 returns the information about how the dataset has been split
 
@@ -184,7 +184,7 @@ def split(self):
 
 ### Dataset().version
 
-[Show source in dataset.py:66](../../../alfred/data/dataset.py#L66)
+[Show source in dataset.py:67](../../../alfred/data/dataset.py#L67)
 
 returns the version of the dataset
 

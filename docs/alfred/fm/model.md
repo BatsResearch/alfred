@@ -20,7 +20,7 @@ Model
 
 ## APIAccessFoundationModel
 
-[Show source in model.py:347](../../../alfred/fm/model.py#L347)
+[Show source in model.py:370](../../../alfred/fm/model.py#L370)
 
 #### Signature
 
@@ -38,7 +38,7 @@ class APIAccessFoundationModel(FoundationModel):
 
 ## FoundationModel
 
-[Show source in model.py:18](../../../alfred/fm/model.py#L18)
+[Show source in model.py:19](../../../alfred/fm/model.py#L19)
 
 Generic interface for foundation model class
 
@@ -51,7 +51,7 @@ class FoundationModel(abc.ABC):
 
 ### FoundationModel().__call__
 
-[Show source in model.py:327](../../../alfred/fm/model.py#L327)
+[Show source in model.py:348](../../../alfred/fm/model.py#L348)
 
 This function returns the output of the run function when the
  model is called as a function. It can be used as model(queries),
@@ -74,7 +74,9 @@ Type: *Union[str, Response, List[Response]]*
 ```python
 def __call__(
     self,
-    queries: Union[Query, str, Tuple[str, str], List[Query], List[str]],
+    queries: Union[
+        Query, str, Tuple[str, str], Tuple[Image.Image, str], List[Query], List[str]
+    ],
     **kwargs: Any
 ) -> Union[str, Response, List[Response]]:
     ...
@@ -82,7 +84,7 @@ def __call__(
 
 ### FoundationModel().encode
 
-[Show source in model.py:261](../../../alfred/fm/model.py#L261)
+[Show source in model.py:265](../../../alfred/fm/model.py#L265)
 
 This function is a wrapper around the forward function
 
@@ -118,7 +120,7 @@ def encode(
 
 ### FoundationModel().forward
 
-[Show source in model.py:75](../../../alfred/fm/model.py#L75)
+[Show source in model.py:79](../../../alfred/fm/model.py#L79)
 
 This function is the main entry point for running queries through the foundation model.
 It accepts raw query content and automatically converts it into query objects.
@@ -166,7 +168,7 @@ def forward(
 
 ### FoundationModel().generate
 
-[Show source in model.py:206](../../../alfred/fm/model.py#L206)
+[Show source in model.py:214](../../../alfred/fm/model.py#L214)
 
 This function is a wrapper around the forward function for running
 CompletionQuery objects through the foundation model. It returns a list
@@ -203,7 +205,7 @@ def generate(
 
 ### FoundationModel().run
 
-[Show source in model.py:290](../../../alfred/fm/model.py#L290)
+[Show source in model.py:296](../../../alfred/fm/model.py#L296)
 
 This function is the main entry point for users to run queries through the foundation model.
 It accepts raw query content and automatically converts it into query objects.
@@ -227,7 +229,9 @@ Type: *Union[str, Response, List[Response]]*
 ```python
 def run(
     self,
-    queries: Union[Query, str, Tuple[str, str], List[Query], List[str]],
+    queries: Union[
+        Query, str, Tuple[str, str], Tuple[Image.Image, str], List[Query], List[str]
+    ],
     **kwargs: Any
 ) -> Union[str, Response, List[Response]]:
     ...
@@ -235,7 +239,7 @@ def run(
 
 ### FoundationModel().score
 
-[Show source in model.py:231](../../../alfred/fm/model.py#L231)
+[Show source in model.py:239](../../../alfred/fm/model.py#L239)
 
 This function is a wrapper around the forward function
 for running RankedQuery objects through the foundation model.
@@ -274,7 +278,7 @@ def score(
 
 ## LocalAccessFoundationModel
 
-[Show source in model.py:362](../../../alfred/fm/model.py#L362)
+[Show source in model.py:385](../../../alfred/fm/model.py#L385)
 
 #### Signature
 

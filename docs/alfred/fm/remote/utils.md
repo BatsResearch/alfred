@@ -16,7 +16,7 @@ Utils
 
 ## bytes_to_tensor
 
-[Show source in utils.py:51](../../../../alfred/fm/remote/utils.py#L51)
+[Show source in utils.py:52](../../../../alfred/fm/remote/utils.py#L52)
 
 #### Signature
 
@@ -54,7 +54,7 @@ def get_ip(ipv4=True):
 
 ## port_finder
 
-[Show source in utils.py:26](../../../../alfred/fm/remote/utils.py#L26)
+[Show source in utils.py:27](../../../../alfred/fm/remote/utils.py#L27)
 
 Finds the next available port if given port is not available
 
@@ -69,7 +69,7 @@ def port_finder(port: int) -> int:
 
 ## tensor_to_bytes
 
-[Show source in utils.py:41](../../../../alfred/fm/remote/utils.py#L41)
+[Show source in utils.py:42](../../../../alfred/fm/remote/utils.py#L42)
 
 #### Signature
 

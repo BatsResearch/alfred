@@ -27,7 +27,7 @@ class FlyingSquid(LabelModel):
 
 ### FlyingSquid().label
 
-[Show source in flyingsquid.py:21](../../../alfred/labeling/flyingsquid.py#L21)
+[Show source in flyingsquid.py:22](../../../alfred/labeling/flyingsquid.py#L22)
 
 #### Signature
 

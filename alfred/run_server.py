@@ -5,9 +5,9 @@ from typing import Any
 import alfred.fm.remote.grpc as grpc_utils
 
 logging.basicConfig(
-    format='ALFRED %(levelname)s: %(asctime)-5s  %(message)s',
+    format="ALFRED %(levelname)s: %(asctime)-5s  %(message)s",
     level=logging.NOTSET,
-    datefmt='%Y-%m-%d %H:%M:%S',
+    datefmt="%Y-%m-%d %H:%M:%S",
 )
 
 logger = logging.getLogger("Alfred Server")
@@ -18,6 +18,7 @@ class ModelServer:
     ModelServer is the server-side interface that wraps a certain alfred.fm class.
     ModelServer is used to launch the specified alfred.fm model as a gRPC Server and find the proper port.
     """
+
     def __init__(
         self,
         model: str,
@@ -44,46 +45,63 @@ class ModelServer:
         self.model = model
         self.model_type = model_type.lower()
         assert self.model_type in [
-            "huggingface", "huggingfacevlm", "huggingfacedocument",
-            "onnx", "tensorrt", "openai", "anthropic",
-            "flexgen", "vllm",
-            "cohere", "ai21", "torch", "dummy"
+            "huggingface",
+            "huggingfacevlm",
+            "huggingfacedocument",
+            "onnx",
+            "tensorrt",
+            "openai",
+            "anthropic",
+            "flexgen",
+            "vllm",
+            "cohere",
+            "ai21",
+            "torch",
+            "dummy",
         ], f"Invalid model type: {self.model_type}"
         if self.model_type == "huggingface":
             from alfred.fm.huggingface import HuggingFaceModel
-            self.model = HuggingFaceModel(self.model,
-                                          **kwargs)
+
+            self.model = HuggingFaceModel(self.model, **kwargs)
         elif self.model_type == "huggingfacevlm":
             from alfred.fm.huggingfacevlm import HuggingFaceCLIPModel
-            self.model = HuggingFaceCLIPModel(self.model,
-                                              **kwargs)
+
+            self.model = HuggingFaceCLIPModel(self.model, **kwargs)
         elif self.model_type == "huggingfacedocument":
             from alfred.fm.huggingfacedocument import HuggingFaceDocumentModel
-            self.model = HuggingFaceDocumentModel(self.model,
-                                                    **kwargs)
+
+            self.model = HuggingFaceDocumentModel(self.model, **kwargs)
         elif self.model_type == "anthropic":
             from alfred.fm.anthropic import AnthropicModel
+
             self.model = AnthropicModel(self.model, **kwargs)
         elif self.model_type == "openai":
             from alfred.fm.openai import OpenAIModel
+
             self.model = OpenAIModel(self.model, **kwargs)
         elif self.model_type == "cohere":
             from alfred.fm.cohere import CohereModel
+
             self.model = CohereModel(self.model, **kwargs)
         elif self.model_type == "ai21":
             from alfred.fm.ai21 import AI21Model
+
             self.model = AI21Model(self.model, **kwargs)
         elif self.model_type == "dummy":
             from alfred.fm.dummy import DummyModel
+
             self.model = DummyModel(self.model)
         elif self.model_type == "onnx":
             from alfred.fm.onnx import ONNXModel
+
             self.model = ONNXModel(self.model, **kwargs)
         elif self.model_type == "flexgen":
             from alfred.fm.flexgen import FlexGenModel
+
             self.model = FlexGenModel(self.model, **kwargs)
         elif self.model_type == "vllm":
             from alfred.fm.vllm import vLLMModel
+
             self.model = vLLMModel(self.model, **kwargs)
         elif self.model_type == "tensorrt":
             # self.model = TensorRTModel(self.model, **kwargs)
@@ -139,7 +157,7 @@ if __name__ == "__main__":
         # run start_server in a daemon thread
         import threading
 
-        t = threading.Thread(target=start_server, args=(args, ), daemon=True)
+        t = threading.Thread(target=start_server, args=(args,), daemon=True)
         t.start()
     else:
         start_server(args)

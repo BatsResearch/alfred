@@ -27,7 +27,7 @@ class NaiveBayes(LabelModel):
 
 ### NaiveBayes().label
 
-[Show source in naive_bayes.py:25](../../../alfred/labeling/naive_bayes.py#L25)
+[Show source in naive_bayes.py:26](../../../alfred/labeling/naive_bayes.py#L26)
 
 Label the responses using the label model.
 Similar to standard PWS practice, abstention = 0 (i.e. classes are 1-indexed)

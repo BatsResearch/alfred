@@ -1,17 +1,17 @@
 import logging
-from typing import Any, List, Optional, Union, Dict
+from typing import Any, List, Optional, Union, Dict, Tuple
 
 import numpy as np
 import torch
 from grpc import FutureTimeoutError
 
-from alfred.client.cache import Cache, DummyCache, SQLiteCache
-from alfred.client.ssh.sshtunnel import SSHTunnel
-from alfred.fm.query import CompletionQuery, Query, RankedQuery
-from alfred.fm.remote.grpc import gRPCClient
-from alfred.fm.response import Response
-from alfred.template import StringTemplate, Template
-from alfred.voter.voter import Voter
+from .cache import Cache, DummyCache, SQLiteCache
+from .ssh.sshtunnel import SSHTunnel
+from ..fm.query import CompletionQuery, Query, RankedQuery
+from ..fm.remote.grpc import gRPCClient
+from ..fm.response import Response
+from ..template import StringTemplate, Template
+from ..voter.voter import Voter
 
 logger = logging.getLogger(__name__)
 
@@ -25,6 +25,7 @@ class Client:
     The client can be used to specify the model and how to access it,
     and can establish an SSH tunnel to a remote end point for secure access to a remote model.
     """
+
     def __init__(
         self,
         model: Optional[str] = None,
@@ -32,12 +33,12 @@ class Client:
         end_point: Optional[str] = None,
         local_path: Optional[str] = None,
         ssh_tunnel: bool = False,
-        ssh_pk: str = '~/.ssh/id_rsa',
+        ssh_pk: str = "~/.ssh/id_rsa",
         ssh_node: Optional[str] = None,
         cache: Optional[Cache] = None,
         **kwargs: Any,
     ):
-        '''
+        """
         Initialize a Client class.
 
         :param model: (optional) The name of the model. (e.g. bigscience/T0pp or text-davinci-003)
@@ -57,7 +58,7 @@ class Client:
         :type cache: Cache Object
         :param kwargs: Additional keyword arguments
         :type kwargs: Any
-        '''
+        """
 
         self.model = model
         self.model_type = model_type
@@ -65,12 +66,19 @@ class Client:
         if self.model_type:
             self.model_type = model_type.lower()
             assert self.model_type in [
-                "huggingface", "huggingfacevlm", ""
-                "onnx", "tensorrt",
-                "flexgen", "vllm",
-                "openai", "anthropic",
-                "cohere", "ai21",
-                "torch", "dummy"
+                "huggingface",
+                "huggingfacevlm",
+                "huggingfacedocument",
+                "onnx",
+                "tensorrt",
+                "flexgen",
+                "vllm",
+                "openai",
+                "anthropic",
+                "cohere",
+                "ai21",
+                "torch",
+                "dummy",
             ], f"Invalid model type: {self.model_type}"
         else:
             if end_point is None:
@@ -91,8 +99,10 @@ class Client:
         self.grpcClient = None
         if end_point:
             end_point_pieces = end_point.split(":")
-            self.end_point_ip, self.end_point_port = "".join(
-                end_point_pieces[:-1]), end_point_pieces[-1]
+            self.end_point_ip, self.end_point_port = (
+                "".join(end_point_pieces[:-1]),
+                end_point_pieces[-1],
+            )
 
             if ssh_tunnel:
                 try:
@@ -100,7 +110,8 @@ class Client:
                 except ValueError:
                     logger.warning(
                         "Invalid end point format, please use user_name@host_name:port, prompting for username and "
-                        "password")
+                        "password"
+                    )
                     user_name = input("Username: ")
                     host_name = self.end_point_ip
 
@@ -133,53 +144,63 @@ class Client:
                 logger.info(
                     f"Connecting to remote end point: {self.end_point_ip}:{self.end_point_port}, looking for model: {model}"
                 )
-                self.grpcClient = gRPCClient(self.end_point_ip,
-                                             self.end_point_port)
+                self.grpcClient = gRPCClient(self.end_point_ip, self.end_point_port)
                 logger.info(f"Connected to remote end point: {end_point}")
             except FutureTimeoutError:
-                logger.error(
-                    f"Cannot connect to remote end point: {end_point}")
+                logger.error(f"Cannot connect to remote end point: {end_point}")
                 raise ConnectionError(
-                    f"Cannot connect to remote end point: {end_point}")
+                    f"Cannot connect to remote end point: {end_point}"
+                )
         else:
             if self.model_type == "huggingface":
-                from alfred.fm.huggingface import HuggingFaceModel
-                self.model = HuggingFaceModel(self.model,
-                                              local_path=local_path,
-                                              **kwargs)
+                from ..fm.huggingface import HuggingFaceModel
+
+                self.model = HuggingFaceModel(
+                    self.model, local_path=local_path, **kwargs
+                )
             elif self.model_type == "huggingfacevlm":
-                from alfred.fm.huggingfacevlm import HuggingFaceCLIPModel
-                self.model = HuggingFaceCLIPModel(self.model,
-                                                  local_path=local_path,
-                                                  **kwargs)
+                from ..fm.huggingfacevlm import HuggingFaceCLIPModel
+
+                self.model = HuggingFaceCLIPModel(
+                    self.model, local_path=local_path, **kwargs
+                )
             elif self.model_type == "huggingfacedocument":
-                from alfred.fm.huggingfacedocument import HuggingFaceDocumentModel
-                self.model = HuggingFaceDocumentModel(self.model,
-                                                      local_path=local_path,
-                                                      **kwargs)
+                from ..fm.huggingfacedocument import HuggingFaceDocumentModel
+
+                self.model = HuggingFaceDocumentModel(
+                    self.model, local_path=local_path, **kwargs
+                )
             elif self.model_type == "anthropic":
-                from alfred.fm.anthropic import AnthropicModel
+                from ..fm.anthropic import AnthropicModel
+
                 self.model = AnthropicModel(self.model, **kwargs)
             elif self.model_type == "openai":
-                from alfred.fm.openai import OpenAIModel
+                from ..fm.openai import OpenAIModel
+
                 self.model = OpenAIModel(self.model, **kwargs)
             elif self.model_type == "cohere":
-                from alfred.fm.cohere import CohereModel
+                from ..fm.cohere import CohereModel
+
                 self.model = CohereModel(self.model, **kwargs)
             elif self.model_type == "ai21":
-                from alfred.fm.ai21 import AI21Model
+                from ..fm.ai21 import AI21Model
+
                 self.model = AI21Model(self.model, **kwargs)
             elif self.model_type == "dummy":
-                from alfred.fm.dummy import DummyModel
+                from ..fm.dummy import DummyModel
+
                 self.model = DummyModel(self.model)
             elif self.model_type == "onnx":
-                from alfred.fm.onnx import ONNXModel
+                from ..fm.onnx import ONNXModel
+
                 self.model = ONNXModel(self.model, **kwargs)
             elif self.model_type == "flexgen":
-                from alfred.fm.flexgen import FlexGenModel
+                from ..fm.flexgen import FlexGenModel
+
                 self.model = FlexGenModel(self.model, **kwargs)
             elif self.model_type == "vllm":
-                from alfred.fm.vllm import vLLMModel
+                from ..fm.vllm import vLLMModel
+
                 self.model = vLLMModel(self.model, **kwargs)
             elif self.model_type == "tensorrt":
                 # self.model = TensorRTModel(self.model, **kwargs)
@@ -190,8 +211,7 @@ class Client:
             else:
                 logger.error(f"Invalid model type: {self.model_type}")
                 raise ValueError(f"Invalid model type: {self.model_type}")
-            logger.info(
-                f"Connected to local {self.model_type} model: {self.model}")
+            logger.info(f"Connected to local {self.model_type} model: {self.model}")
 
     def run(
         self,
@@ -229,7 +249,11 @@ class Client:
         :rtype: Union[Response, List[Response]]
         """
         single_query = False
-        if isinstance(queries, str) or isinstance(queries, Query):
+        if (
+            isinstance(queries, str)
+            or isinstance(queries, Query)
+            or isinstance(queries, Tuple)
+        ):
             single_query = True
             queries = [queries]
         responses = self.grpcClient.run(queries, **kwargs)
@@ -276,8 +300,9 @@ class Client:
         """
         return self(query, **kwargs)
 
-    def __call__(self, queries: Union[Query, str, List[Query], List[str]],
-                 **kwargs: Any) -> Union[Response, List[Response]]:
+    def __call__(
+        self, queries: Union[Query, str, List[Query], List[str]], **kwargs: Any
+    ) -> Union[Response, List[Response]]:
         """
         __call__() function to run the model on the queries.
         Equivalent to run() function.
@@ -335,15 +360,11 @@ class Client:
             logger.error("No candidates provided for calibration.")
             raise ValueError("No answer candidates provided for calibration.")
 
-        template = StringTemplate(template) if isinstance(template,
-                                                          str) else template
+        template = StringTemplate(template) if isinstance(template, str) else template
 
         # identify the keywords in template_str
         keywords = template.keywords
-        weights = np.empty(
-            [len(null_tokens),
-             len(candidates),
-             len(candidates)])
+        weights = np.empty([len(null_tokens), len(candidates), len(candidates)])
         biases = np.empty([len(null_tokens), len(candidates)])
         scores = np.empty((len(null_tokens), len(candidates)))
         for null_token_id, null_token in enumerate(null_tokens):
@@ -370,7 +391,7 @@ class Client:
     def encode(
         self,
         queries: Union[str, List[str]],
-        reduction: str = 'mean',
+        reduction: str = "mean",
     ) -> Union[torch.Tensor, List[torch.Tensor]]:
         """
         embed() function to embed the queries.
@@ -404,6 +425,9 @@ class Client:
         if self.model_type in ["openai", "anthropic"]:
             self.model.chat(log_save_path=log_save_path, **kwargs)
         else:
-            logger.error("Chat APIs are only supported for Anthropic and OpenAI models.")
+            logger.error(
+                "Chat APIs are only supported for Anthropic and OpenAI models."
+            )
             raise NotImplementedError(
-                "Currently Chat are only supported for Anthropic and OpenAI models.")
+                "Currently Chat are only supported for Anthropic and OpenAI models."
+            )

@@ -2,6 +2,7 @@ import abc
 import logging
 import os
 from contextlib import nullcontext
+from PIL import Image
 from typing import List, Optional, Dict, Union, Tuple, OrderedDict, Any
 
 import numpy as np
@@ -19,6 +20,7 @@ class FoundationModel(abc.ABC):
     """
     Generic interface for foundation model class
     """
+
     def _generate_batch(
         self,
         batch_instance: Union[List[str]],
@@ -36,7 +38,8 @@ class FoundationModel(abc.ABC):
         :rtype List[Response]
         """
         raise NotImplementedError(
-            f"_infer_batch() is not implemented for {self.__class__.__name__}")
+            f"_infer_batch() is not implemented for {self.__class__.__name__}"
+        )
 
     def _score_batch(
         self,
@@ -53,7 +56,8 @@ class FoundationModel(abc.ABC):
         :rtype List[Response]
         """
         raise NotImplementedError(
-            f"_score_batch() is not implemented for {self.__class__.__name__}")
+            f"_score_batch() is not implemented for {self.__class__.__name__}"
+        )
 
     def _encode_batch(
         self,
@@ -75,13 +79,17 @@ class FoundationModel(abc.ABC):
     def forward(
         self,
         queries: Union[List[Query], List[str], List[Tuple[str, str]]],
-        batch_policy: str = 'dynamic',
+        batch_policy: str = "dynamic",
         batch_size: int = 1024,
-        mode: str = 'generate',
+        mode: str = "generate",
         pretokenize: bool = True,
         **kwargs,
-    ) -> Union[List[CompletionResponse], List[RankedResponse],
-               List[OrderedDict], List[torch.Tensor]]:
+    ) -> Union[
+        List[CompletionResponse],
+        List[RankedResponse],
+        List[OrderedDict],
+        List[torch.Tensor],
+    ]:
         """
         This function is the main entry point for running queries through the foundation model.
         It accepts raw query content and automatically converts it into query objects.
@@ -105,37 +113,29 @@ class FoundationModel(abc.ABC):
         :return: A list of responses
         :rtype: Union[List[CompletionResponse], List[RankedResponse], List[OrderedDict], List[torch.Tensor]]
         """
-        with_grad = kwargs.get('with_grad', False)
-        no_tqdm = kwargs.get('no_tqdm', False)
+        with_grad = kwargs.get("with_grad", False)
+        no_tqdm = kwargs.get("no_tqdm", False)
 
         if type(queries[0]) in [RankedQuery, tuple]:
-            mode = 'score'
-
-        if mode == 'generate':
-            inferece_fn = self._generate_batch
-        elif mode == 'score':
-            inferece_fn = self._score_batch
-        elif mode == 'encode':
-            inferece_fn = self._encode_batch
-        else:
-            raise ValueError(f"mode {mode} not supported")
+            mode = "score"
 
         if isinstance(self, LocalAccessFoundationModel):
             try:
-                if self.processor:
-                    batch_policy = 'static'
-                    batched_queries = batch_multimodal(queries,
-                                                       batch_size=batch_size)
-                    pretokenized = False
-                    inferece_fn = self._score_batch
+                batched_queries = batch_multimodal(
+                    queries, mode=self.multimodal_mode, batch_size=batch_size
+                )
+                batch_policy = "static"
+                pretokenized = False
+                mode = (
+                    "generate" if self.multimodal_mode == "autoregressive" else "score"
+                )
             except AttributeError:
-                if batch_policy == 'static':
-                    # To near equally sized batches
+                if batch_policy == "static":
                     batched_queries = np.array_split(
-                        queries,
-                        len(queries) // batch_size)
+                        queries, max(1, len(queries) // batch_size)
+                    )
                     pretokenized = False
-                elif batch_policy == 'dynamic':
+                elif batch_policy == "dynamic":
                     if pretokenize:
                         pretokenized = True
                         try:
@@ -149,30 +149,38 @@ class FoundationModel(abc.ABC):
                     else:
                         pretokenized = False
                         tokenizer = None
-                    DB = DynamicBatcher(queries,
-                                        tokenizer=tokenizer,
-                                        max_batch_size=batch_size)
+                    DB = DynamicBatcher(
+                        queries, tokenizer=tokenizer, max_batch_size=batch_size
+                    )
                     batched_queries = DB.batch()
                 else:
-                    raise ValueError(
-                        f"batch_policy {batch_policy} not supported")
+                    raise ValueError(f"batch_policy {batch_policy} not supported")
         else:
-            batch_policy = 'static'
+            batch_policy = "static"
             batched_queries = np.array_split(queries, len(queries))
             pretokenized = False
 
-        logger.log(logging.INFO, f"Inferring {len(batched_queries)} batches")
+        if mode == "generate":
+            inferece_fn = self._generate_batch
+        elif mode == "score":
+            inferece_fn = self._score_batch
+        elif mode == "encode":
+            inferece_fn = self._encode_batch
+        else:
+            raise ValueError(f"mode {mode} not supported")
 
+        logger.log(logging.INFO, f"Inferring {len(batched_queries)} batches")
         attempts = 0
         while attempts < 3:
             try:
                 with nullcontext() if with_grad else torch.no_grad():
                     responses = []
                     for batch_id, batch in enumerate(
-                            tqdm(batched_queries, disable=no_tqdm)):
-                        responses += inferece_fn(batch,
-                                                 tokenized=pretokenized,
-                                                 **kwargs)
+                        tqdm(batched_queries, disable=no_tqdm)
+                    ):
+                        responses += inferece_fn(
+                            batch, tokenized=pretokenized, **kwargs
+                        )
                     break
             except RuntimeError as e:
                 attempts += 1
@@ -182,13 +190,13 @@ class FoundationModel(abc.ABC):
                         "WARNING: out of memory, trying to allocate a new batch",
                     )
                     clear_cuda_cache()
-                    if batch_policy == 'static':
+                    if batch_policy == "static":
                         batch_size = int(batch_size * 0.8)
                         batched_queries = np.array_split(
-                            queries,
-                            len(queries) // batch_size)
+                            queries, len(queries) // batch_size
+                        )
                         logging.info(f"New batch size: {batch_size}")
-                    elif batch_policy == 'dynamic':
+                    elif batch_policy == "dynamic":
                         DB.limit_size = int(DB.limit_size * 0.9)
                         DB.max_batch_size = int(DB.max_batch_size * 0.9)
                         batched_queries = DB.batch()
@@ -198,7 +206,7 @@ class FoundationModel(abc.ABC):
                 else:
                     raise e
 
-        if batch_policy == 'dynamic':
+        if batch_policy == "dynamic":
             responses = DB.reorder(responses)
 
         return list(responses)
@@ -206,7 +214,7 @@ class FoundationModel(abc.ABC):
     def generate(
         self,
         queries: Union[List[CompletionQuery], List[str]],
-        batch_policy: str = 'dynamic',
+        batch_policy: str = "dynamic",
         batch_size: int = 1024,
         **kwargs,
     ) -> List[CompletionResponse]:
@@ -231,7 +239,7 @@ class FoundationModel(abc.ABC):
     def score(
         self,
         queries: List[RankedQuery],
-        batch_policy: str = 'dynamic',
+        batch_policy: str = "dynamic",
         batch_size: int = 64,
         **kwargs: Any,
     ) -> List[RankedResponse]:
@@ -252,18 +260,14 @@ class FoundationModel(abc.ABC):
         :rtype: List[RankedResponse]
         """
 
-        return self.forward(queries,
-                            batch_policy,
-                            batch_size,
-                            mode="score",
-                            **kwargs)
+        return self.forward(queries, batch_policy, batch_size, mode="score", **kwargs)
 
     def encode(
         self,
         queries: Union[List[Query], List[str]],
-        batch_policy: str = 'dynamic',
+        batch_policy: str = "dynamic",
         batch_size: int = 1024,
-        reduction: str = 'mean',
+        reduction: str = "mean",
         **kwargs: Any,
     ) -> List[torch.Tensor]:
         """
@@ -280,16 +284,20 @@ class FoundationModel(abc.ABC):
         :return: A list of encoded queries
         :rtype: List[torch.Tensor]
         """
-        return self.forward(queries,
-                            batch_policy,
-                            batch_size,
-                            mode="encode",
-                            reduction=reduction,
-                            **kwargs)
+        return self.forward(
+            queries,
+            batch_policy,
+            batch_size,
+            mode="encode",
+            reduction=reduction,
+            **kwargs,
+        )
 
     def run(
         self,
-        queries: Union[Query, str, Tuple[str, str], List[Query], List[str]],
+        queries: Union[
+            Query, str, Tuple[str, str], Tuple[Image.Image, str], List[Query], List[str]
+        ],
         **kwargs: Any,
     ) -> Union[str, Response, List[Response]]:
         """
@@ -305,28 +313,43 @@ class FoundationModel(abc.ABC):
         :return: A single response or a list of responses
         :rtype: Union[str, Response, List[Response]]
         """
-        if isinstance(queries, list):
-            if type(queries[0]) in [tuple, RankedQuery]:
-                mode = 'score'
+        if isinstance(queries, List):
+            if type(queries[0]) == RankedQuery:
+                mode = "score"
+            elif isinstance(queries[0], Tuple):
+                if isinstance(queries[0][0], Image.Image) and isinstance(
+                    queries[0][1], str
+                ):
+                    mode = "generate"
+                else:
+                    mode = "score"
             elif type(queries[0]) in [str, CompletionQuery]:
-                mode = 'generate'
+                mode = "generate"
             else:
                 raise ValueError(f"Unsupported query type {type(queries[0])}")
             return self.forward(queries, mode=mode, **kwargs)
-        elif isinstance(queries, RankedQuery) or isinstance(queries, tuple):
+        elif isinstance(queries, RankedQuery):
             return self.forward([queries], mode="score", **kwargs)[0]
+        elif isinstance(queries, Tuple):
+            if isinstance(queries[0], Image.Image) and isinstance(queries[1], str):
+                mode = "generate"
+            else:
+                mode = "score"
+            return self.forward([queries], mode=mode, **kwargs)[0]
         elif isinstance(queries, CompletionQuery) or isinstance(queries, str):
             return self._generate_batch(
-                queries.load() if isinstance(queries, CompletionQuery) else
-                [queries], **kwargs)[0]
+                queries.load() if isinstance(queries, CompletionQuery) else [queries],
+                **kwargs,
+            )[0]
         else:
-            logger.warning(
-                f"Unsupported query type {type(queries)}, Attempting to run")
+            logger.warning(f"Unsupported query type {type(queries)}")
             return self.forward(queries, **kwargs)
 
     def __call__(
         self,
-        queries: Union[Query, str, Tuple[str, str], List[Query], List[str]],
+        queries: Union[
+            Query, str, Tuple[str, str], Tuple[Image.Image, str], List[Query], List[str]
+        ],
         **kwargs: Any,
     ) -> Union[str, Response, List[Response]]:
         """
@@ -374,6 +397,7 @@ class LocalAccessFoundationModel(FoundationModel):
         """
         self.local_path = local_path
         if local_path is None:
-            self.local_path = os.path.join(os.path.expanduser('~'),
-                                           '.model_cache', model_string)
+            self.local_path = os.path.join(
+                os.path.expanduser("~"), ".model_cache", model_string
+            )
         self.model_string = model_string

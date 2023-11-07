@@ -7,6 +7,7 @@ class NaiveBayes(LabelModel):
     """
     LabelModel wrapper to perform label modeling for partial labelers on the responses
     """
+
     def __init__(self, num_classes, num_lfs):
         """Constructor"""
         try:

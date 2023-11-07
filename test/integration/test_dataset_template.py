@@ -6,13 +6,11 @@ from alfred.template import StringTemplate
 
 class TestDatasetTemplate(unittest.TestCase):
     def test_apply_template_to_datset(self):
-        dataset = [{
-            'text': 'This is a test.'
-        }, {
-            'text': 'This is another test.'
-        }, {
-            'text': 'This is a third test.'
-        }]
+        dataset = [
+            {"text": "This is a test."},
+            {"text": "This is another test."},
+            {"text": "This is a third test."},
+        ]
 
         template = StringTemplate("This is a [[text]]")
 

@@ -24,5 +24,5 @@ class TestClientWithDummyModel(unittest.TestCase):
         self.assertEqual(response.prediction, "I went to the store")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

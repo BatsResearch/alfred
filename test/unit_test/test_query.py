@@ -5,11 +5,9 @@ from alfred.fm.query import Query, RankedQuery, CompletionQuery
 
 class TestQuery(unittest.TestCase):
     def test_init(self):
-        self.assertTrue(
-            type(RankedQuery("prompt", candidates=["2"])) == RankedQuery)
+        self.assertTrue(type(RankedQuery("prompt", candidates=["2"])) == RankedQuery)
 
-        self.assertTrue(
-            isinstance(RankedQuery("prompt", candidates=["2"]), Query))
+        self.assertTrue(isinstance(RankedQuery("prompt", candidates=["2"]), Query))
 
         # empty candidates
         self.assertRaises(AssertionError, RankedQuery, "prompt", candidates=[])
@@ -28,15 +26,16 @@ class TestQuery(unittest.TestCase):
         self.assertTrue(CompletionQuery("prompt").load() == ["prompt"])
 
         self.assertTrue(
-            type(RankedQuery("prompt", candidates=["2", "1"]).load()) == list)
+            type(RankedQuery("prompt", candidates=["2", "1"]).load()) == list
+        )
+
+        self.assertTrue(len(RankedQuery("prompt", candidates=["2", "1"]).load()) == 2)
 
         self.assertTrue(
-            len(RankedQuery("prompt", candidates=["2", "1"]).load()) == 2)
-
-        self.assertTrue(
-            RankedQuery("prompt", candidates=["2", "1"]).load() == [(
-                "prompt", "2"), ("prompt", "1")])
+            RankedQuery("prompt", candidates=["2", "1"]).load()
+            == [("prompt", "2"), ("prompt", "1")]
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

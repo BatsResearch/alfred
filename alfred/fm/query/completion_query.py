@@ -13,10 +13,13 @@ class CompletionQuery(Query):
     This is the generic query for any alfred.fm model.
     It mainly contains the prompt, which is the input to the model.
 
+    In the case of a multimodal completion query, it may take the form of a tuple (e.g. (PIL.Image, str))
+
     This class represents a query for completion of a given prompt.
     It is initialized with a prompt, which can be a string, NumPy array,
     list, tuple, or PyTorch tensor.
     """
+
     def __init__(
         self,
         prompt: Union[str, np.ndarray, List, Tuple, torch.Tensor],

@@ -43,10 +43,10 @@ class WrenchBenchmarkDataset(IterableArrowDataset):
         url={https://openreview.net/forum?id=Q9SKS5k8io}
     }
     """
-    def __init__(self,
-                 dataset_name: str,
-                 split: str = "train",
-                 local_path: Optional[str] = None):
+
+    def __init__(
+        self, dataset_name: str, split: str = "train", local_path: Optional[str] = None
+    ):
         """
         Initialize the Wrench Dataset class.
 
@@ -68,18 +68,18 @@ class WrenchBenchmarkDataset(IterableArrowDataset):
         if WRENCH_AVAILABLE:
             local_path = local_path or get_data_home()
             logger.log(
-                logging.INFO,
-                f"Loading wrench dataset {dataset_name} from {local_path}")
+                logging.INFO, f"Loading wrench dataset {dataset_name} from {local_path}"
+            )
 
         else:
             if local_path is None:
                 logging.error("No local path for wrench dataset is provided.")
                 raise ValueError(
-                    "local_path must be specified if wrench is not installed.")
+                    "local_path must be specified if wrench is not installed."
+                )
 
         try:
-            with open(os.path.join(local_path, dataset_name,
-                                   split + '.json')) as f:
+            with open(os.path.join(local_path, dataset_name, split + ".json")) as f:
                 raw_data = json.load(f)
         except FileNotFoundError:
             warn_msg = f"No {split} data found under {local_path} for {dataset_name}."
@@ -91,7 +91,7 @@ class WrenchBenchmarkDataset(IterableArrowDataset):
         self.uid2label = {}
         self.labels = []
         # Strong assumption: every data has the same fields!!!
-        _inst = list(raw_data.values())[0]['data']
+        _inst = list(raw_data.values())[0]["data"]
         self.valid_field = {
             key: self.pyarrow_typer(value)
             for key, value in _inst.items()
@@ -100,23 +100,12 @@ class WrenchBenchmarkDataset(IterableArrowDataset):
         self.uid2idx = {}
         self.data_list = []
         for idx, (uid, inst) in enumerate(raw_data.items()):
-            lean_data = {
-                key: inst['data'][key]
-                for key in self.valid_field.keys()
-            }
-            lean_data = {
-                **{
-                    'uid': uid
-                },
-                **lean_data,
-                **{
-                    'label': inst['label']
-                }
-            }
+            lean_data = {key: inst["data"][key] for key in self.valid_field.keys()}
+            lean_data = {**{"uid": uid}, **lean_data, **{"label": inst["label"]}}
             self.data_list.append(lean_data)
 
-            self.uid2label[uid] = inst['label']
-            self.labels.append(inst['label'])
+            self.uid2label[uid] = inst["label"]
+            self.labels.append(inst["label"])
             self.uid2idx[uid] = idx
 
         self.uids = list(self.uid2label.keys())
@@ -126,15 +115,13 @@ class WrenchBenchmarkDataset(IterableArrowDataset):
             version="0.0.0",
         )
 
-        schema = pyarrow.schema({
-            **{
-                "uid": self.pyarrow_typer(self.uids[0])
-            },
-            **self.valid_field,
-            **{
-                "label": self.pyarrow_typer(self.uid2label[self.uids[0]])
+        schema = pyarrow.schema(
+            {
+                **{"uid": self.pyarrow_typer(self.uids[0])},
+                **self.valid_field,
+                **{"label": self.pyarrow_typer(self.uid2label[self.uids[0]])},
             }
-        })
+        )
 
         _data = pyarrow.Table.from_pylist(self.data_list, schema=schema)
 

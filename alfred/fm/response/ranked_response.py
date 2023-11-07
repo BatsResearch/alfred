@@ -11,6 +11,7 @@ class RankedResponse(Response):
     A subclass of `Response` that represents a language model response for scoring/ranking.
 
     """
+
     def __init__(
         self,
         prediction: str,
@@ -31,10 +32,10 @@ class RankedResponse(Response):
         :type embedding: Union[torch.Tensor, np.ndarray]
         """
         super(RankedResponse, self).__init__()
-        self['prediction'] = str(prediction)
-        self['scores'] = scores
-        self['embeddings'] = embeddings
-        self['logits'] = logits
+        self["prediction"] = str(prediction)
+        self["scores"] = scores
+        self["embeddings"] = embeddings
+        self["logits"] = logits
 
     @property
     def prediction(self) -> str:
@@ -44,7 +45,7 @@ class RankedResponse(Response):
         :returns: The prediction made by the language model
         :rtype: str
         """
-        return self['prediction']
+        return self["prediction"]
 
     @property
     def scores(self) -> Dict:
@@ -54,7 +55,7 @@ class RankedResponse(Response):
         :returns: A dictionary of scores for each class in the language model
         :rtype: dict
         """
-        return self['scores']
+        return self["scores"]
 
     @property
     def logits(self) -> Union[torch.Tensor, np.ndarray]:
@@ -64,7 +65,7 @@ class RankedResponse(Response):
         :returns: The logits output by the language model
         :rtype: Union[torch.Tensor, np.ndarray]
         """
-        return self['logits']
+        return self["logits"]
 
     @property
     def embeddings(self) -> Union[torch.Tensor, np.ndarray]:
@@ -74,7 +75,7 @@ class RankedResponse(Response):
         :returns: The embedding output by the language model
         :rtype: Union[torch.Tensor, np.ndarray]
         """
-        return self['embeddings']
+        return self["embeddings"]
 
     def __eq__(self, other):
         """
@@ -91,14 +92,15 @@ class RankedResponse(Response):
         """
         if isinstance(other, RankedResponse):
             consistent_flag = self.prediction == other.prediction
-            consistent_flag &= (self.scores
-                                == other.scores) or (self.scores is None
-                                                     and other.scores is None)
-            consistent_flag &= (self.logits
-                                == other.logits) or (self.logits is None
-                                                     and other.logits is None)
-            consistent_flag &= (self['embeddings'] == other['embeddings']) or (
-                self['embeddings'] is None and other['embeddings'] is None)
+            consistent_flag &= (self.scores == other.scores) or (
+                self.scores is None and other.scores is None
+            )
+            consistent_flag &= (self.logits == other.logits) or (
+                self.logits is None and other.logits is None
+            )
+            consistent_flag &= (self["embeddings"] == other["embeddings"]) or (
+                self["embeddings"] is None and other["embeddings"] is None
+            )
             return consistent_flag
         else:
             return False

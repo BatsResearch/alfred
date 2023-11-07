@@ -45,6 +45,7 @@ class Cache(abc.ABC):
     TODO:
         - RedisCache: Redis - based cache
     """
+
     @abc.abstractmethod
     def read(self, prompt: str, metadata: Optional[str] = None) -> list:
         """
@@ -58,12 +59,13 @@ class Cache(abc.ABC):
         :rtype: list
         """
         raise NotImplementedError(
-            f"read() is not implemented for {self.__class__.__name__}")
+            f"read() is not implemented for {self.__class__.__name__}"
+        )
 
     @abc.abstractmethod
-    def read_batch(self,
-                   prompts: List[str],
-                   metadata: Optional[str] = None) -> List[str]:
+    def read_batch(
+        self, prompts: List[str], metadata: Optional[str] = None
+    ) -> List[str]:
         """
         Read a value from the cache by list of serialized prompts and metadata
 
@@ -75,13 +77,11 @@ class Cache(abc.ABC):
         :rtype: list
         """
         raise NotImplementedError(
-            f"read_batch() is not implemented for {self.__class__.__name__}")
+            f"read_batch() is not implemented for {self.__class__.__name__}"
+        )
 
     @abc.abstractmethod
-    def write(self,
-              prompt: str,
-              response: str,
-              metadata: Optional[str] = None):
+    def write(self, prompt: str, response: str, metadata: Optional[str] = None):
         """
         Write a value to the cache by serialized prompt, serialized response and metadata
 
@@ -93,13 +93,13 @@ class Cache(abc.ABC):
         :type metadata: str
         """
         raise NotImplementedError(
-            f"write() is not implemented for {self.__class__.__name__}")
+            f"write() is not implemented for {self.__class__.__name__}"
+        )
 
     @abc.abstractmethod
-    def write_batch(self,
-                    prompts: List[str],
-                    response: List[str],
-                    metadata: Optional[str] = None):
+    def write_batch(
+        self, prompts: List[str], response: List[str], metadata: Optional[str] = None
+    ):
         """
         Write a value to the cache by serialized prompts, serialized responses and metadata in batch
 
@@ -111,7 +111,8 @@ class Cache(abc.ABC):
         :type metadata: str
         """
         raise NotImplementedError(
-            f"write_batch() is not implemented for {self.__class__.__name__}")
+            f"write_batch() is not implemented for {self.__class__.__name__}"
+        )
 
     @abc.abstractmethod
     def read_by_prompt(self, prompt: str) -> List:
@@ -144,8 +145,7 @@ class Cache(abc.ABC):
         )
 
     @abc.abstractmethod
-    def read_by_prompts_and_metadata(self, prompts: List[str],
-                                     metadata: str) -> List:
+    def read_by_prompts_and_metadata(self, prompts: List[str], metadata: str) -> List:
         """
         Read the record from the cache via serialized prompts and metadata string
 
@@ -183,7 +183,8 @@ class Cache(abc.ABC):
         :type path: str
         """
         raise NotImplementedError(
-            f"save() is not implemented for {self.__class__.__name__}")
+            f"save() is not implemented for {self.__class__.__name__}"
+        )
 
     @abc.abstractmethod
     def load(self, path: str):
@@ -194,7 +195,8 @@ class Cache(abc.ABC):
         :type path: str
         """
         raise NotImplementedError(
-            f"load() is not implemented for {self.__class__.__name__}")
+            f"load() is not implemented for {self.__class__.__name__}"
+        )
 
     @abc.abstractmethod
     def to_pandas(self) -> pd.DataFrame:
@@ -205,7 +207,8 @@ class Cache(abc.ABC):
         :rtype: pd.DataFrame
         """
         raise NotImplementedError(
-            f"to_pandas() is not implemented for {self.__class__.__name__}")
+            f"to_pandas() is not implemented for {self.__class__.__name__}"
+        )
 
     def cached_query(self, model_run: Callable) -> Callable:
         """
@@ -216,8 +219,10 @@ class Cache(abc.ABC):
         :return: Decorated function
         :rtype: Callable
         """
-        def run_query(queries: Union[Response, List[Response], str, List[str]],
-                      **kwargs: Any) -> Union[Response, List[Response]]:
+
+        def run_query(
+            queries: Union[Response, List[Response], str, List[str]], **kwargs: Any
+        ) -> Union[Response, List[Response]]:
             """
             Run query function wrapper that process the queries and
             fetch from cache db if exist else write into cache_db
@@ -237,8 +242,9 @@ class Cache(abc.ABC):
             responses, new_q_idx, new_queries = [], [], []
             for q_idx, query in enumerate(queries):
                 cached_response = self.read(
-                    query.serialize()
-                    if isinstance(query, Query) else str(query), metadata)
+                    query.serialize() if isinstance(query, Query) else str(query),
+                    metadata,
+                )
                 if cached_response:
                     responses.append(deserialize(cached_response))
                 else:
@@ -248,25 +254,31 @@ class Cache(abc.ABC):
             if len(new_q_idx) > 0:
                 logger.info(f"Running {len(new_q_idx)} queries")
                 _model_responses = model_run(
-                    _new_queries[0]
-                    if len(_new_queries) == 1 else _new_queries, **kwargs)
-                _model_responses = [_model_responses] if not isinstance(
-                    _model_responses, list) else _model_responses
+                    _new_queries[0] if len(_new_queries) == 1 else _new_queries,
+                    **kwargs,
+                )
+                _model_responses = (
+                    [_model_responses]
+                    if not isinstance(_model_responses, list)
+                    else _model_responses
+                )
                 _serialized_responses = [
                     response.serialize() for response in _model_responses
                 ]
                 _serialized_new_queries = [
-                    query.serialize()
-                    if isinstance(query, Query) else str(query)
+                    query.serialize() if isinstance(query, Query) else str(query)
                     for query in _new_queries
                 ]
                 try:
-                    self.write_batch(_serialized_new_queries,
-                                     _serialized_responses,
-                                     metadata=metadata)
+                    self.write_batch(
+                        _serialized_new_queries,
+                        _serialized_responses,
+                        metadata=metadata,
+                    )
                 except NotImplementedError:
-                    for query, response in zip(_serialized_new_queries,
-                                               _serialized_responses):
+                    for query, response in zip(
+                        _serialized_new_queries, _serialized_responses
+                    ):
                         self.write(query, response, metadata=metadata)
 
                 for idx, q_idx in enumerate(new_q_idx):

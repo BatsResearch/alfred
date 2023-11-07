@@ -13,8 +13,8 @@ from transformers import (
     AutoTokenizer,
 )
 
-from alfred.fm.model import LocalAccessFoundationModel
-from alfred.fm.response import CompletionResponse
+from .model import LocalAccessFoundationModel
+from .response import CompletionResponse
 
 logger = logging.getLogger(__name__)
 
@@ -22,7 +22,9 @@ try:
     from transformers import LlamaPreTrainedModel
 except ImportError:
     LlamaPreTrainedModel = None
-    logger.info("LlamaPreTrainedModel not Found. Please upgrade transformers to support Llama.")
+    logger.info(
+        "LlamaPreTrainedModel not Found. Please upgrade transformers to support Llama."
+    )
 
 dtype_match = {
     "auto": "auto",
@@ -33,14 +35,14 @@ dtype_match = {
 }
 
 HF_MODEL_BANK_PREFIX = {
-    'gpt2': (AutoModelForCausalLM, AutoTokenizer),
-    'bigscience/bloom': (AutoModelForCausalLM, AutoTokenizer),
-    'bigscience/T0': (AutoModelForSeq2SeqLM, AutoTokenizer),
-    'google/flan': (AutoModelForSeq2SeqLM, AutoTokenizer),
-    'google/t5': (AutoModelForSeq2SeqLM, AutoTokenizer),
-    't5': (AutoModelForSeq2SeqLM, AutoTokenizer),
-    'microsoft/DialoGPT': (AutoModelForCausalLM, AutoTokenizer),
-    'EleutherAI/gpt-': (AutoModelForCausalLM, AutoTokenizer),
+    "gpt2": (AutoModelForCausalLM, AutoTokenizer),
+    "bigscience/bloom": (AutoModelForCausalLM, AutoTokenizer),
+    "bigscience/T0": (AutoModelForSeq2SeqLM, AutoTokenizer),
+    "google/flan": (AutoModelForSeq2SeqLM, AutoTokenizer),
+    "google/t5": (AutoModelForSeq2SeqLM, AutoTokenizer),
+    "t5": (AutoModelForSeq2SeqLM, AutoTokenizer),
+    "microsoft/DialoGPT": (AutoModelForCausalLM, AutoTokenizer),
+    "EleutherAI/gpt-": (AutoModelForCausalLM, AutoTokenizer),
 }
 
 
@@ -58,6 +60,7 @@ class HuggingFaceModel(LocalAccessFoundationModel):
     The interface includes implementations of the _score_batch method
     for ranking candidates and the _generate_batch method for generating prompts.
     """
+
     def __init__(
         self,
         model_string: str,
@@ -66,7 +69,7 @@ class HuggingFaceModel(LocalAccessFoundationModel):
         device_map: Optional[Union[str, dict]] = "auto",
         offload_folder: Optional[str] = None,
         int_8: bool = False,
-        trust_remote_code: bool=True,
+        trust_remote_code: bool = True,
         tokenizer: Optional[PreTrainedTokenizer] = None,
     ):
         """
@@ -92,49 +95,51 @@ class HuggingFaceModel(LocalAccessFoundationModel):
         """
         if not local_path:
             for HF_ENV_PATH in [
-                    'TRANSFORMERS_CACHE', 'HUGGINGFACE_HUB_CACHE', 'HF_HOME'
+                "TRANSFORMERS_CACHE",
+                "HUGGINGFACE_HUB_CACHE",
+                "HF_HOME",
             ]:
                 value = os.environ.get(HF_ENV_PATH)
                 if value is not None:
                     local_path = value
             if not local_path:
-                local_path = os.path.join(Path.home(), ".cache", "huggingface",
-                                          "hub")
+                local_path = os.path.join(Path.home(), ".cache", "huggingface", "hub")
 
         super().__init__(model_string, local_path)
 
         try:
             self.dtype = dtype_match[dtype]
         except KeyError:
-            logger.log(logging.WARNING,
-                       f"Invalid dtype {dtype}, defaulting to fp32")
+            logger.log(logging.WARNING, f"Invalid dtype {dtype}, defaulting to fp32")
             self.dtype = "auto"
-        if '/' in self.model_string:
-            hf_factory, hf_modelname = self.model_string.split('/')
+        if "/" in self.model_string:
+            hf_factory, hf_modelname = self.model_string.split("/")
             model_name = f"{hf_factory}/{hf_modelname}"
         else:
             model_name = model_string
 
         auto_model_class = [
-            HF_MODEL_BANK_PREFIX[key] for key in HF_MODEL_BANK_PREFIX
+            HF_MODEL_BANK_PREFIX[key]
+            for key in HF_MODEL_BANK_PREFIX
             if model_name.startswith(key)
         ]
 
-        auto_model_class = AutoModelForCausalLM if len(
-            auto_model_class) == 0 else auto_model_class[0][0]
+        auto_model_class = (
+            AutoModelForCausalLM
+            if len(auto_model_class) == 0
+            else auto_model_class[0][0]
+        )
 
         if torch.cuda.is_available():
             n_gpus = torch.cuda.device_count()
-            free_in_GB = sum(
-                [int(mem / 1024**3) for mem in torch.cuda.mem_get_info()])
+            free_in_GB = sum([int(mem / 1024**3) for mem in torch.cuda.mem_get_info()])
 
             logger.log(
-                logging.INFO,
-                f"Found {n_gpus} GPUs with {free_in_GB}GB free GPU memory")
+                logging.INFO, f"Found {n_gpus} GPUs with {free_in_GB}GB free GPU memory"
+            )
 
             [
-                logger.log(logging.WARNING,
-                           f"GPU {i}: {torch.cuda.get_device_name(i)}")
+                logger.log(logging.WARNING, f"GPU {i}: {torch.cuda.get_device_name(i)}")
                 for i in range(n_gpus)
             ]
 
@@ -146,8 +151,7 @@ class HuggingFaceModel(LocalAccessFoundationModel):
                 load_in_8bit=int_8,
                 torch_dtype=self.dtype,
                 offload_folder=offload_folder,
-                max_memory={i: f'{free_in_GB - 2}GB'
-                            for i in range(n_gpus)},
+                max_memory={i: f"{free_in_GB - 2}GB" for i in range(n_gpus)},
             )
         else:
             self.model = auto_model_class.from_pretrained(
@@ -162,9 +166,11 @@ class HuggingFaceModel(LocalAccessFoundationModel):
         except AttributeError:
             self.max_position_embeddings = 512
 
-        self.tokenizer = AutoTokenizer.from_pretrained(
-            model_name,
-            cache_dir=self.local_path) if tokenizer is None else tokenizer
+        self.tokenizer = (
+            AutoTokenizer.from_pretrained(model_name, cache_dir=self.local_path)
+            if tokenizer is None
+            else tokenizer
+        )
 
     def _get_hidden_states(self, inputs, reduction="mean") -> torch.Tensor:
         """
@@ -276,55 +282,62 @@ class HuggingFaceModel(LocalAccessFoundationModel):
         else:
             _, prefix_length = inputs.input_ids.shape
             input_ids = torch.cat(
-                [inputs.input_ids.to(end_device), candidate_token_ids], dim=-1).to(end_device)
+                [inputs.input_ids.to(end_device), candidate_token_ids], dim=-1
+            ).to(end_device)
             attention_mask = torch.cat(
-                [inputs.attention_mask.to(end_device),
-                 candidate_tokens.attention_mask.to(end_device)],
-                dim=-1)
+                [
+                    inputs.attention_mask.to(end_device),
+                    candidate_tokens.attention_mask.to(end_device),
+                ],
+                dim=-1,
+            )
             if is_llama:
                 logits = self.model(
                     input_ids=input_ids,
                     attention_mask=attention_mask,
-                ).logits[:, prefix_length - 1:-1]
+                ).logits[:, prefix_length - 1 : -1]
             else:
                 position_ids = torch.maximum(
-                    torch.cumsum(attention_mask.cuda().to(torch.long),
-                                 dim=-1) - 1,
+                    torch.cumsum(attention_mask.cuda().to(torch.long), dim=-1) - 1,
                     torch.zeros(
                         1,
                         dtype=torch.long,
-                    ).cuda()[None, None])
+                    ).cuda()[None, None],
+                )
 
                 logits = self.model(
                     input_ids=input_ids,
                     position_ids=position_ids,
                     attention_mask=attention_mask,
-                ).logits[:, prefix_length - 1:-1]
+                ).logits[:, prefix_length - 1 : -1]
 
         masked_log_probs = candidate_tokens.attention_mask.to(
-            logits.get_device()).unsqueeze(
-                -1) * torch.nn.functional.log_softmax(logits, dim=-1)
+            logits.get_device()
+        ).unsqueeze(-1) * torch.nn.functional.log_softmax(logits, dim=-1)
         seq_token_log_probs = torch.gather(
-            masked_log_probs, -1,
-            candidate_token_ids.to(logits.get_device()).unsqueeze(-1))
+            masked_log_probs,
+            -1,
+            candidate_token_ids.to(logits.get_device()).unsqueeze(-1),
+        )
         seq_log_prob = seq_token_log_probs.squeeze(dim=-1).sum(dim=-1)
         seq_log_prob = seq_log_prob.view(len(candidate), -1)
 
         if hidden_state:
             reduction = kwargs.get("reduction", "mean")
-            _hidden_state = self._get_hidden_states(inputs,
-                                                    reduction=reduction)
-            return [{
-                'logit': logit,
-                'candidate': candidate[logit_id],
-                'hidden_state': _hidden_state[logit_id].squeeze(0)
-            } for logit_id, logit in enumerate(torch.flatten(seq_log_prob))]
+            _hidden_state = self._get_hidden_states(inputs, reduction=reduction)
+            return [
+                {
+                    "logit": logit,
+                    "candidate": candidate[logit_id],
+                    "hidden_state": _hidden_state[logit_id].squeeze(0),
+                }
+                for logit_id, logit in enumerate(torch.flatten(seq_log_prob))
+            ]
 
-        return [{
-            'logit': logit,
-            'candidate': candidate[logit_id],
-            'hidden_state': None
-        } for logit_id, logit in enumerate(torch.flatten(seq_log_prob))]
+        return [
+            {"logit": logit, "candidate": candidate[logit_id], "hidden_state": None}
+            for logit_id, logit in enumerate(torch.flatten(seq_log_prob))
+        ]
 
     def _generate_batch(
         self,
@@ -363,21 +376,18 @@ class HuggingFaceModel(LocalAccessFoundationModel):
         else:
             if padding:
                 self.tokenizer.pad_token = self.tokenizer.eos_token
-                inputs = self.tokenizer(batch,
-                                        return_tensors="pt",
-                                        padding=True)
+                inputs = self.tokenizer(batch, return_tensors="pt", padding=True)
             else:
-                inputs = [
-                    self.tokenizer(inst, return_tensors="pt") for inst in batch
-                ]
+                inputs = [self.tokenizer(inst, return_tensors="pt") for inst in batch]
 
-        temprature = kwargs.get('temperature', 0.0)
-        repetition_penalty = kwargs.get('repetition_penalty', None)
-        max_new_tokens = kwargs.get('max_new_tokens', 32)
+        temprature = kwargs.get("temperature", 0.0)
+        repetition_penalty = kwargs.get("repetition_penalty", None)
+        max_new_tokens = kwargs.get("max_new_tokens", 32)
 
         with nullcontext() if allow_grad else torch.no_grad():
-            logger.log(logging.INFO,
-                       f"Inferring {len(batch)} instances with huggingface")
+            logger.log(
+                logging.INFO, f"Inferring {len(batch)} instances with huggingface"
+            )
             if padding:
                 outputs = self.model.generate(
                     inputs.input_ids.to(self.model.device),
@@ -391,29 +401,29 @@ class HuggingFaceModel(LocalAccessFoundationModel):
                     self.model.generate(
                         input.input_ids.to(self.model.device),
                         max_length=max_new_tokens,
-                    ) for input in inputs
+                    )
+                    for input in inputs
                 ]
 
         if padding:
             texts = list(
-                self.tokenizer.batch_decode(outputs.sequences,
-                                            skip_special_tokens=True))
+                self.tokenizer.batch_decode(outputs.sequences, skip_special_tokens=True)
+            )
         else:
             texts = [
-                self.tokenizer.batch_decode(output,
-                                            skip_special_tokens=True)[0]
+                self.tokenizer.batch_decode(output, skip_special_tokens=True)[0]
                 for output in outputs
             ]
 
         if hidden_state:
             reduction = kwargs.get("reduction", "mean")
 
-            _hidden_state = self._get_hidden_states(inputs,
-                                                    reduction=reduction)
+            _hidden_state = self._get_hidden_states(inputs, reduction=reduction)
 
             return [
-                CompletionResponse(prediction=text,
-                                   embedding=_hidden_state[text_id].squeeze(0))
+                CompletionResponse(
+                    prediction=text, embedding=_hidden_state[text_id].squeeze(0)
+                )
                 for text_id, text in enumerate(texts)
             ]
 
@@ -431,12 +441,15 @@ class HuggingFaceModel(LocalAccessFoundationModel):
         :rtype: List[torch.Tensor]
         """
 
-        reduction = kwargs.get('reduction', 'mean')
-        padding = kwargs.get('padding', True)
-        tokenized = kwargs.get('tokenized', False)
+        reduction = kwargs.get("reduction", "mean")
+        padding = kwargs.get("padding", True)
+        tokenized = kwargs.get("tokenized", False)
 
-        inputs = batch_instance if tokenized else self.tokenizer(
-            batch_instance, return_tensors="pt", padding=padding)
+        inputs = (
+            batch_instance
+            if tokenized
+            else self.tokenizer(batch_instance, return_tensors="pt", padding=padding)
+        )
 
         _hidden_state = self._get_hidden_states(inputs, reduction=reduction)
 

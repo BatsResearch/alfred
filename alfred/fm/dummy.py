@@ -3,7 +3,7 @@ from typing import Optional, List, Union, Any
 
 import torch
 
-from alfred.fm.model import LocalAccessFoundationModel
+from .model import LocalAccessFoundationModel
 from .query import Query
 from .response import CompletionResponse, Response
 
@@ -17,6 +17,7 @@ class DummyModel(LocalAccessFoundationModel):
     This model implements a dummy model that returns the
     input as the output for both completion and outputs a raw logit of -1 for scoring.
     """
+
     def __init__(self, model: Optional[str] = None):
         """
         Initialize a `DummyModel` object.
@@ -45,7 +46,8 @@ class DummyModel(LocalAccessFoundationModel):
         """
         return [
             CompletionResponse(
-                content.load()[0] if isinstance(content, Query) else content)
+                content.load()[0] if isinstance(content, Query) else content
+            )
             for content in batch_instance
         ]
 
@@ -87,4 +89,4 @@ class DummyModel(LocalAccessFoundationModel):
         :rtype: List[dict]
         """
 
-        return [{'logits': 1.} for _ in range(len(batch_instance))]
+        return [{"logits": 1.0} for _ in range(len(batch_instance))]

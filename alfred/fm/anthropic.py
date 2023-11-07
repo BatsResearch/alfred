@@ -22,8 +22,12 @@ ANTHROPIC_MODELS = (
 try:
     import anthropic
 except ModuleNotFoundError:
-    logger.warning("Anthropic module not found. Please install it from https://github.com/anthropics/anthropic-sdk-python")
-    raise ModuleNotFoundError("Anthropic module not found. Please install it from https://github.com/anthropics/anthropic-sdk-python")
+    logger.warning(
+        "Anthropic module not found. Please install it from https://github.com/anthropics/anthropic-sdk-python"
+    )
+    raise ModuleNotFoundError(
+        "Anthropic module not found. Please install it from https://github.com/anthropics/anthropic-sdk-python"
+    )
 
 
 class AnthropicModel(APIAccessFoundationModel):
@@ -80,9 +84,9 @@ class AnthropicModel(APIAccessFoundationModel):
             )
             return response["completion"]
 
-    def __init__(self,
-                 model_string: str = "claude-instant-1",
-                 api_key: Optional[str] = None):
+    def __init__(
+        self, model_string: str = "claude-instant-1", api_key: Optional[str] = None
+    ):
         """
         Initialize the Anthropic API wrapper.
 
@@ -95,20 +99,23 @@ class AnthropicModel(APIAccessFoundationModel):
         :param api_key: The API key to be used for the anthropic API.
         :type api_key: Optional[str]
         """
-        assert model_string in ANTHROPIC_MODELS, f"Model {model_string} not found. Please choose from {ANTHROPIC_MODELS}"
+        assert (
+            model_string in ANTHROPIC_MODELS
+        ), f"Model {model_string} not found. Please choose from {ANTHROPIC_MODELS}"
 
         if "ANTHROPIC_API_KEY" in os.environ:
             api_key = os.getenv("ANTHROPIC_API_KEY")
             logger.log(logging.INFO, f"Anthropic model api key found")
         else:
-            logger.log(logging.INFO,
-                       f"Anthropic model api key not found in environment")
+            logger.log(
+                logging.INFO, f"Anthropic model api key not found in environment"
+            )
             if api_key:
                 api_key = api_key
             else:
                 logger.log(
                     logging.INFO,
-                    "Anthropic API key not found in config, Requesting User Input"
+                    "Anthropic API key not found in config, Requesting User Input",
                 )
                 api_key = input("Please enter your anthropic API key: ")
                 logger.log(logging.INFO, f"Anthropic model api key stored")
@@ -137,18 +144,26 @@ class AnthropicModel(APIAccessFoundationModel):
         output = []
         for query in batch_instance:
             output.append(
-                CompletionResponse(prediction=self._anthropic_query(
-                    query, model=self.model_string, **kwargs)))
+                CompletionResponse(
+                    prediction=self._anthropic_query(
+                        query, model=self.model_string, **kwargs
+                    )
+                )
+            )
         return output
 
     def chat(self, **kwargs: Any):
         """
         Launch an interactive chat session with the Anthropic API.
         """
+
         def _feedback(feedback: str, no_newline=False, override=False):
-            if override: print("\r", end="")
-            print(colorize_str("Chat AI: ", "GREEN") + feedback,
-                  end="\n" if not no_newline else "")
+            if override:
+                print("\r", end="")
+            print(
+                colorize_str("Chat AI: ", "GREEN") + feedback,
+                end="\n" if not no_newline else "",
+            )
 
         model = kwargs.get("model", self.model_string)
         c_title = colorize_str("Alfred's Anthropic Chat", "BLUE")
@@ -161,9 +176,7 @@ class AnthropicModel(APIAccessFoundationModel):
         log_save_path = kwargs.get("log_save_path", None)
         manual_chat_sequence = kwargs.get("manual_chat_sequence", None)
 
-        print(
-            f"Welcome to the {c_title} session!\nYou are using the {c_model} model."
-        )
+        print(f"Welcome to the {c_title} session!\nYou are using the {c_model} model.")
         print(f"Type '{c_exit}' or hit {c_ctrlc} to exit the chat session.")
 
         message_log = []
@@ -187,18 +200,20 @@ class AnthropicModel(APIAccessFoundationModel):
                     break
                 message_log.append({"role": "user", "content": query})
                 response = []
-                for resp in self._anthropic_query(query,
-                                               chat=True,
-                                               model=model,
-                                               temperature=temperature,
-                                               max_tokens=max_tokens):
+                for resp in self._anthropic_query(
+                    query,
+                    chat=True,
+                    model=model,
+                    temperature=temperature,
+                    max_tokens=max_tokens,
+                ):
                     if resp["stop_reason"] in ["stop", "stop_sequence"]:
                         break
                     try:
                         txt = resp["completion"]
                         _feedback(txt, no_newline=True, override=True)
                     except AttributeError:
-                        txt = ''
+                        txt = ""
                 response.append(txt)
                 print()
                 response = "".join(response).strip()
