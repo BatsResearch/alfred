@@ -32,7 +32,7 @@ class NPLM(LabelModel):
 
 ### NPLM().label
 
-[Show source in nplm.py:30](../../../alfred/labeling/nplm.py#L30)
+[Show source in nplm.py:33](../../../alfred/labeling/nplm.py#L33)
 
 Label the responses using the label model.
 Similar to standard PWS practice, abstention = 0 (i.e. classes are 1-indexed)

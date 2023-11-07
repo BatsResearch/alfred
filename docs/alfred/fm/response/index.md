@@ -14,7 +14,7 @@ Response
 
 ## deserialize
 
-[Show source in __init__.py:23](../../../../alfred/fm/response/__init__.py#L23)
+[Show source in __init__.py:25](../../../../alfred/fm/response/__init__.py#L25)
 
 Deserializes a JSON string into a Response object.
 

@@ -17,9 +17,10 @@ def get_ip(ipv4=True):
     :return: The Public IP address of the current machine.
     :rtype: str
     """
-    prefix = 'v4' if ipv4 else 'v6'
-    external_ip = urllib.request.urlopen(
-        f"https://{prefix}.ident.me").read().decode('utf8')
+    prefix = "v4" if ipv4 else "v6"
+    external_ip = (
+        urllib.request.urlopen(f"https://{prefix}.ident.me").read().decode("utf8")
+    )
     return external_ip.strip()
 
 
@@ -30,7 +31,7 @@ def port_finder(port: int) -> int:
     while True:
         try:
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            s.bind(('', port))
+            s.bind(("", port))
             s.close()
             return port
         except OSError:
@@ -45,7 +46,7 @@ def tensor_to_bytes(tensor):
         res = buffer.getvalue()
         return res
     except Exception as e:
-        return bytes('error', 'utf-8')
+        return bytes("error", "utf-8")
 
 
 def bytes_to_tensor(bytes):

@@ -28,6 +28,8 @@ A completion query class.
 This is the generic query for any alfred.fm model.
 It mainly contains the prompt, which is the input to the model.
 
+In the case of a multimodal completion query, it may take the form of a tuple (e.g. (PIL.Image, str))
+
 This class represents a query for completion of a given prompt.
 It is initialized with a prompt, which can be a string, NumPy array,
 list, tuple, or PyTorch tensor.
@@ -42,7 +44,7 @@ class CompletionQuery(Query):
 
 ### CompletionQuery().__add__
 
-[Show source in completion_query.py:61](../../../../alfred/fm/query/completion_query.py#L61)
+[Show source in completion_query.py:64](../../../../alfred/fm/query/completion_query.py#L64)
 
 concatenates the two queries
 
@@ -55,7 +57,7 @@ def __add__(self, other):
 
 ### CompletionQuery().__eq__
 
-[Show source in completion_query.py:49](../../../../alfred/fm/query/completion_query.py#L49)
+[Show source in completion_query.py:52](../../../../alfred/fm/query/completion_query.py#L52)
 
 returns whether the two queries are equal
 
@@ -68,7 +70,7 @@ def __eq__(self, other):
 
 ### CompletionQuery().__hash__
 
-[Show source in completion_query.py:53](../../../../alfred/fm/query/completion_query.py#L53)
+[Show source in completion_query.py:56](../../../../alfred/fm/query/completion_query.py#L56)
 
 returns the hash of the query
 
@@ -81,7 +83,7 @@ def __hash__(self):
 
 ### CompletionQuery().__len__
 
-[Show source in completion_query.py:57](../../../../alfred/fm/query/completion_query.py#L57)
+[Show source in completion_query.py:60](../../../../alfred/fm/query/completion_query.py#L60)
 
 returns the length of the prompt
 
@@ -94,7 +96,7 @@ def __len__(self):
 
 ### CompletionQuery().__repr__
 
-[Show source in completion_query.py:41](../../../../alfred/fm/query/completion_query.py#L41)
+[Show source in completion_query.py:44](../../../../alfred/fm/query/completion_query.py#L44)
 
 returns the string representation of the query
 
@@ -107,7 +109,7 @@ def __repr__(self):
 
 ### CompletionQuery().__str__
 
-[Show source in completion_query.py:45](../../../../alfred/fm/query/completion_query.py#L45)
+[Show source in completion_query.py:48](../../../../alfred/fm/query/completion_query.py#L48)
 
 returns the string representation of the query
 
@@ -120,7 +122,7 @@ def __str__(self):
 
 ### CompletionQuery().load
 
-[Show source in completion_query.py:37](../../../../alfred/fm/query/completion_query.py#L37)
+[Show source in completion_query.py:40](../../../../alfred/fm/query/completion_query.py#L40)
 
 loads the prompt, this will be convenient for batching the queries
 
@@ -133,7 +135,7 @@ def load(self):
 
 ### CompletionQuery().prompt
 
-[Show source in completion_query.py:32](../../../../alfred/fm/query/completion_query.py#L32)
+[Show source in completion_query.py:35](../../../../alfred/fm/query/completion_query.py#L35)
 
 returns the raw prompt content
 

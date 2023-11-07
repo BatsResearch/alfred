@@ -29,7 +29,7 @@ class Query(abc.ABC):
 
 ### Query.compose
 
-[Show source in query.py:11](../../../../alfred/fm/query/query.py#L11)
+[Show source in query.py:12](../../../../alfred/fm/query/query.py#L12)
 
 Compose two strings or lists or tensors or numpy arrays
 
@@ -56,7 +56,7 @@ def compose(a, b, strategy=None):
 
 ### Query().load
 
-[Show source in query.py:49](../../../../alfred/fm/query/query.py#L49)
+[Show source in query.py:50](../../../../alfred/fm/query/query.py#L50)
 
 #### Signature
 
@@ -68,7 +68,7 @@ def load(self):
 
 ### Query().serialize
 
-[Show source in query.py:40](../../../../alfred/fm/query/query.py#L40)
+[Show source in query.py:41](../../../../alfred/fm/query/query.py#L41)
 
 Serialize query
 

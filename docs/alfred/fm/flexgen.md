@@ -37,8 +37,4 @@ class FlexGenModel(LocalAccessFoundationModel):
         ...
 ```
 
-#### See also
-
-- [LocalAccessFoundationModel](./model.md#localaccessfoundationmodel)
-
 

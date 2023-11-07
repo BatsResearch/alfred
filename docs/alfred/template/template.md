@@ -49,7 +49,7 @@ class Template(abc.ABC):
 
 ### Template().__call__
 
-[Show source in template.py:82](../../../alfred/template/template.py#L82)
+[Show source in template.py:83](../../../alfred/template/template.py#L83)
 
 returns the template applied to the example, this allows a functional style
 
@@ -62,7 +62,7 @@ def __call__(self, example):
 
 ### Template().apply
 
-[Show source in template.py:67](../../../alfred/template/template.py#L67)
+[Show source in template.py:68](../../../alfred/template/template.py#L68)
 
 returns the template applied to the example
 
@@ -76,7 +76,7 @@ def apply(self, example):
 
 ### Template().deserialize
 
-[Show source in template.py:77](../../../alfred/template/template.py#L77)
+[Show source in template.py:78](../../../alfred/template/template.py#L78)
 
 returns the deserialized version of the template
 
@@ -90,7 +90,7 @@ def deserialize(self, json_str):
 
 ### Template().get_answer_choices_list
 
-[Show source in template.py:62](../../../alfred/template/template.py#L62)
+[Show source in template.py:63](../../../alfred/template/template.py#L63)
 
 returns the answer choices list of the template
 
@@ -104,7 +104,7 @@ def get_answer_choices_list(self, example):
 
 ### Template().id
 
-[Show source in template.py:38](../../../alfred/template/template.py#L38)
+[Show source in template.py:39](../../../alfred/template/template.py#L39)
 
 returns the id of the template
 
@@ -119,7 +119,7 @@ def id(self):
 
 ### Template().keywords
 
-[Show source in template.py:32](../../../alfred/template/template.py#L32)
+[Show source in template.py:33](../../../alfred/template/template.py#L33)
 
 returns the keywords of the template
 
@@ -134,7 +134,7 @@ def keywords(self):
 
 ### Template().metadata
 
-[Show source in template.py:56](../../../alfred/template/template.py#L56)
+[Show source in template.py:57](../../../alfred/template/template.py#L57)
 
 returns the metadata of the template
 
@@ -149,7 +149,7 @@ def metadata(self):
 
 ### Template().name
 
-[Show source in template.py:44](../../../alfred/template/template.py#L44)
+[Show source in template.py:45](../../../alfred/template/template.py#L45)
 
 returns the name of the template
 
@@ -164,7 +164,7 @@ def name(self):
 
 ### Template().reference
 
-[Show source in template.py:50](../../../alfred/template/template.py#L50)
+[Show source in template.py:51](../../../alfred/template/template.py#L51)
 
 returns the reference of the template
 
@@ -179,7 +179,7 @@ def reference(self):
 
 ### Template().serialize
 
-[Show source in template.py:72](../../../alfred/template/template.py#L72)
+[Show source in template.py:73](../../../alfred/template/template.py#L73)
 
 returns the serialized version of the template
 
@@ -193,7 +193,7 @@ def serialize(self):
 
 ### Template().template
 
-[Show source in template.py:20](../../../alfred/template/template.py#L20)
+[Show source in template.py:21](../../../alfred/template/template.py#L21)
 
 returns the template string
 
@@ -208,7 +208,7 @@ def template(self):
 
 ### Template().type
 
-[Show source in template.py:26](../../../alfred/template/template.py#L26)
+[Show source in template.py:27](../../../alfred/template/template.py#L27)
 
 returns the type of the template
 

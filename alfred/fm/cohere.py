@@ -15,6 +15,7 @@ class CohereModel(APIAccessFoundationModel):
 
     This class provides a wrapper for the OpenAI API for generating completions.
     """
+
     def _cohere_query(
         self,
         query_string: str,
@@ -37,11 +38,13 @@ class CohereModel(APIAccessFoundationModel):
         :return: The generated completion
         :rtype: str
         """
-        response = self.cohere_model.generate(prompt=query_string,
-                                              model=model,
-                                              max_tokens=max_tokens,
-                                              temperature=temperature,
-                                              **kwargs)
+        response = self.cohere_model.generate(
+            prompt=query_string,
+            model=model,
+            max_tokens=max_tokens,
+            temperature=temperature,
+            **kwargs,
+        )
         return response.generations[0].text
 
     def _cohere_embedding_query(
@@ -57,7 +60,8 @@ class CohereModel(APIAccessFoundationModel):
         :rtype: str
         """
         return torch.FloatTensor(
-            self.cohere_model.embed(texts=[query_string]).embeddings)
+            self.cohere_model.embed(texts=[query_string]).embeddings
+        )
 
     def __init__(
         self,
@@ -75,15 +79,15 @@ class CohereModel(APIAccessFoundationModel):
         try:
             import cohere
         except ModuleNotFoundError:
-            raise ModuleNotFoundError(
-                "cohere module not found. Please install it.")
+            raise ModuleNotFoundError("cohere module not found. Please install it.")
         if api_key is None:
-            logger.log(logging.WARNING,
-                       "Cohere API key not found, Requesting User Input")
+            logger.log(
+                logging.WARNING, "Cohere API key not found, Requesting User Input"
+            )
             api_key = input("Please enter your Cohere API key: ")
             logger.log(logging.INFO, f"Cohere model api key stored")
         self.cohere_model = cohere.Client(api_key)
-        super().__init__(model_string, {'api_key': api_key})
+        super().__init__(model_string, {"api_key": api_key})
 
     def _generate_batch(
         self,
@@ -106,8 +110,12 @@ class CohereModel(APIAccessFoundationModel):
         output = []
         for query in batch_instance:
             output.append(
-                CompletionResponse(prediction=self._cohere_query(
-                    query, model=self.model_string, **kwargs)))
+                CompletionResponse(
+                    prediction=self._cohere_query(
+                        query, model=self.model_string, **kwargs
+                    )
+                )
+            )
         return output
 
     def _encode_batch(

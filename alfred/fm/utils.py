@@ -44,8 +44,8 @@ def normalize_logits(logits: torch.Tensor) -> torch.Tensor:
 
 
 def reorder_array(
-    arr: Union[np.ndarray, torch.Tensor,
-               list], order: Union[np.ndarray, torch.Tensor, list]
+    arr: Union[np.ndarray, torch.Tensor, list],
+    order: Union[np.ndarray, torch.Tensor, list],
 ) -> Union[np.ndarray, torch.Tensor, list]:
     """
     Recover an array according to a given order index.
@@ -76,37 +76,55 @@ def tokenize(inst, tokenizer, max_length=512):
     :rtype: List[int]
     """
     if tokenizer:
-        token_ids = tokenizer.encode(inst,
-                                     max_length=max_length,
-                                     truncation=True,
-                                     return_tensors='pt')[0]
+        token_ids = tokenizer.encode(
+            inst, max_length=max_length, truncation=True, return_tensors="pt"
+        )[0]
     else:
         token_ids = inst
     return token_ids, len(token_ids)
 
 
-def batch_multimodal(queries: List[RankedQuery], batch_size=64):
+def batch_multimodal(queries: List[Query], mode: str, batch_size=64):
     """
     Batch RankedQueries with Multimodal Payloads
 
     :param queries: A list of multimodal queries
-    :type queries: List[RankedQuery]
+    :type queries: List[Query]
+    :param mode: The mode of the multimodal query ("autoregressive", "contrastive")
+    :type mode: str
     :param batch_size: The batch size
     :type batch_size: int
     :return: A list of batches of multimodal ranked queries
-    :rtype: List[List[RankedQuery]]
+    :rtype: List[List[Query]]
     """
-    candidates = queries[0].candidates
-    batches = []
-    batch = []
-    for query in queries:
-        if len(batch) == batch_size:
+    if mode == "contrastive":
+        candidates = queries[0].candidates
+        batches = []
+        batch = []
+        for query in queries:
+            if len(batch) == batch_size:
+                batches.append((batch, candidates))
+                batch = []
+            batch.append(query.prompt)
+        if len(batch) > 0:
             batches.append((batch, candidates))
-            batch = []
-        batch.append(query.prompt)
-    if len(batch) > 0:
-        batches.append((batch, candidates))
+    elif mode == "autoregressive":
+        batches = []
+        batch = []
+        for query in queries:
+            if len(batch) == batch_size:
+                batches.append(batch)
+                batch = []
+            if isinstance(query, Query):
+                batch.append(query.prompt)
+            else:
+                batch.append(query)
+        if len(batch) > 0:
+            batches.append(batch)
+    else:
+        raise ValueError(f"Unknown multimodal mode {mode}")
     return batches
+
 
 def retry(num_retries=3, wait_time=0.1, exceptions=(Exception,)):
     """
@@ -123,6 +141,7 @@ def retry(num_retries=3, wait_time=0.1, exceptions=(Exception,)):
     :return: The decorated function
     :rtype: Callable
     """
+
     def decorator(func):
         # @wraps(func)
         def wrapper(*args, **kwargs):
@@ -136,22 +155,22 @@ def retry(num_retries=3, wait_time=0.1, exceptions=(Exception,)):
                     else:
                         raise e
                 return result
+
         return wrapper
+
     return decorator
 
 
-
-
 class bcolors:
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKCYAN = '\033[96m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
+    HEADER = "\033[95m"
+    OKBLUE = "\033[94m"
+    OKCYAN = "\033[96m"
+    OKGREEN = "\033[92m"
+    WARNING = "\033[93m"
+    FAIL = "\033[91m"
+    ENDC = "\033[0m"
+    BOLD = "\033[1m"
+    UNDERLINE = "\033[4m"
 
 
 def colorize_str(str, color="CYAN"):
@@ -163,7 +182,7 @@ def colorize_str(str, color="CYAN"):
         "WARNING": bcolors.WARNING,
         "FAIL": bcolors.FAIL,
         "BOLD": bcolors.BOLD,
-        "UNDERLINE": bcolors.UNDERLINE
+        "UNDERLINE": bcolors.UNDERLINE,
     }
     return f"{bcolor_ref[color]}{str}{bcolors.ENDC}"
 
@@ -172,6 +191,7 @@ class EmbeddingCache:
     """
     A simple embedding cache for VLM models
     """
+
     def __init__(self, max_size: int = 32):
         self.max_size = max_size
         self.cache = {}
@@ -228,15 +248,16 @@ class EmbeddingCache:
             self[inp] = embedding
         return torch.stack(
             reorder_array(
-                list(new_embeddings) + cached_embeddings,
-                new_inp_idx + cached_idx))
+                list(new_embeddings) + cached_embeddings, new_inp_idx + cached_idx
+            )
+        )
 
 
 class TokenizedBatch:
     def __init__(self, token_ids, pad_token_id=0):
-        self.input_ids = pad_sequence(token_ids,
-                                      batch_first=True,
-                                      padding_value=pad_token_id).long()
+        self.input_ids = pad_sequence(
+            token_ids, batch_first=True, padding_value=pad_token_id
+        ).long()
         self.attention_mask = (self.input_ids != pad_token_id).long()
 
     def __len__(self):
@@ -248,6 +269,7 @@ class DynamicBatcher:
     Dynamic Batching Utility
     Maximize GPU Utilization by batching queries of similar sizes
     """
+
     def __init__(
         self,
         queries: Union[List[Query], List[str]],
@@ -282,8 +304,7 @@ class DynamicBatcher:
         self.max_token_length = max_token_length
 
         if isinstance(self.queries[0], RankedQuery):
-            # Enforcing Uniform Candidate sizes and order across one set of
-            # RankedQueries
+            # Enforcing Uniform Candidate sizes and order across one set of RankedQueries
             self.candidates = self.queries[0].candidates
             self.candidate_size = len(self.candidates)
             self.ranked = True
@@ -309,12 +330,11 @@ class DynamicBatcher:
         scores = torch.empty(self.candidate_size)
         candidates = []
         for response_idx, response in enumerate(responses):
-            scores[response_idx] = response['logit']
-            candidates.append(response['candidate'])
+            scores[response_idx] = response["logit"]
+            candidates.append(response["candidate"])
 
         logits = {
-            candidate: score.item()
-            for candidate, score in zip(candidates, scores)
+            candidate: score.item() for candidate, score in zip(candidates, scores)
         }
 
         if softmax:
@@ -322,15 +342,14 @@ class DynamicBatcher:
         pred = candidates[int(torch.argmax(scores, dim=0))]
 
         scores = {
-            candidate: score.item()
-            for candidate, score in zip(candidates, scores)
+            candidate: score.item() for candidate, score in zip(candidates, scores)
         }
 
         return RankedResponse(
             prediction=pred,
             scores=scores,
             logits=logits,
-            embeddings=responses[0]['hidden_state'],
+            embeddings=responses[0]["hidden_state"],
         )
 
     def reorder(
@@ -352,8 +371,9 @@ class DynamicBatcher:
         if len(inst) != len(self.len_sorted_idx):
             if offset:
                 _inst = np.empty([len(inst)])
-                for idx, i in enumerate(self.len_sorted_idx[offset:offset +
-                                                            len(inst)]):
+                for idx, i in enumerate(
+                    self.len_sorted_idx[offset : offset + len(inst)]
+                ):
                     _inst[idx] = inst[i]
                 return list(_inst)
             raise ValueError(
@@ -366,8 +386,7 @@ class DynamicBatcher:
 
         if self.ranked:
             reordered_inst = [
-                self.merge_rank_response(reordered_inst[i:i +
-                                                        self.candidate_size])
+                self.merge_rank_response(reordered_inst[i : i + self.candidate_size])
                 for i in range(0, len(reordered_inst), self.candidate_size)
             ]
 
@@ -375,14 +394,15 @@ class DynamicBatcher:
         return list(reordered_inst)
 
     def batch(self) -> List:
-        '''
+        """
         Batch a list of instances into a list of batches.
         If the instances are of different sizes, they will be sorted by size
         and batched accordingly
 
         :return: A list of batches
         :rtype: List[List[Instance]]
-        '''
+        """
+
         def _process_batch(batch):
             if self.tokenizer:
                 if isinstance(batch[0], tuple):
@@ -392,26 +412,26 @@ class DynamicBatcher:
                     return TokenizedBatch(batch)
             return batch
 
-        logger.info(
-            f"Batching queries with tokenizer? {self.tokenizer is not None}")
+        logger.info(f"Batching queries with tokenizer? {self.tokenizer is not None}")
 
         insts = []
         candidates = []
         inst_len = []
         for query in self.queries:
             if isinstance(query, str):
-                inst, ilen = tokenize(query, self.tokenizer,
-                                      self.max_token_length)
+                inst, ilen = tokenize(query, self.tokenizer, self.max_token_length)
                 insts.append(inst)
                 inst_len.append(ilen)
             elif isinstance(query, CompletionQuery):
-                inst, ilen = tokenize(query.load()[0], self.tokenizer,
-                                      self.max_token_length)
+                inst, ilen = tokenize(
+                    query.load()[0], self.tokenizer, self.max_token_length
+                )
                 insts.append(inst)
                 inst_len.append(ilen)
             elif isinstance(query, RankedQuery):
-                inst, ilen = tokenize(query.prompt, self.tokenizer,
-                                      self.max_token_length)
+                inst, ilen = tokenize(
+                    query.prompt, self.tokenizer, self.max_token_length
+                )
                 insts += [inst] * self.candidate_size
                 inst_len += [ilen] * self.candidate_size
                 candidates += self.candidates
@@ -423,7 +443,8 @@ class DynamicBatcher:
         if ranked:
             self.limit_size /= self.candidate_size
         inst_len_sorted, inst_len_sorted_idx = torch.sort(
-            torch.tensor(inst_len), descending=True)
+            torch.tensor(inst_len), descending=True
+        )
 
         self.len_sorted_idx = inst_len_sorted_idx
 
@@ -434,8 +455,7 @@ class DynamicBatcher:
         batches = []
         for sorted_idx, index in enumerate(inst_len_sorted_idx):
             inst_len = inst_len_sorted[sorted_idx]
-            curr_inst = (insts[index],
-                         candidates[index]) if ranked else insts[index]
+            curr_inst = (insts[index], candidates[index]) if ranked else insts[index]
             curr_max = max(curr_max, inst_len)
             new_sz = curr_max * curr_max * curr_batch_sz
             if new_sz >= self.limit_size or curr_batch_sz >= self.max_batch_size:

@@ -5,7 +5,7 @@ from typing import Optional, Union, Callable
 import paramiko
 import os
 
-from alfred.client.ssh.utils import port_finder, forward_tunnel
+from .utils import port_finder, forward_tunnel
 
 logger = logging.getLogger(__name__)
 
@@ -18,13 +18,14 @@ class SSHTunnel:
     e.g. model on a gpu node of a cluster can use login node as jump
          This will be equivalent to SSH -L commands
     """
+
     @staticmethod
     def adaptive_handler(title, instructions, prompt_list):
         """Authentication handler for paramiko's interactive authentication"""
         print(title)
         print(instructions)
         user_input = []
-        for (prompt, echo) in prompt_list:
+        for prompt, echo in prompt_list:
             if echo:
                 res = input(prompt)
             else:
@@ -40,7 +41,7 @@ class SSHTunnel:
         username: Optional[str] = None,
         remote_node_address: Optional[str] = None,
         remote_bind_port: Optional[Union[int, str]] = 443,
-        key_file: str="~/.ssh/id_rsa",
+        key_file: str = "~/.ssh/id_rsa",
         handler: Callable = None,
     ):
         """
@@ -75,7 +76,11 @@ class SSHTunnel:
         self.remote_bind_port = remote_bind_port
 
         # if key file exist the nuse key_file else None
-        self.key_file = paramiko.RSAKey.from_private_key_file(os.path.expanduser(key_file)) if os.path.isfile(os.path.expanduser(key_file)) else None
+        self.key_file = (
+            paramiko.RSAKey.from_private_key_file(os.path.expanduser(key_file))
+            if os.path.isfile(os.path.expanduser(key_file))
+            else None
+        )
 
         self.handler = handler or self.adaptive_handler
 
@@ -104,7 +109,7 @@ class SSHTunnel:
                 self.remote_host,
                 username=self.username,
                 pkey=self.key_file,
-                look_for_keys=False
+                look_for_keys=False,
             )
         except paramiko.ssh_exception.SSHException:
             pass
@@ -112,7 +117,8 @@ class SSHTunnel:
         if not self.client.get_transport().is_authenticated():
             try:
                 self.client.get_transport().auth_interactive(
-                    username=self.username, handler=self.handler)
+                    username=self.username, handler=self.handler
+                )
             except paramiko.ssh_exception.AuthenticationException:
                 logger.error("Wrong Password, Please restart the Tunnel")
                 raise paramiko.ssh_exception.AuthenticationException
@@ -123,16 +129,19 @@ class SSHTunnel:
         logger.debug(f"Underlying port: {port}")
 
         if not self.remote_node_address:
-            self.remote_bind_port = port_finder(self.remote_bind_port,
-                                                self.remote_host)
+            self.remote_bind_port = port_finder(self.remote_bind_port, self.remote_host)
             self.remote_node_address = "127.0.0.1"
         else:
             self.remote_bind_port = self.remote_port
 
         logger.info(f"Remote bind port: {self.remote_bind_port}")
 
-        forward_tunnel(int(self.local_port), self.remote_node_address,
-                       int(self.remote_port), self.client.get_transport())
+        forward_tunnel(
+            int(self.local_port),
+            self.remote_node_address,
+            int(self.remote_port),
+            self.client.get_transport(),
+        )
         logger.info(f"Forward SSH Tunnel started on port {self.local_port}")
 
         logger.info(

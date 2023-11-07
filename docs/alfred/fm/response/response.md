@@ -32,7 +32,7 @@ class Response(OrderedDict):
 
 ### Response().__repr__
 
-[Show source in response.py:43](../../../../alfred/fm/response/response.py#L43)
+[Show source in response.py:44](../../../../alfred/fm/response/response.py#L44)
 
 Get a string representation of the response object.
 
@@ -50,7 +50,7 @@ def __repr__(self):
 
 ### Response().__str__
 
-[Show source in response.py:30](../../../../alfred/fm/response/response.py#L30)
+[Show source in response.py:31](../../../../alfred/fm/response/response.py#L31)
 
 Get a string representation of the response.
 
@@ -68,7 +68,7 @@ def __str__(self):
 
 ### Response().prediction
 
-[Show source in response.py:12](../../../../alfred/fm/response/response.py#L12)
+[Show source in response.py:13](../../../../alfred/fm/response/response.py#L13)
 
 Get the prediction made by the model.
 
@@ -86,7 +86,7 @@ def prediction(self):
 
 ### Response().serialize
 
-[Show source in response.py:21](../../../../alfred/fm/response/response.py#L21)
+[Show source in response.py:22](../../../../alfred/fm/response/response.py#L22)
 
 Serialize the response to a JSON string.
 

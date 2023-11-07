@@ -46,6 +46,7 @@ class StringTemplate(Template):
         reference: reference
         metadata: metadata
     """
+
     def __init__(
         self,
         template: str,
@@ -112,12 +113,12 @@ class StringTemplate(Template):
         :param promptsource_template: a promptsource template
         :type promptsource_template: Dict
         """
-        self._template = promptsource_template['template']
-        self._id = promptsource_template['id']
-        self._name = promptsource_template['name']
-        self._reference = promptsource_template['reference']
-        self._metadata = promptsource_template['metadata']
-        self._answer_choices = promptsource_template['answer_choices']
+        self._template = promptsource_template["template"]
+        self._id = promptsource_template["id"]
+        self._name = promptsource_template["name"]
+        self._reference = promptsource_template["reference"]
+        self._metadata = promptsource_template["metadata"]
+        self._answer_choices = promptsource_template["answer_choices"]
 
     def apply(self, example: Dict, **kawrgs) -> Query:
         """
@@ -130,8 +131,8 @@ class StringTemplate(Template):
         :return: query object (either CompletionQuery or RankedQuery depending on the template type)
         :rtype: Query
         """
-        if 'key_translator' in kawrgs:
-            key_translator = kawrgs['key_translator']
+        if "key_translator" in kawrgs:
+            key_translator = kawrgs["key_translator"]
         else:
             key_translator = None
 
@@ -156,8 +157,8 @@ class StringTemplate(Template):
                     else:
                         k = key
                     prompt[k] = value
-                elif isinstance(key, str) and ':' in key:
-                    start, end = key.split(':')
+                elif isinstance(key, str) and ":" in key:
+                    start, end = key.split(":")
                     if len(start) == 0:
                         start = 0
                     if len(end) == 0:
@@ -166,7 +167,7 @@ class StringTemplate(Template):
                     assert r == len(
                         value
                     ), f"Length of the value {len(value)} does not match the range {r}"
-                    prompt[int(start):int(end)] = value
+                    prompt[int(start) : int(end)] = value
                 else:
                     logger.error(
                         f"Key {key} is not an integer. Cannot replace with list."
@@ -176,8 +177,7 @@ class StringTemplate(Template):
                     )
 
         if self._answer_choices:
-            return RankedQuery(prompt=prompt,
-                               candidates=self._answer_candidates)
+            return RankedQuery(prompt=prompt, candidates=self._answer_candidates)
         else:
             return CompletionQuery(prompt)
 
@@ -249,14 +249,16 @@ class StringTemplate(Template):
         :return: json string of dictionary
         :rtype: str
         """
-        return json.dumps({
-            "id": self._id,
-            "name": self._name,
-            "reference": self._reference,
-            "template": self._template,
-            "metadata": self._metadata,
-            "answer_choices": self._answer_choices,
-        })
+        return json.dumps(
+            {
+                "id": self._id,
+                "name": self._name,
+                "reference": self._reference,
+                "template": self._template,
+                "metadata": self._metadata,
+                "answer_choices": self._answer_choices,
+            }
+        )
 
     def deserialize(self, json_str: str) -> Template:
         """
@@ -268,12 +270,12 @@ class StringTemplate(Template):
         """
         json_str = json.loads(json_str)
         self.__init__(
-            json_str['id'],
-            json_str['name'],
-            json_str['reference'],
-            json_str['template'],
-            json_str['metadata'],
-            json_str['answer_choices'],
+            json_str["id"],
+            json_str["name"],
+            json_str["reference"],
+            json_str["template"],
+            json_str["metadata"],
+            json_str["answer_choices"],
         )
         return self
 

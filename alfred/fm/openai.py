@@ -15,8 +15,12 @@ logger = logging.getLogger(__name__)
 try:
     import openai
 except ModuleNotFoundError:
-    logger.warning("OpenAI module not found. Please install it to use the OpenAI model.")
-    raise ModuleNotFoundError("OpenAI module not found. Please install it to use the OpenAI model.")
+    logger.warning(
+        "OpenAI module not found. Please install it to use the OpenAI model."
+    )
+    raise ModuleNotFoundError(
+        "OpenAI module not found. Please install it to use the OpenAI model."
+    )
 
 from openai.error import (
     AuthenticationError,
@@ -47,14 +51,19 @@ OPENAI_MODELS = (
     "code-davinci-002",
 )
 
+
 class OpenAIModel(APIAccessFoundationModel):
     """
     A wrapper for the OpenAI API.
 
     This class provides a wrapper for the OpenAI API for generating completions.
     """
+
     @staticmethod
-    @retry(num_retries=3, wait_time=0.1, exceptions=(
+    @retry(
+        num_retries=3,
+        wait_time=0.1,
+        exceptions=(
             AuthenticationError,
             APIError,
             Timeout,
@@ -62,7 +71,8 @@ class OpenAIModel(APIAccessFoundationModel):
             InvalidRequestError,
             APIConnectionError,
             ServiceUnavailableError,
-    ))
+        ),
+    )
     def _openai_query(
         query: Union[str, List],
         temperature: float = 0.0,
@@ -110,14 +120,18 @@ class OpenAIModel(APIAccessFoundationModel):
             return response["choices"][0]["text"]
 
     @staticmethod
-    @retry(num_retries=3, wait_time=0.1, exceptions=(
+    @retry(
+        num_retries=3,
+        wait_time=0.1,
+        exceptions=(
             APIError,
             Timeout,
             RateLimitError,
             InvalidRequestError,
             APIConnectionError,
             ServiceUnavailableError,
-    ))
+        ),
+    )
     def _openai_embedding_query(
         query_string: str,
         model: str = "text-davinci-002",
@@ -137,12 +151,14 @@ class OpenAIModel(APIAccessFoundationModel):
         if openai_api_key is not None:
             openai.api_key = openai_api_key
         return torch.tensor(
-            openai.Embedding.create(input=[query_string.replace("\n", " ")],
-                                    model=model)['data'][0]['embedding'])
+            openai.Embedding.create(
+                input=[query_string.replace("\n", " ")], model=model
+            )["data"][0]["embedding"]
+        )
 
-    def __init__(self,
-                 model_string: str = "text-davinci-002",
-                 api_key: Optional[str] = None):
+    def __init__(
+        self, model_string: str = "text-davinci-002", api_key: Optional[str] = None
+    ):
         """
         Initialize the OpenAI API wrapper.
 
@@ -155,25 +171,25 @@ class OpenAIModel(APIAccessFoundationModel):
         :param api_key: The API key to be used for the OpenAI API.
         :type api_key: Optional[str]
         """
-        assert model_string in OPENAI_MODELS, f"Model {model_string} not found. Please choose from {OPENAI_MODELS}"
+        assert (
+            model_string in OPENAI_MODELS
+        ), f"Model {model_string} not found. Please choose from {OPENAI_MODELS}"
 
         if "OPENAI_API_KEY" in os.environ:
             openai.api_key = os.getenv("OPENAI_API_KEY")
             logger.log(logging.INFO, f"OpenAI model api key found")
         else:
-            logger.log(logging.INFO,
-                       f"OpenAI model api key not found in environment")
+            logger.log(logging.INFO, f"OpenAI model api key not found in environment")
             if api_key:
                 openai.api_key = api_key
             else:
                 logger.log(
                     logging.INFO,
-                    "OpenAI API key not found in config, Requesting User Input"
+                    "OpenAI API key not found in config, Requesting User Input",
                 )
                 openai.api_key = input("Please enter your OpenAI API key: ")
                 logger.log(logging.INFO, f"OpenAI model api key stored")
         super().__init__(model_string, {"api_key": openai.api_key})
-
 
     def _generate_batch(
         self,
@@ -196,8 +212,12 @@ class OpenAIModel(APIAccessFoundationModel):
         output = []
         for query in batch_instance:
             output.append(
-                CompletionResponse(prediction=self._openai_query(
-                    query, model=self.model_string, **kwargs)))
+                CompletionResponse(
+                    prediction=self._openai_query(
+                        query, model=self.model_string, **kwargs
+                    )
+                )
+            )
         return output
 
     def _encode_batch(
@@ -221,18 +241,20 @@ class OpenAIModel(APIAccessFoundationModel):
         output = []
         for query in batch_instance:
             output.append(
-                self._openai_embedding_query(query,
-                                             model=self.model_string,
-                                             **kwargs))
+                self._openai_embedding_query(query, model=self.model_string, **kwargs)
+            )
         return output
 
     def chat(self, **kwargs: Any):
         """
         Launch an interactive chat session with the OpenAI API.
         """
+
         def _feedback(feedback: str, no_newline=False):
-            print(colorize_str("Chat AI: ", "GREEN") + feedback,
-                  end="\n" if not no_newline else "")
+            print(
+                colorize_str("Chat AI: ", "GREEN") + feedback,
+                end="\n" if not no_newline else "",
+            )
 
         model = kwargs.get("model", self.model_string)
         c_title = colorize_str("Alfred's OpenAI Chat", "BLUE")
@@ -245,17 +267,15 @@ class OpenAIModel(APIAccessFoundationModel):
         log_save_path = kwargs.get("log_save_path", None)
         manual_chat_sequence = kwargs.get("manual_chat_sequence", None)
 
-        print(
-            f"Welcome to the {c_title} session!\nYou are using the {c_model} model."
-        )
+        print(f"Welcome to the {c_title} session!\nYou are using the {c_model} model.")
         print(f"Type '{c_exit}' or hit {c_ctrlc} to exit the chat session.")
 
-        message_log = [{
-            "role":
-            "system",
-            "content":
-            "You are a intelligent assistant. Please answer the user with professional language."
-        }]
+        message_log = [
+            {
+                "role": "system",
+                "content": "You are a intelligent assistant. Please answer the user with professional language.",
+            }
+        ]
 
         print()
         print("======== Chat Begin ========")
@@ -277,18 +297,20 @@ class OpenAIModel(APIAccessFoundationModel):
                 message_log.append({"role": "user", "content": query})
                 _feedback("", no_newline=True)
                 response = []
-                for resp in self._openai_query(message_log,
-                                               chat=True,
-                                               model=model,
-                                               temperature=temperature,
-                                               max_tokens=max_tokens):
+                for resp in self._openai_query(
+                    message_log,
+                    chat=True,
+                    model=model,
+                    temperature=temperature,
+                    max_tokens=max_tokens,
+                ):
                     if resp.choices[0].finish_reason == "stop":
                         break
                     try:
                         txt = resp.choices[0].delta.content
                         print(txt, end="")
                     except AttributeError:
-                        txt = ''
+                        txt = ""
                     response.append(txt)
                 print()
                 response = "".join(response).strip()

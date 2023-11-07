@@ -27,8 +27,4 @@ class DummyModel(LocalAccessFoundationModel):
         ...
 ```
 
-#### See also
-
-- [LocalAccessFoundationModel](./model.md#localaccessfoundationmodel)
-
 

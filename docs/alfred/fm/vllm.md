@@ -28,8 +28,4 @@ class vLLMModel(LocalAccessFoundationModel):
         ...
 ```
 
-#### See also
-
-- [LocalAccessFoundationModel](./model.md#localaccessfoundationmodel)
-
 

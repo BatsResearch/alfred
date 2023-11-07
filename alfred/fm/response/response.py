@@ -9,6 +9,7 @@ class Response(OrderedDict):
     Inherit from OrderedDict.
     Inherited by CompletionResponse and RankedResponse.
     """
+
     @abc.abstractmethod
     def prediction(self):
         """
@@ -37,7 +38,7 @@ class Response(OrderedDict):
         ret = f"{self.__class__.__name__}("
         for k, v in self.items():
             ret += f"{str(k)}={str(v)}, "
-        ret += ')'
+        ret += ")"
         return ret
 
     def __repr__(self):

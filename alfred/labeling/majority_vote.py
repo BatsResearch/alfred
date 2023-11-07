@@ -8,6 +8,7 @@ class MajorityVote(LabelModel):
     """
     LabelModel class to perform majority vote on the responses
     """
+
     def __init__(self):
         """Constructor"""
         super().__init__()

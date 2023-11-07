@@ -7,13 +7,14 @@ from .response import Response
 
 
 class CompletionResponse(Response):
-    '''
+    """
     A response class for language model completions.
 
     This class represents a completion response from a language model,
     which includes the predicted completion string, a score indicating
     the confidence of the prediction, and an optional embedding output.
-    '''
+    """
+
     def __init__(
         self,
         prediction: str,
@@ -31,9 +32,9 @@ class CompletionResponse(Response):
         :type embedding: Union[torch.Tensor, np.ndarray]
         """
         super(CompletionResponse, self).__init__()
-        self['prediction'] = str(prediction)
-        self['score'] = float(score) if score else None
-        self['embedding'] = embedding
+        self["prediction"] = str(prediction)
+        self["score"] = float(score) if score else None
+        self["embedding"] = embedding
 
     @property
     def prediction(self) -> str:
@@ -43,7 +44,7 @@ class CompletionResponse(Response):
         :return: The predicted completion string.
         :rtype: str
         """
-        return self['prediction']
+        return self["prediction"]
 
     @property
     def score(self) -> Dict:
@@ -53,7 +54,7 @@ class CompletionResponse(Response):
         :return: The score of the completion prediction.
         :rtype: float
         """
-        return self['score']
+        return self["score"]
 
     @property
     def embedding(self) -> Union[torch.Tensor, np.ndarray]:
@@ -63,7 +64,7 @@ class CompletionResponse(Response):
         :return: The embedding of the completion prediction.
         :rtype: Union[torch.Tensor, np.ndarray]
         """
-        return self['embedding']
+        return self["embedding"]
 
     def __eq__(self, other):
         """
@@ -80,11 +81,12 @@ class CompletionResponse(Response):
         """
         if isinstance(other, CompletionResponse):
             consistent_flag = self.prediction == other.prediction
-            consistent_flag &= (self.score
-                                == other.score) or (self.score is None
-                                                    and other.score is None)
-            consistent_flag &= (self['embedding'] == other['embedding']) or (
-                self['embedding'] is None and other['embedding'] is None)
+            consistent_flag &= (self.score == other.score) or (
+                self.score is None and other.score is None
+            )
+            consistent_flag &= (self["embedding"] == other["embedding"]) or (
+                self["embedding"] is None and other["embedding"] is None
+            )
             return consistent_flag
         else:
             return False

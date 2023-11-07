@@ -57,7 +57,7 @@ class SQLiteCache(Cache):
 
 ### SQLiteCache().fetch_data
 
-[Show source in sqlite.py:97](../../../../alfred/client/cache/sqlite.py#L97)
+[Show source in sqlite.py:98](../../../../alfred/client/cache/sqlite.py#L98)
 
 Wrapper function for fetching data with specific sql suffix and args
 
@@ -82,7 +82,7 @@ def fetch_data(self, sql_suffix: str, *args: Any) -> List:
 
 ### SQLiteCache().load
 
-[Show source in sqlite.py:232](../../../../alfred/client/cache/sqlite.py#L232)
+[Show source in sqlite.py:233](../../../../alfred/client/cache/sqlite.py#L233)
 
 Load the cache from a file
 
@@ -125,7 +125,7 @@ def read(self, prompt: str, metadata: Optional[str] = None) -> List:
 
 ### SQLiteCache().read_batch
 
-[Show source in sqlite.py:186](../../../../alfred/client/cache/sqlite.py#L186)
+[Show source in sqlite.py:189](../../../../alfred/client/cache/sqlite.py#L189)
 
 Read a batch of values from the cache by prompt
 
@@ -177,7 +177,7 @@ def read_by_metadata(self, metadata: str) -> List:
 
 ### SQLiteCache().read_by_prompt
 
-[Show source in sqlite.py:116](../../../../alfred/client/cache/sqlite.py#L116)
+[Show source in sqlite.py:117](../../../../alfred/client/cache/sqlite.py#L117)
 
 Read records from the cache by prompt
 
@@ -200,7 +200,7 @@ def read_by_prompt(self, prompt: str) -> List:
 
 ### SQLiteCache().read_by_prompt_and_metadata
 
-[Show source in sqlite.py:127](../../../../alfred/client/cache/sqlite.py#L127)
+[Show source in sqlite.py:128](../../../../alfred/client/cache/sqlite.py#L128)
 
 Read records from the cache by prompt and metadata
 
@@ -250,7 +250,7 @@ def read_by_prompts_and_metadata(self, prompts: List[str], metadata: str) -> Lis
 
 ### SQLiteCache().save
 
-[Show source in sqlite.py:223](../../../../alfred/client/cache/sqlite.py#L223)
+[Show source in sqlite.py:224](../../../../alfred/client/cache/sqlite.py#L224)
 
 Save the cache to a file
 
@@ -268,7 +268,7 @@ def save(self, path: Optional[str] = None):
 
 ### SQLiteCache().to_pandas
 
-[Show source in sqlite.py:214](../../../../alfred/client/cache/sqlite.py#L214)
+[Show source in sqlite.py:215](../../../../alfred/client/cache/sqlite.py#L215)
 
 Return the cache db as a pandas dataframe
 
@@ -286,7 +286,7 @@ def to_pandas(self) -> pd.DataFrame:
 
 ### SQLiteCache().write
 
-[Show source in sqlite.py:55](../../../../alfred/client/cache/sqlite.py#L55)
+[Show source in sqlite.py:58](../../../../alfred/client/cache/sqlite.py#L58)
 
 Write a prompt, response, and metadata record to the cache
 
@@ -308,7 +308,7 @@ def write(self, prompt: str, response: str, metadata: Optional[str] = None):
 
 ### SQLiteCache().write_batch
 
-[Show source in sqlite.py:74](../../../../alfred/client/cache/sqlite.py#L74)
+[Show source in sqlite.py:75](../../../../alfred/client/cache/sqlite.py#L75)
 
 Write a batch of serialized prompt, serialized response, and metadata records to the cache
 

@@ -46,7 +46,7 @@ class Cache(abc.ABC):
 
 ### Cache().cached_query
 
-[Show source in cache.py:210](../../../../alfred/client/cache/cache.py#L210)
+[Show source in cache.py:213](../../../../alfred/client/cache/cache.py#L213)
 
 Decorator function for model queries, fetch from cache db if exist else write into cache_db
 
@@ -69,7 +69,7 @@ def cached_query(self, model_run: Callable) -> Callable:
 
 ### Cache().load
 
-[Show source in cache.py:188](../../../../alfred/client/cache/cache.py#L188)
+[Show source in cache.py:189](../../../../alfred/client/cache/cache.py#L189)
 
 Load the cache from disk to the cache object
 
@@ -88,7 +88,7 @@ def load(self, path: str):
 
 ### Cache().read
 
-[Show source in cache.py:48](../../../../alfred/client/cache/cache.py#L48)
+[Show source in cache.py:49](../../../../alfred/client/cache/cache.py#L49)
 
 Read from cache by prompt and metadata
 
@@ -114,7 +114,7 @@ def read(self, prompt: str, metadata: Optional[str] = None) -> list:
 
 ### Cache().read_batch
 
-[Show source in cache.py:63](../../../../alfred/client/cache/cache.py#L63)
+[Show source in cache.py:65](../../../../alfred/client/cache/cache.py#L65)
 
 Read a value from the cache by list of serialized prompts and metadata
 
@@ -164,7 +164,7 @@ def read_by_metadata(self, metadata: str) -> List:
 
 ### Cache().read_by_prompt
 
-[Show source in cache.py:116](../../../../alfred/client/cache/cache.py#L116)
+[Show source in cache.py:117](../../../../alfred/client/cache/cache.py#L117)
 
 Read the record from the cache via serialized prompt
 
@@ -188,7 +188,7 @@ def read_by_prompt(self, prompt: str) -> List:
 
 ### Cache().read_by_prompt_and_metadata
 
-[Show source in cache.py:130](../../../../alfred/client/cache/cache.py#L130)
+[Show source in cache.py:131](../../../../alfred/client/cache/cache.py#L131)
 
 Read the record from the cache via serialized prompt and metadata string
 
@@ -214,7 +214,7 @@ def read_by_prompt_and_metadata(self, prompt: str, metadata: str) -> List:
 
 ### Cache().read_by_prompts_and_metadata
 
-[Show source in cache.py:146](../../../../alfred/client/cache/cache.py#L146)
+[Show source in cache.py:147](../../../../alfred/client/cache/cache.py#L147)
 
 Read the record from the cache via serialized prompts and metadata string
 
@@ -259,7 +259,7 @@ def save(self, path: str):
 
 ### Cache().to_pandas
 
-[Show source in cache.py:199](../../../../alfred/client/cache/cache.py#L199)
+[Show source in cache.py:201](../../../../alfred/client/cache/cache.py#L201)
 
 Return the cache db as a pandas dataframe
 
@@ -278,7 +278,7 @@ def to_pandas(self) -> pd.DataFrame:
 
 ### Cache().write
 
-[Show source in cache.py:80](../../../../alfred/client/cache/cache.py#L80)
+[Show source in cache.py:83](../../../../alfred/client/cache/cache.py#L83)
 
 Write a value to the cache by serialized prompt, serialized response and metadata
 
@@ -301,7 +301,7 @@ def write(self, prompt: str, response: str, metadata: Optional[str] = None):
 
 ### Cache().write_batch
 
-[Show source in cache.py:98](../../../../alfred/client/cache/cache.py#L98)
+[Show source in cache.py:99](../../../../alfred/client/cache/cache.py#L99)
 
 Write a value to the cache by serialized prompts, serialized responses and metadata in batch
 

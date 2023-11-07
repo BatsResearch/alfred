@@ -23,6 +23,7 @@ class SQLiteCache(Cache):
 
     # TODO: Make response (de)serializable such that it fits in to the entries
     """
+
     def __init__(
         self,
         session_name: str = "prompt-session-0",
@@ -38,7 +39,7 @@ class SQLiteCache(Cache):
         """
 
         self.cache_location = cache_location or f".cache/{session_name}.sqlite3"
-        self.cache_db = sqlite3.connect(':memory:', check_same_thread=False)
+        self.cache_db = sqlite3.connect(":memory:", check_same_thread=False)
 
         # check if cache exists
         if os.path.exists(self.cache_location):
@@ -47,15 +48,14 @@ class SQLiteCache(Cache):
             con.close()
         else:
             # create cache
-            self.cache_db.execute("CREATE TABLE prompt_cache (prompt text," +
-                                  " metadata text, response text, " +
-                                  " PRIMARY KEY (prompt, metadata));")
+            self.cache_db.execute(
+                "CREATE TABLE prompt_cache (prompt text,"
+                + " metadata text, response text, "
+                + " PRIMARY KEY (prompt, metadata));"
+            )
             self.cache_db.commit()
 
-    def write(self,
-              prompt: str,
-              response: str,
-              metadata: Optional[str] = None):
+    def write(self, prompt: str, response: str, metadata: Optional[str] = None):
         """
         Write a prompt, response, and metadata record to the cache
 
@@ -67,14 +67,14 @@ class SQLiteCache(Cache):
         :type metadata: str
         """
         self.cache_db.execute(
-            'INSERT INTO prompt_cache (prompt, metadata, response) VALUES (?, ?, ?)',
-            (prompt, metadata, response))
+            "INSERT INTO prompt_cache (prompt, metadata, response) VALUES (?, ?, ?)",
+            (prompt, metadata, response),
+        )
         self.cache_db.commit()
 
-    def write_batch(self,
-                    prompts: List[str],
-                    responses: List[str],
-                    metadata: Optional[str] = None):
+    def write_batch(
+        self, prompts: List[str], responses: List[str], metadata: Optional[str] = None
+    ):
         """
         Write a batch of serialized prompt, serialized response, and metadata records to the cache
 
@@ -86,12 +86,13 @@ class SQLiteCache(Cache):
         :type metadata: str
         """
         if metadata is None:
-            metadata = ['{}'] * len(prompts)
+            metadata = ["{}"] * len(prompts)
         else:
             metadata = [metadata] * len(prompts)
         self.cache_db.executemany(
-            'INSERT INTO prompt_cache (prompt, metadata, response) VALUES (?, ?, ?)',
-            zip(prompts, metadata, responses))
+            "INSERT INTO prompt_cache (prompt, metadata, response) VALUES (?, ?, ?)",
+            zip(prompts, metadata, responses),
+        )
         self.cache_db.commit()
 
     def fetch_data(self, sql_suffix: str, *args: Any) -> List:
@@ -135,11 +136,9 @@ class SQLiteCache(Cache):
         :return: The records as a list
         :rtype: List
         """
-        return self.fetch_data(f"WHERE prompt = ? AND metadata = ?",
-                               (prompt, metadata))
+        return self.fetch_data(f"WHERE prompt = ? AND metadata = ?", (prompt, metadata))
 
-    def read_by_prompts_and_metadata(self, prompts: List[str],
-                                     metadata: str) -> List:
+    def read_by_prompts_and_metadata(self, prompts: List[str], metadata: str) -> List:
         """
         Read records from the cache by list of prompts and metadata
 
@@ -152,7 +151,8 @@ class SQLiteCache(Cache):
         """
         return self.fetch_data(
             f"WHERE prompt IN ({','.join('?' * len(prompts))}) AND metadata = ?",
-            (*prompts, metadata))
+            (*prompts, metadata),
+        )
 
     def read_by_metadata(self, metadata: str) -> List:
         """
@@ -176,16 +176,17 @@ class SQLiteCache(Cache):
         :return: The records as a list
         :rtype: List
         """
-        response = self.read_by_prompt_and_metadata(
-            prompt, metadata) if metadata else self.read_by_prompt(prompt)
+        response = (
+            self.read_by_prompt_and_metadata(prompt, metadata)
+            if metadata
+            else self.read_by_prompt(prompt)
+        )
         try:
             return response[0][2]
         except IndexError:
             return None
 
-    def read_batch(self,
-                   prompts: List[str],
-                   metadata: Optional[str] = None) -> List:
+    def read_batch(self, prompts: List[str], metadata: Optional[str] = None) -> List:
         """
         Read a batch of values from the cache by prompt
 
@@ -236,7 +237,7 @@ class SQLiteCache(Cache):
         :param path: (optional) The path to load the cache from. If not provided, will load from the path provided at initialization
         :type path: str
         """
-        self.cache_db = sqlite3.connect(':memory:', check_same_thread=False)
+        self.cache_db = sqlite3.connect(":memory:", check_same_thread=False)
         if os.path.exists(self.cache_location):
             con = sqlite3.connect(self.cache_location)
             con.backup(self.cache_db)

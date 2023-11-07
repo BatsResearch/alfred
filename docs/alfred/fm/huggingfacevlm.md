@@ -31,8 +31,4 @@ class HuggingFaceCLIPModel(LocalAccessFoundationModel):
         ...
 ```
 
-#### See also
-
-- [LocalAccessFoundationModel](./model.md#localaccessfoundationmodel)
-
 

@@ -7,6 +7,7 @@ class FlyingSquid(LabelModel):
     """
     LabelModel class to perform FlyingSquid-based label modeling on the responses
     """
+
     def __init__(self, num_lfs):
         """Constructor wrapper for FlyingSquid"""
         try:

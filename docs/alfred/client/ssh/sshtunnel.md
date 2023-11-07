@@ -44,7 +44,7 @@ class SSHTunnel:
 
 ### SSHTunnel.adaptive_handler
 
-[Show source in sshtunnel.py:21](../../../../alfred/client/ssh/sshtunnel.py#L21)
+[Show source in sshtunnel.py:22](../../../../alfred/client/ssh/sshtunnel.py#L22)
 
 Authentication handler for paramiko's interactive authentication
 
@@ -58,7 +58,7 @@ def adaptive_handler(title, instructions, prompt_list):
 
 ### SSHTunnel().start
 
-[Show source in sshtunnel.py:82](../../../../alfred/client/ssh/sshtunnel.py#L82)
+[Show source in sshtunnel.py:87](../../../../alfred/client/ssh/sshtunnel.py#L87)
 
 Wrapper for _start() with exception handling
 
@@ -71,7 +71,7 @@ def start(self):
 
 ### SSHTunnel().stop
 
-[Show source in sshtunnel.py:142](../../../../alfred/client/ssh/sshtunnel.py#L142)
+[Show source in sshtunnel.py:151](../../../../alfred/client/ssh/sshtunnel.py#L151)
 
 Stop the tunnel
 

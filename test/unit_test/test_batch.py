@@ -7,7 +7,7 @@ from alfred.fm.utils import DynamicBatcher
 
 class TestDynamicBatcher(unittest.TestCase):
     def test_init(self):
-        queries = ['query 1', 'query 2', 'query 3']
+        queries = ["query 1", "query 2", "query 3"]
         max_batch_size = 10
         batcher = DynamicBatcher(queries, max_batch_size)
 
@@ -38,7 +38,7 @@ class TestDynamicBatcher(unittest.TestCase):
         #     self.assertEqual(batcher.max_batch_size, 2048)
 
     def test_reorder(self):
-        inst = ['query 1', 'query 2', 'query 3']
+        inst = ["query 1", "query 2", "query 3"]
         batcher = DynamicBatcher(inst)
         batches = batcher.batch()
 
@@ -49,8 +49,7 @@ class TestDynamicBatcher(unittest.TestCase):
         reordered_inst = batcher.reorder(inst)
         [
             self.assertEqual(x, y)
-            for (x,
-                 y) in zip(reordered_inst, ['query 2', 'query 1', 'query 3'])
+            for (x, y) in zip(reordered_inst, ["query 2", "query 1", "query 3"])
         ]
 
     def test_simple_batch(self):
@@ -61,7 +60,8 @@ class TestDynamicBatcher(unittest.TestCase):
         batches = batcher.batch()
         print(batches)
         self.assertEqual(
-            batches, [["query1", "query2"], ["query3", "query4"], ["query5"]])
+            batches, [["query1", "query2"], ["query3", "query4"], ["query5"]]
+        )
 
     def test_batch(self):
         # Figure out how to simulate low GPU memory

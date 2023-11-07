@@ -1,6 +1,6 @@
 import json
 import logging
-from typing import Dict, Any, Optional, Iterable, List, Union
+from typing import Dict, Any, Optional, Iterable, List, Union, Tuple
 
 import numpy as np
 import torch
@@ -18,6 +18,7 @@ class ImageTemplate(Template):
 
     The class handles ranked queries for image data.
     """
+
     def __init__(
         self,
         candidate_replacement: dict,
@@ -66,7 +67,8 @@ class ImageTemplate(Template):
         for keyword, candidates in self._candidate_replacement.items():
             for candidate in candidates:
                 self._templated_candidates.append(
-                    self._template.replace(f"[[{keyword}]]", f"{candidate}"))
+                    self._template.replace(f"[[{keyword}]]", f"{candidate}")
+                )
 
     def apply(
         self,
@@ -90,9 +92,9 @@ class ImageTemplate(Template):
             image = Image.fromarray(example.numpy())
         elif isinstance(example, np.ndarray):
             image = Image.fromarray(example)
-        elif isinstance(example, tuple):
+        elif isinstance(example, Tuple):
             image = example[0]
-        elif isinstance(example, dict):
+        elif isinstance(example, Dict):
             image = Image.open(example[keyword])
         elif isinstance(example, str):
             image = Image.open(example)
@@ -169,14 +171,16 @@ class ImageTemplate(Template):
         :return: json string of dictionary
         :rtype: str
         """
-        return json.dumps({
-            "id": self._id,
-            "name": self._name,
-            "reference": self._reference,
-            "template": self._template,
-            "metadata": self._metadata,
-            "candidate_replacement": self._candidate_replacement,
-        })
+        return json.dumps(
+            {
+                "id": self._id,
+                "name": self._name,
+                "reference": self._reference,
+                "template": self._template,
+                "metadata": self._metadata,
+                "candidate_replacement": self._candidate_replacement,
+            }
+        )
 
     def deserialize(self, json_str: str) -> Template:
         """
@@ -188,12 +192,12 @@ class ImageTemplate(Template):
         """
         json_str = json.loads(json_str)
         self.__init__(
-            json_str['id'],
-            json_str['name'],
-            json_str['reference'],
-            json_str['template'],
-            json_str['metadata'],
-            json_str['candidate_replacement'],
+            json_str["id"],
+            json_str["name"],
+            json_str["reference"],
+            json_str["template"],
+            json_str["metadata"],
+            json_str["candidate_replacement"],
         )
         return self
 
