@@ -4,7 +4,7 @@
 Test Status:  ![test status](https://github.com/BatsResearch/alfred/actions/workflows/tests.yml/badge.svg?branch=main)
 
 # News Update
-- **[[GPT-4V(ision)](https://openai.com/research/gpt-4v-system-card) Support]**
+- **[[GPT-4V](https://openai.com/research/gpt-4v-system-card) Support]**
   Alfred now supports GPT-4V(ision). Use it to streamline your image annotation tasks! For example:
   ```python
   openai = Client(model_type="openai", model="gpt-4-vision-preview")
