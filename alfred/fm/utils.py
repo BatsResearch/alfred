@@ -1,7 +1,9 @@
+import base64
 import gc
 import logging
 from collections import OrderedDict
 from typing import List, Union, Optional, Callable
+import io
 
 import numpy as np
 import torch
@@ -10,7 +12,6 @@ from PIL import Image
 from torch.nn.utils.rnn import pad_sequence
 
 import time
-from functools import wraps
 
 from .query import Query, RankedQuery, CompletionQuery
 from .response import RankedResponse
@@ -41,6 +42,29 @@ def normalize_logits(logits: torch.Tensor) -> torch.Tensor:
     :rtype: torch.Tensor
     """
     return torch.softmax(logits, dim=-1)
+
+
+def encode_image(image, type="path"):
+    """
+    Encode an image file into base64.
+
+    :param image: The image to be encoded.
+    :type image: str or bytes or PIL.Image
+    :param type: The type of the image. Can be "path", "bytes", or "image".
+    :type type: str
+    """
+    if isinstance(image, str):
+        if type == "path":
+            with open(image, "rb") as image_file:
+                img = image_file.read()
+                return base64.b64encode(img).decode("utf-8")
+        else:
+            return image.decode("utf-8")
+    elif isinstance(image, Image.Image):
+        buffer = io.BytesIO()
+        image.save(buffer, format="png")
+        image = buffer.getvalue()
+        return base64.b64encode(image).decode("utf-8")
 
 
 def reorder_array(

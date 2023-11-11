@@ -15,35 +15,36 @@ Alfred aims to reduce annotation cost and time by making efficient use of LLMs, 
 ![alt text](assets/poster.png)
 
 # News Update
-
-- **[[FlexGen](https://github.com/FMInference/FlexGen) Support]**
-  Alfred now supports FlexGen, a high-throughput inference pipeline with single GPU. Example usage:
+- **[[GPT-4V(ision)(https://openai.com/research/gpt-4v-system-card) Support]**
+  Alfred now supports GPT-4V(ision). Use it to streamline your image annotation tasks! For example:
   ```python
-  from alfred import Client
-  flexgen = Client(model_type="flexgen", model="facebook/opt-30b", local_path='<model_path>', offload_dir="./flexgen-offload-cache")
+  openai = Client(model_type="openai", model="gpt-4-vision-preview")
+  image = ... # load your image
+  openai((image, f"What type is this document? Please choose from {label_space}"))
   ```
-- **[[Claude](https://console.anthropic.com/claude) Support]**
-  Alfred now supports Claude models through API. Similarly you can start a chat session with "Client.chat()"!
-
-- **[[Llama](https://arxiv.org/pdf/2302.13971.pdf) Support]**
-  Alfred now supports locally hosted Llama through transformers.
+  
+- **[[vLLM](https://github.com/vllm-project/vllm) Support]**
+  Alfred now supports vLLM accelerated models! To use:
+  ```python
+  vLLMClient = Client(model_type="vllm", model=<your_favourite_model>)
+  ```
 
 - **[Embedding with Alfred]**
   Get a vector representation for any input strings! Alfred now supports embedding from locally hosted huggingface models or api-based calls from Cohere   and OpenAI. To use:
   ```python
   Client.encode(Union[str, List[str]]) -> Union[torch.tensor, List[torch.tensor]]
   ```
- 
-- **[Server-side Caching for CLIP]**
-  Alfred has now incorporated an automatic server-side caching mechanism to avoid redudent encoding of text or image prompts. Further latency reduction! 
-  
-- **[Chat with GPTs on Alfred]**
+
+- **[Chat with GPTs or Claude on Alfred]**
   Alfred now supports chat with openai api-based models, to use simply type:
   ```python
   from alfred import Client
 
-  openai = Client(model_type="openai", model="gpt-3.5-turbo")
-  openai.chat()
+  gpt = Client(model_type="openai", model="gpt-3.5-turbo")
+  gpt.chat()
+  # or chat with claude from Anthropic!
+  claude = Client(model_type="anthropic", model="claude-2")
+  claude.chat()
   ```
 
 # Citation
@@ -54,7 +55,7 @@ If you find Alfred useful, please cite the following work. Thank you!
 @inproceedings{yu2023alfred,
   title = {Alfred: A System for Prompted Weak Supervision},
   author = {Yu, Peilin and Bach, Stephen H.}, 
-  booktitle = {ACL Demo}, 
+  booktitle = {ACL Systen Demonstration}, 
   year = 2023, 
 }
 ```
