@@ -13,7 +13,7 @@ Openai
 
 ## OpenAIModel
 
-[Show source in openai.py:55](../../../alfred/fm/openai.py#L55)
+[Show source in openai.py:66](../../../alfred/fm/openai.py#L66)
 
 A wrapper for the OpenAI API.
 
@@ -31,7 +31,7 @@ class OpenAIModel(APIAccessFoundationModel):
 
 ### OpenAIModel().chat
 
-[Show source in openai.py:248](../../../alfred/fm/openai.py#L248)
+[Show source in openai.py:288](../../../alfred/fm/openai.py#L288)
 
 Launch an interactive chat session with the OpenAI API.
 

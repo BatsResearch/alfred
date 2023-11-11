@@ -16,3 +16,5 @@ grpcio==1.48.1
 protobuf==3.20.0
 sentencepiece
 deepspeed>=0.8.2 
+
+openai>=1.2.0

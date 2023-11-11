@@ -29,7 +29,7 @@ ImageTemplate
 
 Template Class for Image data
 
-The class handles ranked queries for image data.
+The class generates queries for image data.
 
 #### Signature
 

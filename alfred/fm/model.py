@@ -157,9 +157,17 @@ class FoundationModel(abc.ABC):
                     raise ValueError(f"batch_policy {batch_policy} not supported")
         else:
             batch_policy = "static"
-            batched_queries = np.array_split(queries, len(queries))
             pretokenized = False
-
+            if isinstance(queries[0], Tuple):
+                if isinstance(queries[0][0], Image.Image):
+                    mode = "generate"
+                    batched_queries = batch_multimodal(
+                        queries, mode=self.multimodal_mode, batch_size=batch_size
+                    )
+                else:
+                    batched_queries = np.array_split(queries, len(queries))
+            else:
+                batched_queries = np.array_split(queries, len(queries))
         if mode == "generate":
             inferece_fn = self._generate_batch
         elif mode == "score":

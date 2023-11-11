@@ -1,14 +1,15 @@
 import json
 import logging
 import os
-from typing import Optional, List, Any, Union
+from typing import Optional, List, Any, Union, Tuple
 
+import PIL.Image
 import torch
 import readline
 
 from .model import APIAccessFoundationModel
 from .response import CompletionResponse
-from .utils import colorize_str, retry
+from .utils import colorize_str, retry, encode_image
 
 logger = logging.getLogger(__name__)
 
@@ -22,14 +23,14 @@ except ModuleNotFoundError:
         "OpenAI module not found. Please install it to use the OpenAI model."
     )
 
-from openai.error import (
+from openai._exceptions import (
     AuthenticationError,
     APIError,
-    Timeout,
+    APITimeoutError,
     RateLimitError,
-    InvalidRequestError,
+    BadRequestError,
     APIConnectionError,
-    ServiceUnavailableError,
+    APIStatusError,
 )
 
 OPENAI_MODELS = (
@@ -37,6 +38,7 @@ OPENAI_MODELS = (
     "gpt-4-0613",
     "gpt-4-32k",
     "gpt-4-32k-0613",
+    "gpt-4-1106-preview",
     "gpt-3.5-turbo",
     "gpt-3.5-turbo-16k",
     "gpt-3.5-turbo-0613",
@@ -47,9 +49,18 @@ OPENAI_MODELS = (
     "text-curie-001",
     "text-babbage-001",
     "text-ada-001",
-    "text-embedding-ada-002",
     "code-davinci-002",
 )
+
+OPENAI_EMBEDDING_MODELS = (
+    "text-davinci-001",
+    "text-curie-001",
+    "text-babbage-001",
+    "text-ada-001",
+    "text-embedding-ada-002",
+)
+
+OPENAI_VISION_MODELS = ("gpt-4-vision-preview",)
 
 
 class OpenAIModel(APIAccessFoundationModel):
@@ -59,25 +70,24 @@ class OpenAIModel(APIAccessFoundationModel):
     This class provides a wrapper for the OpenAI API for generating completions.
     """
 
-    @staticmethod
     @retry(
         num_retries=3,
         wait_time=0.1,
         exceptions=(
             AuthenticationError,
-            APIError,
-            Timeout,
-            RateLimitError,
-            InvalidRequestError,
             APIConnectionError,
-            ServiceUnavailableError,
+            APITimeoutError,
+            RateLimitError,
+            APIError,
+            BadRequestError,
+            APIStatusError,
         ),
     )
     def _openai_query(
-        query: Union[str, List],
+        self,
+        query: Union[str, List, Tuple],
         temperature: float = 0.0,
-        max_tokens: int = 3,
-        model: str = "text-davinci-002",
+        max_tokens: int = 64,
         **kwargs: Any,
     ) -> str:
         """
@@ -89,8 +99,6 @@ class OpenAIModel(APIAccessFoundationModel):
         :type temperature: float
         :param max_tokens: The maximum number of tokens to be returned
         :type max_tokens: int
-        :param model: The model to be used (choose from https://beta.openai.com/docs/api-reference/completions/create)
-        :type model: str
         :param kwargs: Additional keyword arguments
         :type kwargs: Any
         :return: The generated completion
@@ -102,8 +110,8 @@ class OpenAIModel(APIAccessFoundationModel):
             openai.api_key = openai_api_key
 
         if chat:
-            return openai.ChatCompletion.create(
-                model=model,
+            return self.openai_client.chat.completions.create(
+                model=self.model_string,
                 messages=query,
                 max_tokens=max_tokens,
                 stop=None,
@@ -111,30 +119,50 @@ class OpenAIModel(APIAccessFoundationModel):
                 stream=True,
             )
         else:
-            response = openai.Completion.create(
-                model=model,
-                prompt=query,
+            if self.model_string in OPENAI_VISION_MODELS:
+                img, prompt = query[0], query[1]
+                if isinstance(img, PIL.Image.Image):
+                    img = encode_image(img, type="image")
+                elif isinstance(img, str):
+                    img = img
+                query = [
+                    {
+                        "role": "user",
+                        "content": [
+                            {"type": "text", "text": f"{prompt}"},
+                            {
+                                "type": "image_url",
+                                "image_url": {"url": f"data:image/jpeg;base64,{img}"},
+                            },
+                        ],
+                    }
+                ]
+            else:
+                query = [{"role": "user", "content": query}]
+            response = self.openai_client.chat.completions.create(
+                messages=query,
+                model=self.model_string,
                 temperature=temperature,
                 max_tokens=max_tokens,
             )
-            return response["choices"][0]["text"]
+            return response.choices[0].message.content
 
-    @staticmethod
     @retry(
         num_retries=3,
         wait_time=0.1,
         exceptions=(
-            APIError,
-            Timeout,
-            RateLimitError,
-            InvalidRequestError,
+            AuthenticationError,
             APIConnectionError,
-            ServiceUnavailableError,
+            APITimeoutError,
+            RateLimitError,
+            APIError,
+            BadRequestError,
+            APIStatusError,
         ),
     )
     def _openai_embedding_query(
+        self,
         query_string: str,
-        model: str = "text-davinci-002",
         **kwargs: Any,
     ) -> torch.Tensor:
         """
@@ -142,18 +170,19 @@ class OpenAIModel(APIAccessFoundationModel):
 
         :param query_string: The prompt to be used for the query
         :type query_string: str
-        :param model: The model to be used (choose from https://beta.openai.com/docs/api-reference/completions/create)
-        :type model: str
         :return: The embeddings
         :rtype: str
         """
         openai_api_key = kwargs.get("openai_api_key", None)
         if openai_api_key is not None:
             openai.api_key = openai_api_key
+
         return torch.tensor(
-            openai.Embedding.create(
-                input=[query_string.replace("\n", " ")], model=model
-            )["data"][0]["embedding"]
+            self.openai_client.embeddings.create(
+                input=[query_string.replace("\n", " ")], model=self.model_string
+            )
+            .data[0]
+            .embedding
         )
 
     def __init__(
@@ -172,8 +201,12 @@ class OpenAIModel(APIAccessFoundationModel):
         :type api_key: Optional[str]
         """
         assert (
-            model_string in OPENAI_MODELS
-        ), f"Model {model_string} not found. Please choose from {OPENAI_MODELS}"
+            model_string
+            in OPENAI_MODELS + OPENAI_VISION_MODELS + OPENAI_EMBEDDING_MODELS
+        ), (
+            f"Model {model_string} not found. "
+            f"Please choose from {OPENAI_MODELS} or {OPENAI_VISION_MODELS} or {OPENAI_EMBEDDING_MODELS}"
+        )
 
         if "OPENAI_API_KEY" in os.environ:
             openai.api_key = os.getenv("OPENAI_API_KEY")
@@ -189,11 +222,15 @@ class OpenAIModel(APIAccessFoundationModel):
                 )
                 openai.api_key = input("Please enter your OpenAI API key: ")
                 logger.log(logging.INFO, f"OpenAI model api key stored")
+
+        self.openai_client = openai.OpenAI(api_key=api_key)
+        if model_string in OPENAI_VISION_MODELS:
+            self.multimodal_mode = "autoregressive"
         super().__init__(model_string, {"api_key": openai.api_key})
 
     def _generate_batch(
         self,
-        batch_instance: List[str],
+        batch_instance: Union[List[str], Tuple],
         **kwargs,
     ) -> List[CompletionResponse]:
         """
@@ -203,7 +240,7 @@ class OpenAIModel(APIAccessFoundationModel):
         The generated completions are returned in a list of `CompletionResponse` objects.
 
         :param batch_instance: A list of prompts for which to generate completions.
-        :type batch_instance: List[str]
+        :type batch_instance: List[str] or List[Tuple]
         :param kwargs: Additional keyword arguments to pass to the OpenAI API.
         :type kwargs: Any
         :return: A list of `CompletionResponse` objects containing the generated completions.
@@ -212,11 +249,7 @@ class OpenAIModel(APIAccessFoundationModel):
         output = []
         for query in batch_instance:
             output.append(
-                CompletionResponse(
-                    prediction=self._openai_query(
-                        query, model=self.model_string, **kwargs
-                    )
-                )
+                CompletionResponse(prediction=self._openai_query(query, **kwargs))
             )
         return output
 
@@ -238,11 +271,18 @@ class OpenAIModel(APIAccessFoundationModel):
         :return: A list of `torch.Tensor` objects containing the generated embeddings.
         :rtype: List[torch.Tensor]
         """
+        if self.model_string not in OPENAI_EMBEDDING_MODELS:
+            logger.error(
+                f"Model {self.model_string} does not support embedding."
+                f"Please choose from {OPENAI_EMBEDDING_MODELS}"
+            )
+            raise ValueError(
+                f"Model {self.model_string} does not support embedding."
+                f"Please choose from {OPENAI_EMBEDDING_MODELS}"
+            )
         output = []
         for query in batch_instance:
-            output.append(
-                self._openai_embedding_query(query, model=self.model_string, **kwargs)
-            )
+            output.append(self._openai_embedding_query(query, **kwargs))
         return output
 
     def chat(self, **kwargs: Any):
@@ -300,7 +340,6 @@ class OpenAIModel(APIAccessFoundationModel):
                 for resp in self._openai_query(
                     message_log,
                     chat=True,
-                    model=model,
                     temperature=temperature,
                     max_tokens=max_tokens,
                 ):

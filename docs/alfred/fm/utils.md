@@ -19,6 +19,7 @@ Utils
   - [batch_multimodal](#batch_multimodal)
   - [clear_cuda_cache](#clear_cuda_cache)
   - [colorize_str](#colorize_str)
+  - [encode_image](#encode_image)
   - [normalize_logits](#normalize_logits)
   - [reorder_array](#reorder_array)
   - [retry](#retry)
@@ -26,7 +27,7 @@ Utils
 
 ## DynamicBatcher
 
-[Show source in utils.py:267](../../../alfred/fm/utils.py#L267)
+[Show source in utils.py:291](../../../alfred/fm/utils.py#L291)
 
 Dynamic Batching Utility
 Maximize GPU Utilization by batching queries of similar sizes
@@ -47,7 +48,7 @@ class DynamicBatcher:
 
 ### DynamicBatcher().batch
 
-[Show source in utils.py:396](../../../alfred/fm/utils.py#L396)
+[Show source in utils.py:420](../../../alfred/fm/utils.py#L420)
 
 Batch a list of instances into a list of batches.
 If the instances are of different sizes, they will be sorted by size
@@ -67,7 +68,7 @@ def batch(self) -> List:
 
 ### DynamicBatcher().merge_rank_response
 
-[Show source in utils.py:312](../../../alfred/fm/utils.py#L312)
+[Show source in utils.py:336](../../../alfred/fm/utils.py#L336)
 
 Merge a list of responses with raw logit into a single RankedResponse
 Assumption: Candidate Order is the same across all ranked queries
@@ -95,7 +96,7 @@ def merge_rank_response(
 
 ### DynamicBatcher().reorder
 
-[Show source in utils.py:355](../../../alfred/fm/utils.py#L355)
+[Show source in utils.py:379](../../../alfred/fm/utils.py#L379)
 
 Reordering the responses according to the original order of the queries
 
@@ -122,7 +123,7 @@ def reorder(self, inst: List, offset: Optional[int] = None) -> List:
 
 ## EmbeddingCache
 
-[Show source in utils.py:190](../../../alfred/fm/utils.py#L190)
+[Show source in utils.py:214](../../../alfred/fm/utils.py#L214)
 
 A simple embedding cache for VLM models
 
@@ -136,7 +137,7 @@ class EmbeddingCache:
 
 ### EmbeddingCache().get
 
-[Show source in utils.py:216](../../../alfred/fm/utils.py#L216)
+[Show source in utils.py:240](../../../alfred/fm/utils.py#L240)
 
 Process the inputs and retrieve from the cache/embed the inputs
 
@@ -165,7 +166,7 @@ def get(
 
 ## TokenizedBatch
 
-[Show source in utils.py:256](../../../alfred/fm/utils.py#L256)
+[Show source in utils.py:280](../../../alfred/fm/utils.py#L280)
 
 #### Signature
 
@@ -179,7 +180,7 @@ class TokenizedBatch:
 
 ## bcolors
 
-[Show source in utils.py:164](../../../alfred/fm/utils.py#L164)
+[Show source in utils.py:188](../../../alfred/fm/utils.py#L188)
 
 #### Signature
 
@@ -192,7 +193,7 @@ class bcolors:
 
 ## batch_multimodal
 
-[Show source in utils.py:87](../../../alfred/fm/utils.py#L87)
+[Show source in utils.py:111](../../../alfred/fm/utils.py#L111)
 
 Batch RankedQueries with Multimodal Payloads
 
@@ -221,7 +222,7 @@ def batch_multimodal(queries: List[Query], mode: str, batch_size=64):
 
 ## clear_cuda_cache
 
-[Show source in utils.py:23](../../../alfred/fm/utils.py#L23)
+[Show source in utils.py:24](../../../alfred/fm/utils.py#L24)
 
 Clear cuda cache via garbage collection
 
@@ -236,7 +237,7 @@ def clear_cuda_cache():
 
 ## colorize_str
 
-[Show source in utils.py:176](../../../alfred/fm/utils.py#L176)
+[Show source in utils.py:200](../../../alfred/fm/utils.py#L200)
 
 #### Signature
 
@@ -247,9 +248,31 @@ def colorize_str(str, color="CYAN"):
 
 
 
+## encode_image
+
+[Show source in utils.py:47](../../../alfred/fm/utils.py#L47)
+
+Encode an image file into base64.
+
+#### Arguments
+
+- `image` - The image to be encoded.
+:type image: str or bytes or PIL.Image
+- `type` - The type of the image. Can be "path", "bytes", or "image".
+:type type: str
+
+#### Signature
+
+```python
+def encode_image(image, type="path"):
+    ...
+```
+
+
+
 ## normalize_logits
 
-[Show source in utils.py:31](../../../alfred/fm/utils.py#L31)
+[Show source in utils.py:32](../../../alfred/fm/utils.py#L32)
 
 Normalize raw logit scores from a foundation model.
 
@@ -277,7 +300,7 @@ def normalize_logits(logits: torch.Tensor) -> torch.Tensor:
 
 ## reorder_array
 
-[Show source in utils.py:46](../../../alfred/fm/utils.py#L46)
+[Show source in utils.py:70](../../../alfred/fm/utils.py#L70)
 
 Recover an array according to a given order index.
 
@@ -309,7 +332,7 @@ def reorder_array(
 
 ## retry
 
-[Show source in utils.py:129](../../../alfred/fm/utils.py#L129)
+[Show source in utils.py:153](../../../alfred/fm/utils.py#L153)
 
 A decorator to retry a function call if it raises an exception.
 
@@ -340,7 +363,7 @@ def retry(num_retries=3, wait_time=0.1, exceptions=(Exception)):
 
 ## tokenize
 
-[Show source in utils.py:65](../../../alfred/fm/utils.py#L65)
+[Show source in utils.py:89](../../../alfred/fm/utils.py#L89)
 
 Tokenize a query instance
 
