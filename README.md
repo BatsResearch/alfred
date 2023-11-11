@@ -3,17 +3,6 @@
 
 Test Status:  ![test status](https://github.com/BatsResearch/alfred/actions/workflows/tests.yml/badge.svg?branch=main)
 
-# Overview
-
-Alfred is a prototype framework for integrating large pretrained model into programmatic weak supervision pipelines.
-Alfred provides an intuitive and user-friendly interface, enabling users to quickly create and refine prompts as supervision sources and interact with large models.
-Furthermore, Alfred includes tools for label modeling, allowing the mixed signals from prompted model responses to be combined, distilled and denoised. 
-Additionally, Alfred enables memory- and computation- intensive models to be run on cloud or computing clusters with optimized batching mechanisms, significantly increasing query throughput. 
-Alfred aims to reduce annotation cost and time by making efficient use of LLMs, allowing users to make the most of their resources.
-
-![alt text](assets/examples.png)
-![alt text](assets/poster.png)
-
 # News Update
 - **[[GPT-4V(ision)(https://openai.com/research/gpt-4v-system-card) Support]**
   Alfred now supports GPT-4V(ision). Use it to streamline your image annotation tasks! For example:
@@ -46,6 +35,18 @@ Alfred aims to reduce annotation cost and time by making efficient use of LLMs, 
   claude = Client(model_type="anthropic", model="claude-2")
   claude.chat()
   ```
+
+
+# Overview
+
+Alfred is a prototype framework for integrating large pretrained model into programmatic weak supervision pipelines.
+Alfred provides an intuitive and user-friendly interface, enabling users to quickly create and refine prompts as supervision sources and interact with large models.
+Furthermore, Alfred includes tools for label modeling, allowing the mixed signals from prompted model responses to be combined, distilled and denoised. 
+Additionally, Alfred enables memory- and computation- intensive models to be run on cloud or computing clusters with optimized batching mechanisms, significantly increasing query throughput. 
+Alfred aims to reduce annotation cost and time by making efficient use of LLMs, allowing users to make the most of their resources.
+
+![alt text](assets/examples.png)
+![alt text](assets/poster.png)
 
 # Citation
 If you find Alfred useful, please cite the following work. Thank you!
