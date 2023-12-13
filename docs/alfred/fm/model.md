@@ -20,7 +20,7 @@ Model
 
 ## APIAccessFoundationModel
 
-[Show source in model.py:378](../../../alfred/fm/model.py#L378)
+[Show source in model.py:380](../../../alfred/fm/model.py#L380)
 
 #### Signature
 
@@ -51,7 +51,7 @@ class FoundationModel(abc.ABC):
 
 ### FoundationModel().__call__
 
-[Show source in model.py:356](../../../alfred/fm/model.py#L356)
+[Show source in model.py:358](../../../alfred/fm/model.py#L358)
 
 This function returns the output of the run function when the
  model is called as a function. It can be used as model(queries),
@@ -84,7 +84,7 @@ def __call__(
 
 ### FoundationModel().encode
 
-[Show source in model.py:273](../../../alfred/fm/model.py#L273)
+[Show source in model.py:275](../../../alfred/fm/model.py#L275)
 
 This function is a wrapper around the forward function
 
@@ -168,7 +168,7 @@ def forward(
 
 ### FoundationModel().generate
 
-[Show source in model.py:222](../../../alfred/fm/model.py#L222)
+[Show source in model.py:224](../../../alfred/fm/model.py#L224)
 
 This function is a wrapper around the forward function for running
 CompletionQuery objects through the foundation model. It returns a list
@@ -205,7 +205,7 @@ def generate(
 
 ### FoundationModel().run
 
-[Show source in model.py:304](../../../alfred/fm/model.py#L304)
+[Show source in model.py:306](../../../alfred/fm/model.py#L306)
 
 This function is the main entry point for users to run queries through the foundation model.
 It accepts raw query content and automatically converts it into query objects.
@@ -239,7 +239,7 @@ def run(
 
 ### FoundationModel().score
 
-[Show source in model.py:247](../../../alfred/fm/model.py#L247)
+[Show source in model.py:249](../../../alfred/fm/model.py#L249)
 
 This function is a wrapper around the forward function
 for running RankedQuery objects through the foundation model.
@@ -278,7 +278,7 @@ def score(
 
 ## LocalAccessFoundationModel
 
-[Show source in model.py:393](../../../alfred/fm/model.py#L393)
+[Show source in model.py:395](../../../alfred/fm/model.py#L395)
 
 #### Signature
 
@@ -291,5 +291,3 @@ class LocalAccessFoundationModel(FoundationModel):
 #### See also
 
 - [FoundationModel](#foundationmodel)
-
-

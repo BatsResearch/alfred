@@ -177,10 +177,10 @@ class FoundationModel(abc.ABC):
         else:
             raise ValueError(f"mode {mode} not supported")
 
-        logger.log(logging.INFO, f"Inferring {len(batched_queries)} batches")
         attempts = 0
         while attempts < 3:
             try:
+                logger.info(f"Inferring {len(batched_queries)} batches")
                 with nullcontext() if with_grad else torch.no_grad():
                     responses = []
                     for batch_id, batch in enumerate(
@@ -205,8 +205,10 @@ class FoundationModel(abc.ABC):
                         )
                         logging.info(f"New batch size: {batch_size}")
                     elif batch_policy == "dynamic":
+                        DB = DynamicBatcher(
+                            queries, tokenizer=tokenizer, max_batch_size=int(DB.max_batch_size * 0.9)
+                        )
                         DB.limit_size = int(DB.limit_size * 0.9)
-                        DB.max_batch_size = int(DB.max_batch_size * 0.9)
                         batched_queries = DB.batch()
                         logging.info(
                             f"New lmt_sz, bs: {DB.limit_size}, {DB.max_batch_size}"

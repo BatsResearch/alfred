@@ -277,5 +277,3 @@ def score(
 ) -> Union[Response, List[Response]]:
     ...
 ```
-
-

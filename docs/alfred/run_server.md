@@ -44,5 +44,3 @@ Wrapper function to start gRPC Server.
 def start_server(args: argparse.Namespace):
     ...
 ```
-
-

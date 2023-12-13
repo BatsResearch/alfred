@@ -22,10 +22,6 @@ source: https://github.com/vllm-project/vllm
 
 ```python
 class vLLMModel(LocalAccessFoundationModel):
-    def __init__(
-        self, model: str, model_string: str, local_dir: str = None, **kwargs: Any
-    ):
+    def __init__(self, model: str, local_dir: str = None, **kwargs: Any):
         ...
 ```
-
-
