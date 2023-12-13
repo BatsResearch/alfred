@@ -95,5 +95,3 @@ Finds the next available port if given port is not available
 def port_finder(port: Union[str, int], host: str = "") -> int:
     ...
 ```
-
-

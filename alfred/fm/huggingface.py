@@ -18,13 +18,7 @@ from .response import CompletionResponse
 
 logger = logging.getLogger(__name__)
 
-try:
-    from transformers import LlamaPreTrainedModel
-except ImportError:
-    LlamaPreTrainedModel = None
-    logger.info(
-        "LlamaPreTrainedModel not Found. Please upgrade transformers to support Llama."
-    )
+from transformers import LlamaPreTrainedModel, MistralPreTrainedModel
 
 dtype_match = {
     "auto": "auto",
@@ -255,31 +249,37 @@ class HuggingFaceModel(LocalAccessFoundationModel):
                 max_length=self.max_position_embeddings,
             )
 
-        candidate_tokens = self.tokenizer(
-            candidate,
-            padding=True,
-            truncation=True,
-            max_length=self.max_position_embeddings,
-            return_tensors="pt",
-        )
 
         end_device = list(self.model.hf_device_map.values())[-1]
-        candidate_token_ids = candidate_tokens.input_ids.to(end_device)
 
         logger.log(logging.INFO, f"Ranking {len(candidate)} instances")
 
-        if LlamaPreTrainedModel:
-            is_llama = isinstance(self.model, LlamaPreTrainedModel)
-        else:
-            is_llama = False
-
         if self.model.config.is_encoder_decoder:
+            candidate_tokens = self.tokenizer(
+                candidate,
+                padding=True,
+                truncation=True,
+                max_length=self.max_position_embeddings,
+                return_tensors="pt",
+            )
+
+            candidate_token_ids = candidate_tokens.input_ids.to(end_device)
+
             logits = self.model(
                 input_ids=inputs.input_ids.cuda(),
                 attention_mask=inputs.attention_mask.cuda(),
                 labels=candidate_token_ids,
             ).logits
         else:
+            candidate_tokens = self.tokenizer(
+                candidate,
+                padding=True,
+                truncation=True,
+                max_length=self.max_position_embeddings,
+                add_special_tokens=not (isinstance(self.model, LlamaPreTrainedModel) or isinstance(self.model, MistralPreTrainedModel)),
+                return_tensors="pt",
+            )
+            candidate_token_ids = candidate_tokens.input_ids.to(end_device)
             _, prefix_length = inputs.input_ids.shape
             input_ids = torch.cat(
                 [inputs.input_ids.to(end_device), candidate_token_ids], dim=-1
@@ -291,7 +291,7 @@ class HuggingFaceModel(LocalAccessFoundationModel):
                 ],
                 dim=-1,
             )
-            if is_llama:
+            if isinstance(self.model, LlamaPreTrainedModel):
                 logits = self.model(
                     input_ids=input_ids,
                     attention_mask=attention_mask,

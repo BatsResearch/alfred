@@ -23,7 +23,7 @@ class vLLMModel(LocalAccessFoundationModel):
     """
 
     def __init__(
-        self, model: str, model_string: str, local_dir: str = None, **kwargs: Any
+        self, model: str, local_dir: str = None, **kwargs: Any
     ):
         """
         Initialize a VLLM with MultiGPU.
@@ -32,7 +32,7 @@ class vLLMModel(LocalAccessFoundationModel):
         :type model: str
         """
         self.model_string = model
-        super().__init__(model_string)
+        super().__init__(model)
         self.gpu_count = torch.cuda.device_count()
         self.model = LLM(
             local_dir if local_dir is not None else model,

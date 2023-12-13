@@ -30,5 +30,3 @@ class HuggingFaceCLIPModel(LocalAccessFoundationModel):
     ):
         ...
 ```
-
-

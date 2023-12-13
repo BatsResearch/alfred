@@ -26,5 +26,3 @@ class DummyModel(LocalAccessFoundationModel):
     def __init__(self, model: Optional[str] = None):
         ...
 ```
-
-

@@ -36,5 +36,3 @@ class FlexGenModel(LocalAccessFoundationModel):
     ):
         ...
 ```
-
-

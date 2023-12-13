@@ -37,5 +37,3 @@ returns the majority vote for each response row
 def label(self, votes: np.ndarray) -> np.ndarray:
     ...
 ```
-
-
