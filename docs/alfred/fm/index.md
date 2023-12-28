@@ -16,6 +16,7 @@ Fm
 - [Cohere](./cohere.md)
 - [Dummy](./dummy.md)
 - [Flexgen](./flexgen.md)
+- [Google](./google.md)
 - [Huggingface](./huggingface.md)
 - [Huggingfacedocument](./huggingfacedocument.md)
 - [Huggingfacevlm](./huggingfacevlm.md)

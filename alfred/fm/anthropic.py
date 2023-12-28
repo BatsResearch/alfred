@@ -8,7 +8,7 @@ import readline
 
 from .model import APIAccessFoundationModel
 from .response import CompletionResponse
-from .utils import colorize_str
+from .utils import colorize_str, type_print
 
 logger = logging.getLogger(__name__)
 
@@ -38,12 +38,12 @@ class AnthropicModel(APIAccessFoundationModel):
     """
 
     def _anthropic_query(
-        self,
-        query: Union[str, List],
-        temperature: float = 0.0,
-        max_tokens: int = 3,
-        model: str = "claude-instant-1",
-        **kwargs: Any,
+            self,
+            query: Union[str, List],
+            temperature: float = 0.0,
+            max_tokens: int = 3,
+            model: str = "claude-instant-1",
+            **kwargs: Any,
     ) -> str:
         """
         Run a single query through the foundation model
@@ -85,7 +85,7 @@ class AnthropicModel(APIAccessFoundationModel):
             return response["completion"]
 
     def __init__(
-        self, model_string: str = "claude-instant-1", api_key: Optional[str] = None
+            self, model_string: str = "claude-instant-1", api_key: Optional[str] = None
     ):
         """
         Initialize the Anthropic API wrapper.
@@ -100,7 +100,7 @@ class AnthropicModel(APIAccessFoundationModel):
         :type api_key: Optional[str]
         """
         assert (
-            model_string in ANTHROPIC_MODELS
+                model_string in ANTHROPIC_MODELS
         ), f"Model {model_string} not found. Please choose from {ANTHROPIC_MODELS}"
 
         if "ANTHROPIC_API_KEY" in os.environ:
@@ -124,9 +124,9 @@ class AnthropicModel(APIAccessFoundationModel):
         super().__init__(model_string, {"api_key": api_key})
 
     def _generate_batch(
-        self,
-        batch_instance: List[str],
-        **kwargs,
+            self,
+            batch_instance: List[str],
+            **kwargs,
     ) -> List[CompletionResponse]:
         """
         Generate completions for a batch of prompts using the anthropic API.
@@ -161,9 +161,13 @@ class AnthropicModel(APIAccessFoundationModel):
             if override:
                 print("\r", end="")
             print(
-                colorize_str("Chat AI: ", "GREEN") + feedback,
-                end="\n" if not no_newline else "",
+                colorize_str("Chat AI: ", "GREEN"),
+                end="",
             )
+            type_print(feedback)
+            print("",
+                  end="\n" if not no_newline else "",
+                  )
 
         model = kwargs.get("model", self.model_string)
         c_title = colorize_str("Alfred's Anthropic Chat", "BLUE")
@@ -201,11 +205,11 @@ class AnthropicModel(APIAccessFoundationModel):
                 message_log.append({"role": "user", "content": query})
                 response = []
                 for resp in self._anthropic_query(
-                    query,
-                    chat=True,
-                    model=model,
-                    temperature=temperature,
-                    max_tokens=max_tokens,
+                        query,
+                        chat=True,
+                        model=model,
+                        temperature=temperature,
+                        max_tokens=max_tokens,
                 ):
                     if resp["stop_reason"] in ["stop", "stop_sequence"]:
                         break

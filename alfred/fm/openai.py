@@ -9,7 +9,7 @@ import readline
 
 from .model import APIAccessFoundationModel
 from .response import CompletionResponse
-from .utils import colorize_str, retry, encode_image
+from .utils import colorize_str, retry, encode_image, type_print
 
 logger = logging.getLogger(__name__)
 
@@ -347,7 +347,7 @@ class OpenAIModel(APIAccessFoundationModel):
                         break
                     try:
                         txt = resp.choices[0].delta.content
-                        print(txt, end="")
+                        type_print(txt)
                     except AttributeError:
                         txt = ""
                     response.append(txt)

@@ -8,4 +8,5 @@
 Query Pb2
 
 > Auto-generated documentation for [alfred.fm.remote.protos.query_pb2](../../../../../alfred/fm/remote/protos/query_pb2.py) module.
+
 - [Query Pb2](#query-pb2)
