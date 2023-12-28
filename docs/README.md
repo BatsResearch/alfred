@@ -24,6 +24,7 @@ A full list of `Alfred` project modules.
         - [Cohere](alfred/fm/cohere.md#cohere)
         - [Dummy](alfred/fm/dummy.md#dummy)
         - [Flexgen](alfred/fm/flexgen.md#flexgen)
+        - [Google](alfred/fm/google.md#google)
         - [Huggingface](alfred/fm/huggingface.md#huggingface)
         - [Huggingfacedocument](alfred/fm/huggingfacedocument.md#huggingfacedocument)
         - [Huggingfacevlm](alfred/fm/huggingfacevlm.md#huggingfacevlm)

@@ -14,8 +14,8 @@ Run Server
 
 [Show source in run_server.py:16](../../alfred/run_server.py#L16)
 
-ModelServer is the server-side interface that wraps a certain alfred.fm class.
-ModelServer is used to launch the specified alfred.fm model as a gRPC Server and find the proper port.
+ModelServer is the server-side interface that wraps a certain alferd.fm class.
+ModelServer is used to launch the specified alferd.fm model as a gRPC Server and find the proper port.
 
 #### Signature
 
@@ -29,7 +29,7 @@ class ModelServer:
 
 ## start_server
 
-[Show source in run_server.py:122](../../alfred/run_server.py#L122)
+[Show source in run_server.py:127](../../alfred/run_server.py#L127)
 
 Wrapper function to start gRPC Server.
 
@@ -44,3 +44,5 @@ Wrapper function to start gRPC Server.
 def start_server(args: argparse.Namespace):
     ...
 ```
+
+

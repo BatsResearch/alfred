@@ -77,6 +77,7 @@ class Client:
                 "anthropic",
                 "cohere",
                 "ai21",
+                "google",
                 "torch",
                 "dummy",
             ], f"Invalid model type: {self.model_type}"
@@ -186,6 +187,10 @@ class Client:
                 from ..fm.ai21 import AI21Model
 
                 self.model = AI21Model(self.model, **kwargs)
+            elif self.model_type == "google":
+                from ..fm.google import GoogleModel
+
+                self.model = GoogleModel(self.model, **kwargs)
             elif self.model_type == "dummy":
                 from ..fm.dummy import DummyModel
 
@@ -422,12 +427,12 @@ class Client:
         :param log_save_path: The file to save the chat logs.
         :type log_save_path: Optional[str]
         """
-        if self.model_type in ["openai", "anthropic"]:
+        if self.model_type in ["openai", "anthropic", "google"]:
             self.model.chat(log_save_path=log_save_path, **kwargs)
         else:
             logger.error(
-                "Chat APIs are only supported for Anthropic and OpenAI models."
+                "Chat APIs are only supported for Anthropic, Google Gemini and OpenAI models."
             )
             raise NotImplementedError(
-                "Currently Chat are only supported for Anthropic and OpenAI models."
+                "Currently Chat are only supported for Anthropic, Google Gemini and OpenAI models."
             )

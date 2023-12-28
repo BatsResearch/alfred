@@ -17,6 +17,7 @@ Utils
   - [TokenizedBatch](#tokenizedbatch)
   - [bcolors](#bcolors)
   - [batch_multimodal](#batch_multimodal)
+  - [check_pkg_available](#check_pkg_available)
   - [clear_cuda_cache](#clear_cuda_cache)
   - [colorize_str](#colorize_str)
   - [encode_image](#encode_image)
@@ -24,10 +25,11 @@ Utils
   - [reorder_array](#reorder_array)
   - [retry](#retry)
   - [tokenize](#tokenize)
+  - [type_print](#type_print)
 
 ## DynamicBatcher
 
-[Show source in utils.py:291](../../../alfred/fm/utils.py#L291)
+[Show source in utils.py:318](../../../alfred/fm/utils.py#L318)
 
 Dynamic Batching Utility
 Maximize GPU Utilization by batching queries of similar sizes
@@ -48,7 +50,7 @@ class DynamicBatcher:
 
 ### DynamicBatcher().batch
 
-[Show source in utils.py:420](../../../alfred/fm/utils.py#L420)
+[Show source in utils.py:447](../../../alfred/fm/utils.py#L447)
 
 Batch a list of instances into a list of batches.
 If the instances are of different sizes, they will be sorted by size
@@ -68,7 +70,7 @@ def batch(self) -> List:
 
 ### DynamicBatcher().merge_rank_response
 
-[Show source in utils.py:336](../../../alfred/fm/utils.py#L336)
+[Show source in utils.py:363](../../../alfred/fm/utils.py#L363)
 
 Merge a list of responses with raw logit into a single RankedResponse
 Assumption: Candidate Order is the same across all ranked queries
@@ -96,7 +98,7 @@ def merge_rank_response(
 
 ### DynamicBatcher().reorder
 
-[Show source in utils.py:379](../../../alfred/fm/utils.py#L379)
+[Show source in utils.py:406](../../../alfred/fm/utils.py#L406)
 
 Reordering the responses according to the original order of the queries
 
@@ -123,7 +125,7 @@ def reorder(self, inst: List, offset: Optional[int] = None) -> List:
 
 ## EmbeddingCache
 
-[Show source in utils.py:214](../../../alfred/fm/utils.py#L214)
+[Show source in utils.py:241](../../../alfred/fm/utils.py#L241)
 
 A simple embedding cache for VLM models
 
@@ -137,7 +139,7 @@ class EmbeddingCache:
 
 ### EmbeddingCache().get
 
-[Show source in utils.py:240](../../../alfred/fm/utils.py#L240)
+[Show source in utils.py:267](../../../alfred/fm/utils.py#L267)
 
 Process the inputs and retrieve from the cache/embed the inputs
 
@@ -166,7 +168,7 @@ def get(
 
 ## TokenizedBatch
 
-[Show source in utils.py:280](../../../alfred/fm/utils.py#L280)
+[Show source in utils.py:307](../../../alfred/fm/utils.py#L307)
 
 #### Signature
 
@@ -180,7 +182,7 @@ class TokenizedBatch:
 
 ## bcolors
 
-[Show source in utils.py:188](../../../alfred/fm/utils.py#L188)
+[Show source in utils.py:215](../../../alfred/fm/utils.py#L215)
 
 #### Signature
 
@@ -220,6 +222,31 @@ def batch_multimodal(queries: List[Query], mode: str, batch_size=64):
 
 
 
+## check_pkg_available
+
+[Show source in utils.py:153](../../../alfred/fm/utils.py#L153)
+
+Check if a package is available
+
+#### Arguments
+
+- `pkg_name` - The name of the package
+:type pkg_name: str
+
+#### Returns
+
+Whether the package is available
+Type: *bool*
+
+#### Signature
+
+```python
+def check_pkg_available(pkg_name: str) -> bool:
+    ...
+```
+
+
+
 ## clear_cuda_cache
 
 [Show source in utils.py:24](../../../alfred/fm/utils.py#L24)
@@ -237,7 +264,7 @@ def clear_cuda_cache():
 
 ## colorize_str
 
-[Show source in utils.py:200](../../../alfred/fm/utils.py#L200)
+[Show source in utils.py:227](../../../alfred/fm/utils.py#L227)
 
 #### Signature
 
@@ -332,7 +359,7 @@ def reorder_array(
 
 ## retry
 
-[Show source in utils.py:153](../../../alfred/fm/utils.py#L153)
+[Show source in utils.py:180](../../../alfred/fm/utils.py#L180)
 
 A decorator to retry a function call if it raises an exception.
 
@@ -387,3 +414,20 @@ Type: *List[int]*
 def tokenize(inst, tokenizer, max_length=512):
     ...
 ```
+
+
+
+## type_print
+
+[Show source in utils.py:169](../../../alfred/fm/utils.py#L169)
+
+Print a string word by word to simulate typing
+
+#### Signature
+
+```python
+def type_print(string, interval=0.07, newline=False):
+    ...
+```
+
+

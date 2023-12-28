@@ -150,6 +150,33 @@ def batch_multimodal(queries: List[Query], mode: str, batch_size=64):
     return batches
 
 
+def check_pkg_available(pkg_name: str) -> bool:
+    """
+    Check if a package is available
+
+    :param pkg_name: The name of the package
+    :type pkg_name: str
+    :return: Whether the package is available
+    :rtype: bool
+    """
+    try:
+        __import__(pkg_name)
+        return True
+    except ImportError:
+        raise ImportError(f"Please install {pkg_name} to use this feature")
+
+
+def type_print(string, interval=.07, newline=False):
+    """
+    Print a string word by word to simulate typing
+    """
+    for word in string.split(" "):
+        print(word, end=" ", flush=True)
+        time.sleep(interval)
+    print("\b", end="", flush=True)
+    if newline: print("")
+
+
 def retry(num_retries=3, wait_time=0.1, exceptions=(Exception,)):
     """
     A decorator to retry a function call if it raises an exception.

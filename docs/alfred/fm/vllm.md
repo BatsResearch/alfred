@@ -25,3 +25,5 @@ class vLLMModel(LocalAccessFoundationModel):
     def __init__(self, model: str, local_dir: str = None, **kwargs: Any):
         ...
 ```
+
+

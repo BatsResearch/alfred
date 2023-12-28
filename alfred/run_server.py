@@ -2,7 +2,7 @@ import argparse
 import logging
 from typing import Any
 
-import alfred.fm.remote.grpc as grpc_utils
+import fm.remote.grpc as grpc_utils
 
 logging.basicConfig(
     format="ALFRED %(levelname)s: %(asctime)-5s  %(message)s",
@@ -15,8 +15,8 @@ logger = logging.getLogger("Alfred Server")
 
 class ModelServer:
     """
-    ModelServer is the server-side interface that wraps a certain alfred.fm class.
-    ModelServer is used to launch the specified alfred.fm model as a gRPC Server and find the proper port.
+    ModelServer is the server-side interface that wraps a certain alferd.fm class.
+    ModelServer is used to launch the specified alferd.fm model as a gRPC Server and find the proper port.
     """
 
     def __init__(
@@ -29,7 +29,7 @@ class ModelServer:
         """
 
         Constructor Alfred ModelServer on the Server Side.
-        This ModeServer launches the specified alfred.fm model on the server
+        This ModeServer launches the specified alferd.fm model on the server
         and map the model interfaces to the specified port number.
         If the port given is not available, the server will try to find the next available port.
 
@@ -56,51 +56,56 @@ class ModelServer:
             "vllm",
             "cohere",
             "ai21",
+            "google",
             "torch",
             "dummy",
         ], f"Invalid model type: {self.model_type}"
         if self.model_type == "huggingface":
-            from alfred.fm.huggingface import HuggingFaceModel
+            from .fm.huggingface import HuggingFaceModel
 
             self.model = HuggingFaceModel(self.model, **kwargs)
         elif self.model_type == "huggingfacevlm":
-            from alfred.fm.huggingfacevlm import HuggingFaceCLIPModel
+            from .fm.huggingfacevlm import HuggingFaceCLIPModel
 
             self.model = HuggingFaceCLIPModel(self.model, **kwargs)
         elif self.model_type == "huggingfacedocument":
-            from alfred.fm.huggingfacedocument import HuggingFaceDocumentModel
+            from .fm.huggingfacedocument import HuggingFaceDocumentModel
 
             self.model = HuggingFaceDocumentModel(self.model, **kwargs)
         elif self.model_type == "anthropic":
-            from alfred.fm.anthropic import AnthropicModel
+            from .fm.anthropic import AnthropicModel
 
             self.model = AnthropicModel(self.model, **kwargs)
         elif self.model_type == "openai":
-            from alfred.fm.openai import OpenAIModel
+            from .fm.openai import OpenAIModel
 
             self.model = OpenAIModel(self.model, **kwargs)
         elif self.model_type == "cohere":
-            from alfred.fm.cohere import CohereModel
+            from .fm.cohere import CohereModel
 
             self.model = CohereModel(self.model, **kwargs)
         elif self.model_type == "ai21":
-            from alfred.fm.ai21 import AI21Model
+            from .fm.ai21 import AI21Model
 
             self.model = AI21Model(self.model, **kwargs)
+        elif self.model_type == "google":
+            from .fm.google import GoogleModel
+
+            self.model = GoogleModel(self.model, **kwargs)
         elif self.model_type == "dummy":
-            from alfred.fm.dummy import DummyModel
+            from .fm.dummy import DummyModel
 
             self.model = DummyModel(self.model)
         elif self.model_type == "onnx":
-            from alfred.fm.onnx import ONNXModel
+            from .fm.onnx import ONNXModel
 
             self.model = ONNXModel(self.model, **kwargs)
         elif self.model_type == "flexgen":
-            from alfred.fm.flexgen import FlexGenModel
+            from .fm.flexgen import FlexGenModel
 
             self.model = FlexGenModel(self.model, **kwargs)
         elif self.model_type == "vllm":
-            from alfred.fm.vllm import vLLMModel
+            from .fm.vllm import vLLMModel
 
             self.model = vLLMModel(self.model, **kwargs)
         elif self.model_type == "tensorrt":
