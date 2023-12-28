@@ -7,7 +7,7 @@ import torch
 import readline
 
 from .model import APIAccessFoundationModel
-from .response import CompletionResponse
+from .response import CompletionResponse, RankedResponse
 from .utils import colorize_str, type_print
 
 logger = logging.getLogger(__name__)
@@ -38,12 +38,12 @@ class AnthropicModel(APIAccessFoundationModel):
     """
 
     def _anthropic_query(
-            self,
-            query: Union[str, List],
-            temperature: float = 0.0,
-            max_tokens: int = 3,
-            model: str = "claude-instant-1",
-            **kwargs: Any,
+        self,
+        query: Union[str, List],
+        temperature: float = 0.0,
+        max_tokens: int = 3,
+        model: str = "claude-instant-1",
+        **kwargs: Any,
     ) -> str:
         """
         Run a single query through the foundation model
@@ -85,7 +85,7 @@ class AnthropicModel(APIAccessFoundationModel):
             return response["completion"]
 
     def __init__(
-            self, model_string: str = "claude-instant-1", api_key: Optional[str] = None
+        self, model_string: str = "claude-instant-1", api_key: Optional[str] = None
     ):
         """
         Initialize the Anthropic API wrapper.
@@ -100,7 +100,7 @@ class AnthropicModel(APIAccessFoundationModel):
         :type api_key: Optional[str]
         """
         assert (
-                model_string in ANTHROPIC_MODELS
+            model_string in ANTHROPIC_MODELS
         ), f"Model {model_string} not found. Please choose from {ANTHROPIC_MODELS}"
 
         if "ANTHROPIC_API_KEY" in os.environ:
@@ -124,9 +124,9 @@ class AnthropicModel(APIAccessFoundationModel):
         super().__init__(model_string, {"api_key": api_key})
 
     def _generate_batch(
-            self,
-            batch_instance: List[str],
-            **kwargs,
+        self,
+        batch_instance: List[str],
+        **kwargs,
     ) -> List[CompletionResponse]:
         """
         Generate completions for a batch of prompts using the anthropic API.
@@ -152,6 +152,38 @@ class AnthropicModel(APIAccessFoundationModel):
             )
         return output
 
+    def _score_batch(
+        self,
+        batch_instance: Union[List[Tuple[str, str]], List[str]],
+        scoring_instruction: str = "Instruction: Given the query, choose your answer from [[label_space]]:\nQuery:\n",
+        **kwargs,
+    ) -> List[RankedResponse]:
+        """
+        Tentative solution for scoring candidates.
+
+        :param batch_instance: A list of prompts for which to generate candidate preferences.
+        :type batch_instance: List[str] or List[Tuple]
+        :param scoring_instruction: The instruction prompt for scoring
+        :type scoring_instruction: str
+        """
+        output = []
+        for query in batch_instance:
+            _scoring_prompt = (
+                scoring_instruction.replace(
+                    "[[label_space]]", ",".join(query.candidates)
+                )
+                + query.prompt
+            )
+            output.append(
+                RankedResponse(
+                    prediction=self._anthropic_query(
+                        _scoring_prompt, model=self.model_string, **kwargs
+                    ),
+                    scores={},
+                )
+            )
+        return output
+
     def chat(self, **kwargs: Any):
         """
         Launch an interactive chat session with the Anthropic API.
@@ -165,9 +197,10 @@ class AnthropicModel(APIAccessFoundationModel):
                 end="",
             )
             type_print(feedback)
-            print("",
-                  end="\n" if not no_newline else "",
-                  )
+            print(
+                "",
+                end="\n" if not no_newline else "",
+            )
 
         model = kwargs.get("model", self.model_string)
         c_title = colorize_str("Alfred's Anthropic Chat", "BLUE")
@@ -205,11 +238,11 @@ class AnthropicModel(APIAccessFoundationModel):
                 message_log.append({"role": "user", "content": query})
                 response = []
                 for resp in self._anthropic_query(
-                        query,
-                        chat=True,
-                        model=model,
-                        temperature=temperature,
-                        max_tokens=max_tokens,
+                    query,
+                    chat=True,
+                    model=model,
+                    temperature=temperature,
+                    max_tokens=max_tokens,
                 ):
                     if resp["stop_reason"] in ["stop", "stop_sequence"]:
                         break

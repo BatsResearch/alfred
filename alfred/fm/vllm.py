@@ -22,9 +22,7 @@ class vLLMModel(LocalAccessFoundationModel):
     source: https://github.com/vllm-project/vllm
     """
 
-    def __init__(
-        self, model: str, local_dir: str = None, **kwargs: Any
-    ):
+    def __init__(self, model: str, local_dir: str = None, **kwargs: Any):
         """
         Initialize a VLLM with MultiGPU.
 

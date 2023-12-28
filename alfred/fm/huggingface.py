@@ -249,7 +249,6 @@ class HuggingFaceModel(LocalAccessFoundationModel):
                 max_length=self.max_position_embeddings,
             )
 
-
         end_device = list(self.model.hf_device_map.values())[-1]
 
         logger.log(logging.INFO, f"Ranking {len(candidate)} instances")
@@ -276,7 +275,10 @@ class HuggingFaceModel(LocalAccessFoundationModel):
                 padding=True,
                 truncation=True,
                 max_length=self.max_position_embeddings,
-                add_special_tokens=not (isinstance(self.model, LlamaPreTrainedModel) or isinstance(self.model, MistralPreTrainedModel)),
+                add_special_tokens=not (
+                    isinstance(self.model, LlamaPreTrainedModel)
+                    or isinstance(self.model, MistralPreTrainedModel)
+                ),
                 return_tensors="pt",
             )
             candidate_token_ids = candidate_tokens.input_ids.to(end_device)
