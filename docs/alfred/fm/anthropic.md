@@ -31,7 +31,7 @@ class AnthropicModel(APIAccessFoundationModel):
 
 ### AnthropicModel().chat
 
-[Show source in anthropic.py:155](../../../alfred/fm/anthropic.py#L155)
+[Show source in anthropic.py:187](../../../alfred/fm/anthropic.py#L187)
 
 Launch an interactive chat session with the Anthropic API.
 

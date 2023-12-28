@@ -20,7 +20,7 @@ Model
 
 ## APIAccessFoundationModel
 
-[Show source in model.py:380](../../../alfred/fm/model.py#L380)
+[Show source in model.py:382](../../../alfred/fm/model.py#L382)
 
 #### Signature
 
@@ -51,7 +51,7 @@ class FoundationModel(abc.ABC):
 
 ### FoundationModel().__call__
 
-[Show source in model.py:358](../../../alfred/fm/model.py#L358)
+[Show source in model.py:360](../../../alfred/fm/model.py#L360)
 
 This function returns the output of the run function when the
  model is called as a function. It can be used as model(queries),
@@ -84,7 +84,7 @@ def __call__(
 
 ### FoundationModel().encode
 
-[Show source in model.py:275](../../../alfred/fm/model.py#L275)
+[Show source in model.py:277](../../../alfred/fm/model.py#L277)
 
 This function is a wrapper around the forward function
 
@@ -168,7 +168,7 @@ def forward(
 
 ### FoundationModel().generate
 
-[Show source in model.py:224](../../../alfred/fm/model.py#L224)
+[Show source in model.py:226](../../../alfred/fm/model.py#L226)
 
 This function is a wrapper around the forward function for running
 CompletionQuery objects through the foundation model. It returns a list
@@ -205,7 +205,7 @@ def generate(
 
 ### FoundationModel().run
 
-[Show source in model.py:306](../../../alfred/fm/model.py#L306)
+[Show source in model.py:308](../../../alfred/fm/model.py#L308)
 
 This function is the main entry point for users to run queries through the foundation model.
 It accepts raw query content and automatically converts it into query objects.
@@ -239,7 +239,7 @@ def run(
 
 ### FoundationModel().score
 
-[Show source in model.py:249](../../../alfred/fm/model.py#L249)
+[Show source in model.py:251](../../../alfred/fm/model.py#L251)
 
 This function is a wrapper around the forward function
 for running RankedQuery objects through the foundation model.
@@ -278,7 +278,7 @@ def score(
 
 ## LocalAccessFoundationModel
 
-[Show source in model.py:395](../../../alfred/fm/model.py#L395)
+[Show source in model.py:397](../../../alfred/fm/model.py#L397)
 
 #### Signature
 

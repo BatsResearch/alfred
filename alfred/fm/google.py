@@ -8,7 +8,7 @@ import PIL.Image
 import torch
 
 from .model import APIAccessFoundationModel
-from .response import CompletionResponse
+from .response import CompletionResponse, RankedResponse
 from .utils import colorize_str, retry, type_print
 
 logger = logging.getLogger(__name__)
@@ -23,17 +23,12 @@ except ModuleNotFoundError:
         "Google GenAI module not found. Please install google-generativeai to use the Google model."
     )
 
-GOOGLE_GENAI_MODELS = (
-    "gemini-pro",
-)
+GOOGLE_GENAI_MODELS = ("gemini-pro",)
 
-GOOGLE_GENAI_VISION_MODELS = (
-    "gemini-pro-vision",
-)
+GOOGLE_GENAI_VISION_MODELS = ("gemini-pro-vision",)
 
-GOOGLE_GENAI_EMBEDDING_MODELS = (
-    "embedding-001",
-)
+GOOGLE_GENAI_EMBEDDING_MODELS = ("embedding-001",)
+
 
 class GoogleModel(APIAccessFoundationModel):
     """
@@ -45,9 +40,7 @@ class GoogleModel(APIAccessFoundationModel):
     @retry(
         num_retries=3,
         wait_time=0.1,
-        exceptions=(
-            Exception
-        ),
+        exceptions=(Exception),
     )
     def _google_genai_query(
         self,
@@ -73,27 +66,25 @@ class GoogleModel(APIAccessFoundationModel):
         if self.model_string in GOOGLE_GENAI_VISION_MODELS:
             img, prompt = query[0], query[1]
             if not isinstance(img, PIL.Image.Image):
-                raise ValueError(f"Image type {type(img)} not supported. Please use PIL.Image!")
-            query = [
-                prompt, img
-            ] if len(prompt) > 0 else [img]
+                raise ValueError(
+                    f"Image type {type(img)} not supported. Please use PIL.Image!"
+                )
+            query = [prompt, img] if len(prompt) > 0 else [img]
         response = self.model.generate_content(
             query,
             generation_config=genai.types.GenerationConfig(
                 candidate_count=1,
-                stop_sequences=['x'],
+                stop_sequences=["x"],
                 max_output_tokens=max_tokens,
                 temperature=temperature,
-            )
+            ),
         )
         return response.text
 
     @retry(
         num_retries=3,
         wait_time=0.1,
-        exceptions=(
-            Exception
-        ),
+        exceptions=(Exception),
     )
     def _google_genai_embedding_query(
         self,
@@ -114,12 +105,11 @@ class GoogleModel(APIAccessFoundationModel):
                 model=f"models/{self.model_string}",
                 content=query_string,
                 task_type="retrieval_document",
-                title="Embedding of single string")
+                title="Embedding of single string",
+            )
         )
 
-    def __init__(
-        self, model_string: str = "gemini-pro", api_key: Optional[str] = None
-    ):
+    def __init__(self, model_string: str = "gemini-pro", api_key: Optional[str] = None):
         """
         Initialize the Google API wrapper.
 
@@ -138,7 +128,9 @@ class GoogleModel(APIAccessFoundationModel):
             raise RuntimeError("Google GenAI requires Python 3.9+")
         assert (
             model_string
-            in GOOGLE_GENAI_MODELS + GOOGLE_GENAI_EMBEDDING_MODELS + GOOGLE_GENAI_VISION_MODELS
+            in GOOGLE_GENAI_MODELS
+            + GOOGLE_GENAI_EMBEDDING_MODELS
+            + GOOGLE_GENAI_VISION_MODELS
         ), (
             f"Model {model_string} not found. "
             f"Please choose from {GOOGLE_GENAI_MODELS + GOOGLE_GENAI_EMBEDDING_MODELS + GOOGLE_GENAI_VISION_MODELS}"
@@ -186,6 +178,36 @@ class GoogleModel(APIAccessFoundationModel):
         for query in batch_instance:
             output.append(
                 CompletionResponse(prediction=self._google_genai_query(query, **kwargs))
+            )
+        return output
+
+    def _score_batch(
+        self,
+        batch_instance: Union[List[Tuple[str, str]], List[str]],
+        scoring_instruction: str = "Instruction: Given the query, choose your answer from [[label_space]]:\nQuery:\n",
+        **kwargs,
+    ) -> List[RankedResponse]:
+        """
+        Tentative solution for scoring candidates.
+
+        :param batch_instance: A list of prompts for which to generate candidate preferences.
+        :type batch_instance: List[str] or List[Tuple]
+        :param scoring_instruction: The instruction prompt for scoring
+        :type scoring_instruction: str
+        """
+        output = []
+        for query in batch_instance:
+            _scoring_prompt = (
+                scoring_instruction.replace(
+                    "[[label_space]]", ",".join(query.candidates)
+                )
+                + query.prompt
+            )
+            output.append(
+                RankedResponse(
+                    prediction=self._google_genai_query(_scoring_prompt, **kwargs),
+                    scores={},
+                )
             )
         return output
 

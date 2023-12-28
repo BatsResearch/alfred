@@ -31,7 +31,7 @@ class OpenAIModel(APIAccessFoundationModel):
 
 ### OpenAIModel().chat
 
-[Show source in openai.py:288](../../../alfred/fm/openai.py#L288)
+[Show source in openai.py:317](../../../alfred/fm/openai.py#L317)
 
 Launch an interactive chat session with the OpenAI API.
 

@@ -8,7 +8,7 @@ import torch
 import readline
 
 from .model import APIAccessFoundationModel
-from .response import CompletionResponse
+from .response import CompletionResponse, RankedResponse
 from .utils import colorize_str, retry, encode_image, type_print
 
 logger = logging.getLogger(__name__)
@@ -283,6 +283,35 @@ class OpenAIModel(APIAccessFoundationModel):
         output = []
         for query in batch_instance:
             output.append(self._openai_embedding_query(query, **kwargs))
+        return output
+
+    def _score_batch(
+        self,
+        batch_instance: Union[List[Tuple[str, str]], List[str]],
+        scoring_instruction: str = "Instruction: Given the query, choose your answer from [[label_space]]:\nQuery:\n",
+        **kwargs,
+    ) -> List[RankedResponse]:
+        """
+        Tentative solution for scoring candidates.
+
+        :param batch_instance: A list of prompts for which to generate candidate preferences.
+        :type batch_instance: List[str] or List[Tuple]
+        :param scoring_instruction: The instruction prompt for scoring
+        :type scoring_instruction: str
+        """
+        output = []
+        for query in batch_instance:
+            _scoring_prompt = (
+                scoring_instruction.replace(
+                    "[[label_space]]", ",".join(query.candidates)
+                )
+                + query.prompt
+            )
+            output.append(
+                RankedResponse(
+                    prediction=self._openai_query(_scoring_prompt, **kwargs), scores={}
+                )
+            )
         return output
 
     def chat(self, **kwargs: Any):

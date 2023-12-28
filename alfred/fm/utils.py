@@ -166,7 +166,7 @@ def check_pkg_available(pkg_name: str) -> bool:
         raise ImportError(f"Please install {pkg_name} to use this feature")
 
 
-def type_print(string, interval=.07, newline=False):
+def type_print(string, interval=0.07, newline=False):
     """
     Print a string word by word to simulate typing
     """
@@ -174,7 +174,8 @@ def type_print(string, interval=.07, newline=False):
         print(word, end=" ", flush=True)
         time.sleep(interval)
     print("\b", end="", flush=True)
-    if newline: print("")
+    if newline:
+        print("")
 
 
 def retry(num_retries=3, wait_time=0.1, exceptions=(Exception,)):

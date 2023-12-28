@@ -29,7 +29,7 @@ Utils
 
 ## DynamicBatcher
 
-[Show source in utils.py:318](../../../alfred/fm/utils.py#L318)
+[Show source in utils.py:319](../../../alfred/fm/utils.py#L319)
 
 Dynamic Batching Utility
 Maximize GPU Utilization by batching queries of similar sizes
@@ -50,7 +50,7 @@ class DynamicBatcher:
 
 ### DynamicBatcher().batch
 
-[Show source in utils.py:447](../../../alfred/fm/utils.py#L447)
+[Show source in utils.py:448](../../../alfred/fm/utils.py#L448)
 
 Batch a list of instances into a list of batches.
 If the instances are of different sizes, they will be sorted by size
@@ -70,7 +70,7 @@ def batch(self) -> List:
 
 ### DynamicBatcher().merge_rank_response
 
-[Show source in utils.py:363](../../../alfred/fm/utils.py#L363)
+[Show source in utils.py:364](../../../alfred/fm/utils.py#L364)
 
 Merge a list of responses with raw logit into a single RankedResponse
 Assumption: Candidate Order is the same across all ranked queries
@@ -98,7 +98,7 @@ def merge_rank_response(
 
 ### DynamicBatcher().reorder
 
-[Show source in utils.py:406](../../../alfred/fm/utils.py#L406)
+[Show source in utils.py:407](../../../alfred/fm/utils.py#L407)
 
 Reordering the responses according to the original order of the queries
 
@@ -125,7 +125,7 @@ def reorder(self, inst: List, offset: Optional[int] = None) -> List:
 
 ## EmbeddingCache
 
-[Show source in utils.py:241](../../../alfred/fm/utils.py#L241)
+[Show source in utils.py:242](../../../alfred/fm/utils.py#L242)
 
 A simple embedding cache for VLM models
 
@@ -139,7 +139,7 @@ class EmbeddingCache:
 
 ### EmbeddingCache().get
 
-[Show source in utils.py:267](../../../alfred/fm/utils.py#L267)
+[Show source in utils.py:268](../../../alfred/fm/utils.py#L268)
 
 Process the inputs and retrieve from the cache/embed the inputs
 
@@ -168,7 +168,7 @@ def get(
 
 ## TokenizedBatch
 
-[Show source in utils.py:307](../../../alfred/fm/utils.py#L307)
+[Show source in utils.py:308](../../../alfred/fm/utils.py#L308)
 
 #### Signature
 
@@ -182,7 +182,7 @@ class TokenizedBatch:
 
 ## bcolors
 
-[Show source in utils.py:215](../../../alfred/fm/utils.py#L215)
+[Show source in utils.py:216](../../../alfred/fm/utils.py#L216)
 
 #### Signature
 
@@ -264,7 +264,7 @@ def clear_cuda_cache():
 
 ## colorize_str
 
-[Show source in utils.py:227](../../../alfred/fm/utils.py#L227)
+[Show source in utils.py:228](../../../alfred/fm/utils.py#L228)
 
 #### Signature
 
@@ -359,7 +359,7 @@ def reorder_array(
 
 ## retry
 
-[Show source in utils.py:180](../../../alfred/fm/utils.py#L180)
+[Show source in utils.py:181](../../../alfred/fm/utils.py#L181)
 
 A decorator to retry a function call if it raises an exception.
 
