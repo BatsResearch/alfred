@@ -4,6 +4,11 @@
 Test Status:  ![test status](https://github.com/BatsResearch/alfred/actions/workflows/tests.yml/badge.svg?branch=main)
 
 # News Update
+- **[[Google Gemini](https://ai.google.dev/) Support]**
+  Gemini is here!
+  ```python
+  gemini_pro = Client(model_type="google", model="gemini-pro", api_key=<your API key>)
+  ```
 - **[[GPT-4V](https://openai.com/research/gpt-4v-system-card) Support]**
   Alfred now supports GPT-4V(ision). Use it to streamline your image annotation tasks! For example:
   ```python
@@ -68,7 +73,7 @@ If you find Alfred useful, please cite the following work. Thank you!
 ```bash
 pip install -r requirements.txt
 ```
-It is highly recommended to use anaconda to create a virtual environment in alternative to the above command
+(Optional) It is highly recommended to use anaconda to create a virtual environment in alternative to the above command
 ```bash
 conda create --name alfred
 conda activate alfred
@@ -76,7 +81,7 @@ pip install -r requirements.txt
 ```
 Run Alfred directly in its root directory or install it as a pip package at the end of the setup process.
 ```bash
-pip3 install .
+pip install -e .
 ```
 
 ### 2. Run and play with the model!
