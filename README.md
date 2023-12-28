@@ -29,8 +29,8 @@ Test Status:  ![test status](https://github.com/BatsResearch/alfred/actions/work
   Client.encode(Union[str, List[str]]) -> Union[torch.tensor, List[torch.tensor]]
   ```
 
-- **[Chat with GPTs or Claude on Alfred]**
-  Alfred now supports chat with openai api-based models, to use simply type:
+- **[Chat with GPTs, Gemini or Claude on Alfred]**
+  Alfred now supports chat with anthropic, google gemini and openai api-based models, to use simply type:
   ```python
   from alfred import Client
 
@@ -39,6 +39,9 @@ Test Status:  ![test status](https://github.com/BatsResearch/alfred/actions/work
   # or chat with claude from Anthropic!
   claude = Client(model_type="anthropic", model="claude-2")
   claude.chat()
+
+  gemini = Client(model_type="google", model="gemini-pro")
+  gemini.chat()
   ```
 
 
