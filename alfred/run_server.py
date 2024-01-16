@@ -2,7 +2,7 @@ import argparse
 import logging
 from typing import Any
 
-import fm.remote.grpc as grpc_utils
+import alfred.fm.remote.grpc as grpc_utils
 
 logging.basicConfig(
     format="ALFRED %(levelname)s: %(asctime)-5s  %(message)s",
