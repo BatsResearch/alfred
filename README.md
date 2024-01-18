@@ -47,6 +47,7 @@ Test Status:  ![test status](https://github.com/BatsResearch/alfred/actions/work
 
 # Overview
 
+Our Alfred paper is available [here](https://aclanthology.org/2023.acl-demo.46.pdf)!
 Alfred is a prototype framework for integrating large pretrained model into programmatic weak supervision pipelines.
 Alfred provides an intuitive and user-friendly interface, enabling users to quickly create and refine prompts as supervision sources and interact with large models.
 Furthermore, Alfred includes tools for label modeling, allowing the mixed signals from prompted model responses to be combined, distilled and denoised. 
