@@ -119,13 +119,13 @@ pip install -r requirements.txt
 ```
 ### 2. Run the server with desired model and port
 ```shell
-python alfred.run_server --model_type <model_type> --model <model_name> --local_path <model_ckpt_dir> --port <port_number>
+python -m alfred.run_server --model_type <model_type> --model <model_name> --local_path <model_ckpt_dir> --port <port_number>
 ```
 
 > **_NOTE:_**  It is better to check the standard output logs to make sure the port number given is used by the server. If not, alfred will automatically find the nearest available port number.
 ##### Example
 ```shell
-python alfred.run_server --model_type "huggingface" --model "bigscience/T0pp"  --local_path "/data/models/huggingface/" --port 10719
+python -m alfred.run_server --model_type "huggingface" --model "bigscience/T0pp"  --local_path "/data/models/huggingface/" --port 10719
 ```
 You may launch the server with cluster manager (e.g. SLURM) and use the login node as jump host.
 A example slurm bash script:
