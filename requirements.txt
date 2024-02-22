@@ -1,8 +1,8 @@
-datasets~=2.4.0
 paramiko>=2.7.2
 pyarrow>=3.0.0
 torch>=1.8.0
 
+datasets
 transformers
 accelerate
 numpy>=1.21.0
@@ -12,8 +12,8 @@ arrow>=0.13.1
 setuptools>=58.0.4
 scipy>=1.7.1
 
-grpcio==1.48.1
-protobuf==3.20.0
+grpcio==1.62.0
+protobuf==4.25.2
 sentencepiece
 deepspeed>=0.8.2 
 
