@@ -21,7 +21,7 @@ Query Pb2 Grpc
 
 ## QueryService
 
-[Show source in query_pb2_grpc.py:71](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L71)
+[Show source in query_pb2_grpc.py:65](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L65)
 
 Missing associated documentation comment in .proto file.
 
@@ -34,7 +34,7 @@ class QueryService(object):
 
 ### QueryService.Encode
 
-[Show source in query_pb2_grpc.py:74](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L74)
+[Show source in query_pb2_grpc.py:68](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L68)
 
 #### Signature
 
@@ -57,7 +57,7 @@ def Encode(
 
 ### QueryService.Run
 
-[Show source in query_pb2_grpc.py:103](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L103)
+[Show source in query_pb2_grpc.py:97](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L97)
 
 #### Signature
 
@@ -82,7 +82,7 @@ def Run(
 
 ## QueryServiceServicer
 
-[Show source in query_pb2_grpc.py:35](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L35)
+[Show source in query_pb2_grpc.py:29](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L29)
 
 Missing associated documentation comment in .proto file.
 
@@ -95,7 +95,7 @@ class QueryServiceServicer(object):
 
 ### QueryServiceServicer().Encode
 
-[Show source in query_pb2_grpc.py:38](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L38)
+[Show source in query_pb2_grpc.py:32](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L32)
 
 Missing associated documentation comment in .proto file.
 
@@ -108,7 +108,7 @@ def Encode(self, request_iterator, context):
 
 ### QueryServiceServicer().Run
 
-[Show source in query_pb2_grpc.py:44](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L44)
+[Show source in query_pb2_grpc.py:38](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L38)
 
 Missing associated documentation comment in .proto file.
 
@@ -123,7 +123,7 @@ def Run(self, request_iterator, context):
 
 ## QueryServiceStub
 
-[Show source in query_pb2_grpc.py:14](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L14)
+[Show source in query_pb2_grpc.py:8](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L8)
 
 Missing associated documentation comment in .proto file.
 
@@ -139,7 +139,7 @@ class QueryServiceStub(object):
 
 ## add_QueryServiceServicer_to_server
 
-[Show source in query_pb2_grpc.py:51](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L51)
+[Show source in query_pb2_grpc.py:45](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py#L45)
 
 #### Signature
 

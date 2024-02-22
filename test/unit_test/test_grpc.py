@@ -1,4 +1,5 @@
 import threading
+import time
 import unittest
 
 import grpc
@@ -36,6 +37,7 @@ class TestGRPCServer(unittest.TestCase):
 
         self.channel = grpc.insecure_channel(f"localhost:{self.port}")
         self.stub = query_pb2_grpc.QueryServiceStub(self.channel)
+        time.sleep(2)
 
     def test_run_single_query(self):
         # Test running a single query using the client
