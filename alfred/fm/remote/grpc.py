@@ -11,11 +11,11 @@ import grpc
 from PIL import Image
 from tqdm.auto import tqdm
 
-from alfred.fm.query import Query, RankedQuery, CompletionQuery
-from alfred.fm.remote.protos import query_pb2
-from alfred.fm.remote.protos import query_pb2_grpc
-from alfred.fm.remote.utils import get_ip, tensor_to_bytes, bytes_to_tensor, port_finder
-from alfred.fm.response import RankedResponse, CompletionResponse
+from ..query import Query, RankedQuery, CompletionQuery
+from ..remote.protos import query_pb2
+from ..remote.protos import query_pb2_grpc
+from ..remote.utils import get_ip, tensor_to_bytes, bytes_to_tensor, port_finder
+from ..response import RankedResponse, CompletionResponse
 
 logger = logging.getLogger(__name__)
 

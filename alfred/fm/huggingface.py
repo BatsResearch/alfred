@@ -18,7 +18,8 @@ from .response import CompletionResponse
 
 logger = logging.getLogger(__name__)
 
-from transformers import LlamaPreTrainedModel, MistralPreTrainedModel
+from transformers.models.llama.modeling_llama import LlamaPreTrainedModel
+from transformers.models.mistral.modeling_mistral import MistralPreTrainedModel
 
 dtype_match = {
     "auto": "auto",

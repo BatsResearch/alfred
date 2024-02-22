@@ -2,13 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-try:
-    import alfred.fm.remote.protos.query_pb2 as query__pb2
-except ImportError:
-    try:
-        import query_pb2 as query__pb2
-    except ModuleNotFoundError:
-        from . import query_pb2 as query__pb2
+from . import query_pb2 as query__pb2
 
 
 class QueryServiceStub(object):
