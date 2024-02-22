@@ -79,7 +79,7 @@ pip install -r requirements.txt
 ```
 (Optional) It is highly recommended to use anaconda to create a virtual environment in alternative to the above command
 ```bash
-conda create --name alfred
+conda create --name alfred anaconda
 conda activate alfred
 pip install -r requirements.txt
 ```
