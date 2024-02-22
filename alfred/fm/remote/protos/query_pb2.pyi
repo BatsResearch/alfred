@@ -1,7 +1,6 @@
-from typing import ClassVar as _ClassVar, Optional as _Optional
-
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
+from typing import ClassVar as _ClassVar, Optional as _Optional
 
 DESCRIPTOR: _descriptor.FileDescriptor
 
@@ -13,13 +12,7 @@ class EncodeRequest(_message.Message):
     kwargs: str
     message: str
     reduction: str
-
-    def __init__(
-        self,
-        message: _Optional[str] = ...,
-        reduction: _Optional[str] = ...,
-        kwargs: _Optional[str] = ...,
-    ) -> None: ...
+    def __init__(self, message: _Optional[str] = ..., reduction: _Optional[str] = ..., kwargs: _Optional[str] = ...) -> None: ...
 
 class EncodeResponse(_message.Message):
     __slots__ = ["embedding", "success"]
@@ -27,10 +20,7 @@ class EncodeResponse(_message.Message):
     SUCCESS_FIELD_NUMBER: _ClassVar[int]
     embedding: bytes
     success: bool
-
-    def __init__(
-        self, embedding: _Optional[bytes] = ..., success: bool = ...
-    ) -> None: ...
+    def __init__(self, embedding: _Optional[bytes] = ..., success: bool = ...) -> None: ...
 
 class RunRequest(_message.Message):
     __slots__ = ["candidate", "kwargs", "message"]
@@ -40,13 +30,7 @@ class RunRequest(_message.Message):
     candidate: str
     kwargs: str
     message: str
-
-    def __init__(
-        self,
-        message: _Optional[str] = ...,
-        candidate: _Optional[str] = ...,
-        kwargs: _Optional[str] = ...,
-    ) -> None: ...
+    def __init__(self, message: _Optional[str] = ..., candidate: _Optional[str] = ..., kwargs: _Optional[str] = ...) -> None: ...
 
 class RunResponse(_message.Message):
     __slots__ = ["embedding", "logit", "message", "ranked", "success"]
@@ -60,12 +44,4 @@ class RunResponse(_message.Message):
     message: str
     ranked: bool
     success: bool
-
-    def __init__(
-        self,
-        message: _Optional[str] = ...,
-        ranked: bool = ...,
-        success: bool = ...,
-        logit: _Optional[str] = ...,
-        embedding: _Optional[bytes] = ...,
-    ) -> None: ...
+    def __init__(self, message: _Optional[str] = ..., ranked: bool = ..., success: bool = ..., logit: _Optional[str] = ..., embedding: _Optional[bytes] = ...) -> None: ...
