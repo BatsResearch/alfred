@@ -22,7 +22,7 @@ class vLLMModel(LocalAccessFoundationModel):
     source: https://github.com/vllm-project/vllm
     """
 
-    def __init__(self, model: str, local_dir: str = None, **kwargs: Any):
+    def __init__(self, model: str, local_path: str = None, **kwargs: Any):
         """
         Initialize a VLLM with MultiGPU.
 
@@ -33,7 +33,7 @@ class vLLMModel(LocalAccessFoundationModel):
         super().__init__(model)
         self.gpu_count = torch.cuda.device_count()
         self.model = LLM(
-            local_dir if local_dir is not None else model,
+            local_path if local_path is not None else model,
             tensor_parallel_size=self.gpu_count,
         )
 
