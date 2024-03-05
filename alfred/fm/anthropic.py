@@ -6,6 +6,7 @@ from typing import Optional, List, Any, Union, Tuple, Dict
 import torch
 import readline
 
+
 from .model import APIAccessFoundationModel
 from .response import CompletionResponse, RankedResponse
 from .utils import colorize_str, type_print
@@ -17,10 +18,21 @@ ANTHROPIC_MODELS = (
     "claude-instant-1.2",
     "claude-2",
     "claude-2.0",
+    "claude-3-opus-20240229",
+    "claude-3-sonnet-20240229"
 )
 
 try:
     import anthropic
+    from anthropic.types import (
+        ContentBlock,
+        ContentBlockStartEvent,
+        ContentBlockDeltaEvent,
+        ContentBlockStopEvent,
+        MessageStartEvent,
+        MessageStopEvent,
+        MessageStreamEvent,
+    )
 except ModuleNotFoundError:
     logger.warning(
         "Anthropic module not found. Please install it from https://github.com/anthropics/anthropic-sdk-python"
@@ -41,8 +53,8 @@ class AnthropicModel(APIAccessFoundationModel):
         self,
         query: Union[str, List],
         temperature: float = 0.0,
-        max_tokens: int = 3,
-        model: str = "claude-instant-1",
+        max_tokens: int = 32,
+        model: str = "claude-3-opus-20240229",
         **kwargs: Any,
     ) -> str:
         """
@@ -68,24 +80,34 @@ class AnthropicModel(APIAccessFoundationModel):
             anthropic.api_key = api_key
 
         if chat:
-            return self._anthropic_client.completion_stream(
+            return self._anthropic_client.messages.create(
                 model=model,
-                prompt=f"{anthropic.HUMAN_PROMPT} {query}{anthropic.AI_PROMPT}",
-                max_tokens_to_sample=max_tokens,
+                messages=[
+                    {
+                        "role": "user",
+                        "content": query,
+                    }
+                ],
+                max_tokens=max_tokens,
                 temperature=temperature,
                 stream=True,
             )
         else:
-            response = self._anthropic_client.completion(
-                prompt=f"{anthropic.HUMAN_PROMPT} {query}{anthropic.AI_PROMPT}",
-                model="claude-v1",
-                max_tokens_to_sample=max_tokens,
+            response = self._anthropic_client.messages.create(
+                messages=[
+                    {
+                        "role": "user",
+                        "content": query,
+                    }
+                ],
+                model=model,
+                max_tokens=max_tokens,
                 temperature=temperature,
             )
-            return response["completion"]
+            return response.content[0].text
 
     def __init__(
-        self, model_string: str = "claude-instant-1", api_key: Optional[str] = None
+        self, model_string: str = "claude-3-opus-20240229", api_key: Optional[str] = None
     ):
         """
         Initialize the Anthropic API wrapper.
@@ -119,8 +141,7 @@ class AnthropicModel(APIAccessFoundationModel):
                 )
                 api_key = input("Please enter your anthropic API key: ")
                 logger.log(logging.INFO, f"Anthropic model api key stored")
-
-        self._anthropic_client = anthropic.Client(api_key)
+        self._anthropic_client = anthropic.Client(api_key=api_key)
         super().__init__(model_string, {"api_key": api_key})
 
     def _generate_batch(
@@ -235,8 +256,14 @@ class AnthropicModel(APIAccessFoundationModel):
                 if query == "exit":
                     _feedback("Goodbye!")
                     break
+
                 message_log.append({"role": "user", "content": query})
+                print(
+                    colorize_str("Chat AI: ", "GREEN"),
+                    end="",
+                )
                 response = []
+
                 for resp in self._anthropic_query(
                     query,
                     chat=True,
@@ -244,11 +271,22 @@ class AnthropicModel(APIAccessFoundationModel):
                     temperature=temperature,
                     max_tokens=max_tokens,
                 ):
-                    if resp["stop_reason"] in ["stop", "stop_sequence"]:
+                    if isinstance(resp, MessageStartEvent):
+                        continue
+                    if isinstance(resp, MessageStopEvent):
                         break
+                    if isinstance(resp, ContentBlockStartEvent):
+                        resp=resp.content_block
+                    if isinstance(resp, ContentBlockDeltaEvent):
+                        resp=resp.delta
+                    if resp.type == "content_block_stop" or resp.type == "message_delta":
+                        break
+                    if resp.type != "text" and resp.type != "text_delta":
+                        logger.warning(f"Unsupported response type {resp.type}")
+                        continue
                     try:
-                        txt = resp["completion"]
-                        _feedback(txt, no_newline=True, override=True)
+                        txt = resp.text
+                        type_print(txt)
                     except AttributeError:
                         txt = ""
                 response.append(txt)
