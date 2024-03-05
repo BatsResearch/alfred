@@ -3,7 +3,7 @@
 
 Test Status:  ![test status](https://github.com/BatsResearch/alfred/actions/workflows/tests.yml/badge.svg?branch=main)
 
-# News Update
+# News
 - **[[Google Gemini](https://ai.google.dev/) Support]**
   Gemini is here!
   ```python
