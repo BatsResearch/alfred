@@ -1,10 +1,6 @@
 # Sqlite
 
-[Alfred Index](../../../README.md#alfred-index) /
-[Alfred](../../index.md#alfred) /
-[Client](../index.md#client) /
-[Cache](./index.md#cache) /
-Sqlite
+[Alfred Index](../../../README.md#alfred-index) / [Alfred](../../index.md#alfred) / [Client](../index.md#client) / [Cache](./index.md#cache) / Sqlite
 
 > Auto-generated documentation for [alfred.client.cache.sqlite](../../../../alfred/client/cache/sqlite.py) module.
 
@@ -47,8 +43,7 @@ class SQLiteCache(Cache):
         self,
         session_name: str = "prompt-session-0",
         cache_location: Optional[str] = None,
-    ):
-        ...
+    ): ...
 ```
 
 #### See also
@@ -76,8 +71,7 @@ Type: *List*
 #### Signature
 
 ```python
-def fetch_data(self, sql_suffix: str, *args: Any) -> List:
-    ...
+def fetch_data(self, sql_suffix: str, *args: Any) -> List: ...
 ```
 
 ### SQLiteCache().load
@@ -94,8 +88,7 @@ Load the cache from a file
 #### Signature
 
 ```python
-def load(self, path: Optional[str] = None):
-    ...
+def load(self, path: Optional[str] = None): ...
 ```
 
 ### SQLiteCache().read
@@ -119,8 +112,7 @@ Type: *List*
 #### Signature
 
 ```python
-def read(self, prompt: str, metadata: Optional[str] = None) -> List:
-    ...
+def read(self, prompt: str, metadata: Optional[str] = None) -> List: ...
 ```
 
 ### SQLiteCache().read_batch
@@ -148,8 +140,7 @@ Type: *List*
 #### Signature
 
 ```python
-def read_batch(self, prompts: List[str], metadata: Optional[str] = None) -> List:
-    ...
+def read_batch(self, prompts: List[str], metadata: Optional[str] = None) -> List: ...
 ```
 
 ### SQLiteCache().read_by_metadata
@@ -171,8 +162,7 @@ Type: *List*
 #### Signature
 
 ```python
-def read_by_metadata(self, metadata: str) -> List:
-    ...
+def read_by_metadata(self, metadata: str) -> List: ...
 ```
 
 ### SQLiteCache().read_by_prompt
@@ -194,8 +184,7 @@ Type: *List*
 #### Signature
 
 ```python
-def read_by_prompt(self, prompt: str) -> List:
-    ...
+def read_by_prompt(self, prompt: str) -> List: ...
 ```
 
 ### SQLiteCache().read_by_prompt_and_metadata
@@ -219,8 +208,7 @@ Type: *List*
 #### Signature
 
 ```python
-def read_by_prompt_and_metadata(self, prompt: str, metadata: str) -> List:
-    ...
+def read_by_prompt_and_metadata(self, prompt: str, metadata: str) -> List: ...
 ```
 
 ### SQLiteCache().read_by_prompts_and_metadata
@@ -244,8 +232,7 @@ Type: *List*
 #### Signature
 
 ```python
-def read_by_prompts_and_metadata(self, prompts: List[str], metadata: str) -> List:
-    ...
+def read_by_prompts_and_metadata(self, prompts: List[str], metadata: str) -> List: ...
 ```
 
 ### SQLiteCache().save
@@ -262,8 +249,7 @@ Save the cache to a file
 #### Signature
 
 ```python
-def save(self, path: Optional[str] = None):
-    ...
+def save(self, path: Optional[str] = None): ...
 ```
 
 ### SQLiteCache().to_pandas
@@ -280,8 +266,7 @@ Type: *pd.DataFrame*
 #### Signature
 
 ```python
-def to_pandas(self) -> pd.DataFrame:
-    ...
+def to_pandas(self) -> pd.DataFrame: ...
 ```
 
 ### SQLiteCache().write
@@ -302,8 +287,7 @@ Write a prompt, response, and metadata record to the cache
 #### Signature
 
 ```python
-def write(self, prompt: str, response: str, metadata: Optional[str] = None):
-    ...
+def write(self, prompt: str, response: str, metadata: Optional[str] = None): ...
 ```
 
 ### SQLiteCache().write_batch
@@ -326,8 +310,5 @@ Write a batch of serialized prompt, serialized response, and metadata records to
 ```python
 def write_batch(
     self, prompts: List[str], responses: List[str], metadata: Optional[str] = None
-):
-    ...
+): ...
 ```
-
-

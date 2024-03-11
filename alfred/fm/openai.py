@@ -5,7 +5,6 @@ from typing import Optional, List, Any, Union, Tuple
 
 import PIL.Image
 import torch
-import readline
 
 from .model import APIAccessFoundationModel
 from .response import CompletionResponse, RankedResponse

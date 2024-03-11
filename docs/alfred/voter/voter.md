@@ -1,14 +1,12 @@
 # Voter
 
-[Alfred Index](../../README.md#alfred-index) /
-[Alfred](../index.md#alfred) /
-[Voter](./index.md#voter) /
-Voter
+[Alfred Index](../../README.md#alfred-index) / [Alfred](../index.md#alfred) / [Voter](./index.md#voter) / Voter
 
 > Auto-generated documentation for [alfred.voter.voter](../../../alfred/voter/voter.py) module.
 
 - [Voter](#voter)
   - [Voter](#voter-1)
+    - [Voter().__call__](#voter()__call__)
     - [Voter().clear_calibration](#voter()clear_calibration)
     - [Voter().set_calibration](#voter()set_calibration)
     - [Voter().vote](#voter()vote)
@@ -29,9 +27,30 @@ class Voter:
         label_map: Dict,
         matching_fn: Callable = lambda x, y,: x == y,
         calibration: Optional[Union[List, np.ndarray, Tuple]] = None,
-    ):
-        ...
+    ): ...
 ```
+
+### Voter().__call__
+
+[Show source in voter.py:156](../../../alfred/voter/voter.py#L156)
+
+Vote for the responses based on the matching function and the label maps
+
+#### Signature
+
+```python
+def __call__(
+    self,
+    responses: Union[Iterable[str], str, Iterable[Response], Response],
+    matching_function: Optional[Callable] = None,
+    label_map: Optional[Dict] = None,
+    **kwargs: Any
+) -> np.ndarray: ...
+```
+
+#### See also
+
+- [Response](../fm/response/response.md#response)
 
 ### Voter().clear_calibration
 
@@ -42,8 +61,7 @@ Clear calibration weights and biases
 #### Signature
 
 ```python
-def clear_calibration(self):
-    ...
+def clear_calibration(self): ...
 ```
 
 ### Voter().set_calibration
@@ -66,8 +84,7 @@ Final calibration would be weights * scores + biases
 ```python
 def set_calibration(
     self, weights: Union[List[float], np.ndarray], biases: Union[List[float], np.ndarray]
-):
-    ...
+): ...
 ```
 
 ### Voter().vote
@@ -108,12 +125,9 @@ def vote(
     matching_function: Optional[Callable] = None,
     label_map: Optional[Dict] = None,
     **kwargs: Any
-) -> np.ndarray:
-    ...
+) -> np.ndarray: ...
 ```
 
 #### See also
 
 - [Response](../fm/response/response.md#response)
-
-

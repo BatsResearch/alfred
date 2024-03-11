@@ -1,10 +1,6 @@
 # CompletionQuery
 
-[Alfred Index](../../../README.md#alfred-index) /
-[Alfred](../../index.md#alfred) /
-[Fm](../index.md#fm) /
-[Query](./index.md#query) /
-CompletionQuery
+[Alfred Index](../../../README.md#alfred-index) / [Alfred](../../index.md#alfred) / [Fm](../index.md#fm) / [Query](./index.md#query) / CompletionQuery
 
 > Auto-generated documentation for [alfred.fm.query.completion_query](../../../../alfred/fm/query/completion_query.py) module.
 
@@ -38,8 +34,7 @@ list, tuple, or PyTorch tensor.
 
 ```python
 class CompletionQuery(Query):
-    def __init__(self, prompt: Union[str, np.ndarray, List, Tuple, torch.Tensor]):
-        ...
+    def __init__(self, prompt: Union[str, np.ndarray, List, Tuple, torch.Tensor]): ...
 ```
 
 ### CompletionQuery().__add__
@@ -51,8 +46,7 @@ concatenates the two queries
 #### Signature
 
 ```python
-def __add__(self, other):
-    ...
+def __add__(self, other): ...
 ```
 
 ### CompletionQuery().__eq__
@@ -64,8 +58,7 @@ returns whether the two queries are equal
 #### Signature
 
 ```python
-def __eq__(self, other):
-    ...
+def __eq__(self, other): ...
 ```
 
 ### CompletionQuery().__hash__
@@ -77,8 +70,7 @@ returns the hash of the query
 #### Signature
 
 ```python
-def __hash__(self):
-    ...
+def __hash__(self): ...
 ```
 
 ### CompletionQuery().__len__
@@ -90,8 +82,7 @@ returns the length of the prompt
 #### Signature
 
 ```python
-def __len__(self):
-    ...
+def __len__(self): ...
 ```
 
 ### CompletionQuery().__repr__
@@ -103,8 +94,7 @@ returns the string representation of the query
 #### Signature
 
 ```python
-def __repr__(self):
-    ...
+def __repr__(self): ...
 ```
 
 ### CompletionQuery().__str__
@@ -116,8 +106,7 @@ returns the string representation of the query
 #### Signature
 
 ```python
-def __str__(self):
-    ...
+def __str__(self): ...
 ```
 
 ### CompletionQuery().load
@@ -129,8 +118,7 @@ loads the prompt, this will be convenient for batching the queries
 #### Signature
 
 ```python
-def load(self):
-    ...
+def load(self): ...
 ```
 
 ### CompletionQuery().prompt
@@ -143,8 +131,5 @@ returns the raw prompt content
 
 ```python
 @property
-def prompt(self):
-    ...
+def prompt(self): ...
 ```
-
-

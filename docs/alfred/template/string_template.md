@@ -1,9 +1,6 @@
 # StringTemplate
 
-[Alfred Index](../../README.md#alfred-index) /
-[Alfred](../index.md#alfred) /
-[Template](./index.md#template) /
-StringTemplate
+[Alfred Index](../../README.md#alfred-index) / [Alfred](../index.md#alfred) / [Template](./index.md#template) / StringTemplate
 
 > Auto-generated documentation for [alfred.template.string_template](../../../alfred/template/string_template.py) module.
 
@@ -75,8 +72,7 @@ class StringTemplate(Template):
         reference: Optional[str] = None,
         metadata: Optional[Dict[str, Any]] = None,
         answer_choices: Optional[Union[str, List[str]]] = None,
-    ):
-        ...
+    ): ...
 ```
 
 #### See also
@@ -85,7 +81,7 @@ class StringTemplate(Template):
 
 ### StringTemplate().__call__
 
-[Show source in string_template.py:282](../../../alfred/template/string_template.py#L282)
+[Show source in string_template.py:290](../../../alfred/template/string_template.py#L290)
 
 A wrapper function to apply the template to a single example
 
@@ -104,38 +100,38 @@ Type: *Query*
 #### Signature
 
 ```python
-def __call__(self, example: Dict, **kawrgs: Any) -> Query:
-    ...
+def __call__(self, example: Dict, **kawrgs: Any) -> Query: ...
 ```
 
 ### StringTemplate().apply
 
 [Show source in string_template.py:123](../../../alfred/template/string_template.py#L123)
 
-Apply template to an example and returns a query object
+Apply template to an example or a list of examples and returns a query object or a list of queries
 
 #### Arguments
 
-- `example` - an example in format of dictionary
-:type example: Dict
+- `example` - list of examples or an example in format of dictionary
+:type example: Union[Dict, List[Dict]]
 - `kawrgs` - "key_translator" for key translation (e.g. for fields key replacements)
 :type kawrgs: Dict
 
 #### Returns
 
-query object (either CompletionQuery or RankedQuery depending on the template type)
-Type: *Query*
+one or a list of query object (either CompletionQuery or RankedQuery depending on the template type)
+Type: *Query or List[Query]*
 
 #### Signature
 
 ```python
-def apply(self, example: Dict, **kawrgs) -> Query:
-    ...
+def apply(
+    self, example: Union[Dict, List[Dict]], **kawrgs
+) -> Union[Query, List[Query]]: ...
 ```
 
 ### StringTemplate().apply_to_dataset
 
-[Show source in string_template.py:184](../../../alfred/template/string_template.py#L184)
+[Show source in string_template.py:192](../../../alfred/template/string_template.py#L192)
 
 A wrapper function to apply the template to a dataset iteratively
 
@@ -154,13 +150,14 @@ Type: *Iterable[Query]*
 #### Signature
 
 ```python
-def apply_to_dataset(self, dataset: Iterable[Dict], **kwargs: Any) -> Iterable[Query]:
-    ...
+def apply_to_dataset(
+    self, dataset: Iterable[Dict], **kwargs: Any
+) -> Iterable[Query]: ...
 ```
 
 ### StringTemplate().deserialize
 
-[Show source in string_template.py:263](../../../alfred/template/string_template.py#L263)
+[Show source in string_template.py:271](../../../alfred/template/string_template.py#L271)
 
 returns a template object from a json string of dictionary
 
@@ -176,8 +173,7 @@ template object
 #### Signature
 
 ```python
-def deserialize(self, json_str: str) -> Template:
-    ...
+def deserialize(self, json_str: str) -> Template: ...
 ```
 
 #### See also
@@ -198,13 +194,12 @@ Update the template from a promptsource template
 #### Signature
 
 ```python
-def from_promptsource(self, promptsource_template):
-    ...
+def from_promptsource(self, promptsource_template): ...
 ```
 
 ### StringTemplate().get_answer_choices_list
 
-[Show source in string_template.py:201](../../../alfred/template/string_template.py#L201)
+[Show source in string_template.py:209](../../../alfred/template/string_template.py#L209)
 
 Get answer choices list
 
@@ -216,13 +211,12 @@ Type: *List*
 #### Signature
 
 ```python
-def get_answer_choices_list(self) -> List[str]:
-    ...
+def get_answer_choices_list(self) -> List[str]: ...
 ```
 
 ### StringTemplate().id
 
-[Show source in string_template.py:225](../../../alfred/template/string_template.py#L225)
+[Show source in string_template.py:233](../../../alfred/template/string_template.py#L233)
 
 returns the template id
 
@@ -230,13 +224,12 @@ returns the template id
 
 ```python
 @property
-def id(self):
-    ...
+def id(self): ...
 ```
 
 ### StringTemplate().keywords
 
-[Show source in string_template.py:220](../../../alfred/template/string_template.py#L220)
+[Show source in string_template.py:228](../../../alfred/template/string_template.py#L228)
 
 returns the keywords
 
@@ -244,13 +237,12 @@ returns the keywords
 
 ```python
 @property
-def keywords(self):
-    ...
+def keywords(self): ...
 ```
 
 ### StringTemplate().metadata
 
-[Show source in string_template.py:240](../../../alfred/template/string_template.py#L240)
+[Show source in string_template.py:248](../../../alfred/template/string_template.py#L248)
 
 returns the template metadata
 
@@ -258,13 +250,12 @@ returns the template metadata
 
 ```python
 @property
-def metadata(self):
-    ...
+def metadata(self): ...
 ```
 
 ### StringTemplate().name
 
-[Show source in string_template.py:230](../../../alfred/template/string_template.py#L230)
+[Show source in string_template.py:238](../../../alfred/template/string_template.py#L238)
 
 returns the template name
 
@@ -272,13 +263,12 @@ returns the template name
 
 ```python
 @property
-def name(self):
-    ...
+def name(self): ...
 ```
 
 ### StringTemplate().reference
 
-[Show source in string_template.py:235](../../../alfred/template/string_template.py#L235)
+[Show source in string_template.py:243](../../../alfred/template/string_template.py#L243)
 
 returns the template reference
 
@@ -286,13 +276,12 @@ returns the template reference
 
 ```python
 @property
-def reference(self):
-    ...
+def reference(self): ...
 ```
 
 ### StringTemplate().serialize
 
-[Show source in string_template.py:245](../../../alfred/template/string_template.py#L245)
+[Show source in string_template.py:253](../../../alfred/template/string_template.py#L253)
 
 returns the template as a json string of dictionary
 
@@ -304,13 +293,12 @@ Type: *str*
 #### Signature
 
 ```python
-def serialize(self):
-    ...
+def serialize(self): ...
 ```
 
 ### StringTemplate().template
 
-[Show source in string_template.py:210](../../../alfred/template/string_template.py#L210)
+[Show source in string_template.py:218](../../../alfred/template/string_template.py#L218)
 
 returns the template
 
@@ -318,13 +306,12 @@ returns the template
 
 ```python
 @property
-def template(self):
-    ...
+def template(self): ...
 ```
 
 ### StringTemplate().type
 
-[Show source in string_template.py:215](../../../alfred/template/string_template.py#L215)
+[Show source in string_template.py:223](../../../alfred/template/string_template.py#L223)
 
 returns the template type
 
@@ -332,8 +319,5 @@ returns the template type
 
 ```python
 @property
-def type(self):
-    ...
+def type(self): ...
 ```
-
-

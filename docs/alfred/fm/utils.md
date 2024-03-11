@@ -1,9 +1,6 @@
 # Utils
 
-[Alfred Index](../../README.md#alfred-index) /
-[Alfred](../index.md#alfred) /
-[Fm](./index.md#fm) /
-Utils
+[Alfred Index](../../README.md#alfred-index) / [Alfred](../index.md#alfred) / [Fm](./index.md#fm) / Utils
 
 > Auto-generated documentation for [alfred.fm.utils](../../../alfred/fm/utils.py) module.
 
@@ -44,8 +41,7 @@ class DynamicBatcher:
         max_batch_size: int = 2048,
         tokenizer: Optional[transformers.PreTrainedTokenizer] = None,
         max_token_length: int = 512,
-    ):
-        ...
+    ): ...
 ```
 
 ### DynamicBatcher().batch
@@ -64,8 +60,7 @@ Type: *List[List[Instance]]*
 #### Signature
 
 ```python
-def batch(self) -> List:
-    ...
+def batch(self) -> List: ...
 ```
 
 ### DynamicBatcher().merge_rank_response
@@ -92,8 +87,7 @@ Type: *RankedResponse*
 ```python
 def merge_rank_response(
     self, responses: List[OrderedDict], softmax: bool = True
-) -> RankedResponse:
-    ...
+) -> RankedResponse: ...
 ```
 
 ### DynamicBatcher().reorder
@@ -117,8 +111,7 @@ Type: *List of responses*
 #### Signature
 
 ```python
-def reorder(self, inst: List, offset: Optional[int] = None) -> List:
-    ...
+def reorder(self, inst: List, offset: Optional[int] = None) -> List: ...
 ```
 
 
@@ -133,8 +126,7 @@ A simple embedding cache for VLM models
 
 ```python
 class EmbeddingCache:
-    def __init__(self, max_size: int = 32):
-        ...
+    def __init__(self, max_size: int = 32): ...
 ```
 
 ### EmbeddingCache().get
@@ -160,8 +152,7 @@ Type: *torch.tensor*
 ```python
 def get(
     self, inputs: Union[List[Image.Image], List[str]], embedding_proc: Callable
-) -> torch.tensor:
-    ...
+) -> torch.tensor: ...
 ```
 
 
@@ -174,8 +165,7 @@ def get(
 
 ```python
 class TokenizedBatch:
-    def __init__(self, token_ids, pad_token_id=0):
-        ...
+    def __init__(self, token_ids, pad_token_id=0): ...
 ```
 
 
@@ -187,8 +177,7 @@ class TokenizedBatch:
 #### Signature
 
 ```python
-class bcolors:
-    ...
+class bcolors: ...
 ```
 
 
@@ -216,8 +205,7 @@ Type: *List[List[Query]]*
 #### Signature
 
 ```python
-def batch_multimodal(queries: List[Query], mode: str, batch_size=64):
-    ...
+def batch_multimodal(queries: List[Query], mode: str, batch_size=64): ...
 ```
 
 
@@ -241,8 +229,7 @@ Type: *bool*
 #### Signature
 
 ```python
-def check_pkg_available(pkg_name: str) -> bool:
-    ...
+def check_pkg_available(pkg_name: str) -> bool: ...
 ```
 
 
@@ -256,8 +243,7 @@ Clear cuda cache via garbage collection
 #### Signature
 
 ```python
-def clear_cuda_cache():
-    ...
+def clear_cuda_cache(): ...
 ```
 
 
@@ -269,8 +255,7 @@ def clear_cuda_cache():
 #### Signature
 
 ```python
-def colorize_str(str, color="CYAN"):
-    ...
+def colorize_str(str, color="CYAN"): ...
 ```
 
 
@@ -291,8 +276,7 @@ Encode an image file into base64.
 #### Signature
 
 ```python
-def encode_image(image, type="path"):
-    ...
+def encode_image(image, type="path"): ...
 ```
 
 
@@ -319,8 +303,7 @@ Type: *torch.Tensor*
 #### Signature
 
 ```python
-def normalize_logits(logits: torch.Tensor) -> torch.Tensor:
-    ...
+def normalize_logits(logits: torch.Tensor) -> torch.Tensor: ...
 ```
 
 
@@ -351,8 +334,7 @@ Type: *Union[np.ndarray, torch.Tensor, list]*
 def reorder_array(
     arr: Union[np.ndarray, torch.Tensor, list],
     order: Union[np.ndarray, torch.Tensor, list],
-) -> Union[np.ndarray, torch.Tensor, list]:
-    ...
+) -> Union[np.ndarray, torch.Tensor, list]: ...
 ```
 
 
@@ -382,8 +364,7 @@ Type: *Callable*
 #### Signature
 
 ```python
-def retry(num_retries=3, wait_time=0.1, exceptions=(Exception)):
-    ...
+def retry(num_retries=3, wait_time=0.1, exceptions=(Exception)): ...
 ```
 
 
@@ -411,8 +392,7 @@ Type: *List[int]*
 #### Signature
 
 ```python
-def tokenize(inst, tokenizer, max_length=512):
-    ...
+def tokenize(inst, tokenizer, max_length=512): ...
 ```
 
 
@@ -426,8 +406,5 @@ Print a string word by word to simulate typing
 #### Signature
 
 ```python
-def type_print(string, interval=0.07, newline=False):
-    ...
+def type_print(string, interval=0.07, newline=False): ...
 ```
-
-

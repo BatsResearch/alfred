@@ -1,9 +1,6 @@
 # Response
 
-[Alfred Index](../../../README.md#alfred-index) /
-[Alfred](../../index.md#alfred) /
-[Fm](../index.md#fm) /
-Response
+[Alfred Index](../../../README.md#alfred-index) / [Alfred](../../index.md#alfred) / [Fm](../index.md#fm) / Response
 
 > Auto-generated documentation for [alfred.fm.response](../../../../alfred/fm/response/__init__.py) module.
 
@@ -31,8 +28,7 @@ Type: *Response*
 #### Signature
 
 ```python
-def deserialize(json_str: str) -> Response:
-    ...
+def deserialize(json_str: str) -> Response: ...
 ```
 
 
@@ -56,8 +52,7 @@ Type: *Responses*
 #### Signature
 
 ```python
-def from_dict(json_dict: dict) -> Response:
-    ...
+def from_dict(json_dict: dict) -> Response: ...
 ```
 
 
