@@ -1,9 +1,6 @@
 # NPLM
 
-[Alfred Index](../../README.md#alfred-index) /
-[Alfred](../index.md#alfred) /
-[Labeling](./index.md#labeling) /
-NPLM
+[Alfred Index](../../README.md#alfred-index) / [Alfred](../index.md#alfred) / [Labeling](./index.md#labeling) / NPLM
 
 > Auto-generated documentation for [alfred.labeling.nplm](../../../alfred/labeling/nplm.py) module.
 
@@ -26,8 +23,7 @@ class NPLM(LabelModel):
         num_classes,
         label_partition,
         device="cuda:0" if torch.cuda.is_available() else "cpu",
-    ):
-        ...
+    ): ...
 ```
 
 ### NPLM().label
@@ -50,8 +46,5 @@ Type: *np.ndarray*
 #### Signature
 
 ```python
-def label(self, votes: np.ndarray) -> np.ndarray:
-    ...
+def label(self, votes: np.ndarray) -> np.ndarray: ...
 ```
-
-

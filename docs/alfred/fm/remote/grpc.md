@@ -1,10 +1,6 @@
 # Grpc
 
-[Alfred Index](../../../README.md#alfred-index) /
-[Alfred](../../index.md#alfred) /
-[Fm](../index.md#fm) /
-[Remote](./index.md#remote) /
-Grpc
+[Alfred Index](../../../README.md#alfred-index) / [Alfred](../../index.md#alfred) / [Fm](../index.md#fm) / [Remote](./index.md#remote) / Grpc
 
 > Auto-generated documentation for [alfred.fm.remote.grpc](../../../../alfred/fm/remote/grpc.py) module.
 
@@ -32,8 +28,7 @@ class gRPCClient:
         host: str,
         port: int,
         credentials: Optional[Union[grpc.ChannelCredentials, str]] = None,
-    ):
-        ...
+    ): ...
 ```
 
 ### gRPCClient().encode
@@ -43,8 +38,7 @@ class gRPCClient:
 #### Signature
 
 ```python
-def encode(self, queries: List[str], reduction: str = "mean", **kwargs: Any):
-    ...
+def encode(self, queries: List[str], reduction: str = "mean", **kwargs: Any): ...
 ```
 
 ### gRPCClient().run
@@ -56,8 +50,7 @@ def encode(self, queries: List[str], reduction: str = "mean", **kwargs: Any):
 ```python
 def run(
     self, queries: Union[Iterable[Query], Iterable[str], Iterable[Tuple]], **kwargs: Any
-):
-    ...
+): ...
 ```
 
 
@@ -77,8 +70,7 @@ class gRPCServer(query_pb2_grpc.QueryServiceServicer):
         model,
         port: int = 10719,
         credentials: Optional[grpc.ServerCredentials] = None,
-    ):
-        ...
+    ): ...
 ```
 
 ### gRPCServer().Encode
@@ -88,8 +80,7 @@ class gRPCServer(query_pb2_grpc.QueryServiceServicer):
 #### Signature
 
 ```python
-def Encode(self, request_iterator, context):
-    ...
+def Encode(self, request_iterator, context): ...
 ```
 
 ### gRPCServer().Run
@@ -99,8 +90,7 @@ def Encode(self, request_iterator, context):
 #### Signature
 
 ```python
-def Run(self, request_iterator, context):
-    ...
+def Run(self, request_iterator, context): ...
 ```
 
 ### gRPCServer().close
@@ -110,8 +100,7 @@ def Run(self, request_iterator, context):
 #### Signature
 
 ```python
-def close(self):
-    ...
+def close(self): ...
 ```
 
 ### gRPCServer().restart
@@ -121,8 +110,7 @@ def close(self):
 #### Signature
 
 ```python
-def restart(self):
-    ...
+def restart(self): ...
 ```
 
 ### gRPCServer().serve
@@ -132,8 +120,5 @@ def restart(self):
 #### Signature
 
 ```python
-def serve(self, credentials: Optional[grpc.ServerCredentials] = None):
-    ...
+def serve(self, credentials: Optional[grpc.ServerCredentials] = None): ...
 ```
-
-

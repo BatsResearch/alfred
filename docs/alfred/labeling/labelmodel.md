@@ -1,9 +1,6 @@
 # LabelModel
 
-[Alfred Index](../../README.md#alfred-index) /
-[Alfred](../index.md#alfred) /
-[Labeling](./index.md#labeling) /
-LabelModel
+[Alfred Index](../../README.md#alfred-index) / [Alfred](../index.md#alfred) / [Labeling](./index.md#labeling) / LabelModel
 
 > Auto-generated documentation for [alfred.labeling.labelmodel](../../../alfred/labeling/labelmodel.py) module.
 
@@ -22,8 +19,7 @@ Abstract LabelModel Interface
 
 ```python
 class LabelModel:
-    def __init__(self, config: Optional[Dict] = None, trainable: bool = False):
-        ...
+    def __init__(self, config: Optional[Dict] = None, trainable: bool = False): ...
 ```
 
 ### LabelModel().__call__
@@ -35,8 +31,7 @@ functional style of label
 #### Signature
 
 ```python
-def __call__(self, votes):
-    ...
+def __call__(self, votes): ...
 ```
 
 ### LabelModel().label
@@ -47,8 +42,5 @@ def __call__(self, votes):
 
 ```python
 @abc.abstractmethod
-def label(self, votes):
-    ...
+def label(self, votes): ...
 ```
-
-

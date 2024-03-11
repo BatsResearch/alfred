@@ -1,15 +1,12 @@
 # SSHTunnel
 
-[Alfred Index](../../../README.md#alfred-index) /
-[Alfred](../../index.md#alfred) /
-[Client](../index.md#client) /
-[Ssh](./index.md#ssh) /
-SSHTunnel
+[Alfred Index](../../../README.md#alfred-index) / [Alfred](../../index.md#alfred) / [Client](../index.md#client) / [Ssh](./index.md#ssh) / SSHTunnel
 
 > Auto-generated documentation for [alfred.client.ssh.sshtunnel](../../../../alfred/client/ssh/sshtunnel.py) module.
 
 - [SSHTunnel](#sshtunnel)
   - [SSHTunnel](#sshtunnel-1)
+    - [SSHTunnel()._start](#sshtunnel()_start)
     - [SSHTunnel.adaptive_handler](#sshtunneladaptive_handler)
     - [SSHTunnel().start](#sshtunnel()start)
     - [SSHTunnel().stop](#sshtunnel()stop)
@@ -38,8 +35,19 @@ class SSHTunnel:
         remote_bind_port: Optional[Union[int, str]] = 443,
         key_file: str = "~/.ssh/id_rsa",
         handler: Callable = None,
-    ):
-        ...
+    ): ...
+```
+
+### SSHTunnel()._start
+
+[Show source in sshtunnel.py:100](../../../../alfred/client/ssh/sshtunnel.py#L100)
+
+Start the tunnel
+
+#### Signature
+
+```python
+def _start(self): ...
 ```
 
 ### SSHTunnel.adaptive_handler
@@ -52,8 +60,7 @@ Authentication handler for paramiko's interactive authentication
 
 ```python
 @staticmethod
-def adaptive_handler(title, instructions, prompt_list):
-    ...
+def adaptive_handler(title, instructions, prompt_list): ...
 ```
 
 ### SSHTunnel().start
@@ -65,8 +72,7 @@ Wrapper for _start() with exception handling
 #### Signature
 
 ```python
-def start(self):
-    ...
+def start(self): ...
 ```
 
 ### SSHTunnel().stop
@@ -78,8 +84,5 @@ Stop the tunnel
 #### Signature
 
 ```python
-def stop(self):
-    ...
+def stop(self): ...
 ```
-
-

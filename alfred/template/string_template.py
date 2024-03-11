@@ -120,17 +120,25 @@ class StringTemplate(Template):
         self._metadata = promptsource_template["metadata"]
         self._answer_choices = promptsource_template["answer_choices"]
 
-    def apply(self, example: Dict, **kawrgs) -> Query:
+    def apply(self, example: Union[Dict, List[Dict]], **kawrgs) -> Union[Query, List[Query]]:
         """
-        Apply template to an example and returns a query object
+        Apply template to an example or a list of examples and returns a query object or a list of queries
 
-        :param example: an example in format of dictionary
-        :type example: Dict
+        :param example: list of examples or an example in format of dictionary
+        :type example: Union[Dict, List[Dict]]
         :param kawrgs: "key_translator" for key translation (e.g. for fields key replacements)
         :type kawrgs: Dict
-        :return: query object (either CompletionQuery or RankedQuery depending on the template type)
-        :rtype: Query
+        :return: one or a list of query object (either CompletionQuery or RankedQuery depending on the template type)
+        :rtype: Query or List[Query]
         """
+
+        if not isinstance(example, dict):
+            if isinstance(example, list):
+                return [self.apply(e, **kawrgs) for e in example]
+            else:
+                raise ValueError(f"Unsupported example type: {type(example)}")
+
+
         if "key_translator" in kawrgs:
             key_translator = kawrgs["key_translator"]
         else:

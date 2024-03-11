@@ -1,7 +1,6 @@
 # Alfred
 
-[Alfred Index](../README.md#alfred-index) /
-Alfred
+[Alfred Index](../README.md#alfred-index) / Alfred
 
 > Auto-generated documentation for [alfred](../../alfred/__init__.py) module.
 

@@ -1,9 +1,6 @@
 # ImageTemplate
 
-[Alfred Index](../../README.md#alfred-index) /
-[Alfred](../index.md#alfred) /
-[Template](./index.md#template) /
-ImageTemplate
+[Alfred Index](../../README.md#alfred-index) / [Alfred](../index.md#alfred) / [Template](./index.md#template) / ImageTemplate
 
 > Auto-generated documentation for [alfred.template.image_template](../../../alfred/template/image_template.py) module.
 
@@ -43,8 +40,7 @@ class ImageTemplate(Template):
         name: Optional[str] = None,
         reference: Optional[str] = None,
         metadata: Optional[Dict[str, Any]] = None,
-    ):
-        ...
+    ): ...
 ```
 
 #### See also
@@ -76,8 +72,7 @@ def __call__(
     self,
     example: Union[Image.Image, torch.tensor, np.ndarray, str, tuple],
     **kawrgs: Any
-) -> Query:
-    ...
+) -> Query: ...
 ```
 
 ### ImageTemplate().apply
@@ -106,8 +101,7 @@ def apply(
     example: Union[Image.Image, torch.tensor, np.ndarray, str, tuple],
     keyword: str = "image_path",
     **kwargs: Any
-) -> RankedQuery:
-    ...
+) -> RankedQuery: ...
 ```
 
 ### ImageTemplate().apply_to_dataset
@@ -131,8 +125,9 @@ Type: *Iterable[Query]*
 #### Signature
 
 ```python
-def apply_to_dataset(self, dataset: Iterable[Dict], **kwargs: Any) -> Iterable[Query]:
-    ...
+def apply_to_dataset(
+    self, dataset: Iterable[Dict], **kwargs: Any
+) -> Iterable[Query]: ...
 ```
 
 ### ImageTemplate().deserialize
@@ -153,8 +148,7 @@ template object
 #### Signature
 
 ```python
-def deserialize(self, json_str: str) -> Template:
-    ...
+def deserialize(self, json_str: str) -> Template: ...
 ```
 
 #### See also
@@ -175,8 +169,7 @@ Type: *List*
 #### Signature
 
 ```python
-def get_answer_choices_list(self) -> List[str]:
-    ...
+def get_answer_choices_list(self) -> List[str]: ...
 ```
 
 ### ImageTemplate().id
@@ -189,8 +182,7 @@ returns the template id
 
 ```python
 @property
-def id(self):
-    ...
+def id(self): ...
 ```
 
 ### ImageTemplate().keywords
@@ -203,8 +195,7 @@ returns the keywords
 
 ```python
 @property
-def keywords(self):
-    ...
+def keywords(self): ...
 ```
 
 ### ImageTemplate().metadata
@@ -217,8 +208,7 @@ returns the template metadata
 
 ```python
 @property
-def metadata(self):
-    ...
+def metadata(self): ...
 ```
 
 ### ImageTemplate().name
@@ -231,8 +221,7 @@ returns the template name
 
 ```python
 @property
-def name(self):
-    ...
+def name(self): ...
 ```
 
 ### ImageTemplate().reference
@@ -245,8 +234,7 @@ returns the template reference
 
 ```python
 @property
-def reference(self):
-    ...
+def reference(self): ...
 ```
 
 ### ImageTemplate().serialize
@@ -263,8 +251,7 @@ Type: *str*
 #### Signature
 
 ```python
-def serialize(self):
-    ...
+def serialize(self): ...
 ```
 
 ### ImageTemplate().template
@@ -277,8 +264,7 @@ returns the template
 
 ```python
 @property
-def template(self):
-    ...
+def template(self): ...
 ```
 
 ### ImageTemplate().type
@@ -291,8 +277,5 @@ returns the template type
 
 ```python
 @property
-def type(self):
-    ...
+def type(self): ...
 ```
-
-

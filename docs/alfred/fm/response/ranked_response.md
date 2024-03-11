@@ -1,10 +1,6 @@
 # RankedResponse
 
-[Alfred Index](../../../README.md#alfred-index) /
-[Alfred](../../index.md#alfred) /
-[Fm](../index.md#fm) /
-[Response](./index.md#response) /
-RankedResponse
+[Alfred Index](../../../README.md#alfred-index) / [Alfred](../../index.md#alfred) / [Fm](../index.md#fm) / [Response](./index.md#response) / RankedResponse
 
 > Auto-generated documentation for [alfred.fm.response.ranked_response](../../../../alfred/fm/response/ranked_response.py) module.
 
@@ -32,8 +28,7 @@ class RankedResponse(Response):
         scores: Dict,
         logits: Optional[Union[torch.Tensor, np.ndarray]] = None,
         embeddings: Optional[Union[torch.Tensor, np.ndarray]] = None,
-    ):
-        ...
+    ): ...
 ```
 
 ### RankedResponse().__eq__
@@ -59,8 +54,7 @@ Type: *bool*
 #### Signature
 
 ```python
-def __eq__(self, other):
-    ...
+def __eq__(self, other): ...
 ```
 
 ### RankedResponse().embeddings
@@ -78,8 +72,7 @@ Type: *Union[torch.Tensor, np.ndarray]*
 
 ```python
 @property
-def embeddings(self) -> Union[torch.Tensor, np.ndarray]:
-    ...
+def embeddings(self) -> Union[torch.Tensor, np.ndarray]: ...
 ```
 
 ### RankedResponse().logits
@@ -97,8 +90,7 @@ Type: *Union[torch.Tensor, np.ndarray]*
 
 ```python
 @property
-def logits(self) -> Union[torch.Tensor, np.ndarray]:
-    ...
+def logits(self) -> Union[torch.Tensor, np.ndarray]: ...
 ```
 
 ### RankedResponse().prediction
@@ -116,8 +108,7 @@ Type: *str*
 
 ```python
 @property
-def prediction(self) -> str:
-    ...
+def prediction(self) -> str: ...
 ```
 
 ### RankedResponse().scores
@@ -135,8 +126,5 @@ Type: *dict*
 
 ```python
 @property
-def scores(self) -> Dict:
-    ...
+def scores(self) -> Dict: ...
 ```
-
-

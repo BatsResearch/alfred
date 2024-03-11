@@ -1,11 +1,7 @@
 import json
 import logging
 import os
-from typing import Optional, List, Any, Union, Tuple, Dict
-
-import torch
-import readline
-
+from typing import Optional, List, Any, Union, Tuple
 
 from .model import APIAccessFoundationModel
 from .response import CompletionResponse, RankedResponse
