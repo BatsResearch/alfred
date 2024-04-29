@@ -59,7 +59,9 @@ class GroqModel(APIAccessFoundationModel):
                     "role": "user",
                     "content": query_string,
                 }
-            ] if isinstance(query_string, str) else query_string,
+            ]
+            if isinstance(query_string, str)
+            else query_string,
             model=model,
         )
         try:
@@ -82,7 +84,9 @@ class GroqModel(APIAccessFoundationModel):
         :type api_key: Optional[str]
         """
         if model_string not in GROQ_MODELS:
-            logger.log(f"Model {model_string} not in supported models {GROQ_MODELS}, please check the Groq API documentation for supported models")
+            logger.log(
+                f"Model {model_string} not in supported models {GROQ_MODELS}, please check the Groq API documentation for supported models"
+            )
 
         if api_key is None:
             logger.log(logging.WARNING, "Groq API key not found, Requesting User Input")
@@ -114,11 +118,7 @@ class GroqModel(APIAccessFoundationModel):
         output = []
         for query in batch_instance:
             output.append(
-                CompletionResponse(
-                    prediction=self._groq_query(
-                        query, **kwargs
-                    )
-                )
+                CompletionResponse(prediction=self._groq_query(query, **kwargs))
             )
         return output
 
@@ -187,7 +187,10 @@ class GroqModel(APIAccessFoundationModel):
         print(f"Type '{c_exit}' or hit {c_ctrlc} to exit the chat session.")
 
         message_log = [
-            {"role": "system", "content": "You are a helpful assistant to the user. Answer their questions as accurately as possible."},
+            {
+                "role": "system",
+                "content": "You are a helpful assistant to the user. Answer their questions as accurately as possible.",
+            },
         ]
 
         print()
@@ -213,10 +216,12 @@ class GroqModel(APIAccessFoundationModel):
                     colorize_str("Chat AI: ", "GREEN"),
                     end="",
                 )
-                response = self._groq_query(message_log,
-                                            temperature=temperature,
-                                            max_tokens=max_tokens,
-                                            model=model)
+                response = self._groq_query(
+                    message_log,
+                    temperature=temperature,
+                    max_tokens=max_tokens,
+                    model=model,
+                )
                 print(response)
                 response = response.replace("\n", "")
                 message_log.append({"role": "assistant", "content": response})
