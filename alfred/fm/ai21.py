@@ -17,7 +17,7 @@ AI21_MODELS = (
 
 class AI21Model(APIAccessFoundationModel):
     """
-    A wrapper for the OpenAI API.
+    A wrapper for the AI21 API.
 
     This class provides a wrapper for the OpenAI API for generating completions.
     """
@@ -98,7 +98,7 @@ class AI21Model(APIAccessFoundationModel):
 
         :param batch_instance: A list of prompts for which to generate completions.
         :type batch_instance: List[str]
-        :param kwargs: Additional keyword arguments to pass to the OpenAI API.
+        :param kwargs: Additional keyword arguments to pass to the AI21 API.
         :type kwargs: Any
         :return: A list of `CompletionResponse` objects containing the generated completions.
         :rtype: List[CompletionResponse]
