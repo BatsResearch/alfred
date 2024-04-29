@@ -56,6 +56,7 @@ class ModelServer:
             "vllm",
             "cohere",
             "ai21",
+            "groq",
             "google",
             "torch",
             "dummy",
@@ -92,6 +93,10 @@ class ModelServer:
             from .fm.google import GoogleModel
 
             self.model = GoogleModel(self.model, **kwargs)
+        elif self.model_type == "groq":
+            from .fm.groq import GroqModel
+
+            self.model = GroqModel(self.model, **kwargs)
         elif self.model_type == "dummy":
             from .fm.dummy import DummyModel
 

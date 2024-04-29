@@ -78,6 +78,7 @@ class Client:
                 "cohere",
                 "ai21",
                 "google",
+                "groq",
                 "torch",
                 "dummy",
             ], f"Invalid model type: {self.model_type}"
@@ -191,6 +192,10 @@ class Client:
                 from ..fm.google import GoogleModel
 
                 self.model = GoogleModel(self.model, **kwargs)
+            elif self.model_type == "groq":
+                from ..fm.groq import GroqModel
+
+                self.model = GroqModel(self.model, **kwargs)
             elif self.model_type == "dummy":
                 from ..fm.dummy import DummyModel
 
@@ -427,7 +432,7 @@ class Client:
         :param log_save_path: The file to save the chat logs.
         :type log_save_path: Optional[str]
         """
-        if self.model_type in ["openai", "anthropic", "google", "huggingface"]:
+        if self.model_type in ["openai", "anthropic", "google", "huggingface", "groq"]:
             self.model.chat(log_save_path=log_save_path, **kwargs)
         else:
             logger.error(
