@@ -15,7 +15,7 @@ ANTHROPIC_MODELS = (
     "claude-2",
     "claude-2.0",
     "claude-3-opus-20240229",
-    "claude-3-sonnet-20240229"
+    "claude-3-sonnet-20240229",
 )
 
 try:
@@ -103,7 +103,9 @@ class AnthropicModel(APIAccessFoundationModel):
             return response.content[0].text
 
     def __init__(
-        self, model_string: str = "claude-3-opus-20240229", api_key: Optional[str] = None
+        self,
+        model_string: str = "claude-3-opus-20240229",
+        api_key: Optional[str] = None,
     ):
         """
         Initialize the Anthropic API wrapper.
@@ -272,10 +274,13 @@ class AnthropicModel(APIAccessFoundationModel):
                     if isinstance(resp, MessageStopEvent):
                         break
                     if isinstance(resp, ContentBlockStartEvent):
-                        resp=resp.content_block
+                        resp = resp.content_block
                     if isinstance(resp, ContentBlockDeltaEvent):
-                        resp=resp.delta
-                    if resp.type == "content_block_stop" or resp.type == "message_delta":
+                        resp = resp.delta
+                    if (
+                        resp.type == "content_block_stop"
+                        or resp.type == "message_delta"
+                    ):
                         break
                     if resp.type != "text" and resp.type != "text_delta":
                         logger.warning(f"Unsupported response type {resp.type}")

@@ -120,7 +120,9 @@ class StringTemplate(Template):
         self._metadata = promptsource_template["metadata"]
         self._answer_choices = promptsource_template["answer_choices"]
 
-    def apply(self, example: Union[Dict, List[Dict]], **kawrgs) -> Union[Query, List[Query]]:
+    def apply(
+        self, example: Union[Dict, List[Dict]], **kawrgs
+    ) -> Union[Query, List[Query]]:
         """
         Apply template to an example or a list of examples and returns a query object or a list of queries
 
@@ -137,7 +139,6 @@ class StringTemplate(Template):
                 return [self.apply(e, **kawrgs) for e in example]
             else:
                 raise ValueError(f"Unsupported example type: {type(example)}")
-
 
         if "key_translator" in kawrgs:
             key_translator = kawrgs["key_translator"]
