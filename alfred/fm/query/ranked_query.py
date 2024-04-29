@@ -3,6 +3,7 @@
 Ranked Query Class encompasses query tem
 
 """
+
 from typing import List, Union, Tuple, Callable
 
 import numpy as np

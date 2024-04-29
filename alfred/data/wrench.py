@@ -1,8 +1,9 @@
 """
 
- Wrench Dataset Class is a dataset wrapper for Wrench, a weak supervision benchmark testbed.
+Wrench Dataset Class is a dataset wrapper for Wrench, a weak supervision benchmark testbed.
 
 """
+
 import json
 import logging
 import os

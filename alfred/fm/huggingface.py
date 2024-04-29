@@ -15,6 +15,9 @@ from transformers import (
 
 from .model import LocalAccessFoundationModel
 from .response import CompletionResponse
+from .utils import colorize_str, type_print
+
+import json
 
 logger = logging.getLogger(__name__)
 
@@ -457,3 +460,101 @@ class HuggingFaceModel(LocalAccessFoundationModel):
         _hidden_state = self._get_hidden_states(inputs, reduction=reduction)
 
         return list(_hidden_state)
+
+    def chat(self, **kwargs: Any):
+        """
+        Launch an interactive chat session
+        """
+
+        def _feedback(feedback: str, no_newline=False, override=False):
+            if override:
+                print("\r", end="")
+            print(
+                colorize_str("Chat AI: ", "GREEN"),
+                end="",
+            )
+            type_print(feedback)
+            print(
+                "",
+                end="\n" if not no_newline else "",
+            )
+
+        model = kwargs.get("model", self.model_string)
+        c_title = colorize_str("Alfred's Anthropic Chat", "BLUE")
+        c_model = colorize_str(model, "WARNING")
+        c_exit = colorize_str("exit", "FAIL")
+        c_ctrlc = colorize_str("Ctrl+C", "FAIL")
+
+        temperature = kwargs.get("temperature", 0.7)
+        max_tokens = kwargs.get("max_tokens", 1024)
+        log_save_path = kwargs.get("log_save_path", None)
+        manual_chat_sequence = kwargs.get("manual_chat_sequence", None)
+
+        print(f"Welcome to the {c_title} session!\nYou are using the {c_model} model.")
+        print(f"Type '{c_exit}' or hit {c_ctrlc} to exit the chat session.")
+
+        message_log = [
+            # {
+            #     "role": "system",
+            #     "content": "You are a friendly chatbot.",
+            # },
+        ]
+
+        print()
+        print("======== Chat Begin ========")
+        print()
+
+        try:
+            while True:
+                if manual_chat_sequence is not None:
+                    query = manual_chat_sequence.pop(0)
+                    _feedback(query, no_newline=True)
+                    print()
+                    if len(manual_chat_sequence) == 0:
+                        break
+                else:
+                    query = input(colorize_str("You: "))
+                if query == "exit":
+                    _feedback("Goodbye!")
+                    break
+
+                message_log.append({"role": "user", "content": query})
+                print(
+                    colorize_str("Chat AI: ", "GREEN"),
+                    end="",
+                )
+                try:
+                    tokenized_chat = self.tokenizer.apply_chat_template(
+                        message_log,
+                        tokenize=True,
+                        add_generation_prompt=True,
+                        return_tensors="pt",
+                    )
+                    tokenized_chat = tokenized_chat.to(self.model.device)
+                except Exception as e:
+                    _feedback(f"Error: {e}")
+                    break
+                outputs = self.model.generate(
+                    tokenized_chat,
+                    max_new_tokens=max_tokens,
+                    temperature=temperature,
+                    do_sample=False if temperature == 0 else True,
+                )
+                outputs = outputs[0][len(tokenized_chat[0]) :]
+                txt = self.tokenizer.decode(outputs, skip_special_tokens=True)
+                type_print(txt)
+                print()
+                response = txt.strip().replace("\n", "")
+                message_log.append({"role": "assistant", "content": response})
+        except KeyboardInterrupt:
+            _feedback("Goodbye!")
+
+        print()
+        print("======== Chat End ========")
+        print()
+        print(colorize_str("Thank you for using Alfred!"))
+
+        if log_save_path:
+            with open(log_save_path, "w") as f:
+                json.dump(message_log, f)
+            print(f"Your chat log is saved to {log_save_path}")

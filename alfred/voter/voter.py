@@ -154,12 +154,12 @@ class Voter:
         self._calibration = None
 
     def __call__(
-            self,
-            responses: Union[Iterable[str], str, Iterable[Response], Response],
-            matching_function: Optional[Callable] = None,
-            label_map: Optional[Dict] = None,
-            **kwargs: Any,
-     ) -> np.ndarray:
+        self,
+        responses: Union[Iterable[str], str, Iterable[Response], Response],
+        matching_function: Optional[Callable] = None,
+        label_map: Optional[Dict] = None,
+        **kwargs: Any,
+    ) -> np.ndarray:
         """
         Vote for the responses based on the matching function and the label maps
         """
