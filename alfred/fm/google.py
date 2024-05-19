@@ -23,9 +23,9 @@ except ModuleNotFoundError:
         "Google GenAI module not found. Please install google-generativeai to use the Google model."
     )
 
-GOOGLE_GENAI_MODELS = ("gemini-pro", "gemini-1.5-flash")
+GOOGLE_GENAI_MODELS = ("gemini-pro", "gemini-1.5-flash", "gemini-1.5-pro-latest")
 
-GOOGLE_GENAI_VISION_MODELS = ("gemini-pro-vision", "gemini-1.5-pro-latest", "gemini-1.5-flash")
+GOOGLE_GENAI_VISION_MODELS = ("gemini-pro-vision") 
 
 GOOGLE_GENAI_EMBEDDING_MODELS = ("embedding-001",)
 
