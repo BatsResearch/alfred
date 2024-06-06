@@ -40,6 +40,8 @@ OPENAI_MODELS = (
     "gpt-4-1106-preview",
     "gpt-4-turbo",
     "gpt-4-turbo-2024-04-09",
+    "gpt-4o-2024-05-13",
+    "gpt-4o",
     "gpt-3.5-turbo",
     "gpt-3.5-turbo-16k",
     "gpt-3.5-turbo-0613",
