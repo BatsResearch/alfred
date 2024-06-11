@@ -238,6 +238,7 @@ class SQLiteCache(Cache):
         :type path: str
         """
         self.cache_db = sqlite3.connect(":memory:", check_same_thread=False)
+        if path is not None: self.cache_location = path
         if os.path.exists(self.cache_location):
             con = sqlite3.connect(self.cache_location)
             con.backup(self.cache_db)
