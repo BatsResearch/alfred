@@ -382,7 +382,7 @@ class DynamicBatcher:
         scores = torch.empty(self.candidate_size)
         candidates = []
         for response_idx, response in enumerate(responses):
-            scores[response_idx] = response["logits"]
+            scores[response_idx] = response["logit"]
             candidates.append(response["candidate"])
 
         logits = {
