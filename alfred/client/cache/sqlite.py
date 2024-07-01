@@ -237,6 +237,7 @@ class SQLiteCache(Cache):
         :param path: (optional) The path to load the cache from. If not provided, will load from the path provided at initialization
         :type path: str
         """
+        if path is not None: self.cache_location = path
         self.cache_db = sqlite3.connect(":memory:", check_same_thread=False)
         if os.path.exists(self.cache_location):
             con = sqlite3.connect(self.cache_location)
