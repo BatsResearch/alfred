@@ -304,3 +304,10 @@ class StringTemplate(Template):
         :rtype: Query
         """
         return self.apply(example, **kawrgs)
+
+    def __str__(self):
+        return (
+            f"StringTemplate(id={self._id}, name={self._name}, reference={self._reference}, "
+            f"template={self._template}, metadata={self._metadata}, "
+            f"answer_choices={self._answer_choices})"
+        )
