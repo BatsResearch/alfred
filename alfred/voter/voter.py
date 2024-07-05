@@ -164,3 +164,9 @@ class Voter:
         Vote for the responses based on the matching function and the label maps
         """
         return self.vote(responses, matching_function, label_map, **kwargs)
+
+    def __str__(self):
+        return (
+            f"Voter(label_map={self._label_map}, matching_fn={self._matching_fn}, "
+            f"calibration={self._calibration})"
+        )

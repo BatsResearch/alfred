@@ -217,3 +217,10 @@ class ImageTemplate(Template):
         :rtype: Query
         """
         return self.apply(example, **kawrgs)
+
+    def __str__(self):
+        return (
+            f"ImageTemplate(id={self._id}, name={self._name}, reference={self._reference}, "
+            f"template={self._template}, metadata={self._metadata}, "
+            f"candidate_replacement={self._candidate_replacement})"
+        )
