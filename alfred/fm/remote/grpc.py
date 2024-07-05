@@ -136,7 +136,7 @@ class gRPCClient:
                         **{
                             "prediction": response.message,
                             "scores": scores,
-                            "logit": logits,
+                            "logits": logits,
                             "embeddings": bytes_to_tensor(response.embedding),
                         }
                     )
