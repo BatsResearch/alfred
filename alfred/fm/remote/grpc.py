@@ -4,6 +4,7 @@ import io
 import json
 import logging
 import socket
+import torch
 import torch.nn.functional as F
 from concurrent import futures
 from typing import Optional, Union, Iterable, Tuple, Any, List
