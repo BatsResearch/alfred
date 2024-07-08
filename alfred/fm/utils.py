@@ -526,7 +526,7 @@ class DynamicBatcher:
         return batches
 
 
-def static_batch(queries: Query, batch_sz: int = 1024) -> List[List[Query]]:
+def static_batch(queries: Query, batch_size: int = 1024) -> List[List[Query]]:
     """
     Static Batching Utility
     Batch queries into fixed size batches
