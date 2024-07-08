@@ -541,7 +541,7 @@ def static_batch(queries: Query, batch_size: int = 1024) -> List[List[Query]]:
     batches = []
     batch = []
     for query in queries:
-        if len(batch) == batch_sz:
+        if len(batch) == batch_size:
             batches.append(batch)
             batch = []
         if isinstance(query, CompletionQuery):
