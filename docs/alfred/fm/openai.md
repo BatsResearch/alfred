@@ -15,7 +15,7 @@
 
 ## OpenAIModel
 
-[Show source in openai.py:66](../../../alfred/fm/openai.py#L66)
+[Show source in openai.py:72](../../../alfred/fm/openai.py#L72)
 
 A wrapper for the OpenAI API.
 
@@ -32,7 +32,7 @@ class OpenAIModel(APIAccessFoundationModel):
 
 ### OpenAIModel()._encode_batch
 
-[Show source in openai.py:256](../../../alfred/fm/openai.py#L256)
+[Show source in openai.py:262](../../../alfred/fm/openai.py#L262)
 
 Generate embeddings for a batch of prompts using the OpenAI API.
 
@@ -59,7 +59,7 @@ def _encode_batch(self, batch_instance: [List[str]], **kwargs) -> List[torch.Ten
 
 ### OpenAIModel()._generate_batch
 
-[Show source in openai.py:231](../../../alfred/fm/openai.py#L231)
+[Show source in openai.py:237](../../../alfred/fm/openai.py#L237)
 
 Generate completions for a batch of prompts using the OpenAI API.
 
@@ -88,7 +88,7 @@ def _generate_batch(
 
 ### OpenAIModel()._openai_embedding_query
 
-[Show source in openai.py:150](../../../alfred/fm/openai.py#L150)
+[Show source in openai.py:156](../../../alfred/fm/openai.py#L156)
 
 Run a single query to get the embedding through the foundation model
 
@@ -123,7 +123,7 @@ def _openai_embedding_query(self, query_string: str, **kwargs: Any) -> torch.Ten
 
 ### OpenAIModel()._openai_query
 
-[Show source in openai.py:73](../../../alfred/fm/openai.py#L73)
+[Show source in openai.py:79](../../../alfred/fm/openai.py#L79)
 
 Run a single query through the foundation model
 
@@ -170,7 +170,7 @@ def _openai_query(
 
 ### OpenAIModel()._score_batch
 
-[Show source in openai.py:288](../../../alfred/fm/openai.py#L288)
+[Show source in openai.py:294](../../../alfred/fm/openai.py#L294)
 
 Tentative solution for scoring candidates.
 
@@ -194,7 +194,7 @@ def _score_batch(
 
 ### OpenAIModel().chat
 
-[Show source in openai.py:317](../../../alfred/fm/openai.py#L317)
+[Show source in openai.py:323](../../../alfred/fm/openai.py#L323)
 
 Launch an interactive chat session with the OpenAI API.
 

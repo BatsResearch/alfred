@@ -24,8 +24,8 @@ A subclass of `Response` that represents a language model response for scoring/r
 class RankedResponse(Response):
     def __init__(
         self,
-        prediction: str,
-        scores: Dict,
+        prediction: str = None,
+        scores: Dict = None,
         logits: Optional[Union[torch.Tensor, np.ndarray]] = None,
         embeddings: Optional[Union[torch.Tensor, np.ndarray]] = None,
     ): ...

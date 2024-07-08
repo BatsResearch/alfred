@@ -4,6 +4,10 @@
 Test Status:  ![test status](https://github.com/BatsResearch/alfred/actions/workflows/tests.yml/badge.svg?branch=main)
 
 # News
+- **[Message Queue System for Alfred Server]**
+  Alfred now implements a lean Kafka-like message queue system for server-client communication. This enables alfred server to communicate with multiple clients concurrently and asynchronously.
+ 
+
 - **[[Google Gemini](https://ai.google.dev/) Support]**
   Gemini is here!
   ```python
@@ -15,12 +19,6 @@ Test Status:  ![test status](https://github.com/BatsResearch/alfred/actions/work
   openai = Client(model_type="openai", model="gpt-4-vision-preview")
   image = ... # load your image
   openai((image, f"What type is this document? Please choose from {label_space}"))
-  ```
-  
-- **[[vLLM](https://github.com/vllm-project/vllm) Support]**
-  Alfred now supports vLLM accelerated models! To use:
-  ```python
-  vLLMClient = Client(model_type="vllm", model=<your_favourite_model>)
   ```
 
 - **[Embedding with Alfred]**

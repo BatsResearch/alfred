@@ -1,64 +1,63 @@
 import threading
 import time
 import unittest
+import asyncio
 
-import grpc
-
-import alfred.fm.remote.protos.query_pb2 as query__pb2
-import alfred.fm.remote.protos.query_pb2_grpc as query_pb2_grpc
 from alfred.client import Client
 from alfred.fm.query import CompletionQuery
-from alfred.fm.remote.grpc import gRPCServer
+from alfred.fm.remote.grpc_server import gRPCServer
+from alfred.fm.remote.grpc_client import gRPCClient
 
 
 class TestGRPCServer(unittest.TestCase):
     def setUp(self):
-        def server_starter(server, client, port):
-            server(client, port, None)
-            print("Server started")
-
         self.port = 10711
-        #
-        cli = Client(model_type="dummy")
-        # self.server.add_insecure_port(f"127.0.0.1:{self.port}")
-        #
-        # # Start the gRPC server in a separate thread
-        self.server = gRPCServer
+        self.model = Client(model_type="dummy")
+
+        def server_starter(server, model, port):
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            loop.run_until_complete(server(model=model, port=port))
+
         self.server_thread = threading.Thread(
             target=server_starter,
             args=(
-                self.server,
-                cli,
+                gRPCServer,
+                self.model,
                 self.port,
             ),
             daemon=True,
         )
         self.server_thread.start()
 
-        self.channel = grpc.insecure_channel(f"localhost:{self.port}")
-        self.stub = query_pb2_grpc.QueryServiceStub(self.channel)
-        time.sleep(2)
+        time.sleep(1)
+
+        self.client = gRPCClient("localhost", self.port)
+
+    def test_handshake(self):
+        # Test the handshake process
+        self.client.handshake()
+        self.assertIsNotNone(self.client.session_id)
 
     def test_run_single_query(self):
         # Test running a single query using the client
         query = CompletionQuery(prompt="This is a query")
+        responses = self.client.run([query])
 
-        def _run_req_gen():
-            yield query__pb2.RunRequest(message=query.prompt)
-
-        response = self.stub.Run(_run_req_gen())
-        response = response.next()
-        self.assertEqual(response.message, query.prompt)
+        self.assertEqual(len(responses), 1)
+        self.assertEqual(responses[0].prediction, query.prompt)
 
     def test_run_multiple_queries(self):
-        # Test running a dataset of queries using the client
         queries = [CompletionQuery(prompt="Query 1"), CompletionQuery(prompt="Query 2")]
+        responses = self.client.run(queries)
 
-        def _run_req_gen():
-            for query in queries:
-                yield query__pb2.RunRequest(message=query.prompt)
-
-        responses = self.stub.Run(_run_req_gen())
-
+        self.assertEqual(len(responses), 2)
         for i, response in enumerate(responses):
-            self.assertEqual(response.message, f"Query {i + 1}")
+            self.assertEqual(response.prediction, f"Query {i + 1}")
+
+    def tearDown(self):
+        self.client.close()
+
+
+if __name__ == "__main__":
+    unittest.main()

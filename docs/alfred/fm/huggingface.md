@@ -10,10 +10,11 @@
     - [HuggingFaceModel()._generate_batch](#huggingfacemodel()_generate_batch)
     - [HuggingFaceModel()._get_hidden_states](#huggingfacemodel()_get_hidden_states)
     - [HuggingFaceModel()._score_batch](#huggingfacemodel()_score_batch)
+    - [HuggingFaceModel().chat](#huggingfacemodel()chat)
 
 ## HuggingFaceModel
 
-[Show source in huggingface.py:44](../../../alfred/fm/huggingface.py#L44)
+[Show source in huggingface.py:47](../../../alfred/fm/huggingface.py#L47)
 
 The HuggingFaceModel class is a wrapper for HuggingFace models,
 including both Seq2Seq (Encoder-Decoder, e.g. T5, T0) and Causal
@@ -46,7 +47,7 @@ class HuggingFaceModel(LocalAccessFoundationModel):
 
 ### HuggingFaceModel()._encode_batch
 
-[Show source in huggingface.py:435](../../../alfred/fm/huggingface.py#L435)
+[Show source in huggingface.py:438](../../../alfred/fm/huggingface.py#L438)
 
 Encode given batch of instances.
 
@@ -70,7 +71,7 @@ def _encode_batch(self, batch_instance, **kwargs) -> List[torch.Tensor]: ...
 
 ### HuggingFaceModel()._generate_batch
 
-[Show source in huggingface.py:345](../../../alfred/fm/huggingface.py#L345)
+[Show source in huggingface.py:348](../../../alfred/fm/huggingface.py#L348)
 
 Generate completions for a batch of prompts using the model.
 
@@ -113,7 +114,7 @@ def _generate_batch(
 
 ### HuggingFaceModel()._get_hidden_states
 
-[Show source in huggingface.py:170](../../../alfred/fm/huggingface.py#L170)
+[Show source in huggingface.py:173](../../../alfred/fm/huggingface.py#L173)
 
 Get the hidden states of the inputs.
 For encoder-decoder models (e.g.) T5, this returns the encoder hidden states.
@@ -139,7 +140,7 @@ def _get_hidden_states(self, inputs, reduction="mean") -> torch.Tensor: ...
 
 ### HuggingFaceModel()._score_batch
 
-[Show source in huggingface.py:209](../../../alfred/fm/huggingface.py#L209)
+[Show source in huggingface.py:212](../../../alfred/fm/huggingface.py#L212)
 
 Score a batch of prompts and candidates using the model.
 
@@ -175,4 +176,16 @@ def _score_batch(
     tokenized: bool = False,
     **kwargs: Any
 ) -> List[Dict[str, Any]]: ...
+```
+
+### HuggingFaceModel().chat
+
+[Show source in huggingface.py:464](../../../alfred/fm/huggingface.py#L464)
+
+Launch an interactive chat session
+
+#### Signature
+
+```python
+def chat(self, **kwargs: Any): ...
 ```

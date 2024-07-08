@@ -9,6 +9,8 @@
 
 ## Modules
 
-- [Grpc](./grpc.md)
+- [gRPCClient](./grpc_client.md)
+- [gRPCServer](./grpc_server.md)
+- [Message Queue](./message_queue.md)
 - [Protos](protos/index.md)
 - [Utils](./utils.md)

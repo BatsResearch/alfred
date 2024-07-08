@@ -2,7 +2,7 @@
 
 [Alfred Index](../../../README.md#alfred-index) / [Alfred](../../index.md#alfred) / [Fm](../index.md#fm) / [Remote](./index.md#remote) / Grpc
 
-> Auto-generated documentation for [alfred.fm.remote.grpc](../../../../alfred/fm/remote/grpc.py) module.
+> Auto-generated documentation for [alfred.fm.remote.grpc](../../../../alfred/fm/remote/protos/_old/grpc.py) module.
 
 - [Grpc](#grpc)
   - [gRPCClient](#grpcclient)
@@ -17,7 +17,7 @@
 
 ## gRPCClient
 
-[Show source in grpc.py:25](../../../../alfred/fm/remote/grpc.py#L25)
+[Show source in grpc.py:25](../../../../alfred/fm/remote/protos/_old/grpc.py#L25)
 
 #### Signature
 
@@ -33,7 +33,7 @@ class gRPCClient:
 
 ### gRPCClient().encode
 
-[Show source in grpc.py:95](../../../../alfred/fm/remote/grpc.py#L95)
+[Show source in grpc.py:95](../../../../alfred/fm/remote/protos/_old/grpc.py#L95)
 
 #### Signature
 
@@ -43,7 +43,7 @@ def encode(self, queries: List[str], reduction: str = "mean", **kwargs: Any): ..
 
 ### gRPCClient().run
 
-[Show source in grpc.py:83](../../../../alfred/fm/remote/grpc.py#L83)
+[Show source in grpc.py:83](../../../../alfred/fm/remote/protos/_old/grpc.py#L83)
 
 #### Signature
 
@@ -57,7 +57,7 @@ def run(
 
 ## gRPCServer
 
-[Show source in grpc.py:165](../../../../alfred/fm/remote/grpc.py#L165)
+[Show source in grpc.py:165](../../../../alfred/fm/remote/protos/_old/grpc.py#L165)
 
 Manages connections with gRPCClient
 
@@ -75,7 +75,7 @@ class gRPCServer(query_pb2_grpc.QueryServiceServicer):
 
 ### gRPCServer().Encode
 
-[Show source in grpc.py:251](../../../../alfred/fm/remote/grpc.py#L251)
+[Show source in grpc.py:251](../../../../alfred/fm/remote/protos/_old/grpc.py#L251)
 
 #### Signature
 
@@ -85,7 +85,7 @@ def Encode(self, request_iterator, context): ...
 
 ### gRPCServer().Run
 
-[Show source in grpc.py:200](../../../../alfred/fm/remote/grpc.py#L200)
+[Show source in grpc.py:200](../../../../alfred/fm/remote/protos/_old/grpc.py#L200)
 
 #### Signature
 
@@ -95,7 +95,7 @@ def Run(self, request_iterator, context): ...
 
 ### gRPCServer().close
 
-[Show source in grpc.py:275](../../../../alfred/fm/remote/grpc.py#L275)
+[Show source in grpc.py:275](../../../../alfred/fm/remote/protos/_old/grpc.py#L275)
 
 #### Signature
 
@@ -105,7 +105,7 @@ def close(self): ...
 
 ### gRPCServer().restart
 
-[Show source in grpc.py:278](../../../../alfred/fm/remote/grpc.py#L278)
+[Show source in grpc.py:278](../../../../alfred/fm/remote/protos/_old/grpc.py#L278)
 
 #### Signature
 
@@ -115,7 +115,7 @@ def restart(self): ...
 
 ### gRPCServer().serve
 
-[Show source in grpc.py:181](../../../../alfred/fm/remote/grpc.py#L181)
+[Show source in grpc.py:181](../../../../alfred/fm/remote/protos/_old/grpc.py#L181)
 
 #### Signature
 
