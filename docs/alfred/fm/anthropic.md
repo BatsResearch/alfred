@@ -13,7 +13,7 @@
 
 ## AnthropicModel
 
-[Show source in anthropic.py:45](../../../alfred/fm/anthropic.py#L45)
+[Show source in anthropic.py:41](../../../alfred/fm/anthropic.py#L41)
 
 A wrapper for the anthropic API.
 
@@ -30,7 +30,7 @@ class AnthropicModel(APIAccessFoundationModel):
 
 ### AnthropicModel()._anthropic_query
 
-[Show source in anthropic.py:52](../../../alfred/fm/anthropic.py#L52)
+[Show source in anthropic.py:48](../../../alfred/fm/anthropic.py#L48)
 
 Run a single query through the foundation model
 
@@ -67,7 +67,7 @@ def _anthropic_query(
 
 ### AnthropicModel()._generate_batch
 
-[Show source in anthropic.py:147](../../../alfred/fm/anthropic.py#L147)
+[Show source in anthropic.py:145](../../../alfred/fm/anthropic.py#L145)
 
 Generate completions for a batch of prompts using the anthropic API.
 
@@ -96,7 +96,7 @@ def _generate_batch(
 
 ### AnthropicModel()._score_batch
 
-[Show source in anthropic.py:176](../../../alfred/fm/anthropic.py#L176)
+[Show source in anthropic.py:174](../../../alfred/fm/anthropic.py#L174)
 
 Tentative solution for scoring candidates.
 
@@ -120,7 +120,7 @@ def _score_batch(
 
 ### AnthropicModel().chat
 
-[Show source in anthropic.py:208](../../../alfred/fm/anthropic.py#L208)
+[Show source in anthropic.py:206](../../../alfred/fm/anthropic.py#L206)
 
 Launch an interactive chat session with the Anthropic API.
 

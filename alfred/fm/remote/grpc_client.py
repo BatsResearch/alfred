@@ -3,20 +3,17 @@ import base64
 import io
 import json
 import logging
-import socket
 import torch
 import torch.nn.functional as F
-from concurrent import futures
 from typing import Optional, Union, Iterable, Tuple, Any, List
 
 import grpc
 from PIL import Image
-from tqdm.auto import tqdm
 
 from ..query import Query, RankedQuery, CompletionQuery
 from ..remote.protos import query_pb2
-from ..remote.protos import query_pb2_grpc
-from ..remote.utils import get_ip, tensor_to_bytes, bytes_to_tensor, port_finder
+from .protos import query_pb2_grpc
+from ..remote.utils import bytes_to_tensor
 from ..response import RankedResponse, CompletionResponse
 
 logger = logging.getLogger(__name__)
@@ -33,6 +30,7 @@ class gRPCClient:
     ):
         self.host = host
         self.port = port
+        self.session_id = None
 
         if credentials:
             self.channel = grpc.secure_channel(f"{self.host}:{self.port}", credentials)
@@ -43,6 +41,15 @@ class gRPCClient:
             self.stub = query_pb2_grpc.QueryServiceStub(self.channel)
         except Exception as e:
             logger.error(f"Failed to connect to {self.host}:{self.port}")
+            raise e
+
+    def handshake(self):
+        try:
+            response = self.stub.Handshake(query_pb2.HandshakeRequest())
+            self.session_id = response.session_id
+            logger.info(f"Handshake completed. Session ID: {self.session_id}")
+        except Exception as e:
+            logger.error(f"Handshake failed: {e}")
             raise e
 
     @staticmethod
@@ -87,6 +94,9 @@ class gRPCClient:
         queries: Union[Iterable[Query], Iterable[str], Iterable[Tuple]],
         **kwargs: Any,
     ):
+        if not self.session_id:
+            self.handshake()
+
         try:
             output = self._run(queries, **kwargs)
         except Exception as e:
@@ -100,6 +110,9 @@ class gRPCClient:
         reduction: str = "mean",
         **kwargs: Any,
     ):
+        if not self.session_id:
+            self.handshake()
+
         try:
             output = self._encode(queries, reduction, **kwargs)
         except Exception as e:
@@ -121,15 +134,17 @@ class gRPCClient:
                     message=msg, candidate=candidate, kwargs=kwargs
                 )
 
+        metadata = (("session_id", self.session_id),)
         output = []
-        for response in self.stub.Run(_run_req_gen()):
+        for response in self.stub.Run(_run_req_gen(), metadata=metadata):
             if response.ranked:
                 logits = ast.literal_eval(response.logit)
                 candidates = list(logits.keys())
                 logit_values = torch.tensor(list(logits.values()))
                 probabilities = F.softmax(logit_values, dim=0)
                 scores = {
-                    candidate: prob.item() for candidate, prob in zip(candidates, probabilities)
+                    candidate: prob.item()
+                    for candidate, prob in zip(candidates, probabilities)
                 }
                 output.append(
                     RankedResponse(
@@ -163,128 +178,14 @@ class gRPCClient:
                     message=query, reduction=reduction, kwargs=kwargs
                 )
 
+        metadata = (("session_id", self.session_id),)
         output = []
-        for response in self.stub.Encode(_encode_req_gen()):
+        for response in self.stub.Encode(_encode_req_gen(), metadata=metadata):
             if response.success:
                 output.append(bytes_to_tensor(response.embedding))
             else:
                 output.append(None)
         return output
 
-
-class gRPCServer(query_pb2_grpc.QueryServiceServicer):
-    """
-    Manages connections with gRPCClient
-    """
-
-    def __init__(
-        self,
-        model,
-        port: int = 10719,
-        credentials: Optional[grpc.ServerCredentials] = None,
-    ):
-        self.model = model
-        self.port = port_finder(port)
-
-        self.serve(credentials)
-
-    def serve(self, credentials: Optional[grpc.ServerCredentials] = None):
-        self.server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-        query_pb2_grpc.add_QueryServiceServicer_to_server(self, self.server)
-
-        if credentials:
-            self.server.add_secure_port(f"[::]:{self.port}", credentials)
-        else:
-            self.server.add_insecure_port(f"[::]:{self.port}")
-
-        my_ip = get_ip()
-        hostname = socket.gethostname()
-        # Will not work if the port is not visible to the outside world
-        logger.info(
-            f"gRPC server starting at {hostname}:{self.port} or {my_ip}:{self.port}"
-        )
-
-        self.server.start()
-        self.server.wait_for_termination()
-
-    def Run(self, request_iterator, context):
-        logger.info("Received request")
-        datasets = []
-        for request in request_iterator:
-            instance = request.message
-            candidate = request.candidate
-            kwargs = request.kwargs
-            if candidate:
-                if instance.startswith(IMAGE_SIGNATURE):
-                    instance = Image.open(
-                        io.BytesIO(base64.b64decode(instance[len(IMAGE_SIGNATURE) :]))
-                    )
-            else:
-                if IMAGE_SIGNATURE in instance:
-                    prompt, img = instance.split(IMAGE_SIGNATURE)
-                    img = Image.open(io.BytesIO(base64.b64decode(img)))
-                    instance = (img, prompt)
-
-            if kwargs:
-                kwargs = json.loads(kwargs)
-            else:
-                kwargs = {}
-            if candidate:
-                instance = RankedQuery(
-                    prompt=instance, candidates=candidate.split("|||")
-                )
-            else:
-                instance = CompletionQuery(instance)
-            datasets.append(instance)
-
-        logger.info(f"Received {len(datasets)} queries")
-
-        responses = self.model.run(datasets, **kwargs)
-        for response in tqdm(responses):
-            if isinstance(response, CompletionResponse):
-                yield query_pb2.RunResponse(
-                    message=response.prediction,
-                    ranked=False,
-                    embedding=tensor_to_bytes(response.embedding),
-                )
-            elif isinstance(response, RankedResponse):
-                yield query_pb2.RunResponse(
-                    message=response.prediction,
-                    ranked=True,
-                    logit=str(response.logits),
-                    embedding=tensor_to_bytes(response.embeddings),
-                )
-            else:
-                logger.error(f"Response type {type(response)} not supported")
-                raise ValueError("Response type not supported")
-
-    def Encode(self, request_iterator, context):
-        logger.info("Received request")
-        datasets = []
-        for request in request_iterator:
-            instance = request.message
-            reduction = request.reduction
-            kwargs = request.kwargs
-
-            if kwargs:
-                kwargs = json.loads(kwargs)
-            else:
-                kwargs = {}
-
-            datasets.append(instance)
-
-        logger.info(f"Received {len(datasets)} queries for embeddings")
-
-        for response in tqdm(
-            self.model.encode(datasets, reduction=reduction, **kwargs)
-        ):
-            yield query_pb2.EncodeResponse(
-                success=True, embedding=tensor_to_bytes(response)
-            )
-
     def close(self):
-        self.server.stop(0)
-
-    def restart(self):
-        self.close()
-        self.__init__(self.port)
+        self.channel.close()

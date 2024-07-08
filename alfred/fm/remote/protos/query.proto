@@ -5,8 +5,17 @@ syntax = "proto3";
 package unary;
 
 service QueryService{
+  rpc Handshake(HandshakeRequest) returns (HandshakeResponse) {}
   rpc Encode(stream EncodeRequest) returns (stream EncodeResponse) {}
   rpc Run(stream RunRequest) returns (stream RunResponse) {}
+}
+
+message HandshakeRequest {
+  string client_id = 1;
+}
+
+message HandshakeResponse {
+  string session_id = 1;
 }
 
 message RunRequest {

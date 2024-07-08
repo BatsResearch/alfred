@@ -2,7 +2,7 @@ import argparse
 import logging
 from typing import Any
 
-import alfred.fm.remote.grpc as grpc_utils
+from alfred.fm.remote.grpc_server import gRPCServer
 
 logging.basicConfig(
     format="ALFRED %(levelname)s: %(asctime)-5s  %(message)s",
@@ -124,7 +124,7 @@ class ModelServer:
             raise ValueError(f"Invalid model type: {self.model_type}")
         logger.info(f"Initialized local {self.model_type} model: {self.model}")
 
-        self.server = grpc_utils.gRPCServer(self.model, port)
+        self.server = gRPCServer(self.model, port)
         self.port = self.server.port
         logger.info(f"Initialized gRPC Server on port: {self.port}")
 
@@ -148,7 +148,7 @@ if __name__ == "__main__":
     """
     To Launch from CLI:
     >>> python -m alfred.run_server.py --model_type huggingface --model gpt2 --port 10719
-    
+
 
     This is the Main Entry Point for Alfred Server
 

@@ -8,7 +8,7 @@ from grpc import FutureTimeoutError
 from .cache import Cache, DummyCache, SQLiteCache
 from .ssh.sshtunnel import SSHTunnel
 from ..fm.query import CompletionQuery, Query, RankedQuery
-from ..fm.remote.grpc import gRPCClient
+from alfred.fm.remote.grpc_client import gRPCClient
 from ..fm.response import Response
 from ..template import StringTemplate, Template
 from ..voter.voter import Voter

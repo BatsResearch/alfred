@@ -5,10 +5,10 @@ import unittest
 import grpc
 
 import alfred.fm.remote.protos.query_pb2 as query__pb2
-import alfred.fm.remote.protos.query_pb2_grpc as query_pb2_grpc
+import alfred.fm.remote.protos._old.query_pb2_grpc as query_pb2_grpc
 from alfred.client import Client
 from alfred.fm.query import CompletionQuery
-from alfred.fm.remote.grpc import gRPCServer
+from alfred.fm.remote.protos._old.grpc import gRPCServer
 
 
 class TestGRPCServer(unittest.TestCase):

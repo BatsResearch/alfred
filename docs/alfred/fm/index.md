@@ -15,6 +15,7 @@
 - [Dummy](./dummy.md)
 - [Flexgen](./flexgen.md)
 - [Google](./google.md)
+- [Groq](./groq.md)
 - [Huggingface](./huggingface.md)
 - [Huggingfacedocument](./huggingfacedocument.md)
 - [Huggingfacevlm](./huggingfacevlm.md)

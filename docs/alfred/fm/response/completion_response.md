@@ -27,7 +27,7 @@ the confidence of the prediction, and an optional embedding output.
 class CompletionResponse(Response):
     def __init__(
         self,
-        prediction: str,
+        prediction: str = None,
         score: Optional[float] = None,
         embedding: Optional[Union[torch.Tensor, np.ndarray]] = None,
     ): ...
