@@ -524,3 +524,31 @@ class DynamicBatcher:
         clear_cuda_cache()
 
         return batches
+
+
+def static_batch(queries: Query, batch_sz: int = 1024) -> List[List[Query]]:
+    """
+    Static Batching Utility
+    Batch queries into fixed size batches
+
+    :param queries: A list of queries to be batched
+    :type queries: List[Query]
+    :param batch_sz: The batch size
+    :type batch_sz: int
+    :return: A list of batches
+    :rtype: List[List[Query]]
+    """
+    batches = []
+    batch = []
+    for query in queries:
+        if len(batch) == batch_sz:
+            batches.append(batch)
+            batch = []
+        if isinstance(query, CompletionQuery):
+            _q = query.load()[0]
+        elif isinstance(query, RankedQuery):
+            _q = query.prompt
+        batch.append(_q)
+    if len(batch) > 0:
+        batches.append(batch)
+    return batches

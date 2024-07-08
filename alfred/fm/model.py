@@ -11,7 +11,7 @@ from tqdm.auto import tqdm
 
 from .query import Query, RankedQuery, CompletionQuery
 from .response import Response, CompletionResponse, RankedResponse
-from .utils import DynamicBatcher, clear_cuda_cache, batch_multimodal
+from .utils import DynamicBatcher, clear_cuda_cache, batch_multimodal, static_batch
 
 logger = logging.getLogger(__name__)
 
@@ -131,9 +131,7 @@ class FoundationModel(abc.ABC):
                 )
             except AttributeError:
                 if batch_policy == "static":
-                    batched_queries = np.array_split(
-                        queries, max(1, len(queries) // batch_size)
-                    )
+                    batched_queries = static_batch(queries, batch_size=batch_size)
                     pretokenized = False
                 elif batch_policy == "dynamic":
                     if pretokenize:
@@ -200,9 +198,7 @@ class FoundationModel(abc.ABC):
                     clear_cuda_cache()
                     if batch_policy == "static":
                         batch_size = int(batch_size * 0.8)
-                        batched_queries = np.array_split(
-                            queries, len(queries) // batch_size
-                        )
+                        batched_queries = static_batch(queries, batch_size=batch_size)
                         logging.info(f"New batch size: {batch_size}")
                     elif batch_policy == "dynamic":
                         DB = DynamicBatcher(
