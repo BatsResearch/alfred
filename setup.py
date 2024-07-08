@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='Alfred',
-    version='0.0.1',
+    version='1.0.1',
     url='https://github.com/BatsResearch/alfred',
     author='Peilin Yu',
     author_email='peilin_yu@brown.edu',
