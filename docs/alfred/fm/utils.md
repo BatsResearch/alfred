@@ -21,6 +21,7 @@
   - [normalize_logits](#normalize_logits)
   - [reorder_array](#reorder_array)
   - [retry](#retry)
+  - [static_batch](#static_batch)
   - [tokenize](#tokenize)
   - [type_print](#type_print)
 
@@ -365,6 +366,33 @@ Type: *Callable*
 
 ```python
 def retry(num_retries=3, wait_time=0.1, exceptions=(Exception)): ...
+```
+
+
+
+## static_batch
+
+[Show source in utils.py:529](../../../alfred/fm/utils.py#L529)
+
+Static Batching Utility
+Batch queries into fixed size batches
+
+#### Arguments
+
+- `queries` - A list of queries to be batched
+:type queries: List[Query]
+- `batch_sz` - The batch size
+:type batch_sz: int
+
+#### Returns
+
+A list of batches
+Type: *List[List[Query]]*
+
+#### Signature
+
+```python
+def static_batch(queries: Query, batch_sz: int = 1024) -> List[List[Query]]: ...
 ```
 
 
