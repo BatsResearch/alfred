@@ -380,7 +380,7 @@ Batch queries into fixed size batches
 #### Arguments
 
 - `queries` - A list of queries to be batched
-:type queries: List[Query]
+:type queries: Union[Query, str]
 - `batch_sz` - The batch size
 :type batch_sz: int
 
@@ -392,7 +392,9 @@ Type: *List[List[Query]]*
 #### Signature
 
 ```python
-def static_batch(queries: Query, batch_sz: int = 1024) -> List[List[Query]]: ...
+def static_batch(
+    queries: Union[Query, str], batch_size: int = 512
+) -> List[List[Query]]: ...
 ```
 
 

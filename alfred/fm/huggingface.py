@@ -130,7 +130,9 @@ class HuggingFaceModel(LocalAccessFoundationModel):
 
         if torch.cuda.is_available():
             n_gpus = torch.cuda.device_count()
-            free_in_GB = sum([int(mem / 1024**3) for mem in torch.cuda.mem_get_info()])
+            free_in_GB = sum(
+                [int(mem / 1024**3) for mem in torch.cuda.mem_get_info()]
+            )
 
             logger.log(
                 logging.INFO, f"Found {n_gpus} GPUs with {free_in_GB}GB free GPU memory"
@@ -398,9 +400,10 @@ class HuggingFaceModel(LocalAccessFoundationModel):
                 outputs = self.model.generate(
                     inputs.input_ids.to(self.model.device),
                     max_new_tokens=max_new_tokens,
-                    temperature=temprature,
+                    temperature=temprature if temprature != 0 else None,
                     repetition_penalty=repetition_penalty,
                     return_dict_in_generate=True,
+                    do_sample=temprature != 0,
                 )
             else:
                 outputs = [
