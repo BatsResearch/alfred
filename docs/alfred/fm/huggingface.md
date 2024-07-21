@@ -47,7 +47,7 @@ class HuggingFaceModel(LocalAccessFoundationModel):
 
 ### HuggingFaceModel()._encode_batch
 
-[Show source in huggingface.py:438](../../../alfred/fm/huggingface.py#L438)
+[Show source in huggingface.py:441](../../../alfred/fm/huggingface.py#L441)
 
 Encode given batch of instances.
 
@@ -71,7 +71,7 @@ def _encode_batch(self, batch_instance, **kwargs) -> List[torch.Tensor]: ...
 
 ### HuggingFaceModel()._generate_batch
 
-[Show source in huggingface.py:348](../../../alfred/fm/huggingface.py#L348)
+[Show source in huggingface.py:350](../../../alfred/fm/huggingface.py#L350)
 
 Generate completions for a batch of prompts using the model.
 
@@ -114,7 +114,7 @@ def _generate_batch(
 
 ### HuggingFaceModel()._get_hidden_states
 
-[Show source in huggingface.py:173](../../../alfred/fm/huggingface.py#L173)
+[Show source in huggingface.py:175](../../../alfred/fm/huggingface.py#L175)
 
 Get the hidden states of the inputs.
 For encoder-decoder models (e.g.) T5, this returns the encoder hidden states.
@@ -140,7 +140,7 @@ def _get_hidden_states(self, inputs, reduction="mean") -> torch.Tensor: ...
 
 ### HuggingFaceModel()._score_batch
 
-[Show source in huggingface.py:212](../../../alfred/fm/huggingface.py#L212)
+[Show source in huggingface.py:214](../../../alfred/fm/huggingface.py#L214)
 
 Score a batch of prompts and candidates using the model.
 
@@ -180,7 +180,7 @@ def _score_batch(
 
 ### HuggingFaceModel().chat
 
-[Show source in huggingface.py:464](../../../alfred/fm/huggingface.py#L464)
+[Show source in huggingface.py:467](../../../alfred/fm/huggingface.py#L467)
 
 Launch an interactive chat session
 

@@ -526,13 +526,15 @@ class DynamicBatcher:
         return batches
 
 
-def static_batch(queries: Query, batch_size: int = 1024) -> List[List[Query]]:
+def static_batch(
+    queries: Union[Query, str], batch_size: int = 512
+) -> List[List[Query]]:
     """
     Static Batching Utility
     Batch queries into fixed size batches
 
     :param queries: A list of queries to be batched
-    :type queries: List[Query]
+    :type queries: Union[Query, str]
     :param batch_sz: The batch size
     :type batch_sz: int
     :return: A list of batches
@@ -548,6 +550,10 @@ def static_batch(queries: Query, batch_size: int = 1024) -> List[List[Query]]:
             _q = query.load()[0]
         elif isinstance(query, RankedQuery):
             _q = query.prompt
+        elif isinstance(query, str):
+            _q = query
+        else:
+            print(f"Unknown query type {type(query)}")
         batch.append(_q)
     if len(batch) > 0:
         batches.append(batch)
