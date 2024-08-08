@@ -7,6 +7,7 @@
 - [Vllm](#vllm)
   - [vLLMModel](#vllmmodel)
     - [vLLMModel()._generate_batch](#vllmmodel()_generate_batch)
+    - [vLLMModel()._score_batch](#vllmmodel()_score_batch)
 
 ## vLLMModel
 
@@ -46,4 +47,34 @@ Type: *List[CompletionResponse]*
 def _generate_batch(
     self, batch_instance: List[str], **kwargs: Any
 ) -> List[CompletionResponse]: ...
+```
+
+### vLLMModel()._score_batch
+
+[Show source in vllm.py:68](../../../alfred/fm/vllm.py#L68)
+
+Score a batch of prompts and candidates using the vLLM model.
+
+#### Arguments
+
+- `batch` - A list of prompts or a list of tuples of prompts and candidates.
+- `candidate` - A list of candidates to rank. If not provided, it's extracted from batch.
+- `hidden_state` - Whether to return the encoder hidden state (not supported in vLLM).
+- `tokenized` - Whether the input is already tokenized (not supported in vLLM).
+
+#### Returns
+
+A list of dictionaries containing the log probability scores for each candidate.
+
+#### Signature
+
+```python
+def _score_batch(
+    self,
+    batch: Union[List[str], List[Tuple[str, str]]],
+    candidate: Optional[List[str]] = None,
+    hidden_state: bool = False,
+    tokenized: bool = False,
+    **kwargs: Any
+) -> List[Dict[str, Any]]: ...
 ```
