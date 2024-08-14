@@ -238,12 +238,10 @@ class HuggingFaceModel(LocalAccessFoundationModel):
         :return: A list of dictionaries containing the raw logit scores and the encoder/decoder hidden states.
         :rtype: List[Dict[str, Any]]
         """
-        def _get_device(self):
-            if hasattr(self.model, 'hf_device_map'):
-                return list(self.model.hf_device_map.values())[-1]
-            return next(self.model.parameters()).device
-
-        device = _get_device()
+        if hasattr(self.model, 'hf_device_map'):
+            device = list(self.model.hf_device_map.values())[-1]
+        else:
+            device = next(self.model.parameters()).device
 
         if tokenized:
             inputs, candidates = batch
