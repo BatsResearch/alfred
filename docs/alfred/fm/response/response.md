@@ -1,6 +1,10 @@
 # Response
 
-[Alfred Index](../../../README.md#alfred-index) / [Alfred](../../index.md#alfred) / [Fm](../index.md#fm) / [Response](./index.md#response) / Response
+[Alfred Index](../../../README.md#alfred-index) /
+[Alfred](../../index.md#alfred) /
+[Fm](../index.md#fm) /
+[Response](./index.md#response) /
+Response
 
 > Auto-generated documentation for [alfred.fm.response.response](../../../../alfred/fm/response/response.py) module.
 
@@ -22,7 +26,8 @@ Inherited by CompletionResponse and RankedResponse.
 #### Signature
 
 ```python
-class Response(OrderedDict): ...
+class Response(OrderedDict):
+    ...
 ```
 
 ### Response().__repr__
@@ -39,7 +44,8 @@ Type: *str*
 #### Signature
 
 ```python
-def __repr__(self): ...
+def __repr__(self):
+    ...
 ```
 
 ### Response().__str__
@@ -56,7 +62,8 @@ Type: *str*
 #### Signature
 
 ```python
-def __str__(self): ...
+def __str__(self):
+    ...
 ```
 
 ### Response().prediction
@@ -73,7 +80,8 @@ The prediction made by the model
 
 ```python
 @abc.abstractmethod
-def prediction(self): ...
+def prediction(self):
+    ...
 ```
 
 ### Response().serialize
@@ -90,5 +98,8 @@ Type: *str*
 #### Signature
 
 ```python
-def serialize(self) -> str: ...
+def serialize(self) -> str:
+    ...
 ```
+
+

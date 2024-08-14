@@ -1,6 +1,9 @@
 # Onnx
 
-[Alfred Index](../../README.md#alfred-index) / [Alfred](../index.md#alfred) / [Fm](./index.md#fm) / Onnx
+[Alfred Index](../../README.md#alfred-index) /
+[Alfred](../index.md#alfred) /
+[Fm](./index.md#fm) /
+Onnx
 
 > Auto-generated documentation for [alfred.fm.onnx](../../../alfred/fm/onnx.py) module.
 
@@ -21,5 +24,8 @@ Currently it only supports T5-based models.
 class ONNXModel(LocalAccessFoundationModel):
     def __init__(
         self, model_string: Optional[str] = None, local_path: Optional[str] = None
-    ): ...
+    ):
+        ...
 ```
+
+

@@ -1,6 +1,9 @@
 # Dataset
 
-[Alfred Index](../../README.md#alfred-index) / [Alfred](../index.md#alfred) / [Data](./index.md#data) / Dataset
+[Alfred Index](../../README.md#alfred-index) /
+[Alfred](../index.md#alfred) /
+[Data](./index.md#data) /
+Dataset
 
 > Auto-generated documentation for [alfred.data.dataset](../../../alfred/data/dataset.py) module.
 
@@ -46,7 +49,8 @@ Properties:
 #### Signature
 
 ```python
-class Dataset(abc.ABC): ...
+class Dataset(abc.ABC):
+    ...
 ```
 
 ### Dataset().__getitem__
@@ -59,7 +63,8 @@ returns the row with the given unique identifier
 
 ```python
 @abc.abstractmethod
-def __getitem__(self, uid, **kawrgs): ...
+def __getitem__(self, uid, **kawrgs):
+    ...
 ```
 
 ### Dataset().__iter__
@@ -72,7 +77,8 @@ iterates over the rows of the dataset
 
 ```python
 @abc.abstractmethod
-def __iter__(self): ...
+def __iter__(self):
+    ...
 ```
 
 ### Dataset().__len__
@@ -85,7 +91,8 @@ returns the number of rows in the dataset
 
 ```python
 @abc.abstractmethod
-def __len__(self) -> int: ...
+def __len__(self) -> int:
+    ...
 ```
 
 ### Dataset().__version__
@@ -98,7 +105,8 @@ returns the version of the dataset
 
 ```python
 @abc.abstractmethod
-def __version__(self) -> str: ...
+def __version__(self) -> str:
+    ...
 ```
 
 ### Dataset().data
@@ -112,7 +120,8 @@ returns the underlying data
 ```python
 @property
 @abc.abstractmethod
-def data(self): ...
+def data(self):
+    ...
 ```
 
 ### Dataset().info
@@ -126,7 +135,8 @@ returns the metadata about the dataset
 ```python
 @property
 @abc.abstractmethod
-def info(self): ...
+def info(self):
+    ...
 ```
 
 ### Dataset.load_from_disk
@@ -139,7 +149,8 @@ loads the dataset from disk from the specified path
 
 ```python
 @staticmethod
-def load_from_disk(self, path: str): ...
+def load_from_disk(self, path: str):
+    ...
 ```
 
 ### Dataset.save_to_disk
@@ -152,7 +163,8 @@ saves the dataset to disk at the specified path
 
 ```python
 @staticmethod
-def save_to_disk(self, path: str): ...
+def save_to_disk(self, path: str):
+    ...
 ```
 
 ### Dataset().split
@@ -166,7 +178,8 @@ returns the information about how the dataset has been split
 ```python
 @property
 @abc.abstractmethod
-def split(self): ...
+def split(self):
+    ...
 ```
 
 ### Dataset().version
@@ -179,5 +192,8 @@ returns the version of the dataset
 
 ```python
 @property
-def version(self) -> str: ...
+def version(self) -> str:
+    ...
 ```
+
+

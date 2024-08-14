@@ -1,6 +1,10 @@
 # Protos
 
-[Alfred Index](../../../../README.md#alfred-index) / [Alfred](../../../index.md#alfred) / [Fm](../../index.md#fm) / [Remote](../index.md#remote) / Protos
+[Alfred Index](../../../../README.md#alfred-index) /
+[Alfred](../../../index.md#alfred) /
+[Fm](../../index.md#fm) /
+[Remote](../index.md#remote) /
+Protos
 
 > Auto-generated documentation for [alfred.fm.remote.protos](../../../../../alfred/fm/remote/protos/__init__.py) module.
 

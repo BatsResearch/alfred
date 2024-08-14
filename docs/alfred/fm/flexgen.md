@@ -1,12 +1,14 @@
 # Flexgen
 
-[Alfred Index](../../README.md#alfred-index) / [Alfred](../index.md#alfred) / [Fm](./index.md#fm) / Flexgen
+[Alfred Index](../../README.md#alfred-index) /
+[Alfred](../index.md#alfred) /
+[Fm](./index.md#fm) /
+Flexgen
 
 > Auto-generated documentation for [alfred.fm.flexgen](../../../alfred/fm/flexgen.py) module.
 
 - [Flexgen](#flexgen)
   - [FlexGenModel](#flexgenmodel)
-    - [FlexGenModel()._generate_batch](#flexgenmodel()_generate_batch)
 
 ## FlexGenModel
 
@@ -31,30 +33,8 @@ class FlexGenModel(LocalAccessFoundationModel):
         policy: Union[List, Policy] = (100, 0, 100, 0, 100, 0),
         offload_dir: str = "./flexgen_offload_cache",
         **kwargs: Any
-    ): ...
+    ):
+        ...
 ```
 
-### FlexGenModel()._generate_batch
 
-[Show source in flexgen.py:73](../../../alfred/fm/flexgen.py#L73)
-
-Generate completions for a batch of queries.
-
-#### Arguments
-
-- `batch_instance` - A list of queries.
-:type batch_instance: List[str]
-- `kwargs` - Additional keyword arguments.
-
-#### Returns
-
-A list of `CompletionResponse` objects with the same prediction content as the input.
-Type: *List[CompletionResponse]*
-
-#### Signature
-
-```python
-def _generate_batch(
-    self, batch_instance: List[str], **kwargs: Any
-) -> List[CompletionResponse]: ...
-```

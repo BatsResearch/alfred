@@ -1,6 +1,8 @@
 # Data
 
-[Alfred Index](../../README.md#alfred-index) / [Alfred](../index.md#alfred) / Data
+[Alfred Index](../../README.md#alfred-index) /
+[Alfred](../index.md#alfred) /
+Data
 
 > Auto-generated documentation for [alfred.data](../../../alfred/data/__init__.py) module.
 
@@ -30,7 +32,8 @@ Type: *IterableArrowDataset*
 #### Signature
 
 ```python
-def from_csv(csv_file: str) -> IterableArrowDataset: ...
+def from_csv(csv_file: str) -> IterableArrowDataset:
+    ...
 ```
 
 
@@ -54,7 +57,8 @@ Type: *IterableArrowDataset*
 #### Signature
 
 ```python
-def from_json(json_file: str) -> IterableArrowDataset: ...
+def from_json(json_file: str) -> IterableArrowDataset:
+    ...
 ```
 
 
@@ -78,7 +82,8 @@ Type: *IterableArrowDataset*
 #### Signature
 
 ```python
-def from_pandas(df: DataFrame) -> IterableArrowDataset: ...
+def from_pandas(df: DataFrame) -> IterableArrowDataset:
+    ...
 ```
 
 
@@ -104,7 +109,8 @@ Type: *IterableArrowDataset*
 #### Signature
 
 ```python
-def from_sql_table(sql_table_name, sql_connection_string) -> IterableArrowDataset: ...
+def from_sql_table(sql_table_name, sql_connection_string) -> IterableArrowDataset:
+    ...
 ```
 
 

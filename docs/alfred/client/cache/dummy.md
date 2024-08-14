@@ -1,6 +1,10 @@
 # Dummy
 
-[Alfred Index](../../../README.md#alfred-index) / [Alfred](../../index.md#alfred) / [Client](../index.md#client) / [Cache](./index.md#cache) / Dummy
+[Alfred Index](../../../README.md#alfred-index) /
+[Alfred](../../index.md#alfred) /
+[Client](../index.md#client) /
+[Cache](./index.md#cache) /
+Dummy
 
 > Auto-generated documentation for [alfred.client.cache.dummy](../../../../alfred/client/cache/dummy.py) module.
 
@@ -26,7 +30,8 @@ This class is intended as a dummy implementation of the `Cache` interface for te
 
 ```python
 class DummyCache(Cache):
-    def __init__(self): ...
+    def __init__(self):
+        ...
 ```
 
 #### See also
@@ -54,7 +59,8 @@ Type: *List*
 #### Signature
 
 ```python
-def read(self, prompt: str, metadata: Optional[str] = None) -> List: ...
+def read(self, prompt: str, metadata: Optional[str] = None) -> List:
+    ...
 ```
 
 ### DummyCache().read_by_metadata
@@ -76,7 +82,8 @@ Type: *list*
 #### Signature
 
 ```python
-def read_by_metadata(self, metadata: Optional[str] = None) -> List: ...
+def read_by_metadata(self, metadata: Optional[str] = None) -> List:
+    ...
 ```
 
 ### DummyCache().read_by_prompt
@@ -98,7 +105,8 @@ Type: *List*
 #### Signature
 
 ```python
-def read_by_prompt(self, prompt: str) -> List: ...
+def read_by_prompt(self, prompt: str) -> List:
+    ...
 ```
 
 ### DummyCache().read_by_prompt_and_metadata
@@ -122,7 +130,8 @@ Type: *List*
 #### Signature
 
 ```python
-def read_by_prompt_and_metadata(self, prompt: str, metadata: str) -> List: ...
+def read_by_prompt_and_metadata(self, prompt: str, metadata: str) -> List:
+    ...
 ```
 
 ### DummyCache().save
@@ -144,7 +153,8 @@ Type: *str*
 #### Signature
 
 ```python
-def save(self, path: str) -> str: ...
+def save(self, path: str) -> str:
+    ...
 ```
 
 ### DummyCache().to_pandas
@@ -161,7 +171,8 @@ Type: *None*
 #### Signature
 
 ```python
-def to_pandas(self) -> None: ...
+def to_pandas(self) -> None:
+    ...
 ```
 
 ### DummyCache().write
@@ -182,5 +193,8 @@ Write a prompt-response pair to the cache
 #### Signature
 
 ```python
-def write(self, prompt: str, response: str, metadata: Optional[str] = None): ...
+def write(self, prompt: str, response: str, metadata: Optional[str] = None):
+    ...
 ```
+
+

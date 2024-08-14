@@ -238,13 +238,19 @@ class HuggingFaceModel(LocalAccessFoundationModel):
         :return: A list of dictionaries containing the raw logit scores and the encoder/decoder hidden states.
         :rtype: List[Dict[str, Any]]
         """
+        def _get_device(self):
+            if hasattr(self.model, 'hf_device_map'):
+                return list(self.model.hf_device_map.values())[-1]
+            return next(self.model.parameters()).device
+
+        device = _get_device()
 
         if tokenized:
-            inputs, candidate = batch
+            inputs, candidates = batch
         else:
             if candidate is None:
-                batch, candidate = zip(*batch)
-            batch, candidate = list(batch), list(candidate)
+                batch, candidates = zip(*batch)
+            batch, candidates = list(batch), list(candidate)
 
             inputs = self.tokenizer(
                 batch,
@@ -255,95 +261,78 @@ class HuggingFaceModel(LocalAccessFoundationModel):
                 max_length=self.max_position_embeddings,
             )
 
-        end_device = list(self.model.hf_device_map.values())[-1]
-
-        logger.log(logging.INFO, f"Ranking {len(candidate)} instances")
+        print(f"Ranking {len(candidates)} instances")
 
         if self.model.config.is_encoder_decoder:
             candidate_tokens = self.tokenizer(
-                candidate,
+                candidates,
                 padding=True,
                 truncation=True,
                 max_length=self.max_position_embeddings,
                 return_tensors="pt",
             )
 
-            candidate_token_ids = candidate_tokens.input_ids.to(end_device)
+            candidate_token_ids = candidate_tokens.input_ids.to(device)
 
-            logits = self.model(
-                input_ids=inputs.input_ids.cuda(),
-                attention_mask=inputs.attention_mask.cuda(),
-                labels=candidate_token_ids,
-            ).logits
+            with torch.no_grad():
+                outputs = self.model(
+                    input_ids=inputs.input_ids.to(device),
+                    attention_mask=inputs.attention_mask.to(device),
+                    labels=candidate_token_ids,
+                )
+            logits = outputs.logits
         else:
             candidate_tokens = self.tokenizer(
-                candidate,
+                candidates,
                 padding=True,
                 truncation=True,
                 max_length=self.max_position_embeddings,
-                add_special_tokens=not (
-                    isinstance(self.model, LlamaPreTrainedModel)
-                    or isinstance(self.model, MistralPreTrainedModel)
-                ),
+                add_special_tokens=False,
                 return_tensors="pt",
             )
-            candidate_token_ids = candidate_tokens.input_ids.to(end_device)
+            candidate_token_ids = candidate_tokens.input_ids.to(device)
             _, prefix_length = inputs.input_ids.shape
             input_ids = torch.cat(
-                [inputs.input_ids.to(end_device), candidate_token_ids], dim=-1
-            ).to(end_device)
+                [inputs.input_ids.to(device), candidate_token_ids], dim=-1
+            )
             attention_mask = torch.cat(
                 [
-                    inputs.attention_mask.to(end_device),
-                    candidate_tokens.attention_mask.to(end_device),
+                    inputs.attention_mask.to(device),
+                    candidate_tokens.attention_mask.to(device),
                 ],
                 dim=-1,
             )
-            if isinstance(self.model, LlamaPreTrainedModel):
-                logits = self.model(
+
+            with torch.no_grad():
+                outputs = self.model(
                     input_ids=input_ids,
                     attention_mask=attention_mask,
-                ).logits[:, prefix_length - 1 : -1]
-            else:
-                position_ids = torch.maximum(
-                    torch.cumsum(attention_mask.cuda().to(torch.long), dim=-1) - 1,
-                    torch.zeros(
-                        1,
-                        dtype=torch.long,
-                    ).cuda()[None, None],
                 )
+            logits = outputs.logits[:, prefix_length - 1: -1]
 
-                logits = self.model(
-                    input_ids=input_ids,
-                    position_ids=position_ids,
-                    attention_mask=attention_mask,
-                ).logits[:, prefix_length - 1 : -1]
-
-        masked_log_probs = candidate_tokens.attention_mask.to(
-            logits.get_device()
-        ).unsqueeze(-1) * torch.nn.functional.log_softmax(logits, dim=-1)
+        masked_log_probs = candidate_tokens.attention_mask.to(logits.device).unsqueeze(
+            -1) * torch.nn.functional.log_softmax(logits, dim=-1)
         seq_token_log_probs = torch.gather(
             masked_log_probs,
             -1,
-            candidate_token_ids.to(logits.get_device()).unsqueeze(-1),
+            candidate_token_ids.to(logits.device).unsqueeze(-1),
         )
         seq_log_prob = seq_token_log_probs.squeeze(dim=-1).sum(dim=-1)
-        seq_log_prob = seq_log_prob.view(len(candidate), -1)
+        seq_log_prob = seq_log_prob.view(len(candidates), -1)
 
         if hidden_state:
-            reduction = kwargs.get("reduction", "mean")
-            _hidden_state = self._get_hidden_states(inputs, reduction=reduction)
+            hidden_states = outputs.hidden_states[-1] if hasattr(outputs, 'hidden_states') else None
             return [
                 {
-                    "logit": logit,
-                    "candidate": candidate[logit_id],
-                    "hidden_state": _hidden_state[logit_id].squeeze(0),
+                    "logit": logit.item(),
+                    "candidate": candidates[logit_id],
+                    "hidden_state": hidden_states[logit_id].squeeze(0) if hidden_states is not None else None,
                 }
                 for logit_id, logit in enumerate(torch.flatten(seq_log_prob))
             ]
 
         return [
-            {"logit": logit, "candidate": candidate[logit_id], "hidden_state": None}
+            {"logit": logit.item(), "candidate": candidates[logit_id], "hidden_state": None}
             for logit_id, logit in enumerate(torch.flatten(seq_log_prob))
         ]
 

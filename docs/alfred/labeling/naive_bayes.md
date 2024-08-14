@@ -1,6 +1,9 @@
 # NaiveBayes
 
-[Alfred Index](../../README.md#alfred-index) / [Alfred](../index.md#alfred) / [Labeling](./index.md#labeling) / NaiveBayes
+[Alfred Index](../../README.md#alfred-index) /
+[Alfred](../index.md#alfred) /
+[Labeling](./index.md#labeling) /
+NaiveBayes
 
 > Auto-generated documentation for [alfred.labeling.naive_bayes](../../../alfred/labeling/naive_bayes.py) module.
 
@@ -18,7 +21,8 @@ LabelModel wrapper to perform label modeling for partial labelers on the respons
 
 ```python
 class NaiveBayes(LabelModel):
-    def __init__(self, num_classes, num_lfs): ...
+    def __init__(self, num_classes, num_lfs):
+        ...
 ```
 
 ### NaiveBayes().label
@@ -41,5 +45,8 @@ Type: *np.ndarray*
 #### Signature
 
 ```python
-def label(self, votes: np.ndarray) -> np.ndarray: ...
+def label(self, votes: np.ndarray) -> np.ndarray:
+    ...
 ```
+
+

@@ -1,6 +1,9 @@
 # Arrow
 
-[Alfred Index](../../README.md#alfred-index) / [Alfred](../index.md#alfred) / [Data](./index.md#data) / Arrow
+[Alfred Index](../../README.md#alfred-index) /
+[Alfred](../index.md#alfred) /
+[Data](./index.md#data) /
+Arrow
 
 > Auto-generated documentation for [alfred.data.arrow](../../../alfred/data/arrow.py) module.
 
@@ -26,7 +29,6 @@
     - [IterableArrowDataset().__len__](#iterablearrowdataset()__len__)
     - [IterableArrowDataset().__repr__](#iterablearrowdataset()__repr__)
     - [IterableArrowDataset().__version__](#iterablearrowdataset()__version__)
-    - [IterableArrowDataset()._getitem](#iterablearrowdataset()_getitem)
     - [IterableArrowDataset().columns](#iterablearrowdataset()columns)
     - [IterableArrowDataset().data](#iterablearrowdataset()data)
     - [IterableArrowDataset().info](#iterablearrowdataset()info)
@@ -78,7 +80,8 @@ class BufferedArrowDataset(Dataset):
         buffer: pyarrow.Buffer,
         info: Optional[DatasetInfo] = None,
         split: Optional[Union[str, NamedSplit]] = None,
-    ): ...
+    ):
+        ...
 ```
 
 ### BufferedArrowDataset().__getitem__
@@ -102,7 +105,8 @@ Type: *Dict[str, Any]*
 #### Signature
 
 ```python
-def __getitem__(self, uid: int, **kawrgs: Any) -> Dict[str, Any]: ...
+def __getitem__(self, uid: int, **kawrgs: Any) -> Dict[str, Any]:
+    ...
 ```
 
 ### BufferedArrowDataset().__iter__
@@ -119,7 +123,8 @@ Type: *Iterable*
 #### Signature
 
 ```python
-def __iter__(self) -> Iterable: ...
+def __iter__(self) -> Iterable:
+    ...
 ```
 
 ### BufferedArrowDataset().__len__
@@ -131,7 +136,8 @@ returns the number of rows in the dataset
 #### Signature
 
 ```python
-def __len__(self) -> int: ...
+def __len__(self) -> int:
+    ...
 ```
 
 ### BufferedArrowDataset().__repr__
@@ -143,7 +149,8 @@ returns a string representation of the dataset
 #### Signature
 
 ```python
-def __repr__(self): ...
+def __repr__(self):
+    ...
 ```
 
 ### BufferedArrowDataset().__version__
@@ -155,7 +162,8 @@ returns the version of the dataset
 #### Signature
 
 ```python
-def __version__(self) -> str: ...
+def __version__(self) -> str:
+    ...
 ```
 
 ### BufferedArrowDataset().data
@@ -167,7 +175,8 @@ returns the underlying pyarrow Table
 #### Signature
 
 ```python
-def data(self): ...
+def data(self):
+    ...
 ```
 
 ### BufferedArrowDataset().info
@@ -179,7 +188,8 @@ returns the metadata about the dataset
 #### Signature
 
 ```python
-def info(self): ...
+def info(self):
+    ...
 ```
 
 ### BufferedArrowDataset().load_from_disk
@@ -191,7 +201,8 @@ loads the dataset from disk from the specified path
 #### Signature
 
 ```python
-def load_from_disk(self, path: str): ...
+def load_from_disk(self, path: str):
+    ...
 ```
 
 ### BufferedArrowDataset().num_cols
@@ -204,7 +215,8 @@ returns the number of columns in the dataset
 
 ```python
 @property
-def num_cols(self) -> int: ...
+def num_cols(self) -> int:
+    ...
 ```
 
 ### BufferedArrowDataset().num_rows
@@ -217,7 +229,8 @@ returns the number of rows in the dataset
 
 ```python
 @property
-def num_rows(self) -> int: ...
+def num_rows(self) -> int:
+    ...
 ```
 
 ### BufferedArrowDataset().save_to_disk
@@ -229,7 +242,8 @@ saves the dataset to disk at the specified path
 #### Signature
 
 ```python
-def save_to_disk(self, path: str): ...
+def save_to_disk(self, path: str):
+    ...
 ```
 
 ### BufferedArrowDataset().shape
@@ -242,7 +256,8 @@ returns the shape of the dataset (number of rows and columns)
 
 ```python
 @property
-def shape(self) -> Tuple[int, int]: ...
+def shape(self) -> Tuple[int, int]:
+    ...
 ```
 
 ### BufferedArrowDataset().split
@@ -254,7 +269,8 @@ returns the information about how the dataset has been split
 #### Signature
 
 ```python
-def split(self): ...
+def split(self):
+    ...
 ```
 
 ### BufferedArrowDataset().version
@@ -266,7 +282,8 @@ returns the version of the dataset
 #### Signature
 
 ```python
-def version(self) -> str: ...
+def version(self) -> str:
+    ...
 ```
 
 
@@ -306,7 +323,8 @@ class IterableArrowDataset(Dataset):
         table: Union[pyarrow.Table, pandas.DataFrame],
         info: Optional[DatasetInfo] = None,
         split: Optional[Union[str, NamedSplit]] = None,
-    ): ...
+    ):
+        ...
 ```
 
 ### IterableArrowDataset().__getitem__
@@ -330,7 +348,8 @@ Type: *Dict[str, Any]*
 #### Signature
 
 ```python
-def __getitem__(self, uid: int, **kawrgs: Any) -> Dict[str, Any]: ...
+def __getitem__(self, uid: int, **kawrgs: Any) -> Dict[str, Any]:
+    ...
 ```
 
 ### IterableArrowDataset().__iter__
@@ -347,7 +366,8 @@ Type: *Iterable[Dict]*
 #### Signature
 
 ```python
-def __iter__(self) -> Iterable[Dict]: ...
+def __iter__(self) -> Iterable[Dict]:
+    ...
 ```
 
 ### IterableArrowDataset().__len__
@@ -359,7 +379,8 @@ returns the number of rows in the dataset
 #### Signature
 
 ```python
-def __len__(self) -> int: ...
+def __len__(self) -> int:
+    ...
 ```
 
 ### IterableArrowDataset().__repr__
@@ -371,7 +392,8 @@ returns a string representation of the dataset
 #### Signature
 
 ```python
-def __repr__(self): ...
+def __repr__(self):
+    ...
 ```
 
 ### IterableArrowDataset().__version__
@@ -383,29 +405,8 @@ returns the version of the dataset
 #### Signature
 
 ```python
-def __version__(self) -> str: ...
-```
-
-### IterableArrowDataset()._getitem
-
-[Show source in arrow.py:160](../../../alfred/data/arrow.py#L160)
-
-Return the row with the given unique identifier.
-
-#### Arguments
-
-- `uid` - The unique identifier of the row to return.
-:type uid: int or slice
-
-#### Returns
-
-The row with the given unique identifier.
-Type: *Dict[str, Any]*
-
-#### Signature
-
-```python
-def _getitem(self, uid: int) -> Dict[str, Any]: ...
+def __version__(self) -> str:
+    ...
 ```
 
 ### IterableArrowDataset().columns
@@ -423,7 +424,8 @@ Type: *List[pyarrow.ChunkedArray]*
 
 ```python
 @property
-def columns(self) -> List[pyarrow.ChunkedArray]: ...
+def columns(self) -> List[pyarrow.ChunkedArray]:
+    ...
 ```
 
 ### IterableArrowDataset().data
@@ -440,7 +442,8 @@ Type: *Union[pyarrow.Table, pandas.DataFrame]*
 #### Signature
 
 ```python
-def data(self) -> Union[pyarrow.Table, pandas.DataFrame]: ...
+def data(self) -> Union[pyarrow.Table, pandas.DataFrame]:
+    ...
 ```
 
 ### IterableArrowDataset().info
@@ -452,7 +455,8 @@ returns the metadata about the dataset
 #### Signature
 
 ```python
-def info(self) -> DatasetInfo: ...
+def info(self) -> DatasetInfo:
+    ...
 ```
 
 ### IterableArrowDataset().itercolumns
@@ -471,7 +475,8 @@ Iterator over all columns in their numerical order.
 #### Signature
 
 ```python
-def itercolumns(self, *args: Any, **kwargs: Any) -> Iterable: ...
+def itercolumns(self, *args: Any, **kwargs: Any) -> Iterable:
+    ...
 ```
 
 ### IterableArrowDataset().load_from_disk
@@ -483,7 +488,8 @@ loads the dataset from disk from the specified path
 #### Signature
 
 ```python
-def load_from_disk(self, path: str): ...
+def load_from_disk(self, path: str):
+    ...
 ```
 
 ### IterableArrowDataset().num_cols
@@ -496,7 +502,8 @@ returns the number of columns in the dataset
 
 ```python
 @property
-def num_cols(self) -> int: ...
+def num_cols(self) -> int:
+    ...
 ```
 
 ### IterableArrowDataset().num_rows
@@ -509,7 +516,8 @@ returns the number of rows in the dataset
 
 ```python
 @property
-def num_rows(self) -> int: ...
+def num_rows(self) -> int:
+    ...
 ```
 
 ### IterableArrowDataset.pyarrow_typer
@@ -532,7 +540,8 @@ Type: *pyarrow.DataType*
 
 ```python
 @staticmethod
-def pyarrow_typer(data: Any) -> pyarrow.DataType: ...
+def pyarrow_typer(data: Any) -> pyarrow.DataType:
+    ...
 ```
 
 ### IterableArrowDataset().save_to_disk
@@ -544,7 +553,8 @@ saves the dataset to disk at the specified path
 #### Signature
 
 ```python
-def save_to_disk(self, path: str): ...
+def save_to_disk(self, path: str):
+    ...
 ```
 
 ### IterableArrowDataset().schema
@@ -562,7 +572,8 @@ Type: *pyarrow.Schema*
 
 ```python
 @property
-def schema(self) -> pyarrow.Schema: ...
+def schema(self) -> pyarrow.Schema:
+    ...
 ```
 
 ### IterableArrowDataset().shape
@@ -575,7 +586,8 @@ returns the shape of the dataset (number of rows and columns)
 
 ```python
 @property
-def shape(self) -> Tuple[int, int]: ...
+def shape(self) -> Tuple[int, int]:
+    ...
 ```
 
 ### IterableArrowDataset().split
@@ -587,7 +599,8 @@ returns the information about how the dataset has been split
 #### Signature
 
 ```python
-def split(self) -> NamedSplit: ...
+def split(self) -> NamedSplit:
+    ...
 ```
 
 ### IterableArrowDataset().version
@@ -599,5 +612,8 @@ returns the version of the dataset
 #### Signature
 
 ```python
-def version(self) -> str: ...
+def version(self) -> str:
+    ...
 ```
+
+

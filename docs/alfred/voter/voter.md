@@ -1,6 +1,9 @@
 # Voter
 
-[Alfred Index](../../README.md#alfred-index) / [Alfred](../index.md#alfred) / [Voter](./index.md#voter) / Voter
+[Alfred Index](../../README.md#alfred-index) /
+[Alfred](../index.md#alfred) /
+[Voter](./index.md#voter) /
+Voter
 
 > Auto-generated documentation for [alfred.voter.voter](../../../alfred/voter/voter.py) module.
 
@@ -27,7 +30,8 @@ class Voter:
         label_map: Dict,
         matching_fn: Callable = lambda x, y,: x == y,
         calibration: Optional[Union[List, np.ndarray, Tuple]] = None,
-    ): ...
+    ):
+        ...
 ```
 
 ### Voter().__call__
@@ -45,7 +49,8 @@ def __call__(
     matching_function: Optional[Callable] = None,
     label_map: Optional[Dict] = None,
     **kwargs: Any
-) -> np.ndarray: ...
+) -> np.ndarray:
+    ...
 ```
 
 #### See also
@@ -61,7 +66,8 @@ Clear calibration weights and biases
 #### Signature
 
 ```python
-def clear_calibration(self): ...
+def clear_calibration(self):
+    ...
 ```
 
 ### Voter().set_calibration
@@ -84,7 +90,8 @@ Final calibration would be weights * scores + biases
 ```python
 def set_calibration(
     self, weights: Union[List[float], np.ndarray], biases: Union[List[float], np.ndarray]
-): ...
+):
+    ...
 ```
 
 ### Voter().vote
@@ -125,9 +132,12 @@ def vote(
     matching_function: Optional[Callable] = None,
     label_map: Optional[Dict] = None,
     **kwargs: Any
-) -> np.ndarray: ...
+) -> np.ndarray:
+    ...
 ```
 
 #### See also
 
 - [Response](../fm/response/response.md#response)
+
+

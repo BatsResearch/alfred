@@ -1,6 +1,8 @@
 # Client
 
-[Alfred Index](../../README.md#alfred-index) / [Alfred](../index.md#alfred) / Client
+[Alfred Index](../../README.md#alfred-index) /
+[Alfred](../index.md#alfred) /
+Client
 
 > Auto-generated documentation for [alfred.client](../../../alfred/client/__init__.py) module.
 

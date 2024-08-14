@@ -1,6 +1,9 @@
 # Template
 
-[Alfred Index](../../README.md#alfred-index) / [Alfred](../index.md#alfred) / [Template](./index.md#template) / Template
+[Alfred Index](../../README.md#alfred-index) /
+[Alfred](../index.md#alfred) /
+[Template](./index.md#template) /
+Template
 
 > Auto-generated documentation for [alfred.template.template](../../../alfred/template/template.py) module.
 
@@ -40,7 +43,8 @@ Please see https://github.com/bigscience-workshop/promptsource for more details
 #### Signature
 
 ```python
-class Template(abc.ABC): ...
+class Template(abc.ABC):
+    ...
 ```
 
 ### Template().__call__
@@ -52,7 +56,8 @@ returns the template applied to the example, this allows a functional style
 #### Signature
 
 ```python
-def __call__(self, example): ...
+def __call__(self, example):
+    ...
 ```
 
 ### Template().apply
@@ -65,7 +70,8 @@ returns the template applied to the example
 
 ```python
 @abc.abstractmethod
-def apply(self, example): ...
+def apply(self, example):
+    ...
 ```
 
 ### Template().deserialize
@@ -78,7 +84,8 @@ returns the deserialized version of the template
 
 ```python
 @abc.abstractmethod
-def deserialize(self, json_str): ...
+def deserialize(self, json_str):
+    ...
 ```
 
 ### Template().get_answer_choices_list
@@ -91,7 +98,8 @@ returns the answer choices list of the template
 
 ```python
 @abc.abstractmethod
-def get_answer_choices_list(self, example): ...
+def get_answer_choices_list(self, example):
+    ...
 ```
 
 ### Template().id
@@ -105,7 +113,8 @@ returns the id of the template
 ```python
 @property
 @abc.abstractmethod
-def id(self): ...
+def id(self):
+    ...
 ```
 
 ### Template().keywords
@@ -119,7 +128,8 @@ returns the keywords of the template
 ```python
 @property
 @abc.abstractmethod
-def keywords(self): ...
+def keywords(self):
+    ...
 ```
 
 ### Template().metadata
@@ -133,7 +143,8 @@ returns the metadata of the template
 ```python
 @property
 @abc.abstractmethod
-def metadata(self): ...
+def metadata(self):
+    ...
 ```
 
 ### Template().name
@@ -147,7 +158,8 @@ returns the name of the template
 ```python
 @property
 @abc.abstractmethod
-def name(self): ...
+def name(self):
+    ...
 ```
 
 ### Template().reference
@@ -161,7 +173,8 @@ returns the reference of the template
 ```python
 @property
 @abc.abstractmethod
-def reference(self): ...
+def reference(self):
+    ...
 ```
 
 ### Template().serialize
@@ -174,7 +187,8 @@ returns the serialized version of the template
 
 ```python
 @abc.abstractmethod
-def serialize(self): ...
+def serialize(self):
+    ...
 ```
 
 ### Template().template
@@ -188,7 +202,8 @@ returns the template string
 ```python
 @property
 @abc.abstractmethod
-def template(self): ...
+def template(self):
+    ...
 ```
 
 ### Template().type
@@ -202,5 +217,8 @@ returns the type of the template
 ```python
 @property
 @abc.abstractmethod
-def type(self): ...
+def type(self):
+    ...
 ```
+
+

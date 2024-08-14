@@ -1,6 +1,10 @@
 # Cache
 
-[Alfred Index](../../../README.md#alfred-index) / [Alfred](../../index.md#alfred) / [Client](../index.md#client) / [Cache](./index.md#cache) / Cache
+[Alfred Index](../../../README.md#alfred-index) /
+[Alfred](../../index.md#alfred) /
+[Client](../index.md#client) /
+[Cache](./index.md#cache) /
+Cache
 
 > Auto-generated documentation for [alfred.client.cache.cache](../../../../alfred/client/cache/cache.py) module.
 
@@ -36,7 +40,8 @@ TODO:
 #### Signature
 
 ```python
-class Cache(abc.ABC): ...
+class Cache(abc.ABC):
+    ...
 ```
 
 ### Cache().cached_query
@@ -58,7 +63,8 @@ Type: *Callable*
 #### Signature
 
 ```python
-def cached_query(self, model_run: Callable) -> Callable: ...
+def cached_query(self, model_run: Callable) -> Callable:
+    ...
 ```
 
 ### Cache().load
@@ -76,7 +82,8 @@ Load the cache from disk to the cache object
 
 ```python
 @abc.abstractmethod
-def load(self, path: str): ...
+def load(self, path: str):
+    ...
 ```
 
 ### Cache().read
@@ -101,7 +108,8 @@ Type: *list*
 
 ```python
 @abc.abstractmethod
-def read(self, prompt: str, metadata: Optional[str] = None) -> list: ...
+def read(self, prompt: str, metadata: Optional[str] = None) -> list:
+    ...
 ```
 
 ### Cache().read_batch
@@ -126,9 +134,8 @@ Type: *list*
 
 ```python
 @abc.abstractmethod
-def read_batch(
-    self, prompts: List[str], metadata: Optional[str] = None
-) -> List[str]: ...
+def read_batch(self, prompts: List[str], metadata: Optional[str] = None) -> List[str]:
+    ...
 ```
 
 ### Cache().read_by_metadata
@@ -151,7 +158,8 @@ Type: *list*
 
 ```python
 @abc.abstractmethod
-def read_by_metadata(self, metadata: str) -> List: ...
+def read_by_metadata(self, metadata: str) -> List:
+    ...
 ```
 
 ### Cache().read_by_prompt
@@ -174,7 +182,8 @@ Type: *list*
 
 ```python
 @abc.abstractmethod
-def read_by_prompt(self, prompt: str) -> List: ...
+def read_by_prompt(self, prompt: str) -> List:
+    ...
 ```
 
 ### Cache().read_by_prompt_and_metadata
@@ -199,7 +208,8 @@ Type: *list*
 
 ```python
 @abc.abstractmethod
-def read_by_prompt_and_metadata(self, prompt: str, metadata: str) -> List: ...
+def read_by_prompt_and_metadata(self, prompt: str, metadata: str) -> List:
+    ...
 ```
 
 ### Cache().read_by_prompts_and_metadata
@@ -224,7 +234,8 @@ Type: *List*
 
 ```python
 @abc.abstractmethod
-def read_by_prompts_and_metadata(self, prompts: List[str], metadata: str) -> List: ...
+def read_by_prompts_and_metadata(self, prompts: List[str], metadata: str) -> List:
+    ...
 ```
 
 ### Cache().save
@@ -242,7 +253,8 @@ Save the cache to disk
 
 ```python
 @abc.abstractmethod
-def save(self, path: str): ...
+def save(self, path: str):
+    ...
 ```
 
 ### Cache().to_pandas
@@ -260,7 +272,8 @@ Type: *pd.DataFrame*
 
 ```python
 @abc.abstractmethod
-def to_pandas(self) -> pd.DataFrame: ...
+def to_pandas(self) -> pd.DataFrame:
+    ...
 ```
 
 ### Cache().write
@@ -282,7 +295,8 @@ Write a value to the cache by serialized prompt, serialized response and metadat
 
 ```python
 @abc.abstractmethod
-def write(self, prompt: str, response: str, metadata: Optional[str] = None): ...
+def write(self, prompt: str, response: str, metadata: Optional[str] = None):
+    ...
 ```
 
 ### Cache().write_batch
@@ -306,7 +320,8 @@ Write a value to the cache by serialized prompts, serialized responses and metad
 @abc.abstractmethod
 def write_batch(
     self, prompts: List[str], response: List[str], metadata: Optional[str] = None
-): ...
+):
+    ...
 ```
 
 
@@ -330,7 +345,8 @@ Type: *dict*
 #### Signature
 
 ```python
-def from_metadata_string(metadata_string: str) -> Dict: ...
+def from_metadata_string(metadata_string: str) -> Dict:
+    ...
 ```
 
 
@@ -354,5 +370,8 @@ Type: *str*
 #### Signature
 
 ```python
-def to_metadata_string(**kwargs: Any) -> str: ...
+def to_metadata_string(**kwargs: Any) -> str:
+    ...
 ```
+
+

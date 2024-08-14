@@ -1,6 +1,8 @@
 # Fm
 
-[Alfred Index](../../README.md#alfred-index) / [Alfred](../index.md#alfred) / Fm
+[Alfred Index](../../README.md#alfred-index) /
+[Alfred](../index.md#alfred) /
+Fm
 
 > Auto-generated documentation for [alfred.fm](../../../alfred/fm/__init__.py) module.
 

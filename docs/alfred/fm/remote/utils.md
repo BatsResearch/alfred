@@ -1,6 +1,10 @@
 # Utils
 
-[Alfred Index](../../../README.md#alfred-index) / [Alfred](../../index.md#alfred) / [Fm](../index.md#fm) / [Remote](./index.md#remote) / Utils
+[Alfred Index](../../../README.md#alfred-index) /
+[Alfred](../../index.md#alfred) /
+[Fm](../index.md#fm) /
+[Remote](./index.md#remote) /
+Utils
 
 > Auto-generated documentation for [alfred.fm.remote.utils](../../../../alfred/fm/remote/utils.py) module.
 
@@ -17,7 +21,8 @@
 #### Signature
 
 ```python
-def bytes_to_tensor(bytes): ...
+def bytes_to_tensor(bytes):
+    ...
 ```
 
 
@@ -41,7 +46,8 @@ Type: *str*
 #### Signature
 
 ```python
-def get_ip(ipv4=True): ...
+def get_ip(ipv4=True):
+    ...
 ```
 
 
@@ -55,7 +61,8 @@ Finds the next available port if given port is not available
 #### Signature
 
 ```python
-def port_finder(port: int) -> int: ...
+def port_finder(port: int) -> int:
+    ...
 ```
 
 
@@ -67,5 +74,8 @@ def port_finder(port: int) -> int: ...
 #### Signature
 
 ```python
-def tensor_to_bytes(tensor): ...
+def tensor_to_bytes(tensor):
+    ...
 ```
+
+

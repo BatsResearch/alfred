@@ -1,6 +1,8 @@
 # Run Server
 
-[Alfred Index](../README.md#alfred-index) / [Alfred](./index.md#alfred) / Run Server
+[Alfred Index](../README.md#alfred-index) /
+[Alfred](./index.md#alfred) /
+Run Server
 
 > Auto-generated documentation for [alfred.run_server](../../alfred/run_server.py) module.
 
@@ -19,9 +21,8 @@ ModelServer is used to launch the specified alferd.fm model as a gRPC Server and
 
 ```python
 class ModelServer:
-    def __init__(
-        self, model: str, model_type: str, port: int = 10719, **kwargs: Any
-    ): ...
+    def __init__(self, model: str, model_type: str, port: int = 10719, **kwargs: Any):
+        ...
 ```
 
 
@@ -40,5 +41,8 @@ Wrapper function to start gRPC Server.
 #### Signature
 
 ```python
-def start_server(args: argparse.Namespace): ...
+def start_server(args: argparse.Namespace):
+    ...
 ```
+
+

@@ -1,6 +1,10 @@
 # CompletionResponse
 
-[Alfred Index](../../../README.md#alfred-index) / [Alfred](../../index.md#alfred) / [Fm](../index.md#fm) / [Response](./index.md#response) / CompletionResponse
+[Alfred Index](../../../README.md#alfred-index) /
+[Alfred](../../index.md#alfred) /
+[Fm](../index.md#fm) /
+[Response](./index.md#response) /
+CompletionResponse
 
 > Auto-generated documentation for [alfred.fm.response.completion_response](../../../../alfred/fm/response/completion_response.py) module.
 
@@ -30,7 +34,8 @@ class CompletionResponse(Response):
         prediction: str = None,
         score: Optional[float] = None,
         embedding: Optional[Union[torch.Tensor, np.ndarray]] = None,
-    ): ...
+    ):
+        ...
 ```
 
 ### CompletionResponse().__eq__
@@ -56,7 +61,8 @@ Type: *bool*
 #### Signature
 
 ```python
-def __eq__(self, other): ...
+def __eq__(self, other):
+    ...
 ```
 
 ### CompletionResponse().embedding
@@ -74,7 +80,8 @@ Type: *Union[torch.Tensor, np.ndarray]*
 
 ```python
 @property
-def embedding(self) -> Union[torch.Tensor, np.ndarray]: ...
+def embedding(self) -> Union[torch.Tensor, np.ndarray]:
+    ...
 ```
 
 ### CompletionResponse().prediction
@@ -92,7 +99,8 @@ Type: *str*
 
 ```python
 @property
-def prediction(self) -> str: ...
+def prediction(self) -> str:
+    ...
 ```
 
 ### CompletionResponse().score
@@ -110,5 +118,8 @@ Type: *float*
 
 ```python
 @property
-def score(self) -> Dict: ...
+def score(self) -> Dict:
+    ...
 ```
+
+

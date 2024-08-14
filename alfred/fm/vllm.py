@@ -1,5 +1,5 @@
 import logging
-from typing import List, Any
+from typing import List, Any, Union, Optional, Tuple, Dict
 
 from .model import LocalAccessFoundationModel
 from .response import CompletionResponse

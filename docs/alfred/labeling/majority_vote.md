@@ -1,6 +1,9 @@
 # MajorityVote
 
-[Alfred Index](../../README.md#alfred-index) / [Alfred](../index.md#alfred) / [Labeling](./index.md#labeling) / MajorityVote
+[Alfred Index](../../README.md#alfred-index) /
+[Alfred](../index.md#alfred) /
+[Labeling](./index.md#labeling) /
+MajorityVote
 
 > Auto-generated documentation for [alfred.labeling.majority_vote](../../../alfred/labeling/majority_vote.py) module.
 
@@ -18,7 +21,8 @@ LabelModel class to perform majority vote on the responses
 
 ```python
 class MajorityVote(LabelModel):
-    def __init__(self): ...
+    def __init__(self):
+        ...
 ```
 
 ### MajorityVote().label
@@ -30,5 +34,8 @@ returns the majority vote for each response row
 #### Signature
 
 ```python
-def label(self, votes: np.ndarray) -> np.ndarray: ...
+def label(self, votes: np.ndarray) -> np.ndarray:
+    ...
 ```
+
+

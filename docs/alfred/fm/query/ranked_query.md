@@ -1,6 +1,10 @@
 # RankedQuery
 
-[Alfred Index](../../../README.md#alfred-index) / [Alfred](../../index.md#alfred) / [Fm](../index.md#fm) / [Query](./index.md#query) / RankedQuery
+[Alfred Index](../../../README.md#alfred-index) /
+[Alfred](../../index.md#alfred) /
+[Fm](../index.md#fm) /
+[Query](./index.md#query) /
+RankedQuery
 
 > Auto-generated documentation for [alfred.fm.query.ranked_query](../../../../alfred/fm/query/ranked_query.py) module.
 
@@ -47,7 +51,8 @@ class RankedQuery(Query):
         self,
         prompt: Union[str, np.ndarray, Image.Image, Tuple, torch.Tensor],
         candidates: Union[List, Tuple, np.ndarray, torch.Tensor],
-    ): ...
+    ):
+        ...
 ```
 
 ### RankedQuery().__add__
@@ -59,7 +64,8 @@ concatenates the two queries
 #### Signature
 
 ```python
-def __add__(self, other): ...
+def __add__(self, other):
+    ...
 ```
 
 ### RankedQuery().__eq__
@@ -71,7 +77,8 @@ returns whether the two queries are equal
 #### Signature
 
 ```python
-def __eq__(self, other): ...
+def __eq__(self, other):
+    ...
 ```
 
 ### RankedQuery().__hash__
@@ -83,7 +90,8 @@ returns the hash of the query
 #### Signature
 
 ```python
-def __hash__(self): ...
+def __hash__(self):
+    ...
 ```
 
 ### RankedQuery().__len__
@@ -95,7 +103,8 @@ returns the length of the query
 #### Signature
 
 ```python
-def __len__(self): ...
+def __len__(self):
+    ...
 ```
 
 ### RankedQuery().__repr__
@@ -107,7 +116,8 @@ returns the string representation of the query
 #### Signature
 
 ```python
-def __repr__(self): ...
+def __repr__(self):
+    ...
 ```
 
 ### RankedQuery().__str__
@@ -119,7 +129,8 @@ returns the string representation of the query
 #### Signature
 
 ```python
-def __str__(self): ...
+def __str__(self):
+    ...
 ```
 
 ### RankedQuery().candidates
@@ -132,7 +143,8 @@ returns the raw candidates content
 
 ```python
 @property
-def candidates(self): ...
+def candidates(self):
+    ...
 ```
 
 ### RankedQuery().get_answer_choices_str
@@ -144,7 +156,8 @@ get the raw candidates as jinja strings (deliminated by '|||')
 #### Signature
 
 ```python
-def get_answer_choices_str(self): ...
+def get_answer_choices_str(self):
+    ...
 ```
 
 ### RankedQuery().load
@@ -166,7 +179,8 @@ Type: *List*
 #### Signature
 
 ```python
-def load(self, composition_fn: Callable = None) -> List: ...
+def load(self, composition_fn: Callable = None) -> List:
+    ...
 ```
 
 ### RankedQuery().prompt
@@ -179,5 +193,8 @@ returns the raw prompt content
 
 ```python
 @property
-def prompt(self): ...
+def prompt(self):
+    ...
 ```
+
+

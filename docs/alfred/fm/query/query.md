@@ -1,6 +1,10 @@
 # Query
 
-[Alfred Index](../../../README.md#alfred-index) / [Alfred](../../index.md#alfred) / [Fm](../index.md#fm) / [Query](./index.md#query) / Query
+[Alfred Index](../../../README.md#alfred-index) /
+[Alfred](../../index.md#alfred) /
+[Fm](../index.md#fm) /
+[Query](./index.md#query) /
+Query
 
 > Auto-generated documentation for [alfred.fm.query.query](../../../../alfred/fm/query/query.py) module.
 
@@ -19,7 +23,8 @@ Abstract base class for a single query for foundation model interfaces
 #### Signature
 
 ```python
-class Query(abc.ABC): ...
+class Query(abc.ABC):
+    ...
 ```
 
 ### Query.compose
@@ -45,7 +50,8 @@ composition of a and b
 
 ```python
 @staticmethod
-def compose(a, b, strategy=None): ...
+def compose(a, b, strategy=None):
+    ...
 ```
 
 ### Query().load
@@ -56,7 +62,8 @@ def compose(a, b, strategy=None): ...
 
 ```python
 @abc.abstractmethod
-def load(self): ...
+def load(self):
+    ...
 ```
 
 ### Query().serialize
@@ -73,5 +80,8 @@ Type: *str*
 #### Signature
 
 ```python
-def serialize(self) -> str: ...
+def serialize(self) -> str:
+    ...
 ```
+
+
