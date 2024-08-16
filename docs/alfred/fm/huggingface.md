@@ -47,7 +47,7 @@ class HuggingFaceModel(LocalAccessFoundationModel):
 
 ### HuggingFaceModel().chat
 
-[Show source in huggingface.py:456](../../../alfred/fm/huggingface.py#L456)
+[Show source in huggingface.py:454](../../../alfred/fm/huggingface.py#L454)
 
 Launch an interactive chat session
 

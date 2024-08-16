@@ -158,7 +158,7 @@ def forward(
     batch_policy: str = "dynamic",
     batch_size: int = 1024,
     mode: str = "generate",
-    pretokenize: bool = True,
+    pretokenize: bool = False,
     **kwargs
 ) -> Union[
     List[CompletionResponse], List[RankedResponse], List[OrderedDict], List[torch.Tensor]
