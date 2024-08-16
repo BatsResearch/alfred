@@ -37,8 +37,6 @@ class vLLMModel(LocalAccessFoundationModel):
             tensor_parallel_size=self.gpu_count,
         )
 
-        self.tokenizer = self.model.get_tokenizer()
-
     def _generate_batch(
         self,
         batch_instance: List[str],
@@ -126,9 +124,11 @@ class vLLMModel(LocalAccessFoundationModel):
             prompt_logprobs = _process_logprobs(prompt_output.prompt_logprobs)
             full_logprobs = _process_logprobs(full_output.prompt_logprobs)
 
+            # Calculate log probability of the candidate
             candidate_tokens = self.tokenizer.encode(candidate)
             candidate_logprob = sum(full_logprobs[-len(candidate_tokens) :])
 
+            # Subtract the prompt logprob to get conditional probability
             prompt_logprob = sum(prompt_logprobs[-len(candidate_tokens) :])
             score = candidate_logprob - prompt_logprob
 
