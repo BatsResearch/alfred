@@ -82,7 +82,7 @@ class FoundationModel(abc.ABC):
         batch_policy: str = "dynamic",
         batch_size: int = 1024,
         mode: str = "generate",
-        pretokenize: bool = True,
+        pretokenize: bool = False,
         **kwargs,
     ) -> Union[
         List[CompletionResponse],
