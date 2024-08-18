@@ -1,6 +1,7 @@
 import torch
 from PIL import Image
 from typing import List, Callable, Union
+import numpy as np
 
 
 class EmbeddingCache:

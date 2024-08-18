@@ -1,5 +1,5 @@
 from typing import List
-from alfred.fm.model import Query
+from ..query import Query
 
 
 def batch_multimodal(queries: List[Query], mode: str, batch_size=64):
