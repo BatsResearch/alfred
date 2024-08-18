@@ -1,9 +1,6 @@
 # Model
 
-[Alfred Index](../../README.md#alfred-index) /
-[Alfred](../index.md#alfred) /
-[Fm](./index.md#fm) /
-Model
+[Alfred Index](../../README.md#alfred-index) / [Alfred](../index.md#alfred) / [Fm](./index.md#fm) / Model
 
 > Auto-generated documentation for [alfred.fm.model](../../../alfred/fm/model.py) module.
 
@@ -11,6 +8,9 @@ Model
   - [APIAccessFoundationModel](#apiaccessfoundationmodel)
   - [FoundationModel](#foundationmodel)
     - [FoundationModel().__call__](#foundationmodel()__call__)
+    - [FoundationModel()._encode_batch](#foundationmodel()_encode_batch)
+    - [FoundationModel()._generate_batch](#foundationmodel()_generate_batch)
+    - [FoundationModel()._score_batch](#foundationmodel()_score_batch)
     - [FoundationModel().encode](#foundationmodel()encode)
     - [FoundationModel().forward](#foundationmodel()forward)
     - [FoundationModel().generate](#foundationmodel()generate)
@@ -20,14 +20,13 @@ Model
 
 ## APIAccessFoundationModel
 
-[Show source in model.py:378](../../../alfred/fm/model.py#L378)
+[Show source in model.py:382](../../../alfred/fm/model.py#L382)
 
 #### Signature
 
 ```python
 class APIAccessFoundationModel(FoundationModel):
-    def __init__(self, model_string: str, cfg: Optional[Dict] = None):
-        ...
+    def __init__(self, model_string: str, cfg: Optional[Dict] = None): ...
 ```
 
 #### See also
@@ -45,13 +44,12 @@ Generic interface for foundation model class
 #### Signature
 
 ```python
-class FoundationModel(abc.ABC):
-    ...
+class FoundationModel(abc.ABC): ...
 ```
 
 ### FoundationModel().__call__
 
-[Show source in model.py:356](../../../alfred/fm/model.py#L356)
+[Show source in model.py:360](../../../alfred/fm/model.py#L360)
 
 This function returns the output of the run function when the
  model is called as a function. It can be used as model(queries),
@@ -78,13 +76,88 @@ def __call__(
         Query, str, Tuple[str, str], Tuple[Image.Image, str], List[Query], List[str]
     ],
     **kwargs: Any
-) -> Union[str, Response, List[Response]]:
-    ...
+) -> Union[str, Response, List[Response]]: ...
+```
+
+### FoundationModel()._encode_batch
+
+[Show source in model.py:62](../../../alfred/fm/model.py#L62)
+
+For encoding queries into embeddings.
+
+#### Arguments
+
+- `batch_instance` - A batch of query objects or raw query content (e.g. string or embedding arrays)
+:type batch_instance: Union[List[RankedQuery], List[str]]
+
+#### Returns
+
+A list of responses
+:rtype List[Response]
+
+#### Signature
+
+```python
+def _encode_batch(
+    self, batch_instance: Union[List[str]], **kwargs: Any
+) -> List[torch.Tensor]: ...
+```
+
+### FoundationModel()._generate_batch
+
+[Show source in model.py:24](../../../alfred/fm/model.py#L24)
+
+For completing / generating given a batch of queries
+Run a batch of queries through the foundation model
+
+#### Arguments
+
+- `batch_instance` - A batch of query objects or raw query content (e.g. string or embedding arrays)
+:type batch_instance: Union[List[CompletionQuery], List[str]]
+- `kwargs` - Additional arguments to pass to the foundation model
+:type batch_instance: Union[List[CompletionQuery], List[str]]
+
+#### Returns
+
+A list of responses
+:rtype List[Response]
+
+#### Signature
+
+```python
+def _generate_batch(
+    self, batch_instance: Union[List[str]], **kwargs
+) -> List[Response]: ...
+```
+
+### FoundationModel()._score_batch
+
+[Show source in model.py:44](../../../alfred/fm/model.py#L44)
+
+For scoring / ranking candidate queries.
+Run a batch of queries through the foundation model.
+
+#### Arguments
+
+- `batch_instance` - A batch of query objects or raw query content (e.g. string or embedding arrays)
+:type batch_instance: Union[List[RankedQuery], List[str]]
+
+#### Returns
+
+A list of responses
+:rtype List[Response]
+
+#### Signature
+
+```python
+def _score_batch(
+    self, batch_instance: Union[List[Tuple[str, str]], List[str]], **kwargs
+) -> List[Response]: ...
 ```
 
 ### FoundationModel().encode
 
-[Show source in model.py:273](../../../alfred/fm/model.py#L273)
+[Show source in model.py:277](../../../alfred/fm/model.py#L277)
 
 This function is a wrapper around the forward function
 
@@ -114,8 +187,7 @@ def encode(
     batch_size: int = 1024,
     reduction: str = "mean",
     **kwargs: Any
-) -> List[torch.Tensor]:
-    ...
+) -> List[torch.Tensor]: ...
 ```
 
 ### FoundationModel().forward
@@ -162,13 +234,12 @@ def forward(
     **kwargs
 ) -> Union[
     List[CompletionResponse], List[RankedResponse], List[OrderedDict], List[torch.Tensor]
-]:
-    ...
+]: ...
 ```
 
 ### FoundationModel().generate
 
-[Show source in model.py:222](../../../alfred/fm/model.py#L222)
+[Show source in model.py:226](../../../alfred/fm/model.py#L226)
 
 This function is a wrapper around the forward function for running
 CompletionQuery objects through the foundation model. It returns a list
@@ -199,13 +270,12 @@ def generate(
     batch_policy: str = "dynamic",
     batch_size: int = 1024,
     **kwargs
-) -> List[CompletionResponse]:
-    ...
+) -> List[CompletionResponse]: ...
 ```
 
 ### FoundationModel().run
 
-[Show source in model.py:304](../../../alfred/fm/model.py#L304)
+[Show source in model.py:308](../../../alfred/fm/model.py#L308)
 
 This function is the main entry point for users to run queries through the foundation model.
 It accepts raw query content and automatically converts it into query objects.
@@ -233,13 +303,12 @@ def run(
         Query, str, Tuple[str, str], Tuple[Image.Image, str], List[Query], List[str]
     ],
     **kwargs: Any
-) -> Union[str, Response, List[Response]]:
-    ...
+) -> Union[str, Response, List[Response]]: ...
 ```
 
 ### FoundationModel().score
 
-[Show source in model.py:247](../../../alfred/fm/model.py#L247)
+[Show source in model.py:251](../../../alfred/fm/model.py#L251)
 
 This function is a wrapper around the forward function
 for running RankedQuery objects through the foundation model.
@@ -270,26 +339,22 @@ def score(
     batch_policy: str = "dynamic",
     batch_size: int = 64,
     **kwargs: Any
-) -> List[RankedResponse]:
-    ...
+) -> List[RankedResponse]: ...
 ```
 
 
 
 ## LocalAccessFoundationModel
 
-[Show source in model.py:393](../../../alfred/fm/model.py#L393)
+[Show source in model.py:397](../../../alfred/fm/model.py#L397)
 
 #### Signature
 
 ```python
 class LocalAccessFoundationModel(FoundationModel):
-    def __init__(self, model_string: str, local_path: Optional[str] = None):
-        ...
+    def __init__(self, model_string: str, local_path: Optional[str] = None): ...
 ```
 
 #### See also
 
 - [FoundationModel](#foundationmodel)
-
-

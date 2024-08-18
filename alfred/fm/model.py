@@ -119,8 +119,12 @@ class FoundationModel(abc.ABC):
         if type(queries[0]) in [RankedQuery, tuple]:
             mode = "score"
 
+        if hasattr(self, "gpu_count"):
+            # default to static batching for vLLM models
+            batch_policy = "static"
+
         if isinstance(self, LocalAccessFoundationModel):
-            try:
+            if hasattr(self, "multimodal_mode"):
                 batched_queries = batch_multimodal(
                     queries, mode=self.multimodal_mode, batch_size=batch_size
                 )
@@ -129,7 +133,7 @@ class FoundationModel(abc.ABC):
                 mode = (
                     "generate" if self.multimodal_mode == "autoregressive" else "score"
                 )
-            except AttributeError:
+            else:
                 if batch_policy == "static":
                     batched_queries = static_batch(queries, batch_size=batch_size)
                     pretokenized = False

@@ -1,9 +1,6 @@
 # FlyingSquid
 
-[Alfred Index](../../README.md#alfred-index) /
-[Alfred](../index.md#alfred) /
-[Labeling](./index.md#labeling) /
-FlyingSquid
+[Alfred Index](../../README.md#alfred-index) / [Alfred](../index.md#alfred) / [Labeling](./index.md#labeling) / FlyingSquid
 
 > Auto-generated documentation for [alfred.labeling.flyingsquid](../../../alfred/labeling/flyingsquid.py) module.
 
@@ -21,8 +18,7 @@ LabelModel class to perform FlyingSquid-based label modeling on the responses
 
 ```python
 class FlyingSquid(LabelModel):
-    def __init__(self, num_lfs):
-        ...
+    def __init__(self, num_lfs): ...
 ```
 
 ### FlyingSquid().label
@@ -32,8 +28,5 @@ class FlyingSquid(LabelModel):
 #### Signature
 
 ```python
-def label(self, votes: np.ndarray) -> np.ndarray:
-    ...
+def label(self, votes: np.ndarray) -> np.ndarray: ...
 ```
-
-

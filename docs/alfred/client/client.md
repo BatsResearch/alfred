@@ -1,9 +1,6 @@
 # Client
 
-[Alfred Index](../../README.md#alfred-index) /
-[Alfred](../index.md#alfred) /
-[Client](./index.md#client) /
-Client
+[Alfred Index](../../README.md#alfred-index) / [Alfred](../index.md#alfred) / [Client](./index.md#client) / Client
 
 > Auto-generated documentation for [alfred.client.client](../../../alfred/client/client.py) module.
 
@@ -42,8 +39,7 @@ class Client:
         ssh_node: Optional[str] = None,
         cache: Optional[Cache] = None,
         **kwargs: Any
-    ):
-        ...
+    ): ...
 ```
 
 ### Client().__call__
@@ -70,8 +66,7 @@ Type: *Union[Response, List[Response]]*
 ```python
 def __call__(
     self, queries: Union[Query, str, List[Query], List[str]], **kwargs: Any
-) -> Union[Response, List[Response]]:
-    ...
+) -> Union[Response, List[Response]]: ...
 ```
 
 ### Client().calibrate
@@ -115,8 +110,7 @@ def calibrate(
     null_tokens: Optional[Union[List[str], str]] = None,
     candidates: Optional[Union[List[str], str]] = None,
     strategy: int = 1,
-):
-    ...
+): ...
 ```
 
 ### Client().chat
@@ -134,8 +128,7 @@ Currently, Alfred supports Chat APIs from Anthropic and OpenAI
 #### Signature
 
 ```python
-def chat(self, log_save_path: Optional[str] = None, **kwargs: Any):
-    ...
+def chat(self, log_save_path: Optional[str] = None, **kwargs: Any): ...
 ```
 
 ### Client().encode
@@ -157,8 +150,7 @@ embed() function to embed the queries.
 ```python
 def encode(
     self, queries: Union[str, List[str]], reduction: str = "mean"
-) -> Union[torch.Tensor, List[torch.Tensor]]:
-    ...
+) -> Union[torch.Tensor, List[torch.Tensor]]: ...
 ```
 
 ### Client().generate
@@ -186,8 +178,7 @@ def generate(
     self,
     query: Union[CompletionQuery, str, List[CompletionQuery], List[str]],
     **kwargs: Any
-) -> Union[Response, List[Response]]:
-    ...
+) -> Union[Response, List[Response]]: ...
 ```
 
 ### Client().remote_run
@@ -213,8 +204,7 @@ Type: *Union[Response, List[Response]]*
 ```python
 def remote_run(
     self, queries: Union[Query, str, List[Query], List[str]], **kwargs: Any
-) -> Union[Response, List[Response]]:
-    ...
+) -> Union[Response, List[Response]]: ...
 ```
 
 ### Client().run
@@ -240,8 +230,7 @@ Type: *Union[Response, List[Response]]*
 ```python
 def run(
     self, queries: Union[Query, str, List[Query], List[str]], **kwargs: Any
-) -> Union[Response, List[Response]]:
-    ...
+) -> Union[Response, List[Response]]: ...
 ```
 
 ### Client().score
@@ -274,8 +263,5 @@ Type: *Union[Response, List[Response]]*
 ```python
 def score(
     self, query: Union[RankedQuery, Dict, List[RankedQuery], List[str]], **kwargs: Any
-) -> Union[Response, List[Response]]:
-    ...
+) -> Union[Response, List[Response]]: ...
 ```
-
-

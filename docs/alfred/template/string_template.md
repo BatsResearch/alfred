@@ -1,9 +1,6 @@
 # StringTemplate
 
-[Alfred Index](../../README.md#alfred-index) /
-[Alfred](../index.md#alfred) /
-[Template](./index.md#template) /
-StringTemplate
+[Alfred Index](../../README.md#alfred-index) / [Alfred](../index.md#alfred) / [Template](./index.md#template) / StringTemplate
 
 > Auto-generated documentation for [alfred.template.string_template](../../../alfred/template/string_template.py) module.
 
@@ -75,8 +72,7 @@ class StringTemplate(Template):
         reference: Optional[str] = None,
         metadata: Optional[Dict[str, Any]] = None,
         answer_choices: Optional[Union[str, List[str]]] = None,
-    ):
-        ...
+    ): ...
 ```
 
 #### See also
@@ -104,8 +100,7 @@ Type: *Query*
 #### Signature
 
 ```python
-def __call__(self, example: Dict, **kawrgs: Any) -> Query:
-    ...
+def __call__(self, example: Dict, **kawrgs: Any) -> Query: ...
 ```
 
 ### StringTemplate().apply
@@ -129,8 +124,9 @@ Type: *Query or List[Query]*
 #### Signature
 
 ```python
-def apply(self, example: Union[Dict, List[Dict]], **kawrgs) -> Union[Query, List[Query]]:
-    ...
+def apply(
+    self, example: Union[Dict, List[Dict]], **kawrgs
+) -> Union[Query, List[Query]]: ...
 ```
 
 ### StringTemplate().apply_to_dataset
@@ -154,8 +150,9 @@ Type: *Iterable[Query]*
 #### Signature
 
 ```python
-def apply_to_dataset(self, dataset: Iterable[Dict], **kwargs: Any) -> Iterable[Query]:
-    ...
+def apply_to_dataset(
+    self, dataset: Iterable[Dict], **kwargs: Any
+) -> Iterable[Query]: ...
 ```
 
 ### StringTemplate().deserialize
@@ -176,8 +173,7 @@ template object
 #### Signature
 
 ```python
-def deserialize(self, json_str: str) -> Template:
-    ...
+def deserialize(self, json_str: str) -> Template: ...
 ```
 
 #### See also
@@ -198,8 +194,7 @@ Update the template from a promptsource template
 #### Signature
 
 ```python
-def from_promptsource(self, promptsource_template):
-    ...
+def from_promptsource(self, promptsource_template): ...
 ```
 
 ### StringTemplate().get_answer_choices_list
@@ -216,8 +211,7 @@ Type: *List*
 #### Signature
 
 ```python
-def get_answer_choices_list(self) -> List[str]:
-    ...
+def get_answer_choices_list(self) -> List[str]: ...
 ```
 
 ### StringTemplate().id
@@ -230,8 +224,7 @@ returns the template id
 
 ```python
 @property
-def id(self):
-    ...
+def id(self): ...
 ```
 
 ### StringTemplate().keywords
@@ -244,8 +237,7 @@ returns the keywords
 
 ```python
 @property
-def keywords(self):
-    ...
+def keywords(self): ...
 ```
 
 ### StringTemplate().metadata
@@ -258,8 +250,7 @@ returns the template metadata
 
 ```python
 @property
-def metadata(self):
-    ...
+def metadata(self): ...
 ```
 
 ### StringTemplate().name
@@ -272,8 +263,7 @@ returns the template name
 
 ```python
 @property
-def name(self):
-    ...
+def name(self): ...
 ```
 
 ### StringTemplate().reference
@@ -286,8 +276,7 @@ returns the template reference
 
 ```python
 @property
-def reference(self):
-    ...
+def reference(self): ...
 ```
 
 ### StringTemplate().serialize
@@ -304,8 +293,7 @@ Type: *str*
 #### Signature
 
 ```python
-def serialize(self):
-    ...
+def serialize(self): ...
 ```
 
 ### StringTemplate().template
@@ -318,8 +306,7 @@ returns the template
 
 ```python
 @property
-def template(self):
-    ...
+def template(self): ...
 ```
 
 ### StringTemplate().type
@@ -332,8 +319,5 @@ returns the template type
 
 ```python
 @property
-def type(self):
-    ...
+def type(self): ...
 ```
-
-

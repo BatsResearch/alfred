@@ -1,11 +1,6 @@
 # Query Pb2 Grpc
 
-[Alfred Index](../../../../README.md#alfred-index) /
-[Alfred](../../../index.md#alfred) /
-[Fm](../../index.md#fm) /
-[Remote](../index.md#remote) /
-[Protos](./index.md#protos) /
-Query Pb2 Grpc
+[Alfred Index](../../../../README.md#alfred-index) / [Alfred](../../../index.md#alfred) / [Fm](../../index.md#fm) / [Remote](../index.md#remote) / [Protos](./index.md#protos) / Query Pb2 Grpc
 
 > Auto-generated documentation for [alfred.fm.remote.protos.query_pb2_grpc](../../../../../alfred/fm/remote/protos/query_pb2_grpc.py) module.
 
@@ -30,8 +25,7 @@ Missing associated documentation comment in .proto file.
 #### Signature
 
 ```python
-class QueryService(object):
-    ...
+class QueryService(object): ...
 ```
 
 ### QueryService.Encode
@@ -53,8 +47,7 @@ def Encode(
     wait_for_ready=None,
     timeout=None,
     metadata=None,
-):
-    ...
+): ...
 ```
 
 ### QueryService.Handshake
@@ -76,8 +69,7 @@ def Handshake(
     wait_for_ready=None,
     timeout=None,
     metadata=None,
-):
-    ...
+): ...
 ```
 
 ### QueryService.Run
@@ -99,8 +91,7 @@ def Run(
     wait_for_ready=None,
     timeout=None,
     metadata=None,
-):
-    ...
+): ...
 ```
 
 
@@ -114,8 +105,7 @@ Missing associated documentation comment in .proto file.
 #### Signature
 
 ```python
-class QueryServiceServicer(object):
-    ...
+class QueryServiceServicer(object): ...
 ```
 
 ### QueryServiceServicer().Encode
@@ -127,8 +117,7 @@ Missing associated documentation comment in .proto file.
 #### Signature
 
 ```python
-def Encode(self, request_iterator, context):
-    ...
+def Encode(self, request_iterator, context): ...
 ```
 
 ### QueryServiceServicer().Handshake
@@ -140,8 +129,7 @@ Missing associated documentation comment in .proto file.
 #### Signature
 
 ```python
-def Handshake(self, request, context):
-    ...
+def Handshake(self, request, context): ...
 ```
 
 ### QueryServiceServicer().Run
@@ -153,8 +141,7 @@ Missing associated documentation comment in .proto file.
 #### Signature
 
 ```python
-def Run(self, request_iterator, context):
-    ...
+def Run(self, request_iterator, context): ...
 ```
 
 
@@ -169,8 +156,7 @@ Missing associated documentation comment in .proto file.
 
 ```python
 class QueryServiceStub(object):
-    def __init__(self, channel):
-        ...
+    def __init__(self, channel): ...
 ```
 
 
@@ -182,8 +168,5 @@ class QueryServiceStub(object):
 #### Signature
 
 ```python
-def add_QueryServiceServicer_to_server(servicer, server):
-    ...
+def add_QueryServiceServicer_to_server(servicer, server): ...
 ```
-
-

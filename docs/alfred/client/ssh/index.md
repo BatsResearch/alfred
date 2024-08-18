@@ -1,9 +1,6 @@
 # Ssh
 
-[Alfred Index](../../../README.md#alfred-index) /
-[Alfred](../../index.md#alfred) /
-[Client](../index.md#client) /
-Ssh
+[Alfred Index](../../../README.md#alfred-index) / [Alfred](../../index.md#alfred) / [Client](../index.md#client) / Ssh
 
 > Auto-generated documentation for [alfred.client.ssh](../../../../alfred/client/ssh/__init__.py) module.
 

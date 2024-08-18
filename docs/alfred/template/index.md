@@ -1,8 +1,6 @@
 # Template
 
-[Alfred Index](../../README.md#alfred-index) /
-[Alfred](../index.md#alfred) /
-Template
+[Alfred Index](../../README.md#alfred-index) / [Alfred](../index.md#alfred) / Template
 
 > Auto-generated documentation for [alfred.template](../../../alfred/template/__init__.py) module.
 

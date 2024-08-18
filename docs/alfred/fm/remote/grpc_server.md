@@ -1,10 +1,6 @@
 # gRPCServer
 
-[Alfred Index](../../../README.md#alfred-index) /
-[Alfred](../../index.md#alfred) /
-[Fm](../index.md#fm) /
-[Remote](./index.md#remote) /
-gRPCServer
+[Alfred Index](../../../README.md#alfred-index) / [Alfred](../../index.md#alfred) / [Fm](../index.md#fm) / [Remote](./index.md#remote) / gRPCServer
 
 > Auto-generated documentation for [alfred.fm.remote.grpc_server](../../../../alfred/fm/remote/grpc_server.py) module.
 
@@ -28,8 +24,7 @@ class gRPCServer(query_pb2_grpc.QueryServiceServicer):
         model,
         port: int = 10719,
         credentials: Optional[grpc.ServerCredentials] = None,
-    ):
-        ...
+    ): ...
 ```
 
 ### gRPCServer().Encode
@@ -39,8 +34,7 @@ class gRPCServer(query_pb2_grpc.QueryServiceServicer):
 #### Signature
 
 ```python
-async def Encode(self, request_iterator, context):
-    ...
+async def Encode(self, request_iterator, context): ...
 ```
 
 ### gRPCServer().Handshake
@@ -50,8 +44,7 @@ async def Encode(self, request_iterator, context):
 #### Signature
 
 ```python
-async def Handshake(self, request, context):
-    ...
+async def Handshake(self, request, context): ...
 ```
 
 ### gRPCServer().Run
@@ -61,8 +54,7 @@ async def Handshake(self, request, context):
 #### Signature
 
 ```python
-async def Run(self, request_iterator, context):
-    ...
+async def Run(self, request_iterator, context): ...
 ```
 
 ### gRPCServer().serve
@@ -72,8 +64,5 @@ async def Run(self, request_iterator, context):
 #### Signature
 
 ```python
-def serve(self, credentials):
-    ...
+def serve(self, credentials): ...
 ```
-
-

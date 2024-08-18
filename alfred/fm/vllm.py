@@ -37,6 +37,8 @@ class vLLMModel(LocalAccessFoundationModel):
             tensor_parallel_size=self.gpu_count,
         )
 
+        self.tokenizer = self.model.get_tokenizer()
+
     def _generate_batch(
         self,
         batch_instance: List[str],

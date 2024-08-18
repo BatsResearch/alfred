@@ -1,9 +1,6 @@
 # Wrench
 
-[Alfred Index](../../README.md#alfred-index) /
-[Alfred](../index.md#alfred) /
-[Data](./index.md#data) /
-Wrench
+[Alfred Index](../../README.md#alfred-index) / [Alfred](../index.md#alfred) / [Data](./index.md#data) / Wrench
 
 > Auto-generated documentation for [alfred.data.wrench](../../../alfred/data/wrench.py) module.
 
@@ -36,8 +33,7 @@ Wrench is a benchmark platform containing diverse weak supervision tasks.
 class WrenchBenchmarkDataset(IterableArrowDataset):
     def __init__(
         self, dataset_name: str, split: str = "train", local_path: Optional[str] = None
-    ):
-        ...
+    ): ...
 ```
 
 ### WrenchBenchmarkDataset().__getattr__
@@ -49,8 +45,7 @@ returns the data instance with the given uid
 #### Signature
 
 ```python
-def __getattr__(self, uid):
-    ...
+def __getattr__(self, uid): ...
 ```
 
 ### WrenchBenchmarkDataset().__repr__
@@ -62,8 +57,5 @@ returns the string representation of the dataset
 #### Signature
 
 ```python
-def __repr__(self):
-    ...
+def __repr__(self): ...
 ```
-
-

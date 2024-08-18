@@ -1,9 +1,6 @@
 # Utils
 
-[Alfred Index](../../README.md#alfred-index) /
-[Alfred](../index.md#alfred) /
-[Fm](./index.md#fm) /
-Utils
+[Alfred Index](../../README.md#alfred-index) / [Alfred](../index.md#alfred) / [Fm](./index.md#fm) / Utils
 
 > Auto-generated documentation for [alfred.fm.utils](../../../alfred/fm/utils.py) module.
 
@@ -30,7 +27,7 @@ Utils
 
 ## DynamicBatcher
 
-[Show source in utils.py:319](../../../alfred/fm/utils.py#L319)
+[Show source in utils.py:320](../../../alfred/fm/utils.py#L320)
 
 Dynamic Batching Utility
 Maximize GPU Utilization by batching queries of similar sizes
@@ -45,13 +42,12 @@ class DynamicBatcher:
         max_batch_size: int = 2048,
         tokenizer: Optional[transformers.PreTrainedTokenizer] = None,
         max_token_length: int = 512,
-    ):
-        ...
+    ): ...
 ```
 
 ### DynamicBatcher().batch
 
-[Show source in utils.py:448](../../../alfred/fm/utils.py#L448)
+[Show source in utils.py:449](../../../alfred/fm/utils.py#L449)
 
 Batch a list of instances into a list of batches.
 If the instances are of different sizes, they will be sorted by size
@@ -65,13 +61,12 @@ Type: *List[List[Instance]]*
 #### Signature
 
 ```python
-def batch(self) -> List:
-    ...
+def batch(self) -> List: ...
 ```
 
 ### DynamicBatcher().merge_rank_response
 
-[Show source in utils.py:364](../../../alfred/fm/utils.py#L364)
+[Show source in utils.py:365](../../../alfred/fm/utils.py#L365)
 
 Merge a list of responses with raw logit into a single RankedResponse
 Assumption: Candidate Order is the same across all ranked queries
@@ -93,13 +88,12 @@ Type: *RankedResponse*
 ```python
 def merge_rank_response(
     self, responses: List[OrderedDict], softmax: bool = True
-) -> RankedResponse:
-    ...
+) -> RankedResponse: ...
 ```
 
 ### DynamicBatcher().reorder
 
-[Show source in utils.py:407](../../../alfred/fm/utils.py#L407)
+[Show source in utils.py:408](../../../alfred/fm/utils.py#L408)
 
 Reordering the responses according to the original order of the queries
 
@@ -118,15 +112,14 @@ Type: *List of responses*
 #### Signature
 
 ```python
-def reorder(self, inst: List, offset: Optional[int] = None) -> List:
-    ...
+def reorder(self, inst: List, offset: Optional[int] = None) -> List: ...
 ```
 
 
 
 ## EmbeddingCache
 
-[Show source in utils.py:242](../../../alfred/fm/utils.py#L242)
+[Show source in utils.py:243](../../../alfred/fm/utils.py#L243)
 
 A simple embedding cache for VLM models
 
@@ -134,13 +127,12 @@ A simple embedding cache for VLM models
 
 ```python
 class EmbeddingCache:
-    def __init__(self, max_size: int = 32):
-        ...
+    def __init__(self, max_size: int = 32): ...
 ```
 
 ### EmbeddingCache().get
 
-[Show source in utils.py:268](../../../alfred/fm/utils.py#L268)
+[Show source in utils.py:269](../../../alfred/fm/utils.py#L269)
 
 Process the inputs and retrieve from the cache/embed the inputs
 
@@ -161,42 +153,39 @@ Type: *torch.tensor*
 ```python
 def get(
     self, inputs: Union[List[Image.Image], List[str]], embedding_proc: Callable
-) -> torch.tensor:
-    ...
+) -> torch.tensor: ...
 ```
 
 
 
 ## TokenizedBatch
 
-[Show source in utils.py:308](../../../alfred/fm/utils.py#L308)
+[Show source in utils.py:309](../../../alfred/fm/utils.py#L309)
 
 #### Signature
 
 ```python
 class TokenizedBatch:
-    def __init__(self, token_ids, pad_token_id=0):
-        ...
+    def __init__(self, token_ids, pad_token_id=0): ...
 ```
 
 
 
 ## bcolors
 
-[Show source in utils.py:216](../../../alfred/fm/utils.py#L216)
+[Show source in utils.py:217](../../../alfred/fm/utils.py#L217)
 
 #### Signature
 
 ```python
-class bcolors:
-    ...
+class bcolors: ...
 ```
 
 
 
 ## batch_multimodal
 
-[Show source in utils.py:111](../../../alfred/fm/utils.py#L111)
+[Show source in utils.py:112](../../../alfred/fm/utils.py#L112)
 
 Batch RankedQueries with Multimodal Payloads
 
@@ -217,15 +206,14 @@ Type: *List[List[Query]]*
 #### Signature
 
 ```python
-def batch_multimodal(queries: List[Query], mode: str, batch_size=64):
-    ...
+def batch_multimodal(queries: List[Query], mode: str, batch_size=64): ...
 ```
 
 
 
 ## check_pkg_available
 
-[Show source in utils.py:153](../../../alfred/fm/utils.py#L153)
+[Show source in utils.py:154](../../../alfred/fm/utils.py#L154)
 
 Check if a package is available
 
@@ -242,43 +230,40 @@ Type: *bool*
 #### Signature
 
 ```python
-def check_pkg_available(pkg_name: str) -> bool:
-    ...
+def check_pkg_available(pkg_name: str) -> bool: ...
 ```
 
 
 
 ## clear_cuda_cache
 
-[Show source in utils.py:24](../../../alfred/fm/utils.py#L24)
+[Show source in utils.py:25](../../../alfred/fm/utils.py#L25)
 
 Clear cuda cache via garbage collection
 
 #### Signature
 
 ```python
-def clear_cuda_cache():
-    ...
+def clear_cuda_cache(): ...
 ```
 
 
 
 ## colorize_str
 
-[Show source in utils.py:228](../../../alfred/fm/utils.py#L228)
+[Show source in utils.py:229](../../../alfred/fm/utils.py#L229)
 
 #### Signature
 
 ```python
-def colorize_str(str, color="CYAN"):
-    ...
+def colorize_str(str, color="CYAN"): ...
 ```
 
 
 
 ## encode_image
 
-[Show source in utils.py:47](../../../alfred/fm/utils.py#L47)
+[Show source in utils.py:48](../../../alfred/fm/utils.py#L48)
 
 Encode an image file into base64.
 
@@ -292,15 +277,14 @@ Encode an image file into base64.
 #### Signature
 
 ```python
-def encode_image(image, type="path"):
-    ...
+def encode_image(image, type="path"): ...
 ```
 
 
 
 ## normalize_logits
 
-[Show source in utils.py:32](../../../alfred/fm/utils.py#L32)
+[Show source in utils.py:33](../../../alfred/fm/utils.py#L33)
 
 Normalize raw logit scores from a foundation model.
 
@@ -320,15 +304,14 @@ Type: *torch.Tensor*
 #### Signature
 
 ```python
-def normalize_logits(logits: torch.Tensor) -> torch.Tensor:
-    ...
+def normalize_logits(logits: torch.Tensor) -> torch.Tensor: ...
 ```
 
 
 
 ## reorder_array
 
-[Show source in utils.py:70](../../../alfred/fm/utils.py#L70)
+[Show source in utils.py:71](../../../alfred/fm/utils.py#L71)
 
 Recover an array according to a given order index.
 
@@ -352,15 +335,14 @@ Type: *Union[np.ndarray, torch.Tensor, list]*
 def reorder_array(
     arr: Union[np.ndarray, torch.Tensor, list],
     order: Union[np.ndarray, torch.Tensor, list],
-) -> Union[np.ndarray, torch.Tensor, list]:
-    ...
+) -> Union[np.ndarray, torch.Tensor, list]: ...
 ```
 
 
 
 ## retry
 
-[Show source in utils.py:181](../../../alfred/fm/utils.py#L181)
+[Show source in utils.py:182](../../../alfred/fm/utils.py#L182)
 
 A decorator to retry a function call if it raises an exception.
 
@@ -383,8 +365,7 @@ Type: *Callable*
 #### Signature
 
 ```python
-def retry(num_retries=3, wait_time=0.1, exceptions=(Exception)):
-    ...
+def retry(num_retries=3, wait_time=0.1, exceptions=(Exception)): ...
 ```
 
 
@@ -398,28 +379,29 @@ Batch queries into fixed size batches
 
 #### Arguments
 
-- `queries` - A list of queries to be batched
-:type queries: Union[Query, str]
-- `batch_sz` - The batch size
-:type batch_sz: int
+- `queries` - A single query or list of queries to be batched
+:type queries: Union[List[Union[Query, str]], Query, str]
+- `batch_size` - The batch size
+:type batch_size: int
 
 #### Returns
 
 A list of batches
-Type: *List[List[Query]]*
+Type: *List[List[Any]]*
 
 #### Signature
 
 ```python
-def static_batch(queries: Union[Query, str], batch_size: int = 512) -> List[List[Query]]:
-    ...
+def static_batch(
+    queries: Union[List[Union[Query, str]], Query, str], batch_size: int = 512
+) -> List[List[Any]]: ...
 ```
 
 
 
 ## tokenize
 
-[Show source in utils.py:89](../../../alfred/fm/utils.py#L89)
+[Show source in utils.py:90](../../../alfred/fm/utils.py#L90)
 
 Tokenize a query instance
 
@@ -440,23 +422,19 @@ Type: *List[int]*
 #### Signature
 
 ```python
-def tokenize(inst, tokenizer, max_length=512):
-    ...
+def tokenize(inst, tokenizer, max_length=512): ...
 ```
 
 
 
 ## type_print
 
-[Show source in utils.py:169](../../../alfred/fm/utils.py#L169)
+[Show source in utils.py:170](../../../alfred/fm/utils.py#L170)
 
 Print a string word by word to simulate typing
 
 #### Signature
 
 ```python
-def type_print(string, interval=0.07, newline=False):
-    ...
+def type_print(string, interval=0.07, newline=False): ...
 ```
-
-

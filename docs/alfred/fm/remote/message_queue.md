@@ -1,10 +1,6 @@
 # Message Queue
 
-[Alfred Index](../../../README.md#alfred-index) /
-[Alfred](../../index.md#alfred) /
-[Fm](../index.md#fm) /
-[Remote](./index.md#remote) /
-Message Queue
+[Alfred Index](../../../README.md#alfred-index) / [Alfred](../../index.md#alfred) / [Fm](../index.md#fm) / [Remote](./index.md#remote) / Message Queue
 
 > Auto-generated documentation for [alfred.fm.remote.message_queue](../../../../alfred/fm/remote/message_queue.py) module.
 
@@ -25,8 +21,7 @@ Message Queue
 
 ```python
 class Message:
-    def __init__(self, topic: str, content: Any, session_id: str):
-        ...
+    def __init__(self, topic: str, content: Any, session_id: str): ...
 ```
 
 
@@ -39,8 +34,7 @@ class Message:
 
 ```python
 class MessageBroker:
-    def __init__(self):
-        ...
+    def __init__(self): ...
 ```
 
 ### MessageBroker().consume
@@ -50,8 +44,7 @@ class MessageBroker:
 #### Signature
 
 ```python
-async def consume(self, session_id: str):
-    ...
+async def consume(self, session_id: str): ...
 ```
 
 ### MessageBroker().create_topic
@@ -61,8 +54,7 @@ async def consume(self, session_id: str):
 #### Signature
 
 ```python
-def create_topic(self, topic_name: str) -> Topic:
-    ...
+def create_topic(self, topic_name: str) -> Topic: ...
 ```
 
 #### See also
@@ -76,8 +68,7 @@ def create_topic(self, topic_name: str) -> Topic:
 #### Signature
 
 ```python
-async def publish(self, message: Message):
-    ...
+async def publish(self, message: Message): ...
 ```
 
 #### See also
@@ -91,8 +82,7 @@ async def publish(self, message: Message):
 #### Signature
 
 ```python
-def subscribe(self, topic_name: str, session_id: str):
-    ...
+def subscribe(self, topic_name: str, session_id: str): ...
 ```
 
 
@@ -105,8 +95,5 @@ def subscribe(self, topic_name: str, session_id: str):
 
 ```python
 class Topic:
-    def __init__(self, name: str):
-        ...
+    def __init__(self, name: str): ...
 ```
-
-

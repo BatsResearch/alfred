@@ -1,10 +1,6 @@
 # gRPCClient
 
-[Alfred Index](../../../README.md#alfred-index) /
-[Alfred](../../index.md#alfred) /
-[Fm](../index.md#fm) /
-[Remote](./index.md#remote) /
-gRPCClient
+[Alfred Index](../../../README.md#alfred-index) / [Alfred](../../index.md#alfred) / [Fm](../index.md#fm) / [Remote](./index.md#remote) / gRPCClient
 
 > Auto-generated documentation for [alfred.fm.remote.grpc_client](../../../../alfred/fm/remote/grpc_client.py) module.
 
@@ -28,8 +24,7 @@ class gRPCClient:
         host: str,
         port: int,
         credentials: Optional[Union[grpc.ChannelCredentials, str]] = None,
-    ):
-        ...
+    ): ...
 ```
 
 ### gRPCClient().close
@@ -39,8 +34,7 @@ class gRPCClient:
 #### Signature
 
 ```python
-def close(self):
-    ...
+def close(self): ...
 ```
 
 ### gRPCClient().encode
@@ -50,8 +44,7 @@ def close(self):
 #### Signature
 
 ```python
-def encode(self, queries: List[str], reduction: str = "mean", **kwargs: Any):
-    ...
+def encode(self, queries: List[str], reduction: str = "mean", **kwargs: Any): ...
 ```
 
 ### gRPCClient().handshake
@@ -61,8 +54,7 @@ def encode(self, queries: List[str], reduction: str = "mean", **kwargs: Any):
 #### Signature
 
 ```python
-def handshake(self):
-    ...
+def handshake(self): ...
 ```
 
 ### gRPCClient().run
@@ -74,8 +66,5 @@ def handshake(self):
 ```python
 def run(
     self, queries: Union[Iterable[Query], Iterable[str], Iterable[Tuple]], **kwargs: Any
-):
-    ...
+): ...
 ```
-
-

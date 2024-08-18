@@ -1,8 +1,6 @@
 # Labeling
 
-[Alfred Index](../../README.md#alfred-index) /
-[Alfred](../index.md#alfred) /
-Labeling
+[Alfred Index](../../README.md#alfred-index) / [Alfred](../index.md#alfred) / Labeling
 
 > Auto-generated documentation for [alfred.labeling](../../../alfred/labeling/__init__.py) module.
 

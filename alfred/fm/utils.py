@@ -2,6 +2,7 @@ import base64
 import gc
 import logging
 from collections import OrderedDict
+from itertools import islice
 from typing import List, Union, Optional, Callable
 import io
 
@@ -522,39 +523,46 @@ class DynamicBatcher:
         batches.append(_process_batch(curr_batch))
 
         clear_cuda_cache()
-
         return batches
 
 
 def static_batch(
-    queries: Union[Query, str], batch_size: int = 512
-) -> List[List[Query]]:
+    queries: Union[List[Union[Query, str]], Query, str], batch_size: int = 512
+) -> List[List[Any]]:
     """
     Static Batching Utility
     Batch queries into fixed size batches
 
-    :param queries: A list of queries to be batched
-    :type queries: Union[Query, str]
-    :param batch_sz: The batch size
-    :type batch_sz: int
+    :param queries: A single query or list of queries to be batched
+    :type queries: Union[List[Union[Query, str]], Query, str]
+    :param batch_size: The batch size
+    :type batch_size: int
     :return: A list of batches
-    :rtype: List[List[Query]]
+    :rtype: List[List[Any]]
     """
+
+    def query_generator(queries):
+        if not isinstance(queries, list):
+            queries = [queries]
+
+        for query in queries:
+            if isinstance(query, CompletionQuery):
+                yield query.load()[0]
+            elif isinstance(query, RankedQuery):
+                for candidate in query.candidates:
+                    yield query.prompt
+                    yield candidate
+            elif isinstance(query, str):
+                yield query
+            else:
+                raise ValueError(f"Unknown query type {type(query)}")
+
+    iterator = query_generator(queries)
     batches = []
-    batch = []
-    for query in queries:
-        if len(batch) == batch_size:
-            batches.append(batch)
-            batch = []
-        if isinstance(query, CompletionQuery):
-            _q = query.load()[0]
-        elif isinstance(query, RankedQuery):
-            _q = query.prompt
-        elif isinstance(query, str):
-            _q = query
-        else:
-            print(f"Unknown query type {type(query)}")
-        batch.append(_q)
-    if len(batch) > 0:
+
+    while True:
+        batch = list(islice(iterator, batch_size))
+        if not batch:
+            break
         batches.append(batch)
     return batches

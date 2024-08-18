@@ -1,8 +1,6 @@
 # Run Client Api
 
-[Alfred Index](../README.md#alfred-index) /
-[Alfred](./index.md#alfred) /
-Run Client Api
+[Alfred Index](../README.md#alfred-index) / [Alfred](./index.md#alfred) / Run Client Api
 
 > Auto-generated documentation for [alfred.run_client_api](../../alfred/run_client_api.py) module.
 
@@ -39,8 +37,7 @@ Run Client Api
 #### Signature
 
 ```python
-class ALFRED_CONFIG(BaseModel):
-    ...
+class ALFRED_CONFIG(BaseModel): ...
 ```
 
 
@@ -53,8 +50,7 @@ class ALFRED_CONFIG(BaseModel):
 
 ```python
 @alfred_app.post("/alfred_server/apply_template")
-async def alfred_server_apply_template(request: Request):
-    ...
+async def alfred_server_apply_template(request: Request): ...
 ```
 
 
@@ -67,8 +63,7 @@ async def alfred_server_apply_template(request: Request):
 
 ```python
 @alfred_app.post("/alfred_server/completion")
-async def alfred_server_completion(request: Request):
-    ...
+async def alfred_server_completion(request: Request): ...
 ```
 
 
@@ -81,8 +76,7 @@ async def alfred_server_completion(request: Request):
 
 ```python
 @alfred_app.post("/alfred_server/rank")
-async def alfred_server_completion(request: Request):
-    ...
+async def alfred_server_completion(request: Request): ...
 ```
 
 
@@ -95,8 +89,7 @@ async def alfred_server_completion(request: Request):
 
 ```python
 @alfred_app.get("/alfred_server/end_point")
-async def get_alfred_server_end_point():
-    ...
+async def get_alfred_server_end_point(): ...
 ```
 
 
@@ -109,8 +102,7 @@ async def get_alfred_server_end_point():
 
 ```python
 @alfred_app.get("/alfred_server/final_host")
-async def get_alfred_server_final_host():
-    ...
+async def get_alfred_server_final_host(): ...
 ```
 
 
@@ -123,8 +115,7 @@ async def get_alfred_server_final_host():
 
 ```python
 @alfred_app.get("/alfred_server/model")
-async def get_alfred_server_model():
-    ...
+async def get_alfred_server_model(): ...
 ```
 
 
@@ -137,8 +128,7 @@ async def get_alfred_server_model():
 
 ```python
 @alfred_app.get("/alfred_server/model_type")
-async def get_alfred_server_model_type():
-    ...
+async def get_alfred_server_model_type(): ...
 ```
 
 
@@ -151,8 +141,7 @@ async def get_alfred_server_model_type():
 
 ```python
 @alfred_app.get("/alfred_server/port")
-async def get_alfred_server_port():
-    ...
+async def get_alfred_server_port(): ...
 ```
 
 
@@ -165,8 +154,7 @@ async def get_alfred_server_port():
 
 ```python
 @alfred_app.get("/alfred_server/username")
-async def get_alfred_server_username():
-    ...
+async def get_alfred_server_username(): ...
 ```
 
 
@@ -179,8 +167,7 @@ async def get_alfred_server_username():
 
 ```python
 @alfred_app.get("/alfred_server/webhook_port")
-async def get_alfred_server_webhook_port():
-    ...
+async def get_alfred_server_webhook_port(): ...
 ```
 
 
@@ -193,8 +180,7 @@ async def get_alfred_server_webhook_port():
 
 ```python
 @alfred_app.get("/alfred_server/cache")
-async def get_cache_table():
-    ...
+async def get_cache_table(): ...
 ```
 
 
@@ -206,8 +192,7 @@ async def get_cache_table():
 #### Signature
 
 ```python
-def main(args):
-    ...
+def main(args): ...
 ```
 
 
@@ -220,8 +205,7 @@ def main(args):
 
 ```python
 @alfred_app.get("/")
-async def root():
-    ...
+async def root(): ...
 ```
 
 
@@ -234,8 +218,7 @@ async def root():
 
 ```python
 @alfred_app.get("/alfred_server/connected")
-async def set_alfred_server_connected():
-    ...
+async def set_alfred_server_connected(): ...
 ```
 
 
@@ -248,8 +231,7 @@ async def set_alfred_server_connected():
 
 ```python
 @alfred_app.post("/alfred_server/end_point")
-async def set_alfred_server_end_point(request: Request):
-    ...
+async def set_alfred_server_end_point(request: Request): ...
 ```
 
 
@@ -262,8 +244,7 @@ async def set_alfred_server_end_point(request: Request):
 
 ```python
 @alfred_app.post("/alfred_server/endpoint_cfg")
-async def set_alfred_server_endpoint_cfg(data: ALFRED_CONFIG):
-    ...
+async def set_alfred_server_endpoint_cfg(data: ALFRED_CONFIG): ...
 ```
 
 #### See also
@@ -280,8 +261,7 @@ async def set_alfred_server_endpoint_cfg(data: ALFRED_CONFIG):
 
 ```python
 @alfred_app.post("/alfred_server/final_host")
-async def set_alfred_server_final_host(request: Request):
-    ...
+async def set_alfred_server_final_host(request: Request): ...
 ```
 
 
@@ -294,8 +274,7 @@ async def set_alfred_server_final_host(request: Request):
 
 ```python
 @alfred_app.post("/alfred_server/model")
-async def set_alfred_server_model(request: Request):
-    ...
+async def set_alfred_server_model(request: Request): ...
 ```
 
 
@@ -308,8 +287,7 @@ async def set_alfred_server_model(request: Request):
 
 ```python
 @alfred_app.post("/alfred_server/model_type")
-async def set_alfred_server_model_type(request: Request):
-    ...
+async def set_alfred_server_model_type(request: Request): ...
 ```
 
 
@@ -322,8 +300,7 @@ async def set_alfred_server_model_type(request: Request):
 
 ```python
 @alfred_app.post("/alfred_server/port")
-async def set_alfred_server_port(request: Request):
-    ...
+async def set_alfred_server_port(request: Request): ...
 ```
 
 
@@ -336,8 +313,7 @@ async def set_alfred_server_port(request: Request):
 
 ```python
 @alfred_app.post("/alfred_server/username")
-async def set_alfred_server_username(request: Request):
-    ...
+async def set_alfred_server_username(request: Request): ...
 ```
 
 
@@ -350,8 +326,7 @@ async def set_alfred_server_username(request: Request):
 
 ```python
 @alfred_app.post("/alfred_server/webhook_port")
-async def set_alfred_server_webhook_port(request: Request):
-    ...
+async def set_alfred_server_webhook_port(request: Request): ...
 ```
 
 
@@ -364,8 +339,5 @@ async def set_alfred_server_webhook_port(request: Request):
 
 ```python
 @alfred_app.get("/status")
-async def status():
-    ...
+async def status(): ...
 ```
-
-
