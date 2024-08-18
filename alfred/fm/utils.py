@@ -3,7 +3,7 @@ import gc
 import logging
 from collections import OrderedDict
 from itertools import islice
-from typing import List, Union, Optional, Callable
+from typing import List, Union, Optional, Callable, Any
 import io
 
 import numpy as np
