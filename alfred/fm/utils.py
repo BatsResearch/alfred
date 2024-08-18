@@ -550,8 +550,7 @@ def static_batch(
                 yield query.load()[0]
             elif isinstance(query, RankedQuery):
                 for candidate in query.candidates:
-                    yield query.prompt
-                    yield candidate
+                    yield (query.prompt, candidate)
             elif isinstance(query, str):
                 yield query
             else:
