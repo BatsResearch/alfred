@@ -1,6 +1,6 @@
 import unittest
 
-from alfred.fm.utils import DynamicBatcher
+from alfred.fm.batch import DynamicBatcher
 
 # from torch import cuda
 

@@ -188,10 +188,8 @@ class AnthropicModel(APIAccessFoundationModel):
         output = []
         for query in batch_instance:
             _scoring_prompt = (
-                scoring_instruction.replace(
-                    "[[label_space]]", ",".join(query.candidates)
-                )
-                + query.prompt
+                scoring_instruction.replace("[[label_space]]", ",".join(query[1]))
+                + query[0]
             )
             output.append(
                 RankedResponse(

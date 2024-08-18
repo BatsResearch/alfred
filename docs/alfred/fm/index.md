@@ -11,6 +11,7 @@
 
 - [Ai21](./ai21.md)
 - [Anthropic](./anthropic.md)
+- [Batch](batch/index.md)
 - [Cohere](./cohere.md)
 - [Dummy](./dummy.md)
 - [Flexgen](./flexgen.md)

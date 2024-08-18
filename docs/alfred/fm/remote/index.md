@@ -13,4 +13,5 @@
 - [gRPCServer](./grpc_server.md)
 - [Message Queue](./message_queue.md)
 - [Protos](protos/index.md)
+- [Server Side Cache](server_side_cache/index.md)
 - [Utils](./utils.md)

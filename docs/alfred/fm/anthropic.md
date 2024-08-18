@@ -120,7 +120,7 @@ def _score_batch(
 
 ### AnthropicModel().chat
 
-[Show source in anthropic.py:206](../../../alfred/fm/anthropic.py#L206)
+[Show source in anthropic.py:204](../../../alfred/fm/anthropic.py#L204)
 
 Launch an interactive chat session with the Anthropic API.
 

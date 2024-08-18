@@ -6,7 +6,7 @@ from PIL import Image
 from transformers import AutoProcessor, CLIPModel
 
 from .model import LocalAccessFoundationModel
-from .utils import EmbeddingCache
+from .remote.server_side_cache.embedding_cache import EmbeddingCache
 from .response import RankedResponse
 
 logger = logging.getLogger(__name__)

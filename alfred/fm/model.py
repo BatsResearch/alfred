@@ -11,7 +11,9 @@ from tqdm.auto import tqdm
 
 from .query import Query, RankedQuery, CompletionQuery
 from .response import Response, CompletionResponse, RankedResponse
-from .utils import DynamicBatcher, clear_cuda_cache, batch_multimodal, static_batch
+from .utils import clear_cuda_cache
+from .batch import StaticBatcher, DynamicBatcher, batch_multimodal
+
 
 logger = logging.getLogger(__name__)
 
@@ -91,91 +93,71 @@ class FoundationModel(abc.ABC):
         List[torch.Tensor],
     ]:
         """
-        This function is the main entry point for running queries through the foundation model.
-        It accepts raw query content and automatically converts it into query objects.
-        The function then determines whether to run the queries through the _generate_batch
-        or _score_batch method based on the type of queries. Finally, the function processes
-        the queries using one of two batching policies (dynamic, static) and passes them
-        through the foundation model.
+        Main entry point for running queries through the foundation model.
 
         :param queries: A list of queries
-        :type queries: Union[List[Query], List[str], List[Tuple[str, str]]]
         :param batch_policy: The batching policy to use. Can be either 'dynamic' or 'static'
-        :type batch_policy: str
         :param batch_size: The batch size to use for static batching or maximum batch size for dynamic batching
-        :type batch_size: int
         :param mode: LLM inference mode, choose from ['generate', 'score', 'encode']
-        :type mode: str
         :param pretokenize: Whether to tokenize the queries while batching
-        :type pretokenize: bool
         :param kwargs: Additional arguments to pass to the foundation model
-        :type kwargs: Any
         :return: A list of responses
-        :rtype: Union[List[CompletionResponse], List[RankedResponse], List[OrderedDict], List[torch.Tensor]]
         """
         with_grad = kwargs.get("with_grad", False)
         no_tqdm = kwargs.get("no_tqdm", False)
 
-        if type(queries[0]) in [RankedQuery, tuple]:
+        batcher = None
+
+        # Determine the mode based on query type
+        if isinstance(queries[0], (RankedQuery, tuple)):
             mode = "score"
 
+        # Set batch policy for vLLM models
         if hasattr(self, "gpu_count"):
-            # default to static batching for vLLM models
             batch_policy = "static"
 
-        if isinstance(self, LocalAccessFoundationModel):
-            if hasattr(self, "multimodal_mode"):
-                batched_queries = batch_multimodal(
-                    queries, mode=self.multimodal_mode, batch_size=batch_size
+        # Handle multimodal queries
+        if isinstance(self, LocalAccessFoundationModel) and hasattr(
+            self, "multimodal_mode"
+        ):
+            batched_queries = batch_multimodal(
+                queries, mode=self.multimodal_mode, batch_size=batch_size
+            )
+            mode = "generate" if self.multimodal_mode == "autoregressive" else "score"
+        else:
+            if isinstance(self, LocalAccessFoundationModel):
+                tokenizer = (
+                    self.tokenizer
+                    if pretokenize and hasattr(self, "tokenizer")
+                    else None
                 )
-                batch_policy = "static"
-                pretokenized = False
-                mode = (
-                    "generate" if self.multimodal_mode == "autoregressive" else "score"
-                )
-            else:
                 if batch_policy == "static":
-                    batched_queries = static_batch(queries, batch_size=batch_size)
-                    pretokenized = False
-                elif batch_policy == "dynamic":
-                    if pretokenize:
-                        pretokenized = True
-                        try:
-                            tokenizer = self.tokenizer
-                        except AttributeError:
-                            logger.error(
-                                "Tokenizer not found. Please set the tokenizer attribute for the model"
-                            )
-                            tokenizer = None
-                            pretokenized = False
-                    else:
-                        pretokenized = False
-                        tokenizer = None
-                    DB = DynamicBatcher(
-                        queries, tokenizer=tokenizer, max_batch_size=batch_size
+                    batcher = StaticBatcher(
+                        queries, max_batch_size=batch_size, tokenizer=tokenizer
                     )
-                    batched_queries = DB.batch()
+                elif batch_policy == "dynamic":
+                    batcher = DynamicBatcher(
+                        queries, max_batch_size=batch_size, tokenizer=tokenizer
+                    )
                 else:
                     raise ValueError(f"batch_policy {batch_policy} not supported")
-        else:
-            batch_policy = "static"
-            pretokenized = False
-            if isinstance(queries[0], Tuple):
-                if isinstance(queries[0][0], Image.Image):
-                    mode = "generate"
+                batched_queries = batcher.batch()
+            else:
+                if isinstance(queries[0], tuple) and isinstance(
+                    queries[0][0], Image.Image
+                ):
                     batched_queries = batch_multimodal(
                         queries, mode=self.multimodal_mode, batch_size=batch_size
                     )
                 else:
-                    batched_queries = np.array_split(queries, len(queries))
-            else:
-                batched_queries = np.array_split(queries, len(queries))
+                    batched_queries = queries
+
         if mode == "generate":
-            inferece_fn = self._generate_batch
+            inference_fn = self._generate_batch
         elif mode == "score":
-            inferece_fn = self._score_batch
+            inference_fn = self._score_batch
         elif mode == "encode":
-            inferece_fn = self._encode_batch
+            inference_fn = self._encode_batch
         else:
             raise ValueError(f"mode {mode} not supported")
 
@@ -185,41 +167,37 @@ class FoundationModel(abc.ABC):
                 logger.info(f"Inferring {len(batched_queries)} batches")
                 with nullcontext() if with_grad else torch.no_grad():
                     responses = []
-                    for batch_id, batch in enumerate(
-                        tqdm(batched_queries, disable=no_tqdm)
-                    ):
-                        responses += inferece_fn(
-                            batch, tokenized=pretokenized, **kwargs
-                        )
-                    break
+                    for batch in tqdm(batched_queries, disable=no_tqdm):
+                        responses += inference_fn(batch, **kwargs)
+                break
             except RuntimeError as e:
-                attempts += 1
                 if "out of memory" in str(e):
-                    logger.log(
-                        logging.INFO,
-                        "WARNING: out of memory, trying to allocate a new batch",
+                    attempts += 1
+                    logger.info(
+                        "WARNING: out of memory, trying to allocate a new batch"
                     )
                     clear_cuda_cache()
-                    if batch_policy == "static":
-                        batch_size = int(batch_size * 0.8)
-                        batched_queries = static_batch(queries, batch_size=batch_size)
-                        logging.info(f"New batch size: {batch_size}")
-                    elif batch_policy == "dynamic":
-                        DB = DynamicBatcher(
-                            queries,
-                            tokenizer=tokenizer,
-                            max_batch_size=int(DB.max_batch_size * 0.9),
-                        )
-                        DB.limit_size = int(DB.limit_size * 0.9)
-                        batched_queries = DB.batch()
-                        logging.info(
-                            f"New lmt_sz, bs: {DB.limit_size}, {DB.max_batch_size}"
-                        )
+                    if isinstance(batched_queries, list) and isinstance(
+                        batched_queries[0], (DynamicBatcher, StaticBatcher)
+                    ):
+                        batcher = batched_queries[0]
+                        if isinstance(batcher, DynamicBatcher):
+                            batcher.max_batch_size = int(batcher.max_batch_size * 0.9)
+                            batcher.limit_size = int(batcher.limit_size * 0.9)
+                        elif isinstance(batcher, StaticBatcher):
+                            batcher.max_batch_size = int(batcher.max_batch_size * 0.8)
+                        batched_queries = batcher.batch()
+                    else:
+                        batched_queries = [
+                            batch[: int(len(batch) * 0.8)] for batch in batched_queries
+                        ]
                 else:
                     raise e
+        else:
+            raise RuntimeError("Failed to allocate memory after 3 attempts")
 
-        if batch_policy == "dynamic":
-            responses = DB.reorder(responses)
+        if batcher:
+            responses = batcher.reorder(responses)
 
         return list(responses)
 
