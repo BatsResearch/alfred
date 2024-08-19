@@ -171,6 +171,8 @@ class HuggingFaceModel(LocalAccessFoundationModel):
             if tokenizer is None
             else tokenizer
         )
+        if self.tokenizer.pad_token_id is None:
+            self.tokenizer.pad_token = self.tokenizer.eos_token
 
     def _get_hidden_states(self, inputs, reduction="mean") -> torch.Tensor:
         """
