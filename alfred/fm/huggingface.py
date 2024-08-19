@@ -214,7 +214,7 @@ class HuggingFaceModel(LocalAccessFoundationModel):
     def _score_batch(
         self,
         batch: Union[List[str], List[Tuple[str, str]]],
-        candidate: Optional[List[str]] = None,
+        candidates: Optional[List[str]] = None,
         hidden_state: bool = False,
         tokenized: bool = False,
         **kwargs: Any,
@@ -231,14 +231,14 @@ class HuggingFaceModel(LocalAccessFoundationModel):
 
         :param batch: A list of prompts or a list of tuples of prompts and candidates.
         :type batch: Union[List[str], List[Tuple[str, str]]]
-        :param candidate: A list of candidates to rank. If not provided, the tokenizer's vocabulary is used.
-        :type candidate: List[str]
+        :param candidates: A list of candidates to rank. If not provided, the tokenizer's vocabulary is used.
+        :type candidates: List[str]
         :param hidden_state: Whether to return the encoder hidden state.
         :type hidden_state: bool
         :return: A list of dictionaries containing the raw logit scores and the encoder/decoder hidden states.
         :rtype: List[Dict[str, Any]]
         """
-        if hasattr(self.model, 'hf_device_map'):
+        if hasattr(self.model, "hf_device_map"):
             device = list(self.model.hf_device_map.values())[-1]
         else:
             device = next(self.model.parameters()).device
@@ -246,9 +246,9 @@ class HuggingFaceModel(LocalAccessFoundationModel):
         if tokenized:
             inputs, candidates = batch
         else:
-            if candidate is None:
+            if candidates is None:
                 batch, candidates = zip(*batch)
-            batch, candidates = list(batch), list(candidate)
+            batch, candidates = list(batch), list(candidates)
 
             inputs = self.tokenizer(
                 batch,
@@ -306,10 +306,11 @@ class HuggingFaceModel(LocalAccessFoundationModel):
                     input_ids=input_ids,
                     attention_mask=attention_mask,
                 )
-            logits = outputs.logits[:, prefix_length - 1: -1]
+            logits = outputs.logits[:, prefix_length - 1 : -1]
 
         masked_log_probs = candidate_tokens.attention_mask.to(logits.device).unsqueeze(
-            -1) * torch.nn.functional.log_softmax(logits, dim=-1)
+            -1
+        ) * torch.nn.functional.log_softmax(logits, dim=-1)
         seq_token_log_probs = torch.gather(
             masked_log_probs,
             -1,
@@ -319,18 +320,26 @@ class HuggingFaceModel(LocalAccessFoundationModel):
         seq_log_prob = seq_log_prob.view(len(candidates), -1)
 
         if hidden_state:
-            hidden_states = outputs.hidden_states[-1] if hasattr(outputs, 'hidden_states') else None
+            hidden_states = (
+                outputs.hidden_states[-1] if hasattr(outputs, "hidden_states") else None
+            )
             return [
                 {
                     "logit": logit.item(),
                     "candidate": candidates[logit_id],
-                    "hidden_state": hidden_states[logit_id].squeeze(0) if hidden_states is not None else None,
+                    "hidden_state": hidden_states[logit_id].squeeze(0)
+                    if hidden_states is not None
+                    else None,
                 }
                 for logit_id, logit in enumerate(torch.flatten(seq_log_prob))
             ]
 
         return [
-            {"logit": logit.item(), "candidate": candidates[logit_id], "hidden_state": None}
+            {
+                "logit": logit.item(),
+                "candidate": candidates[logit_id],
+                "hidden_state": None,
+            }
             for logit_id, logit in enumerate(torch.flatten(seq_log_prob))
         ]
 

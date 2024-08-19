@@ -70,7 +70,7 @@ class vLLMModel(LocalAccessFoundationModel):
     def _score_batch(
         self,
         batch: Union[List[str], List[Tuple[str, str]]],
-        candidate: Optional[List[str]] = None,
+        candidates: Optional[List[str]] = None,
         hidden_state: bool = False,
         tokenized: bool = False,
         **kwargs: Any,
@@ -79,7 +79,7 @@ class vLLMModel(LocalAccessFoundationModel):
         Score a batch of prompts and candidates using the vLLM model.
 
         :param batch: A list of prompts or a list of tuples of prompts and candidates.
-        :param candidate: A list of candidates to rank. If not provided, it's extracted from batch.
+        :param candidates: A list of candidates to rank. If not provided, it's extracted from batch.
         :param hidden_state: Whether to return the encoder hidden state (not supported in vLLM).
         :param tokenized: Whether the input is already tokenized (not supported in vLLM).
         :return: A list of dictionaries containing the log probability scores for each candidate.
@@ -96,7 +96,7 @@ class vLLMModel(LocalAccessFoundationModel):
         if tokenized:
             raise ValueError("vLLM does not support pre-tokenized input.")
 
-        if candidate is None:
+        if candidates is None:
             if isinstance(batch[0], tuple):
                 prompts, candidates = zip(*batch)
             else:
