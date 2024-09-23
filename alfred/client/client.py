@@ -80,6 +80,7 @@ class Client:
                 "google",
                 "groq",
                 "torch",
+                "openllm",
                 "dummy",
             ], f"Invalid model type: {self.model_type}"
         else:
@@ -180,6 +181,13 @@ class Client:
                 from ..fm.openai import OpenAIModel
 
                 self.model = OpenAIModel(self.model, **kwargs)
+            elif self.model_type == "openllm":
+                from ..fm.openllm import OpenLLMModel
+
+                if self.model is None:
+                    self.model = end_point
+
+                self.model = OpenLLMModel(self.model, **kwargs)
             elif self.model_type == "cohere":
                 from ..fm.cohere import CohereModel
 
