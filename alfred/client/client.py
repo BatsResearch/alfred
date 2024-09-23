@@ -80,6 +80,7 @@ class Client:
                 "google",
                 "groq",
                 "torch",
+                "openllm",
                 "dummy",
             ], f"Invalid model type: {self.model_type}"
         else:
@@ -99,7 +100,7 @@ class Client:
             self.run = self.cache.cached_query(self.run)
 
         self.grpcClient = None
-        if end_point:
+        if end_point and model_type not in ["dummy", "openllm", ]:
             end_point_pieces = end_point.split(":")
             self.end_point_ip, self.end_point_port = (
                 "".join(end_point_pieces[:-1]),
@@ -180,6 +181,11 @@ class Client:
                 from ..fm.openai import OpenAIModel
 
                 self.model = OpenAIModel(self.model, **kwargs)
+            elif self.model_type == "openllm":
+                from ..fm.openllm import OpenLLMModel
+
+                base_url = kwargs.get("base_url", end_point)
+                self.model = OpenLLMModel(self.model, base_url=base_url, **kwargs)
             elif self.model_type == "cohere":
                 from ..fm.cohere import CohereModel
 

@@ -44,7 +44,7 @@ class Client:
 
 ### Client().__call__
 
-[Show source in client.py:313](../../../alfred/client/client.py#L313)
+[Show source in client.py:319](../../../alfred/client/client.py#L319)
 
 __call__() function to run the model on the queries.
 Equivalent to run() function.
@@ -71,7 +71,7 @@ def __call__(
 
 ### Client().calibrate
 
-[Show source in client.py:329](../../../alfred/client/client.py#L329)
+[Show source in client.py:335](../../../alfred/client/client.py#L335)
 
 calibrate are used to calibrate foundation models contextually given the template.
 A voter class may be passed to calibrate the model with a specific voter.
@@ -115,7 +115,7 @@ def calibrate(
 
 ### Client().chat
 
-[Show source in client.py:427](../../../alfred/client/client.py#L427)
+[Show source in client.py:433](../../../alfred/client/client.py#L433)
 
 Chat with the model APIs.
 Currently, Alfred supports Chat APIs from Anthropic and OpenAI
@@ -133,7 +133,7 @@ def chat(self, log_save_path: Optional[str] = None, **kwargs: Any): ...
 
 ### Client().encode
 
-[Show source in client.py:401](../../../alfred/client/client.py#L401)
+[Show source in client.py:407](../../../alfred/client/client.py#L407)
 
 embed() function to embed the queries.
 
@@ -155,7 +155,7 @@ def encode(
 
 ### Client().generate
 
-[Show source in client.py:272](../../../alfred/client/client.py#L272)
+[Show source in client.py:278](../../../alfred/client/client.py#L278)
 
 Wrapper function to generate the response(s) from the model. (For completion)
 
@@ -183,7 +183,7 @@ def generate(
 
 ### Client().remote_run
 
-[Show source in client.py:246](../../../alfred/client/client.py#L246)
+[Show source in client.py:252](../../../alfred/client/client.py#L252)
 
 Wrapper function for running the model on the queries thru a gRPC Server.
 
@@ -209,7 +209,7 @@ def remote_run(
 
 ### Client().run
 
-[Show source in client.py:226](../../../alfred/client/client.py#L226)
+[Show source in client.py:232](../../../alfred/client/client.py#L232)
 
 Run the model on the queries.
 
@@ -235,7 +235,7 @@ def run(
 
 ### Client().score
 
-[Show source in client.py:289](../../../alfred/client/client.py#L289)
+[Show source in client.py:295](../../../alfred/client/client.py#L295)
 
 Wrapper function to score the response(s) from the model. (For ranking)
 

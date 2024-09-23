@@ -22,6 +22,7 @@
 - [Model](./model.md)
 - [Onnx](./onnx.md)
 - [Openai](./openai.md)
+- [Openllm](./openllm.md)
 - [Query](query/index.md)
 - [Remote](remote/index.md)
 - [Response](response/index.md)
