@@ -32,6 +32,7 @@ A full list of `Alfred` project modules.
         - [Model](alfred/fm/model.md#model)
         - [Onnx](alfred/fm/onnx.md#onnx)
         - [Openai](alfred/fm/openai.md#openai)
+        - [Openllm](alfred/fm/openllm.md#openllm)
         - [Query](alfred/fm/query/index.md#query)
             - [CompletionQuery](alfred/fm/query/completion_query.md#completionquery)
             - [Query](alfred/fm/query/query.md#query)

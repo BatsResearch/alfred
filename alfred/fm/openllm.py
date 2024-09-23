@@ -1,27 +1,8 @@
 import json
 import logging
-import os
 from typing import Optional, List, Any, Union, Tuple
 
-import PIL.Image
-import torch
-
-from .model import APIAccessFoundationModel
-from .response import CompletionResponse, RankedResponse
-from .utils import colorize_str, retry, encode_image, type_print
-
-logger = logging.getLogger(__name__)
-
-try:
-    import openai
-except ModuleNotFoundError:
-    logger.warning(
-        "OpenAI module not found. Please install it to use the OpenAI model or connect to OpenLLM Server."
-    )
-    raise ModuleNotFoundError(
-        "OpenAI module not found. Please install it to use the OpenAI model or connect to OpenLLM Server."
-    )
-
+import openai
 from openai._exceptions import (
     AuthenticationError,
     APIError,
@@ -32,13 +13,15 @@ from openai._exceptions import (
     APIStatusError,
 )
 
+from .model import APIAccessFoundationModel
+from .response import CompletionResponse, RankedResponse
+from .utils import retry
 
+logger = logging.getLogger(__name__)
 
 class OpenLLMModel(APIAccessFoundationModel):
     """
-    A wrapper for the OpenAI API for OpenLLM Models
-
-    This class provides a wrapper for the OpenAI API for generating completions.
+    A wrapper for the OpenLLM Models using OpenAI's Python package
     """
 
     @retry(
@@ -54,7 +37,7 @@ class OpenLLMModel(APIAccessFoundationModel):
             APIStatusError,
         ),
     )
-    def _openai_query(
+    def _api_query(
         self,
         query: Union[str, List, Tuple],
         temperature: float = 0.0,
@@ -62,10 +45,10 @@ class OpenLLMModel(APIAccessFoundationModel):
         **kwargs: Any,
     ) -> str:
         """
-        Run a single query through the foundation model
+        Run a single query through the foundation model using OpenAI's Python package
 
         :param query: The prompt to be used for the query
-        :type query: Union[str, List]
+        :type query: Union[str, List, Tuple]
         :param temperature: The temperature of the model
         :type temperature: float
         :param max_tokens: The maximum number of tokens to be returned
@@ -76,59 +59,42 @@ class OpenLLMModel(APIAccessFoundationModel):
         :rtype: str
         """
         chat = kwargs.get("chat", False)
-        openai_api_key = kwargs.get("openai_api_key", None)
-        if openai_api_key is not None:
-            openai.api_key = openai_api_key
 
         if chat:
-            return self.openai_client.chat.completions.create(
-                model=self.model_string,
-                messages=query,
-                max_tokens=max_tokens,
-                stop=None,
-                temperature=temperature,
-                stream=True,
-            )
-        else:
-            query = [{"role": "user", "content": query}]
+            messages = query if isinstance(query, list) else [{"role": "user", "content": query}]
             response = self.openai_client.chat.completions.create(
-                messages=query,
                 model=self.model_string,
-                temperature=temperature,
+                messages=messages,
                 max_tokens=max_tokens,
+                temperature=temperature,
             )
             return response.choices[0].message.content
-
-    @retry(
-        num_retries=3,
-        wait_time=0.1,
-        exceptions=(
-            AuthenticationError,
-            APIConnectionError,
-            APITimeoutError,
-            RateLimitError,
-            APIError,
-            BadRequestError,
-            APIStatusError,
-        ),
-    )
+        else:
+            prompt = query[0]['content'] if isinstance(query, list) else query
+            response = self.openai_client.completions.create(
+                model=self.model_string,
+                prompt=prompt,
+                max_tokens=max_tokens,
+                temperature=temperature,
+            )
+            return response.choices[0].text
 
     def __init__(
         self, model_string: str = "", api_key: Optional[str] = None, **kwargs: Any
     ):
         """
-        Initialize the OpenAI API wrapper.
+        Initialize the OpenLLM API wrapper.
 
         :param model_string: The model to be used for generating completions.
         :type model_string: str
         :param api_key: The API key to be used for the OpenAI API.
         :type api_key: Optional[str]
         """
-        base_url = kwargs.get("base_url", None)
-        if not api_key:
-            api_key = "na"
-        self.openai_client = openai.OpenAI(base_url=base_url if base_url else model_string)
-        super().__init__(model_string, {"api_key": openai.api_key})
+        self.model_string = model_string
+        base_url = kwargs.get("base_url",  None)
+        api_key = api_key or "na"
+        self.openai_client = openai.OpenAI(base_url=base_url, api_key=api_key)
+        super().__init__(model_string, {"api_key": api_key, "base_url": base_url})
 
     def _generate_batch(
         self,
@@ -138,12 +104,9 @@ class OpenLLMModel(APIAccessFoundationModel):
         """
         Generate completions for a batch of prompts using the OpenAI API.
 
-        This function generates completions for a batch of prompts using the OpenAI API.
-        The generated completions are returned in a list of `CompletionResponse` objects.
-
         :param batch_instance: A list of prompts for which to generate completions.
         :type batch_instance: List[str] or List[Tuple]
-        :param kwargs: Additional keyword arguments to pass to the OpenAI API.
+        :param kwargs: Additional keyword arguments to pass to the API.
         :type kwargs: Any
         :return: A list of `CompletionResponse` objects containing the generated completions.
         :rtype: List[CompletionResponse]
@@ -151,7 +114,7 @@ class OpenLLMModel(APIAccessFoundationModel):
         output = []
         for query in batch_instance:
             output.append(
-                CompletionResponse(prediction=self._openai_query(query, **kwargs))
+                CompletionResponse(prediction=self._api_query(query, **kwargs))
             )
         return output
 
@@ -162,7 +125,7 @@ class OpenLLMModel(APIAccessFoundationModel):
         **kwargs,
     ) -> List[RankedResponse]:
         """
-        Tentative solution for scoring candidates.
+        Score candidates using the OpenAI API.
 
         :param batch_instance: A list of prompts for which to generate candidate preferences.
         :type batch_instance: List[str] or List[Tuple]
@@ -179,7 +142,7 @@ class OpenLLMModel(APIAccessFoundationModel):
             )
             output.append(
                 RankedResponse(
-                    prediction=self._openai_query(_scoring_prompt, **kwargs), scores={}
+                    prediction=self._api_query(_scoring_prompt, **kwargs), scores={}
                 )
             )
         return output
