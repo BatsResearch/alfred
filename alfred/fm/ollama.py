@@ -51,7 +51,7 @@ class OllamaModel(LocalAccessFoundationModel):
         else:
             self.client = ollama
 
-    def generate_batch(
+    def _generate_batch(
         self,
         batch_instance: List[str],
         **kwargs: Any,

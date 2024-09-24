@@ -38,7 +38,7 @@ class FoundationModel(abc.ABC):
         :rtype List[Response]
         """
         raise NotImplementedError(
-            f"_infer_batch() is not implemented for {self.__class__.__name__}"
+            f"_generate_batch() is not implemented for {self.__class__.__name__}"
         )
 
     def _score_batch(
