@@ -20,6 +20,7 @@
 - [Huggingfacedocument](./huggingfacedocument.md)
 - [Huggingfacevlm](./huggingfacevlm.md)
 - [Model](./model.md)
+- [Ollama](./ollama.md)
 - [Onnx](./onnx.md)
 - [Openai](./openai.md)
 - [Openllm](./openllm.md)
