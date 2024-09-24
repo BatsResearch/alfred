@@ -66,20 +66,11 @@ class OllamaModel(LocalAccessFoundationModel):
         :rtype: List[CompletionResponse]
         """
 
-        temperature = kwargs.get("temperature", 0.7)
-        max_tokens = kwargs.get("max_tokens", 100)
-        top_k = kwargs.get("top_k", 40)
-        top_p = kwargs.get("top_p", 0.95)
-
         responses = []
         for query in batch_instance:
             response = self.client.generate(
                 model=self.model_string,
                 prompt=query,
-                temperature=temperature,
-                max_tokens=max_tokens,
-                top_k=top_k,
-                top_p=top_p
             )
             responses.append(CompletionResponse(prediction=response['response']))
 
@@ -141,8 +132,6 @@ class OllamaModel(LocalAccessFoundationModel):
                     model=self.model_string,
                     messages=message_log,
                     stream=True,
-                    temperature=temperature,
-                    max_tokens=max_tokens,
                 )
 
                 full_response = []

@@ -445,12 +445,12 @@ class Client:
         :param log_save_path: The file to save the chat logs.
         :type log_save_path: Optional[str]
         """
-        if self.model_type in ["openai", "anthropic", "google", "huggingface", "groq"]:
+        if self.model_type in ["openai", "anthropic", "google", "huggingface", "groq", "llama"]:
             self.model.chat(log_save_path=log_save_path, **kwargs)
         else:
             logger.error(
-                "Chat APIs are only supported for Anthropic, Google Gemini and OpenAI models."
+                "Chat APIs are only supported for Anthropic, Google, OpenAI, HuggingFace, Ollama and Groq models."
             )
             raise NotImplementedError(
-                "Currently Chat are only supported for Anthropic, Google Gemini and OpenAI models."
+                "Chat APIs are only supported for Anthropic, Google, OpenAI, HuggingFace, Ollama and Groq models."
             )
