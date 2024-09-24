@@ -11,6 +11,8 @@ try:
 except ImportError:
     raise ImportError("Please install Ollama with `pip install ollama`")
 
+from .utils import colorize_str, retry, encode_image, type_print
+
 class OllamaModel(LocalAccessFoundationModel):
     """
     OllamaModel wraps an Ollama model. Ollama is a library for easy integration with large language models.
