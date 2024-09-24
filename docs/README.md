@@ -30,6 +30,7 @@ A full list of `Alfred` project modules.
         - [Huggingfacedocument](alfred/fm/huggingfacedocument.md#huggingfacedocument)
         - [Huggingfacevlm](alfred/fm/huggingfacevlm.md#huggingfacevlm)
         - [Model](alfred/fm/model.md#model)
+        - [Ollama](alfred/fm/ollama.md#ollama)
         - [Onnx](alfred/fm/onnx.md#onnx)
         - [Openai](alfred/fm/openai.md#openai)
         - [Openllm](alfred/fm/openllm.md#openllm)

@@ -81,6 +81,7 @@ class Client:
                 "groq",
                 "torch",
                 "openllm",
+                "ollama",
                 "dummy",
             ], f"Invalid model type: {self.model_type}"
         else:
@@ -100,7 +101,7 @@ class Client:
             self.run = self.cache.cached_query(self.run)
 
         self.grpcClient = None
-        if end_point and model_type not in ["dummy", "openllm", ]:
+        if end_point and model_type not in ["dummy", "openllm", "ollama",]:
             end_point_pieces = end_point.split(":")
             self.end_point_ip, self.end_point_port = (
                 "".join(end_point_pieces[:-1]),
@@ -186,6 +187,12 @@ class Client:
 
                 base_url = kwargs.get("base_url", end_point)
                 self.model = OpenLLMModel(self.model, base_url=base_url, **kwargs)
+            elif self.model_type == "ollama":
+                from ..fm.ollama import OllamaModel
+
+                if not model and end_point:
+                    model = end_point
+                self.model = OllamaModel(model)
             elif self.model_type == "cohere":
                 from ..fm.cohere import CohereModel
 
@@ -438,12 +445,12 @@ class Client:
         :param log_save_path: The file to save the chat logs.
         :type log_save_path: Optional[str]
         """
-        if self.model_type in ["openai", "anthropic", "google", "huggingface", "groq"]:
+        if self.model_type in ["openai", "anthropic", "google", "huggingface", "groq", "ollama"]:
             self.model.chat(log_save_path=log_save_path, **kwargs)
         else:
             logger.error(
-                "Chat APIs are only supported for Anthropic, Google Gemini and OpenAI models."
+                "Chat APIs are only supported for Anthropic, Google, OpenAI, HuggingFace, Ollama and Groq models."
             )
             raise NotImplementedError(
-                "Currently Chat are only supported for Anthropic, Google Gemini and OpenAI models."
+                "Chat APIs are only supported for Anthropic, Google, OpenAI, HuggingFace, Ollama and Groq models."
             )

@@ -59,6 +59,7 @@ class ModelServer:
             "groq",
             "google",
             "torch",
+            "ollama",
             "dummy",
         ], f"Invalid model type: {self.model_type}"
         if self.model_type == "huggingface":
@@ -97,6 +98,10 @@ class ModelServer:
             from .fm.groq import GroqModel
 
             self.model = GroqModel(self.model, **kwargs)
+        elif self.model_type == "ollama":
+            from ..fm.ollama import OllamaModel
+
+            self.model = OllamaModel(self.model)
         elif self.model_type == "dummy":
             from .fm.dummy import DummyModel
 
