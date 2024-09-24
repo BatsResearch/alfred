@@ -445,7 +445,7 @@ class Client:
         :param log_save_path: The file to save the chat logs.
         :type log_save_path: Optional[str]
         """
-        if self.model_type in ["openai", "anthropic", "google", "huggingface", "groq", "llama"]:
+        if self.model_type in ["openai", "anthropic", "google", "huggingface", "groq", "ollama"]:
             self.model.chat(log_save_path=log_save_path, **kwargs)
         else:
             logger.error(
