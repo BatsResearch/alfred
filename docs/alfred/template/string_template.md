@@ -18,12 +18,16 @@
     - [StringTemplate().name](#stringtemplate()name)
     - [StringTemplate().reference](#stringtemplate()reference)
     - [StringTemplate().serialize](#stringtemplate()serialize)
+    - [StringTemplate().set_chat_template](#stringtemplate()set_chat_template)
+    - [StringTemplate.set_global_chat_template](#stringtemplateset_global_chat_template)
     - [StringTemplate().template](#stringtemplate()template)
     - [StringTemplate().type](#stringtemplate()type)
+    - [StringTemplate().unset_chat_template](#stringtemplate()unset_chat_template)
+    - [StringTemplate.unset_global_chat_template](#stringtemplateunset_global_chat_template)
 
 ## StringTemplate
 
-[Show source in string_template.py:15](../../../alfred/template/string_template.py#L15)
+[Show source in string_template.py:20](../../../alfred/template/string_template.py#L20)
 
 Prompt Template Class for Common Static Templates
 
@@ -72,16 +76,13 @@ class StringTemplate(Template):
         reference: Optional[str] = None,
         metadata: Optional[Dict[str, Any]] = None,
         answer_choices: Optional[Union[str, List[str]]] = None,
+        chat_template: Optional[Union[str, Dict]] = None,
     ): ...
 ```
 
-#### See also
-
-- [Template](./template.md#template)
-
 ### StringTemplate().__call__
 
-[Show source in string_template.py:291](../../../alfred/template/string_template.py#L291)
+[Show source in string_template.py:402](../../../alfred/template/string_template.py#L402)
 
 A wrapper function to apply the template to a single example
 
@@ -89,8 +90,8 @@ A wrapper function to apply the template to a single example
 
 - `example` - a single example in format of a dictionary
 :type example: Dict
-- `kawrgs` - Additional arguments to pass to apply
-:type kawrgs: Any
+- `kwargs` - Additional arguments to pass to apply
+:type kwargs: Any
 
 #### Returns
 
@@ -100,12 +101,12 @@ Type: *Query*
 #### Signature
 
 ```python
-def __call__(self, example: Dict, **kawrgs: Any) -> Query: ...
+def __call__(self, example: Dict, **kwargs: Any) -> Query: ...
 ```
 
 ### StringTemplate().apply
 
-[Show source in string_template.py:123](../../../alfred/template/string_template.py#L123)
+[Show source in string_template.py:203](../../../alfred/template/string_template.py#L203)
 
 Apply template to an example or a list of examples and returns a query object or a list of queries
 
@@ -113,8 +114,8 @@ Apply template to an example or a list of examples and returns a query object or
 
 - `example` - list of examples or an example in format of dictionary
 :type example: Union[Dict, List[Dict]]
-- `kawrgs` - "key_translator" for key translation (e.g. for fields key replacements)
-:type kawrgs: Dict
+- `kwargs` - "key_translator" for key translation (e.g. for fields key replacements)
+:type kwargs: Dict
 
 #### Returns
 
@@ -125,13 +126,13 @@ Type: *Query or List[Query]*
 
 ```python
 def apply(
-    self, example: Union[Dict, List[Dict]], **kawrgs
+    self, example: Union[Dict, List[Dict]], **kwargs
 ) -> Union[Query, List[Query]]: ...
 ```
 
 ### StringTemplate().apply_to_dataset
 
-[Show source in string_template.py:193](../../../alfred/template/string_template.py#L193)
+[Show source in string_template.py:293](../../../alfred/template/string_template.py#L293)
 
 A wrapper function to apply the template to a dataset iteratively
 
@@ -157,7 +158,7 @@ def apply_to_dataset(
 
 ### StringTemplate().deserialize
 
-[Show source in string_template.py:272](../../../alfred/template/string_template.py#L272)
+[Show source in string_template.py:382](../../../alfred/template/string_template.py#L382)
 
 returns a template object from a json string of dictionary
 
@@ -176,13 +177,9 @@ template object
 def deserialize(self, json_str: str) -> Template: ...
 ```
 
-#### See also
-
-- [Template](./template.md#template)
-
 ### StringTemplate().from_promptsource
 
-[Show source in string_template.py:109](../../../alfred/template/string_template.py#L109)
+[Show source in string_template.py:188](../../../alfred/template/string_template.py#L188)
 
 Update the template from a promptsource template
 
@@ -199,7 +196,7 @@ def from_promptsource(self, promptsource_template): ...
 
 ### StringTemplate().get_answer_choices_list
 
-[Show source in string_template.py:210](../../../alfred/template/string_template.py#L210)
+[Show source in string_template.py:311](../../../alfred/template/string_template.py#L311)
 
 Get answer choices list
 
@@ -216,7 +213,7 @@ def get_answer_choices_list(self) -> List[str]: ...
 
 ### StringTemplate().id
 
-[Show source in string_template.py:234](../../../alfred/template/string_template.py#L234)
+[Show source in string_template.py:339](../../../alfred/template/string_template.py#L339)
 
 returns the template id
 
@@ -229,7 +226,7 @@ def id(self): ...
 
 ### StringTemplate().keywords
 
-[Show source in string_template.py:229](../../../alfred/template/string_template.py#L229)
+[Show source in string_template.py:333](../../../alfred/template/string_template.py#L333)
 
 returns the keywords
 
@@ -242,7 +239,7 @@ def keywords(self): ...
 
 ### StringTemplate().metadata
 
-[Show source in string_template.py:249](../../../alfred/template/string_template.py#L249)
+[Show source in string_template.py:357](../../../alfred/template/string_template.py#L357)
 
 returns the template metadata
 
@@ -255,7 +252,7 @@ def metadata(self): ...
 
 ### StringTemplate().name
 
-[Show source in string_template.py:239](../../../alfred/template/string_template.py#L239)
+[Show source in string_template.py:345](../../../alfred/template/string_template.py#L345)
 
 returns the template name
 
@@ -268,7 +265,7 @@ def name(self): ...
 
 ### StringTemplate().reference
 
-[Show source in string_template.py:244](../../../alfred/template/string_template.py#L244)
+[Show source in string_template.py:351](../../../alfred/template/string_template.py#L351)
 
 returns the template reference
 
@@ -281,7 +278,7 @@ def reference(self): ...
 
 ### StringTemplate().serialize
 
-[Show source in string_template.py:254](../../../alfred/template/string_template.py#L254)
+[Show source in string_template.py:363](../../../alfred/template/string_template.py#L363)
 
 returns the template as a json string of dictionary
 
@@ -296,9 +293,68 @@ Type: *str*
 def serialize(self): ...
 ```
 
+### StringTemplate().set_chat_template
+
+[Show source in string_template.py:134](../../../alfred/template/string_template.py#L134)
+
+Set instance-specific chat template, overriding any global template.
+
+#### Arguments
+
+- `chat_template` - chat template to apply
+
+                                - it can either be a model family name (e.g. "llama", "mistral", "gemma", "phi", "qwen", "alpaca")
+                                - or a dictionary of chat templates
+                                    e.g.
+                                    chat_templates = {
+                                            "system": f"<|begin_of_text|><|start_header_id|>system<|end_header_id|>{system_instruction}<|eot_id|>
+",
+                                            "prefix": " <|start_header_id|>user<|end_header_id|> ",
+                                            "suffix": " <|eot_id|>
+
+<|start_header_id|>assistant<|end_header_id|> ",
+                                            }
+        :type chat_template: Union[str, Dict]
+
+#### Signature
+
+```python
+def set_chat_template(self, chat_template: Union[str, Dict]): ...
+```
+
+### StringTemplate.set_global_chat_template
+
+[Show source in string_template.py:160](../../../alfred/template/string_template.py#L160)
+
+Set global chat template to apply to all instances of the template.
+
+#### Arguments
+
+- `chat_template` - chat template to apply
+
+                                - it can either be a model family name (e.g. "llama", "mistral", "gemma", "phi", "qwen", "alpaca")
+                                - or a dictionary of chat templates
+                                    e.g.
+                                    chat_templates = {
+                                            "system": f"<|begin_of_text|><|start_header_id|>system<|end_header_id|>{system_instruction}<|eot_id|>
+",
+                                            "prefix": " <|start_header_id|>user<|end_header_id|> ",
+                                            "suffix": " <|eot_id|>
+
+<|start_header_id|>assistant<|end_header_id|> ",
+                                            }
+        :type chat_template: Union[str, Dict]
+
+#### Signature
+
+```python
+@classmethod
+def set_global_chat_template(cls, chat_template: Union[str, Dict]): ...
+```
+
 ### StringTemplate().template
 
-[Show source in string_template.py:219](../../../alfred/template/string_template.py#L219)
+[Show source in string_template.py:321](../../../alfred/template/string_template.py#L321)
 
 returns the template
 
@@ -311,7 +367,7 @@ def template(self): ...
 
 ### StringTemplate().type
 
-[Show source in string_template.py:224](../../../alfred/template/string_template.py#L224)
+[Show source in string_template.py:327](../../../alfred/template/string_template.py#L327)
 
 returns the template type
 
@@ -320,4 +376,29 @@ returns the template type
 ```python
 @property
 def type(self): ...
+```
+
+### StringTemplate().unset_chat_template
+
+[Show source in string_template.py:153](../../../alfred/template/string_template.py#L153)
+
+Remove instance-specific chat template, reverting to global template if available.
+
+#### Signature
+
+```python
+def unset_chat_template(self): ...
+```
+
+### StringTemplate.unset_global_chat_template
+
+[Show source in string_template.py:180](../../../alfred/template/string_template.py#L180)
+
+Remove global chat template.
+
+#### Signature
+
+```python
+@classmethod
+def unset_global_chat_template(cls): ...
 ```

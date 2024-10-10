@@ -61,6 +61,7 @@ A full list of `Alfred` project modules.
     - [Run Client Api](alfred/run_client_api.md#run-client-api)
     - [Run Server](alfred/run_server.md#run-server)
     - [Template](alfred/template/index.md#template)
+        - [Chat Templates](alfred/template/chat_templates/index.md#chat-templates)
         - [ImageTemplate](alfred/template/image_template.md#imagetemplate)
         - [StringTemplate](alfred/template/string_template.md#stringtemplate)
         - [Template](alfred/template/template.md#template)

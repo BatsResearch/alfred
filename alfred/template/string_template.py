@@ -1,13 +1,18 @@
 import json
 import logging
 import re
+from keyword import kwlist
 from typing import Dict, Any, Optional, Iterable, List, Union
 
 import numpy as np
 import torch
 
+from functools import wraps
 from alfred.fm.query import Query, CompletionQuery, RankedQuery
-from alfred.template.template import Template
+from streamlit.web.cli import activate
+
+from .chat_templates import chat_templates
+from .template import Template
 
 logger = logging.getLogger(__name__)
 
@@ -47,14 +52,16 @@ class StringTemplate(Template):
         metadata: metadata
     """
 
+    _global_chat_template = None
     def __init__(
-        self,
-        template: str,
-        id: Optional[str] = None,
-        name: Optional[str] = None,
-        reference: Optional[str] = None,
-        metadata: Optional[Dict[str, Any]] = None,
-        answer_choices: Optional[Union[str, List[str]]] = None,
+            self,
+            template: str,
+            id: Optional[str] = None,
+            name: Optional[str] = None,
+            reference: Optional[str] = None,
+            metadata: Optional[Dict[str, Any]] = None,
+            answer_choices: Optional[Union[str, List[str]]] = None,
+            chat_template: Optional[Union[str, Dict]] = None,
     ):
         """
 
@@ -72,14 +79,30 @@ class StringTemplate(Template):
         :param metadata: (optional) metadata of the template
         :type metadata: Dict[str, Any]
         :param answer_choices:  (optional) can be one of the following formats:
+
+                                - a list of strings that enumerates the possible completions
+                                    e.g. ["cat", "dog"]
+
                                 -  a ||| delimited string of choices that enumerates
                                    the possible completions. (PromptSource Convention)
                                    e.g. "cat ||| dog"
-                                   This is for compatibility with promptsource templates
-                                - a list of strings that enumerates the possible completions
-                                    e.g. ["cat", "dog"]
+                                   This is for compatibility with jinja promptsource templates
+
                                If None is given, then the template is open-ended completion.
         :type answer_choices: str
+        :param chat_template: (optional) chat template to apply
+
+                                - it can either be a model family name (e.g. "llama", "mistral", "gemma", "phi", "qwen", "alpaca")
+                                - or a dictionary of chat templates
+                                    e.g.
+                                    chat_templates = {
+                                            "system": f"<|begin_of_text|><|start_header_id|>system<|end_header_id|>{system_instruction}<|eot_id|>\n",
+                                            "prefix": " <|start_header_id|>user<|end_header_id|> ",
+                                            "suffix": " <|eot_id|>\n\n<|start_header_id|>assistant<|end_header_id|> ",
+                                            }
+        :type chat_template: Union[str, Dict]
+
+
         """
         self._template = template
 
@@ -106,6 +129,62 @@ class StringTemplate(Template):
                 )
                 self._answer_choices = None
 
+        self._chat_template = chat_template
+
+    def set_chat_template(self, chat_template: Union[str, Dict]):
+        """
+        Set instance-specific chat template, overriding any global template.
+
+        :param chat_template: chat template to apply
+
+                                - it can either be a model family name (e.g. "llama", "mistral", "gemma", "phi", "qwen", "alpaca")
+                                - or a dictionary of chat templates
+                                    e.g.
+                                    chat_templates = {
+                                            "system": f"<|begin_of_text|><|start_header_id|>system<|end_header_id|>{system_instruction}<|eot_id|>\n",
+                                            "prefix": " <|start_header_id|>user<|end_header_id|> ",
+                                            "suffix": " <|eot_id|>\n\n<|start_header_id|>assistant<|end_header_id|> ",
+                                            }
+        :type chat_template: Union[str, Dict]
+        """
+        logger.info(f"Setting instance-specific chat template to {chat_template}")
+        self._chat_template = chat_template
+
+    def unset_chat_template(self):
+        """
+        Remove instance-specific chat template, reverting to global template if available.
+        """
+        logger.info("Removing instance-specific chat template")
+        self._chat_template = None
+
+    @classmethod
+    def set_global_chat_template(cls, chat_template: Union[str, Dict]):
+        """
+        Set global chat template to apply to all instances of the template.
+
+        :param chat_template: chat template to apply
+
+                                - it can either be a model family name (e.g. "llama", "mistral", "gemma", "phi", "qwen", "alpaca")
+                                - or a dictionary of chat templates
+                                    e.g.
+                                    chat_templates = {
+                                            "system": f"<|begin_of_text|><|start_header_id|>system<|end_header_id|>{system_instruction}<|eot_id|>\n",
+                                            "prefix": " <|start_header_id|>user<|end_header_id|> ",
+                                            "suffix": " <|eot_id|>\n\n<|start_header_id|>assistant<|end_header_id|> ",
+                                            }
+        :type chat_template: Union[str, Dict]
+        """
+        logger.info(f"Setting global chat template to {chat_template}")
+        cls._global_chat_template = chat_template
+
+    @classmethod
+    def unset_global_chat_template(cls):
+        """
+        Remove global chat template.
+        """
+        logger.info("Unsetting global chat template")
+        cls._global_chat_template = None
+
     def from_promptsource(self, promptsource_template):
         """
         Update the template from a promptsource template
@@ -120,30 +199,28 @@ class StringTemplate(Template):
         self._metadata = promptsource_template["metadata"]
         self._answer_choices = promptsource_template["answer_choices"]
 
+
     def apply(
-        self, example: Union[Dict, List[Dict]], **kawrgs
+            self, example: Union[Dict, List[Dict]], **kwargs
     ) -> Union[Query, List[Query]]:
         """
         Apply template to an example or a list of examples and returns a query object or a list of queries
 
         :param example: list of examples or an example in format of dictionary
         :type example: Union[Dict, List[Dict]]
-        :param kawrgs: "key_translator" for key translation (e.g. for fields key replacements)
-        :type kawrgs: Dict
+        :param kwargs: "key_translator" for key translation (e.g. for fields key replacements)
+        :type kwargs: Dict
         :return: one or a list of query object (either CompletionQuery or RankedQuery depending on the template type)
         :rtype: Query or List[Query]
         """
 
         if not isinstance(example, dict):
             if isinstance(example, list):
-                return [self.apply(e, **kawrgs) for e in example]
+                return [self.apply(e, **kwargs) for e in example]
             else:
                 raise ValueError(f"Unsupported example type: {type(example)}")
 
-        if "key_translator" in kawrgs:
-            key_translator = kawrgs["key_translator"]
-        else:
-            key_translator = None
+        key_translator = kwargs.get("key_translator")
 
         prompt = self._template
         for key, value in example.items():
@@ -176,7 +253,7 @@ class StringTemplate(Template):
                     assert r == len(
                         value
                     ), f"Length of the value {len(value)} does not match the range {r}"
-                    prompt[int(start) : int(end)] = value
+                    prompt[int(start): int(end)] = value
                 else:
                     logger.error(
                         f"Key {key} is not an integer. Cannot replace with list."
@@ -185,15 +262,38 @@ class StringTemplate(Template):
                         f"Key {key} is not an integer. Cannot replace with list."
                     )
 
+        ignore_chat_template = kwargs.get("ignore_chat_template", False)
+        chat_template = kwargs.get("chat_template", None)
+        if not ignore_chat_template:
+            if chat_template is not None:
+                active_chat_template = chat_template
+            elif self._chat_template is not None:
+                active_chat_template = self._chat_template
+            elif self._global_chat_template is not None:
+                active_chat_template = self._global_chat_template
+            else:
+                active_chat_template = ""
+
+            if isinstance(active_chat_template, str):
+                active_chat_template = chat_templates.get(active_chat_template, chat_templates["default"])
+            try:
+                system = active_chat_template["system"]
+                prefix = active_chat_template["prefix"]
+                suffix = active_chat_template["suffix"]
+            except KeyError:
+                raise ValueError("Template missing required keys: 'system', 'prefix', 'suffix'")
+            prompt = system + prefix + prompt + suffix
+
         if self._answer_choices:
             return RankedQuery(prompt=prompt, candidates=self._answer_candidates)
         else:
             return CompletionQuery(prompt)
 
+
     def apply_to_dataset(
-        self,
-        dataset: Iterable[Dict],
-        **kwargs: Any,
+            self,
+            dataset: Iterable[Dict],
+            **kwargs: Any,
     ) -> Iterable[Query]:
         """
         A wrapper function to apply the template to a dataset iteratively
@@ -207,6 +307,7 @@ class StringTemplate(Template):
         """
         return [self.apply(example, **kwargs) for example in dataset]
 
+
     def get_answer_choices_list(self) -> List[str]:
         """
         Get answer choices list
@@ -216,40 +317,48 @@ class StringTemplate(Template):
         """
         return self._answer_candidates
 
+
     @property
     def template(self):
         """returns the template"""
         return self._template
+
 
     @property
     def type(self):
         """returns the template type"""
         return self._type
 
+
     @property
     def keywords(self):
         """returns the keywords"""
         return self._keywords
+
 
     @property
     def id(self):
         """returns the template id"""
         return self._id
 
+
     @property
     def name(self):
         """returns the template name"""
         return self._name
+
 
     @property
     def reference(self):
         """returns the template reference"""
         return self._reference
 
+
     @property
     def metadata(self):
         """returns the template metadata"""
         return self._metadata
+
 
     def serialize(self):
         """
@@ -268,6 +377,7 @@ class StringTemplate(Template):
                 "answer_choices": self._answer_choices,
             }
         )
+
 
     def deserialize(self, json_str: str) -> Template:
         """
@@ -288,22 +398,24 @@ class StringTemplate(Template):
         )
         return self
 
+
     def __call__(
-        self,
-        example: Dict,
-        **kawrgs: Any,
+            self,
+            example: Dict,
+            **kwargs: Any,
     ) -> Query:
         """
         A wrapper function to apply the template to a single example
 
         :param example: a single example in format of a dictionary
         :type example: Dict
-        :param kawrgs: Additional arguments to pass to apply
-        :type kawrgs: Any
+        :param kwargs: Additional arguments to pass to apply
+        :type kwargs: Any
         :return: a query object
         :rtype: Query
         """
-        return self.apply(example, **kawrgs)
+        return self.apply(example, **kwargs)
+
 
     def __str__(self):
         return (
