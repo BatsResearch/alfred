@@ -1,16 +1,12 @@
 import json
 import logging
 import re
-from keyword import kwlist
 from typing import Dict, Any, Optional, Iterable, List, Union
 
 import numpy as np
 import torch
 
-from functools import wraps
 from alfred.fm.query import Query, CompletionQuery, RankedQuery
-from streamlit.web.cli import activate
-
 from .chat_templates import chat_templates
 from .template import Template
 
@@ -53,6 +49,7 @@ class StringTemplate(Template):
     """
 
     _global_chat_template = None
+
     def __init__(
             self,
             template: str,
@@ -199,7 +196,6 @@ class StringTemplate(Template):
         self._metadata = promptsource_template["metadata"]
         self._answer_choices = promptsource_template["answer_choices"]
 
-
     def apply(
             self, example: Union[Dict, List[Dict]], **kwargs
     ) -> Union[Query, List[Query]]:
@@ -289,7 +285,6 @@ class StringTemplate(Template):
         else:
             return CompletionQuery(prompt)
 
-
     def apply_to_dataset(
             self,
             dataset: Iterable[Dict],
@@ -307,7 +302,6 @@ class StringTemplate(Template):
         """
         return [self.apply(example, **kwargs) for example in dataset]
 
-
     def get_answer_choices_list(self) -> List[str]:
         """
         Get answer choices list
@@ -317,48 +311,40 @@ class StringTemplate(Template):
         """
         return self._answer_candidates
 
-
     @property
     def template(self):
         """returns the template"""
         return self._template
-
 
     @property
     def type(self):
         """returns the template type"""
         return self._type
 
-
     @property
     def keywords(self):
         """returns the keywords"""
         return self._keywords
-
 
     @property
     def id(self):
         """returns the template id"""
         return self._id
 
-
     @property
     def name(self):
         """returns the template name"""
         return self._name
-
 
     @property
     def reference(self):
         """returns the template reference"""
         return self._reference
 
-
     @property
     def metadata(self):
         """returns the template metadata"""
         return self._metadata
-
 
     def serialize(self):
         """
@@ -377,7 +363,6 @@ class StringTemplate(Template):
                 "answer_choices": self._answer_choices,
             }
         )
-
 
     def deserialize(self, json_str: str) -> Template:
         """
@@ -398,7 +383,6 @@ class StringTemplate(Template):
         )
         return self
 
-
     def __call__(
             self,
             example: Dict,
@@ -415,7 +399,6 @@ class StringTemplate(Template):
         :rtype: Query
         """
         return self.apply(example, **kwargs)
-
 
     def __str__(self):
         return (

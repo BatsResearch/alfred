@@ -20,13 +20,13 @@ class ImageTemplate(Template):
     """
 
     def __init__(
-        self,
-        candidate_replacement: dict,
-        template: str = "A photo of [[label]]",
-        id: Optional[str] = None,
-        name: Optional[str] = None,
-        reference: Optional[str] = None,
-        metadata: Optional[Dict[str, Any]] = None,
+            self,
+            candidate_replacement: dict,
+            template: str = "A photo of [[label]]",
+            id: Optional[str] = None,
+            name: Optional[str] = None,
+            reference: Optional[str] = None,
+            metadata: Optional[Dict[str, Any]] = None,
     ):
         """
 
@@ -71,10 +71,10 @@ class ImageTemplate(Template):
                 )
 
     def apply(
-        self,
-        example: Union[Image.Image, torch.tensor, np.ndarray, str, tuple],
-        keyword: str = "image_path",
-        **kwargs: Any,
+            self,
+            example: Union[Image.Image, torch.tensor, np.ndarray, str, tuple],
+            keyword: str = "image_path",
+            **kwargs: Any,
     ) -> RankedQuery:
         """
         Apply the template to a single image example
@@ -104,9 +104,9 @@ class ImageTemplate(Template):
         return RankedQuery(image, self._templated_candidates)
 
     def apply_to_dataset(
-        self,
-        dataset: Iterable[Dict],
-        **kwargs: Any,
+            self,
+            dataset: Iterable[Dict],
+            **kwargs: Any,
     ) -> Iterable[Query]:
         """
         A wrapper function to apply the template to a dataset iteratively
@@ -202,9 +202,9 @@ class ImageTemplate(Template):
         return self
 
     def __call__(
-        self,
-        example: Union[Image.Image, torch.tensor, np.ndarray, str, tuple],
-        **kawrgs: Any,
+            self,
+            example: Union[Image.Image, torch.tensor, np.ndarray, str, tuple],
+            **kawrgs: Any,
     ) -> Query:
         """
         A wrapper function to apply the template to a single example
