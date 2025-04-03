@@ -16,6 +16,8 @@ ANTHROPIC_MODELS = (
     "claude-2.0",
     "claude-3-opus-20240229",
     "claude-3-sonnet-20240229",
+    "claude-3-5-haiku-latest",
+    "claude-3-7-sonnet-latest"
 )
 
 try:
@@ -119,9 +121,11 @@ class AnthropicModel(APIAccessFoundationModel):
         :param api_key: The API key to be used for the anthropic API.
         :type api_key: Optional[str]
         """
-        assert (
-            model_string in ANTHROPIC_MODELS
-        ), f"Model {model_string} not found. Please choose from {ANTHROPIC_MODELS}"
+        if model_string not in ANTHROPIC_MODELS:
+            logger.log(
+                logging.WARNING,
+                f"Model {model_string} not found. Please choose from {ANTHROPIC_MODELS}",
+            )
 
         if "ANTHROPIC_API_KEY" in os.environ:
             api_key = os.getenv("ANTHROPIC_API_KEY")

@@ -16,14 +16,6 @@ from .response import CompletionResponse, RankedResponse
 
 logger = logging.getLogger(__name__)
 
-GROQ_MODELS = (
-    "llama3-8b-8192",
-    "llama3-70b-8192",
-    "mixtral-8x7b-32768",
-    "gemma-7b-it",
-)
-
-
 class GroqModel(APIAccessFoundationModel):
     """
     A wrapper for the OpenAI API.
@@ -83,11 +75,6 @@ class GroqModel(APIAccessFoundationModel):
         :param api_key: The API key to be used for accessing the Groq API.
         :type api_key: Optional[str]
         """
-        if model_string not in GROQ_MODELS:
-            logger.log(
-                f"Model {model_string} not in supported models {GROQ_MODELS}, please check the Groq API documentation for supported models"
-            )
-
         if api_key is None:
             logger.log(logging.WARNING, "Groq API key not found, Requesting User Input")
             api_key = input("Please enter your Groq API key: ")

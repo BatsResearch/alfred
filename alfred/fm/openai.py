@@ -53,6 +53,11 @@ OPENAI_MODELS = (
     "text-babbage-001",
     "text-ada-001",
     "code-davinci-002",
+    "o1-mini",
+    "o1-pro",
+    "o1-mini",
+    "o3-mini",
+    "gpt-4.5-preview"
 )
 
 OPENAI_EMBEDDING_MODELS = (
@@ -206,13 +211,11 @@ class OpenAIModel(APIAccessFoundationModel):
         :param api_key: The API key to be used for the OpenAI API.
         :type api_key: Optional[str]
         """
-        assert (
-            model_string
-            in OPENAI_MODELS + OPENAI_VISION_MODELS + OPENAI_EMBEDDING_MODELS
-        ), (
-            f"Model {model_string} not found. "
-            f"Please choose from {OPENAI_MODELS} or {OPENAI_VISION_MODELS} or {OPENAI_EMBEDDING_MODELS}"
-        )
+        if model_string not in OPENAI_MODELS:
+            logger.log(
+                logging.WARNING,
+                f"Model {model_string} not found. Please choose carefully from {OPENAI_MODELS} or consult the latest OpenAI API documentation.",
+            )
 
         if "OPENAI_API_KEY" in os.environ:
             openai.api_key = os.getenv("OPENAI_API_KEY")

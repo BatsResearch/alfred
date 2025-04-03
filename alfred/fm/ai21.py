@@ -75,9 +75,8 @@ class AI21Model(APIAccessFoundationModel):
         :param api_key: The API key to be used for accessing the AI21 API.
         :type api_key: Optional[str]
         """
-        assert (
-            model_string in AI21_MODELS
-        ), f"Model {model_string} not found. Please choose from {AI21_MODELS}"
+        if model_string not in AI21_MODELS:
+            logger.warn(f"Model {model_string} not supported, please consult latest AI21 documentation")
         if api_key is None:
             logger.log(logging.WARNING, "AI21 API key not found, Requesting User Input")
             api_key = input("Please enter your AI21 API key: ")
